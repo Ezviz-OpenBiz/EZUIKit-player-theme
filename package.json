@@ -36,5 +36,13 @@
     "deepmerge": "^4.3.1",
     "eventemitter3": "^5.0.1",
     "screenfull": "5.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ezviz-OpenBiz/EZUIKit-player-theme.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ezviz-OpenBiz/EZUIKit-player-theme/issues"
+  },
+  "homepage": "https://github.com/Ezviz-OpenBiz/EZUIKit-player-theme#readme"
 }
