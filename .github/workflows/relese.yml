@@ -15,7 +15,7 @@ jobs:
 
       - name: Check file versions
         run: |
-          files="dist/index.js dist/index.umd.js index.mjs package.json"
+          files="dist/index.js dist/index.umd.js dist/index.mjs package.json"
 
           version=""
           inconsistent=false
