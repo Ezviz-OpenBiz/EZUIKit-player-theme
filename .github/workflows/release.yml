@@ -10,6 +10,9 @@ jobs:
   changelog:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Required for OIDC
     steps:
       - uses: actions/checkout@v4
 
@@ -56,9 +59,9 @@ jobs:
       #     version: 8
       # 设置 Node
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: npm
           registry-url: https://registry.npmjs.org
       # 安装依赖
@@ -83,7 +86,7 @@ jobs:
       #   run: pnpm run build
       # 发布npm 发布前执行了prepublishOnly
       - name: Publish npm
-        run: npm publish --tag ${{ steps.determine_tag.outputs.tag }}
+        run: npm publish --tag ${{ steps.determine_tag.outputs.tag }} --access public
         # env:
         #   # 这里需要几个 Token 变量
         #   # NPM_TOKEN 需要在 npm 网站生成
