@@ -36,10 +36,5 @@
     "deepmerge": "^4.3.1",
     "eventemitter3": "^5.0.1",
     "screenfull": "5.2.0"
-  },
-  "devDependencies": {
-    "@common/rollup": "workspace:*",
-    "@ezuikit/control-ptz": "workspace:*",
-    "@ezuikit/control-zoom": "workspace:*"
   }
 }
