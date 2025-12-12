@@ -5,11 +5,11 @@ coverage
 .DS_Store
 *.log
 .idea
-dist
 compiled
 .awcache
 .rpt2_cache
 docs
+src/
 stats.html
 .DS_Store
 .idea
