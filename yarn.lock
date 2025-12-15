@@ -13,10 +13,10 @@
     "@skax/picker" "1.1.7"
     deepmerge "^4.3.1"
 
-"@ezuikit/control-time-line@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-time-line/-/control-time-line-1.0.4.tgz#c5ba1464dbe6d5e46e64355e030763b0df49c77a"
-  integrity sha512-wnKZuBQawg4MyZTSdkOCX+yGeUDFi5dId9iHU1YrnZrHCZU7LrZxMWCJLmY9uILEKUsRzmO6Tgys9TuYQeHAMQ==
+"@ezuikit/control-time-line@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-time-line/-/control-time-line-1.0.5.tgz#b32eae9810ca9443dee400fb296dc3e5c76e3d2a"
+  integrity sha512-wxZcLe9IKvtYmqjT8VQlhXvMRZ9xMzvGafs53b1MF2ssCWYvkGcZV9kM18mbD+kw6hMrMVyvn1/GwMbAaxDaDQ==
   dependencies:
     "@ezuikit/utils-i18n" "2.0.0"
     "@ezuikit/utils-tools" "2.0.0"

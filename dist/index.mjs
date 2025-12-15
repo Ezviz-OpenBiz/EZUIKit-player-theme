@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.0.2-beta.9
-* Copyright (c) 2025-12-12 Ezviz-OpenBiz
+* @ezuikit/player-theme v2.0.2-beta.11
+* Copyright (c) 2025-12-15 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -8851,9 +8851,12 @@ function _set_prototype_of$5(o, p) {
     _proto._render = function _render() {
         var _this = this;
         var _this_timeLineUtil_updateTimeSections, _this_timeLineUtil;
+        var _this__options_showTimeWidthBtn, _this__options_showCoverFold;
         var _timeLineOptions = {
             language: this._options.language || 'zh',
             coverQuery: this._options.coverQuery || '',
+            showTimeWidthBtn: (_this__options_showTimeWidthBtn = this._options.showTimeWidthBtn) != null ? _this__options_showTimeWidthBtn : true,
+            showCoverFold: (_this__options_showCoverFold = this._options.showCoverFold) != null ? _this__options_showCoverFold : true,
             onChange: function(date) {
                 if (_this._currentTime !== (date == null ? void 0 : date.getTime())) {
                     _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, date);
@@ -11379,6 +11382,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.0.2-beta.8';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.0.2-beta.11';
 
 export { Control, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
