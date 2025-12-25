@@ -1,17 +1,10 @@
 {
   "name": "@ezuikit/player-theme",
-  "version": "2.0.2-beta.11",
+  "version": "2.0.3-beta.1",
   "description": "player theme",
   "title": "theme",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
-  "scripts": {
-    "dev": "cross-env NODE_ENV=development rollup --config rollup.config.mjs --watch",
-    "build": "npm run clean && cross-env NODE_ENV=production rollup --config rollup.config.mjs",
-    "clean": "rimraf docs dist coverage",
-    "types": "tsc src/index.ts --emitDeclarationOnly --declaration --declarationDir dist/types --esModuleInterop",
-    "docs": "typedoc --tsconfig typedoc.config.js"
-  },
   "files": [
     "dist"
   ],
@@ -31,7 +24,7 @@
     "@ezuikit/control-date-picker": "1.0.3",
     "@ezuikit/control-time-line": "1.0.5",
     "@juggle/resize-observer": "^3.4.0",
-    "@skax/delegate": "4.0.1",
+    "@skax/delegate": "4.0.2",
     "@skax/picker": "1.1.7",
     "deepmerge": "^4.3.1",
     "eventemitter3": "^5.0.1",
