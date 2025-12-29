@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.0.3-beta.2
-* Copyright (c) 2025-12-25 Ezviz-OpenBiz
+* @ezuikit/player-theme v2.1.0-beta.1
+* Copyright (c) 2025-12-29 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -3186,7 +3186,14 @@ var en = {
             {
                 iconId: 'volume',
                 part: 'left',
-                defaultActive: 1,
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
+                // flv 录制 2.1.0 新增
+                iconId: 'record',
+                part: 'left',
+                defaultActive: 0,
                 isrender: 1
             },
             {
@@ -9630,7 +9637,7 @@ function _renderControls(theme, $container, btnList, props) {
 }
 function _renderTheme(theme, data) {
     return _async_to_generator$1(function() {
-        var _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, _filterThemeData_footer_btnList, list, _needTimeLine, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_options_mobileExtendOptions3, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions4, hasPtz, _filterThemeData_header1, _filterThemeData_footer1, _filterThemeData_footer_btnList1;
+        var _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, _filterThemeData_footer_btnList, list, _needTimeLine, hasPtz, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_options_mobileExtendOptions3, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions4, _filterThemeData_header1, _filterThemeData_footer1, _filterThemeData_footer_btnList1;
         return _ts_generator$1(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -9792,26 +9799,23 @@ function _renderTheme(theme, data) {
                         hasPtz = list.some(function(item) {
                             return item.iconId === 'ptz';
                         });
-                        if (!(hasPtz || _needTimeLine)) {
-                            return [
-                                2
-                            ];
-                        }
-                        theme._mobileExtend = new MobileExtend(theme.$container);
-                        if (theme.options.dateOptions !== null && ((_theme_options_mobileExtendOptions1 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions1.controls.includes('date')) && _needTimeLine) {
-                            _renderDatePicker(theme, theme._mobileExtend.$topLeft, props);
-                        }
-                        if (theme.options.recOptions !== null && ((_theme_options_mobileExtendOptions2 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions2.controls.includes('rec')) && _needTimeLine) {
-                            [].concat(((_filterThemeData_header1 = filterThemeData.header) == null ? void 0 : _filterThemeData_header1.btnList) || [], (_filterThemeData_footer_btnList1 = (_filterThemeData_footer1 = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer1.btnList) != null ? _filterThemeData_footer_btnList1 : []).forEach(function(item) {
-                                var _theme__mobileExtend;
-                                if (REC_GROUP.includes(item.iconId)) _renderRecType(theme, (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight, item.iconId, props);
-                            });
-                        }
-                        if ((theme.options.timeLineOptions !== null || !theme.options.disabledTimeLine) && ((_theme_options_mobileExtendOptions3 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions3.controls.includes('timeLine')) && _needTimeLine) {
-                            _renderTimeLine(theme, theme._mobileExtend.$content, props);
-                        }
-                        if (Utils.isMobile && ((_theme_options_mobileExtendOptions4 = theme.options.mobileExtendOptions) == null ? void 0 : (_theme_options_mobileExtendOptions_controls1 = _theme_options_mobileExtendOptions4.controls) == null ? void 0 : _theme_options_mobileExtendOptions_controls1.includes('ptz')) && hasPtz && theme.controls.ptzControl) {
-                            theme.controls.ptzControl.renderMobileExtend(theme._mobileExtend.$content);
+                        if (hasPtz || _needTimeLine) {
+                            theme._mobileExtend = new MobileExtend(theme.$container);
+                            if (theme.options.dateOptions !== null && ((_theme_options_mobileExtendOptions1 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions1.controls.includes('date')) && _needTimeLine) {
+                                _renderDatePicker(theme, theme._mobileExtend.$topLeft, props);
+                            }
+                            if (theme.options.recOptions !== null && ((_theme_options_mobileExtendOptions2 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions2.controls.includes('rec')) && _needTimeLine) {
+                                [].concat(((_filterThemeData_header1 = filterThemeData.header) == null ? void 0 : _filterThemeData_header1.btnList) || [], (_filterThemeData_footer_btnList1 = (_filterThemeData_footer1 = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer1.btnList) != null ? _filterThemeData_footer_btnList1 : []).forEach(function(item) {
+                                    var _theme__mobileExtend;
+                                    if (REC_GROUP.includes(item.iconId)) _renderRecType(theme, (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight, item.iconId, props);
+                                });
+                            }
+                            if ((theme.options.timeLineOptions !== null || !theme.options.disabledTimeLine) && ((_theme_options_mobileExtendOptions3 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions3.controls.includes('timeLine')) && _needTimeLine) {
+                                _renderTimeLine(theme, theme._mobileExtend.$content, props);
+                            }
+                            if (Utils.isMobile && ((_theme_options_mobileExtendOptions4 = theme.options.mobileExtendOptions) == null ? void 0 : (_theme_options_mobileExtendOptions_controls1 = _theme_options_mobileExtendOptions4.controls) == null ? void 0 : _theme_options_mobileExtendOptions_controls1.includes('ptz')) && hasPtz && theme.controls.ptzControl) {
+                                theme.controls.ptzControl.renderMobileExtend(theme._mobileExtend.$content);
+                            }
                         }
                     }
                     theme.emit(EVENTS.control.mountedControls);
@@ -11384,7 +11388,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.0.3-beta.2';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.0-beta.1';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;
