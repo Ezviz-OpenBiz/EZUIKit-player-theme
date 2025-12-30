@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.1.0-beta.1
-* Copyright (c) 2025-12-29 Ezviz-OpenBiz
+* @ezuikit/player-theme v2.1.0-beta.2
+* Copyright (c) 2025-12-30 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -2995,7 +2995,7 @@
 	        _this._lastVolume = _this._volume;
 	        _this._muted = !!((_this__options_props3 = _this._options.props) == null ? void 0 : _this__options_props3.muted) || false;
 	        // 轻应用私有暂时不支持调节音量
-	        if (!(Utils.isMobile || _this._options.PLAY_TYPE === 'ezopen')) {
+	        if (!(Utils.isMobile || _this._options.PLAY_TYPE !== 'ezopen')) {
 	            var _this__options_props4, _this__options_props5;
 	            _this.picker = new Picker(_this.$container, {
 	                getPopupContainer: function() {
@@ -3160,7 +3160,10 @@
 	                    if (this._lastVolume !== _volume) {
 	                        this._volume = _volume;
 	                        this._lastVolume = this._volume;
-	                        if (this._progress) this._progress.value = _volume;
+	                        if (this._progress) {
+	                            // 静音时进度条为 0
+	                            this._progress.value = this._muted ? 0 : _volume;
+	                        }
 	                        this._options.onChange == null ? void 0 : this._options.onChange.call(this._options, _volume, this._muted);
 	                        this.emit(EVENTS.control.volumechange, _volume, this._muted);
 	                    }
@@ -13768,7 +13771,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.0-beta.1';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.0-beta.2';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
