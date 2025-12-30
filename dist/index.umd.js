@@ -1,5 +1,5 @@
 /*
-* @ezuikit/player-theme v2.1.0-beta.2
+* @ezuikit/player-theme v2.1.0-beta.3
 * Copyright (c) 2025-12-30 Ezviz-OpenBiz
 * Released under the MIT License.
 */
@@ -2995,7 +2995,7 @@
 	        _this._lastVolume = _this._volume;
 	        _this._muted = !!((_this__options_props3 = _this._options.props) == null ? void 0 : _this__options_props3.muted) || false;
 	        // 轻应用私有暂时不支持调节音量
-	        if (!(Utils.isMobile || _this._options.PLAY_TYPE !== 'ezopen')) {
+	        if (!(Utils.isMobile || _this._options.PLAY_TYPE === 'ezopen')) {
 	            var _this__options_props4, _this__options_props5;
 	            _this.picker = new Picker(_this.$container, {
 	                getPopupContainer: function() {
@@ -10498,7 +10498,7 @@
 	            ],
 	            badges: ((_this_options_props = this.options.props) == null ? void 0 : _this_options_props.recMonth) || [],
 	            language: this.options.language === 'zh' ? 'zh' : 'en',
-	            current: new Date(this._value + ' 00:00:00'),
+	            current: distExports$6.DateTime.toDate(this._value),
 	            placement: 'tr',
 	            triggerClose: true,
 	            disabledDate: function(date) {
@@ -13771,7 +13771,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.0-beta.2';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.0-beta.3';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
