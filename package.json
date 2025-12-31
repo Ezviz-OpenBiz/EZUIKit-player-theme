@@ -1,6 +1,6 @@
 {
   "name": "@ezuikit/player-theme",
-  "version": "2.1.0-beta.3",
+  "version": "2.1.0-beta.4",
   "description": "player theme",
   "title": "theme",
   "main": "dist/index.js",
@@ -21,8 +21,8 @@
     "@ezuikit/utils-i18n": "2.0.0",
     "@ezuikit/utils-logger": "2.0.0",
     "@ezuikit/utils-tools": "2.0.1",
-    "@ezuikit/control-date-picker": "1.0.3",
-    "@ezuikit/control-time-line": "1.0.5",
+    "@ezuikit/control-date-picker": "1.0.4",
+    "@ezuikit/control-time-line": "1.0.6",
     "@juggle/resize-observer": "^3.4.0",
     "@skax/delegate": "4.0.2",
     "@skax/picker": "1.1.7",
