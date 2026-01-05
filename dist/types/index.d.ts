@@ -17,6 +17,209 @@ declare const THEME_SCALE_MODE_TYPE: {
     readonly fullAuto: 2;
 };
 declare const THEME_PROPS: readonly ["width", "height", "playing", "volume", "muted", "loading", "recType", "isCurrentFullscreen", "orientationAngle", "zooming", "zoom", "recording", "recordList", "speed", "urlInfo", "videoLevelList", "videoLevel", "recMonth"];
+/**
+ *
+ * 事件名
+ *
+ * ---------------                                             ------------------
+ * -             -           theme.emit(EVENTS.xxxxx)          -                -
+ * -             -   ------------------------------------->    -                -
+ * -             -                                             -                -
+ * -   Theme     -                                             -    Controls    -
+ * -             -        control.emit(EVENTS.control.xxx)     -                -
+ * -             -   <--------------------------------------   -                -
+ * ---------------                                             ------------------
+ *
+ * @example
+ * ```ts
+ * theme.on(EVENTS.loading)
+ * theme.on(EVENTS.loading)
+ * ```
+ *
+ */
+declare const EVENTS: {
+    readonly loading: "loading";
+    /** 播放 */
+    readonly play: "play";
+    /** 截图 */
+    readonly capturePicture: "capturePicture";
+    /** 音量变化 */
+    readonly volumechange: "volumechange";
+    /** 缩放变化 */
+    readonly zoomChange: "zoomChange";
+    /** 缩放状态变化， true: 可缩放状态，false: 禁止缩放状态(不能缩放) */
+    readonly zoomingChange: "zoomingChange";
+    /** 缩放平移改变 */
+    readonly zoomTranslateChange: "zoomTranslateChange";
+    /** 音频信息 */
+    readonly audioInfo: "audioInfo";
+    /** 视频信息 */
+    readonly videoInfo: "videoInfo";
+    /** 首帧 */
+    readonly firstFrameDisplay: "firstFrameDisplay";
+    /** 全屏 */
+    readonly fullscreen: "fullscreen";
+    /** 退出全屏 */
+    readonly exitFullscreen: "exitFullscreen";
+    /**
+     * 全屏变化(移动端也支持触发, 不过移动端是模拟的web全屏 即旋转 180度)
+     * 当 isCurrentFullscreen 为 true 时，表示当前容器全局全屏状态
+     *
+     * 注意：同一个页面中只要有全屏的操作或取消全屏的操作，都会触发该事件 （移动端除外）
+     */
+    readonly fullscreenChange: "fullscreenChange";
+    /** 重置容器尺寸 */
+    readonly resize: "resize";
+    /** 屏幕旋转方向变化 */
+    readonly orientationChange: "orientationChange";
+    /** 音频编码不支持 （暂时仅支持标准流 flv） */
+    readonly audioCodecUnsupported: "audioCodecUnsupported";
+    /** 切换主题 themeDate 变化时 */
+    readonly changeTheme: "changeTheme";
+    /** 回放类型切换 */
+    readonly recTypeChange: "recTypeChange";
+    /** 切换清晰度 */
+    readonly definitionChange: "definitionChange";
+    /** 播放速度切换 */
+    readonly speedChange: "speedChange";
+    /** 控件开始录制 */
+    readonly recordingChange: "recordingChange";
+    /** 对讲状态变化 */
+    readonly talkingChange: "talkingChange";
+    /** 麦克风音量变化 */
+    readonly talkVolumeChange: "talkVolumeChange";
+    /** 动态切换日志配置 */
+    readonly setLoggerOptions: "setLoggerOptions";
+    readonly records: "records";
+    readonly ptzSpeedChange: "ptzSpeedChange";
+    readonly setVideoLevelList: "setVideoLevelList";
+    readonly currentVideoLevel: "currentVideoLevel";
+    readonly currentVideoLevelAuto: "currentVideoLevelAuto";
+    readonly setAllDayRecTimes: "setAllDayRecTimes";
+    readonly getOSDTime: "getOSDTime";
+    /**
+     * 控件相关
+     */
+    readonly control: {
+        /** 点击播放播放／暂停按钮 */
+        readonly play: "Control.play";
+        /** 播放控件销毁 */
+        readonly playDestroy: "Control.playDestroy";
+        /** 截图 */
+        readonly capturePicture: "Control.capturePicture";
+        /** 截图结果 */
+        readonly capturePictureResult: "Control.capturePictureResult";
+        /** 截图控件销毁 */
+        readonly capturePictureDestroy: "Control.capturePictureDestroy";
+        /** 音量变化 */
+        readonly volumechange: "Control.volumechange";
+        /** 音量调节面板 展示隐藏变换 */
+        readonly volumePanelOpenChange: "Control.volumePanelOpenChange";
+        /** 音量控件销毁 */
+        readonly volumeDestroy: "Control.volumeDestroy";
+        /** 控件组件栏(Header/Footer)展示隐藏 */
+        readonly controlsBarOpenChange: "Control.controlsBarOpenChange";
+        /** 当顶部控件栏(header)控件放置不下时， 显示的更多按钮的控件列表变化 */
+        readonly headerMoreShowControlsChange: "Control.headerMoreShowControlsChange";
+        /** 当顶部控件栏(header)控件放置不下时， 更多按钮 展示隐藏变换 */
+        readonly headerMorePanelOpenChange: "Control.headerMorePanelOpenChange";
+        /** 当底部控件栏(footer)控件放置不下时， 显示的更多按钮的控件列表变化 */
+        readonly footerMoreShowControlsChange: "Control.footerMoreShowControlsChange";
+        /** 当底部控件栏(footer)控件放置不下时， 更多按钮 展示隐藏变换 */
+        readonly footerMorePanelOpenChange: "Control.footerMorePanelOpenChange";
+        /** 设备信息控件销毁 */
+        readonly deviceDestroy: "Control.deviceDestroy";
+        /** 回放类型切换控件 */
+        readonly recTypeChange: "Control.recTypeChange";
+        /** 回放类型控件销毁 */
+        readonly recDestroy: "Control.recDestroy";
+        /** 切换清晰度控件 */
+        readonly definitionChange: "Control.definitionChange";
+        readonly definitionList: "Control.definitionList";
+        /** 切换清晰度面板 展示隐藏变换, (open, definition, item) */
+        readonly definitionPanelOpenChange: "Control.definitionPanelOpenChange";
+        /** 切换清晰度控件 */
+        readonly definitionDestroy: "Control.definitionDestroy";
+        /** 播放速度切换 */
+        readonly speedChange: "Control.speedChange";
+        /** 播放速度面板 显示隐藏变换 */
+        readonly speedPanelOpenChange: "Control.speedPanelOpenChange";
+        /** 播放速度控件销毁 */
+        readonly speedDestroy: "Control.speedDestroy";
+        /** 云台面板 显示隐藏变换 */
+        readonly ptzPanelOpenChange: "Control.ptzPanelOpenChange";
+        /** 云台速度切换 */
+        readonly ptzSpeedChange: "Control.ptzSpeedChange";
+        readonly ptzError: "Control.ptzError";
+        /** 云台控件销毁 */
+        readonly ptzDestroy: "Control.ptzDestroy";
+        /** 录制控件是否在录制中 */
+        readonly recordingChange: "Control.recordingChange";
+        readonly recordDestroy: "Control.recordDestroy";
+        /** 开始对讲 */
+        readonly talkingChange: "Control.talkingChange";
+        /** 对讲错误, 一般是麦克风权限被拒绝 */
+        readonly talkError: "Control.talkError";
+        /** 对讲控件销毁 */
+        readonly talkDestroy: "Control.talkDestroy";
+        /** 缩放比例改变 */
+        readonly zoomChange: "Control.zoomChange";
+        /** 音量调节面板 展示隐藏变换 */
+        readonly zoomPanelOpenChange: "Control.zoomPanelOpenChange";
+        /** 缩放控件销毁 */
+        readonly zoomDestroy: "Control.zoomDestroy";
+        /** 全屏控件销毁 */
+        readonly fullscreenDestroy: "Control.fullscreenDestroy";
+        /** 全局全屏控件销毁 */
+        readonly globalFullscreenDestroy: "Control.globalFullscreenDestroy";
+        /** 日期面板展示隐藏变换 */
+        readonly datePanelOpenChange: "Control.datePanelOpenChange";
+        /** 日期改变 */
+        readonly dateChange: "Control.dateChange";
+        /** 日期改变 */
+        readonly dateMonthChange: "Control.dateMonthChange";
+        /** 日期销毁 */
+        readonly dateDestroy: "Control.datePanelDestroy";
+        /** 时间轴拖动结束 */
+        readonly timeLineChange: "Control.timeLineChange";
+        /** 时间轴图片列表面板 */
+        readonly timeLinePanelOpenChange: "Control.timeLinePanelOpenChange";
+        /** 时间轴控件销毁 */
+        readonly timeLineDestroy: "Control.timeLineDestroy";
+        /** 主题控件挂载前 切换新的主题也会触发，如果想首次获取需要在 onInitializing 回调中进行监听 */
+        readonly beforeMountControls: "Control.beforeMountControls";
+        /** 主题控件挂载完成, 切换新的主题也会触发，如果想首次获取需要在 onInitializing 回调中进行监听 */
+        readonly mountedControls: "Control.mountedControls";
+        /** 主题控件卸载前, 已有控件卸载时才可触发 */
+        readonly beforeUnmountControls: "Control.beforeUnmountControls";
+        /** 主题控件卸载完成, 已有控件卸载时才可触发 */
+        readonly unmountedControls: "Control.unmountedControls";
+        /** 封面控件销毁 */
+        readonly posterDestroy: "Control.posterDestroy";
+        /** 加载控件销毁 */
+        readonly loadingDestroy: "Control.loadingDestroy";
+        /** 消息控件销毁 */
+        readonly messageDestroy: "Control.messageDestroy";
+        /** 播放器内容区域销毁 */
+        readonly contentDestroy: "Control.contentDestroy";
+        /** 播放器内容区域重新渲染 */
+        readonly contentRerender: "Control.contentRerender";
+    };
+    /**
+     * 主题控件相关
+     */
+    readonly theme: {
+        /** 销毁前 */
+        readonly beforeDestroy: "Theme.beforeDestroy";
+        /** 销毁后 */
+        readonly destroyed: "Theme.destroyed";
+        /** 移动端扩展销毁 */
+        readonly mobileExtendDestroy: "Theme.mobileExtendDestroy";
+        /** 回放页底部销毁 */
+        readonly recFooterDestroy: "Theme.recFooterDestroy";
+    };
+    readonly message: "message";
+};
 
 /**
  * 控件基类配置项
@@ -1032,7 +1235,7 @@ declare class Content extends EventEmitter {
      * @param {number} originHeight 画面高度
      * @returns {void}
      */
-    private _rerender;
+    rerender(originWidth?: number, originHeight?: number): void;
     setScaleMode(scaleMode?: ThemeOptions$1['scaleMode']): void;
     destroy(): void;
 }
@@ -1694,13 +1897,7 @@ declare class Theme extends EventEmitter {
             3860020: string;
             BTN_RETRY: string;
             BTN_RELOAD: string;
-            LOADING: string; /**
-             * 播放状态
-             * ```ts
-             * // 事件监听
-             * theme.on(Theme.EVENTS.play, (playing: boolean) => {})
-             * ```
-             */
+            LOADING: string;
             TIMEFORMAT_ERROR: string;
             USE_MULTITHREADING_WARING: string;
             OPEN_INSTRUCTIONS: string;
@@ -1780,16 +1977,7 @@ declare class Theme extends EventEmitter {
             START_RECORD_FAILED: string;
             STOP_RECORD_SUCCESS: string;
             STOP_RECORD_FAILED: string;
-            RECORD_TIPS: string; /**
-             * 电子放大倍数， 仅 ezopen 支持
-             * @since 0.0.1
-             * @example
-             * ```ts
-             * theme.zoom // 放大倍数
-             * // 事件监听
-             * theme.on(Theme.EVENTS.zoom, (zoom: number) => {})
-             * ```
-             */
+            RECORD_TIPS: string;
             RECORDS: string;
             OPEN_SOUND: string;
             CLOSE_SOUND: string;
@@ -1828,19 +2016,6 @@ declare class Theme extends EventEmitter {
             MOBILE_PTZ_TIPS: string;
             PTZ_FAST: string;
             PTZ_MID: string;
-            /**
-             * 对讲增益(音量)， 仅 ezopen 支持
-             *
-             * {@link https://mdn.org.cn/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API}
-             *
-             * @since 0.0.1
-             * @example
-             * ```ts
-             * theme.talkGain // 对讲音量
-             * // 事件监听 event
-             * theme.on(Theme.EVENTS.talk, (gain: number) => {})
-             * ```
-             */
             PTZ_SLOW: string;
             PTZ_SPEED: string;
             DEVICE_ZOOM: string;
@@ -1852,7 +2027,9 @@ declare class Theme extends EventEmitter {
             CHANGE_FEC_TYPE: string;
             DEVICE_NOT_SUPPORT: string;
             TYPE_NOT_SUPPORT: string;
-            FEC_SUPPORT_VERSION: string;
+            FEC_SUPPORT_VERSION: string; /**
+             * 云台开启中
+             */
             NO_CANVAS_ID: string;
             SET_FEC_PARAMS: string;
             GET_FEC_PARAMS: string;
@@ -2573,5 +2750,5 @@ declare class Utils {
     static resizeObserver(node: Element, callback?: (entries: ResizeObserverEntry[], observer: ResizeObserver) => void): CleanUpResizeObserver;
 }
 
-export { Control, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
+export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
 export type { CleanUpResizeObserver, CleanUpScreenOrientationFun, ControlItem, ControlOptions, FooterOptions, FullscreenOptions, HeaderOptions, IThemeData, IThemeDataItem, LoadingOptions, MessageOptions, PlayOptions, PosterOptions, RecOptions, ScreenOrientation, ThemeOptions, VolumeOptions };
