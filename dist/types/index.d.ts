@@ -4,7 +4,6 @@ import I18n, { I18nTranslation } from '@ezuikit/utils-i18n';
 import { LoggerCls, LoggerOptions } from '@ezuikit/utils-logger';
 import { BasePtzOptions } from '@ezuikit/control-ptz';
 import Zoom from '@ezuikit/control-zoom';
-import { ThemeOptions as ThemeOptions$1 } from '@/interface';
 import { TimeLineTimeSection } from '@ezuikit/control-time-line';
 
 /** 填充模式 */
@@ -1214,7 +1213,7 @@ declare class Pause extends Control {
 interface ContentOptions {
     /** 获取容器 */
     getContainer: () => HTMLElement;
-    scaleMode: ThemeOptions$1['scaleMode'];
+    scaleMode: ThemeOptions['scaleMode'];
 }
 /**
  * 截图控件
@@ -1245,7 +1244,7 @@ declare class Content extends EventEmitter {
      * @returns {void}
      */
     private rerender;
-    setScaleMode(scaleMode?: ThemeOptions$1['scaleMode']): void;
+    setScaleMode(scaleMode?: ThemeOptions['scaleMode']): void;
     destroy(): void;
 }
 
@@ -1960,7 +1959,9 @@ declare class Theme extends EventEmitter {
             CALL_END: string;
             USER_DO_NOT_OWN_DEVICE: string;
             NO_CLOUD_RECORD: string;
-            CHANGE_VIDEO_LEVEL: string;
+            CHANGE_VIDEO_LEVEL: string; /**
+             * 音量值
+             */
             CHANGE_VIDEO_LEVEL_FAIL: string;
             GET_VIDEO_LEVEL_LIST: string;
             PLEASE_INPUT_RIGHT_VIDEO_LEVEL: string;
@@ -1974,15 +1975,15 @@ declare class Theme extends EventEmitter {
             VIDEO_LEVEL_3K: string;
             VIDEO_LEVEL_4k: string;
             RESET_THEME: string;
-            BTN_PLAY: string; /**
-             * 静音
-             *
-             */
+            BTN_PLAY: string;
             BTN_PAUSE: string;
             BTN_VOLUME: string;
             BTN_MUTED: string;
             BTN_RECORDVIDEO: string;
-            BTN_CAPTURE: string;
+            BTN_CAPTURE: string; /**
+             * 静音
+             *
+             */
             BTN_TALK: string;
             BTN_BROADCAST: string;
             BTN_ZOOM: string;
@@ -1997,9 +1998,7 @@ declare class Theme extends EventEmitter {
             BTN_HD: string;
             BTN_SPEED: string;
             BTN_CLOUDREC: string;
-            BTN_CLOUDRECORD: string; /**
-             * 是否在缩放中
-             */
+            BTN_CLOUDRECORD: string;
             BTN_REC: string;
             BTN_CALENDAR: string;
             BTN_MORE: string;
@@ -2072,23 +2071,6 @@ declare class Theme extends EventEmitter {
             FETCH_THEME_FAILED: string;
             cancel: string;
             ok: string;
-            /**
-             * 重新调整播放器窗口大小
-             *
-             * Adjust the player window size
-             * @param {number | string} width 宽度（number 类型默认px, 支持字符串大小 "100%" | "50vw"）
-             * @param {number | string} height 高度（number 类型默认px, 支持字符串大小 "100%" | "50vh"）
-             * @since 0.0.1
-             * @example
-             * ```ts
-             * theme.resize(600, 400) // 600px * 400px
-             * theme.resize("600px", "400px") // 600px * 400px
-             * theme.resize("50%", "1vh")
-             * theme.resize("2em", "2rem")
-             * // 事件监听 event, 这里是具体的宽高（单位px）
-             * theme.on(Theme.EVENTS.resize, (width: number, height: number) => {})
-             * ```
-             */
             close: string;
         };
     };

@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.1.0-beta.11
-* Copyright (c) 2026-01-16 Ezviz-OpenBiz
+* @ezuikit/player-theme v2.1.0-beta.12
+* Copyright (c) 2026-01-19 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -10404,7 +10404,7 @@ var THEME_DEFAULT_OPTIONS = {
     _inherits(Theme, EventEmitter);
     function Theme(options) {
         var _this;
-        var _this_options_volumeOptions, _this_options_volumeOptions1, _this_options_speedOptions, _this_options, _this_options1;
+        var _this_options_volumeOptions, _this_options_volumeOptions1, _this_options_speedOptions, _this_options, _this_options1, _this_options2, _this_options3;
         _this = EventEmitter.call(this) || this, /** 播放器配置项 */ _this.options = THEME_DEFAULT_OPTIONS, _this.staticPath = '', /** 所有控件列表, 所有控件名称规则（`${iconId}Control`）， 如音量控件 this.controls["volumeControl"]  @since 0.0.1 */ _this.controls = {}, /**
    * @since 0.0.1
    * @private
@@ -10490,7 +10490,8 @@ var THEME_DEFAULT_OPTIONS = {
             'flv',
             'hls',
             'mp4'
-        ].includes(options.type) ? LiveTemplate : (_ref3 = (_this_options_template = (_this_options = _this.options) == null ? void 0 : _this_options.template) != null ? _this_options_template : (_this_options1 = _this.options) == null ? void 0 : _this_options1.themeData) != null ? _ref3 : null);
+        ].includes(options.type) ? ((_this_options = _this.options) == null ? void 0 : _this_options.themeData) !== undefined ? (_this_options1 = _this.options) == null ? void 0 : _this_options1.themeData : LiveTemplate // 标准流仅支持  null 和 LiveTemplate (支持自定义 2026-01-19)
+         : (_ref3 = (_this_options_template = (_this_options2 = _this.options) == null ? void 0 : _this_options2.template) != null ? _this_options_template : (_this_options3 = _this.options) == null ? void 0 : _this_options3.themeData) != null ? _ref3 : null);
         _this._addEventListener();
         _themeEventemitter(_this);
         return _this;
@@ -11678,6 +11679,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.0-beta.11';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.0-beta.12';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
