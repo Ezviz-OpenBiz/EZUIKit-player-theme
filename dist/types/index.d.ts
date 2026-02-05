@@ -89,6 +89,8 @@ declare const EVENTS: {
     readonly talkVolumeChange: "talkVolumeChange";
     /** 语音广播状态变化 */
     readonly broadcastChange: "broadcastChange";
+    /** AI对话框状态变化 */
+    readonly aichatChange: "aichatChange";
     /** 动态切换日志配置 */
     readonly setLoggerOptions: "setLoggerOptions";
     readonly records: "records";
@@ -167,6 +169,10 @@ declare const EVENTS: {
         readonly broadcastChange: "Control.broadcastChange";
         /** 语音广播控件销毁 */
         readonly broadcastDestroy: "Control.broadcastDestroy";
+        /** AI对话框状态变化 */
+        readonly aichatChange: "Control.aichatChange";
+        /** AI对话框控件销毁 */
+        readonly aichatDestroy: "Control.aichatDestroy";
         /** 缩放比例改变 */
         readonly zoomChange: "Control.zoomChange";
         /** 音量调节面板 展示隐藏变换 */
@@ -942,6 +948,8 @@ type ControlType =
  | 'talk'
 /** 语音广播 */
  | 'broadcast'
+/** AI对话 */
+ | 'aiChat'
 /** 电子放大 */
  | 'zoom'
 /** 清晰度， 兼容 hd */
@@ -1430,13 +1438,10 @@ declare class Theme extends EventEmitter {
         readonly talkingChange: "talkingChange";
         readonly talkVolumeChange: "talkVolumeChange";
         readonly broadcastChange: "broadcastChange";
-        readonly setLoggerOptions: "setLoggerOptions"; /**
-         * 更多控件（footer more）
-         * @since 0.0.1
-         * @private
-         */
+        readonly aichatChange: "aichatChange";
+        readonly setLoggerOptions: "setLoggerOptions";
         readonly records: "records";
-        readonly ptzSpeedChange: "ptzSpeedChange";
+        readonly ptzSpeedChange: "ptzSpeedChange"; /** 头部控件 @since 0.0.1 @private */
         readonly setVideoLevelList: "setVideoLevelList";
         readonly currentVideoLevel: "currentVideoLevel";
         readonly currentVideoLevelAuto: "currentVideoLevelAuto";
@@ -1455,7 +1460,6 @@ declare class Theme extends EventEmitter {
             readonly headerMoreShowControlsChange: "Control.headerMoreShowControlsChange";
             readonly headerMorePanelOpenChange: "Control.headerMorePanelOpenChange";
             readonly footerMoreShowControlsChange: "Control.footerMoreShowControlsChange";
-            /** 电子放大倍数 @private */
             readonly footerMorePanelOpenChange: "Control.footerMorePanelOpenChange";
             readonly deviceDestroy: "Control.deviceDestroy";
             readonly recTypeChange: "Control.recTypeChange";
@@ -1464,6 +1468,9 @@ declare class Theme extends EventEmitter {
             readonly definitionList: "Control.definitionList";
             readonly definitionPanelOpenChange: "Control.definitionPanelOpenChange";
             readonly definitionDestroy: "Control.definitionDestroy";
+            /**
+             * 录像回放的月份列表 @private
+             */
             readonly speedChange: "Control.speedChange";
             readonly speedPanelOpenChange: "Control.speedPanelOpenChange";
             readonly speedDestroy: "Control.speedDestroy";
@@ -1478,6 +1485,8 @@ declare class Theme extends EventEmitter {
             readonly talkDestroy: "Control.talkDestroy";
             readonly broadcastChange: "Control.broadcastChange";
             readonly broadcastDestroy: "Control.broadcastDestroy";
+            readonly aichatChange: "Control.aichatChange";
+            readonly aichatDestroy: "Control.aichatDestroy";
             readonly zoomChange: "Control.zoomChange";
             readonly zoomPanelOpenChange: "Control.zoomPanelOpenChange";
             readonly zoomDestroy: "Control.zoomDestroy";
@@ -1699,6 +1708,7 @@ declare class Theme extends EventEmitter {
             BTN_CAPTURE: string;
             BTN_TALK: string;
             BTN_BROADCAST: string;
+            BTN_AICHAT: string;
             BTN_ZOOM: string;
             BTN_3D_ZOOM: string;
             BTN_PTZ: string;
@@ -1717,6 +1727,7 @@ declare class Theme extends EventEmitter {
             DEVICE_ID: string;
             CAPTURE_SUCCESS: string;
             CAPTURE_FAILED: string;
+            /**  resizeObserver 监听销毁 */
             START_RECORD_SUCCESS: string;
             START_RECORD_FAILED: string;
             STOP_RECORD_SUCCESS: string;
@@ -1726,7 +1737,7 @@ declare class Theme extends EventEmitter {
             OPEN_SOUND: string;
             CLOSE_SOUND: string;
             SOUND_OPENED: string;
-            ZOOM: string; /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */
+            ZOOM: string;
             START_ZOOM: string;
             CLOSE_ZOOM: string;
             ZOOM_ADD: string;
@@ -1735,10 +1746,10 @@ declare class Theme extends EventEmitter {
             ZOOM_SUB_MIN: string;
             ZOOM_LIMIT_MAX: string;
             ZOOM_LIMIT_MIN: string;
-            ZOOM_NOT_ENABLED: string; /** 音量 */
+            ZOOM_NOT_ENABLED: string;
             '3D_ZOOM': string;
             '3D_ZOOM_DISABLE': string;
-            '3D_ZOOM_FAILED': string;
+            '3D_ZOOM_FAILED': string; /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */
             START_3D_ZOOM: string;
             CLOSE_3D_ZOOM: string;
             DEVICE_NOT_SUPPORT_3D_ZOOM: string;
@@ -1753,14 +1764,7 @@ declare class Theme extends EventEmitter {
             WEB_FULLSCREEN_EXIT: string;
             DESTROY: string;
             GET_CAPACITY: string;
-            GET_PTZ_STATUS: string; /**
-            //  * 记录回放的月份
-            //  *
-            //  * key: {序列号}_{通道号}_{rec | cloud | cloudRecord}   比如：BC7799091_1_rec  BC7799091_1_cloud BC7799091_1_cloudRecord
-            //  *
-            //  * value: 月份列表  比如 ["2025-12-01", "2025-12-02"]
-            //  * @private
-            //  */
+            GET_PTZ_STATUS: string;
             /**
              * 录像回放的月份列表 @private
              */
@@ -1769,6 +1773,9 @@ declare class Theme extends EventEmitter {
             OPTION_PTZ_FAILED: string;
             MOBILE_PTZ_TIPS: string;
             PTZ_FAST: string;
+            /**
+             * 录像回放的月份列表 @private
+             */
             PTZ_MID: string;
             PTZ_SLOW: string;
             PTZ_SPEED: string;
@@ -1986,6 +1993,7 @@ declare class Theme extends EventEmitter {
              */
             BTN_TALK: string;
             BTN_BROADCAST: string;
+            BTN_AICHAT: string;
             BTN_ZOOM: string;
             BTN_3D_ZOOM: string;
             BTN_PTZ: string;

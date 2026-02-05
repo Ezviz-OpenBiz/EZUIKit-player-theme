@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.1.0-beta.12
-* Copyright (c) 2026-01-19 Ezviz-OpenBiz
+* @ezuikit/player-theme v2.1.1-beta.1
+* Copyright (c) 2026-02-05 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -140,6 +140,7 @@ var EVENTS = {
     /** 对讲状态变化 */ talkingChange: 'talkingChange',
     /** 麦克风音量变化 */ talkVolumeChange: 'talkVolumeChange',
     /** 语音广播状态变化 */ broadcastChange: 'broadcastChange',
+    /** AI对话框状态变化 */ aichatChange: 'aichatChange',
     /** 动态切换日志配置 */ setLoggerOptions: 'setLoggerOptions',
     records: 'records',
     ptzSpeedChange: 'ptzSpeedChange',
@@ -185,6 +186,8 @@ var EVENTS = {
         /** 对讲控件销毁 */ talkDestroy: 'Control.talkDestroy',
         /** 语音广播状态变化 */ broadcastChange: 'Control.broadcastChange',
         /** 语音广播控件销毁 */ broadcastDestroy: 'Control.broadcastDestroy',
+        /** AI对话框状态变化 */ aichatChange: 'Control.aichatChange',
+        /** AI对话框控件销毁 */ aichatDestroy: 'Control.aichatDestroy',
         /** 缩放比例改变 */ zoomChange: 'Control.zoomChange',
         /** 音量调节面板 展示隐藏变换 */ zoomPanelOpenChange: 'Control.zoomPanelOpenChange',
         /** 缩放控件销毁 */ zoomDestroy: 'Control.zoomDestroy',
@@ -236,7 +239,7 @@ function _create_class$9(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$9(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _inherits$s(subClass, superClass) {
+function _inherits$t(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -247,14 +250,14 @@ function _inherits$s(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$s(subClass, superClass);
+    if (superClass) _set_prototype_of$t(subClass, superClass);
 }
-function _set_prototype_of$s(o, p) {
-    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$t(o, p) {
+    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$s(o, p);
+    return _set_prototype_of$t(o, p);
 }
 /**
  * 控件基类
@@ -268,7 +271,7 @@ function _set_prototype_of$s(o, p) {
  * const myControl = new MyControl({})
  * ```
  */ var Control = /*#__PURE__*/ function(EventEmitter) {
-    _inherits$s(Control, EventEmitter);
+    _inherits$t(Control, EventEmitter);
     function Control(options) {
         var _this;
         var _this___options;
@@ -443,8 +446,8 @@ function _set_prototype_of$s(o, p) {
     return Control;
 }(EventEmitter);
 
-function _extends$r() {
-    _extends$r = Object.assign || function(target) {
+function _extends$s() {
+    _extends$s = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -455,9 +458,9 @@ function _extends$r() {
         }
         return target;
     };
-    return _extends$r.apply(this, arguments);
+    return _extends$s.apply(this, arguments);
 }
-function _inherits$r(subClass, superClass) {
+function _inherits$s(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -468,25 +471,25 @@ function _inherits$r(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$r(subClass, superClass);
+    if (superClass) _set_prototype_of$s(subClass, superClass);
 }
-function _set_prototype_of$r(o, p) {
-    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$s(o, p) {
+    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$r(o, p);
+    return _set_prototype_of$s(o, p);
 }
 var LOADING_DEFAULT_OPTIONS = {};
 /**
  * 加载动画控件
  * @category Control
  */ var Loading = /*#__PURE__*/ function(Control) {
-    _inherits$r(Loading, Control);
+    _inherits$s(Loading, Control);
     function Loading(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$r({}, options, {
+        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$s({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'loading'
@@ -524,8 +527,8 @@ var LOADING_DEFAULT_OPTIONS = {};
     return Loading;
 }(Control);
 
-function _extends$q() {
-    _extends$q = Object.assign || function(target) {
+function _extends$r() {
+    _extends$r = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -536,9 +539,9 @@ function _extends$q() {
         }
         return target;
     };
-    return _extends$q.apply(this, arguments);
+    return _extends$r.apply(this, arguments);
 }
-function _inherits$q(subClass, superClass) {
+function _inherits$r(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -549,14 +552,14 @@ function _inherits$q(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$q(subClass, superClass);
+    if (superClass) _set_prototype_of$r(subClass, superClass);
 }
-function _set_prototype_of$q(o, p) {
-    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$r(o, p) {
+    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$q(o, p);
+    return _set_prototype_of$r(o, p);
 }
 // 不放在服务器上 是因为有可能http加载失败
 // prettier-ignore
@@ -568,11 +571,11 @@ var POSTER_OPTIONS = {
  * 封面控件
  * @category Control
  */ var Poster = /*#__PURE__*/ function(Control) {
-    _inherits$q(Poster, Control);
+    _inherits$r(Poster, Control);
     function Poster(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$q({}, options, {
+        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$r({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'poster'
@@ -668,6 +671,7 @@ var Icons = {
         return '<svg width="1em" height="1em" viewBox="0 0 24 24" focusable="false" aria-hidden="true" data-icon="talk-growth">\n      		<g fill="currentColor" stroke="currentColor">\n            <path stroke="none" d="M9.22313 18.9543C9.6588 18.9543 10.0189 19.2133 10.0759 19.5494L10.0837 19.6428L10.0837 21.7847C10.0837 22.1649 9.69841 22.4732 9.22313 22.4732C8.78745 22.4732 8.42739 22.2142 8.37041 21.8781L8.36255 21.7847L8.36255 19.6428C8.36255 19.2626 8.74784 18.9543 9.22313 18.9543Z" fill-rule="evenodd" />\n            <path d="M16.5323 11.3779L16.5323 11.5872C16.5323 15.7472 13.1599 19.1197 8.99981 19.1197C4.83971 19.1197 1.46729 15.7472 1.46729 11.5872L1.46729 11.4335" fill-rule="evenodd" fill="none" stroke-width="1.5" />\n            <path stroke="none" d="M4.07861 6.12978C4.07861 3.589 6.30476 1.5293 9.05085 1.5293C11.7969 1.5293 14.0231 3.589 14.0231 6.12978L14.0231 12.075C14.0231 14.6158 11.7969 16.6755 9.05085 16.6755C6.30476 16.6755 4.07861 14.6158 4.07861 12.075L4.07861 6.12978ZM5.57861 12.075L5.57861 6.12978C5.57861 5.94083 5.597 5.75561 5.63376 5.57412C5.67605 5.36539 5.74265 5.16158 5.83357 4.9627C5.86625 4.8912 5.90164 4.82121 5.93974 4.75272C6.09781 4.4685 6.30245 4.21019 6.55365 3.97777C6.64206 3.89597 6.73424 3.81921 6.83019 3.7475C7.0816 3.55959 7.3589 3.40632 7.66207 3.28767C7.79552 3.23545 7.93107 3.19114 8.06871 3.15475C8.38503 3.07111 8.71241 3.0293 9.05085 3.0293C9.38929 3.0293 9.71668 3.07112 10.033 3.15475C10.1706 3.19114 10.3062 3.23545 10.4396 3.28767C10.7428 3.40632 11.0201 3.55959 11.2715 3.74749C11.3675 3.81921 11.4596 3.89596 11.548 3.97777C11.7993 4.2102 12.0039 4.46853 12.162 4.75276C12.2001 4.82124 12.2354 4.89122 12.2681 4.9627C12.359 5.16157 12.4256 5.36536 12.4679 5.57407C12.5047 5.75558 12.5231 5.94082 12.5231 6.12978L12.5231 12.075C12.5231 12.264 12.5047 12.4492 12.4679 12.6307C12.4256 12.8394 12.359 13.0432 12.2681 13.2421C12.2355 13.3136 12.2001 13.3835 12.162 13.452C12.0039 13.7362 11.7993 13.9946 11.548 14.227C11.4596 14.3088 11.3675 14.3856 11.2715 14.4573C11.0201 14.6452 10.7428 14.7985 10.4396 14.9171C10.3062 14.9693 10.1706 15.0136 10.033 15.05C9.71667 15.1337 9.38929 15.1755 9.05085 15.1755C8.71241 15.1755 8.38503 15.1337 8.06871 15.05C7.93107 15.0136 7.79552 14.9693 7.66207 14.9171C7.3589 14.7985 7.0816 14.6452 6.83019 14.4573C6.73424 14.3856 6.64206 14.3088 6.55365 14.227C6.30244 13.9946 6.09779 13.7363 5.93972 13.452C5.90163 13.3836 5.86625 13.3136 5.83357 13.2421C5.74265 13.0432 5.67605 12.8394 5.63377 12.6307C5.597 12.4492 5.57861 12.264 5.57861 12.075Z" fill-rule="evenodd" />\n          </g>\n          <g class="' + prefix + '-icon-talk-growth-dot">\n            <path class="' + prefix + '-icon-talk-growth-dot1" d="M19.1333 6.40039L22.8667 6.40039" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n            <path class="' + prefix + '-icon-talk-growth-dot2" d="M19.1333 10.1338L21.9331 10.1338" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n            <path class="' + prefix + '-icon-talk-growth-dot3" d="M19.1333 13.8672L20.9995 13.8672" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n            <path class="' + prefix + '-icon-talk-growth-dot4" d="M19.1333 17.6001L20.0669 17.6001" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n          </g>\n      </svg>';
     },
     /** 语音广播 */ broadcast: '\n  <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="none" focusable="false" aria-hidden="true" data-icon="broadcast">\n <g>\n  <path id="矢量 1" d="m8.52109,6.76609l6.17823,-2.91335c0.2485,-0.11718 0.5027,-0.19531 0.7627,-0.2351c0.2034,-0.03077 0.4104,-0.03809 0.6211,-0.02173c0.2092,0.01636 0.4116,0.05493 0.6069,0.11621c0.2278,0.07129 0.4461,0.1731 0.6548,0.30542c0.2087,0.13232 0.394,0.28638 0.5557,0.46216l0.0002,0l0,0c0.1384,0.15064 0.2598,0.31714 0.3638,0.49951c0.1047,0.18335 0.1865,0.37354 0.2451,0.57081c0.0752,0.25219 0.1128,0.51562 0.1128,0.79004l0,10.64651c0,0.2744 -0.0376,0.5379 -0.1128,0.7901l0,0c-0.0586,0.197 -0.1404,0.3874 -0.2451,0.5708c-0.104,0.1823 -0.2254,0.3488 -0.364,0.4995c-0.1617,0.1758 -0.347,0.3298 -0.5557,0.4621c-0.2087,0.1324 -0.427,0.2342 -0.6548,0.3054c-0.1953,0.0611 -0.3977,0.0999 -0.6069,0.1163c-0.2107,0.0163 -0.4175,0.009 -0.6209,-0.0218c-0.2602,-0.0398 -0.5144,-0.1181 -0.7629,-0.2351l-5.45044,-2.5703l0,2.759c0,0.1036 -0.01831,0.1995 -0.05494,0.2879c-0.03662,0.0886 -0.09155,0.1692 -0.16479,0.2424c-0.14624,0.1465 -0.32324,0.2197 -0.53027,0.2197l-2,0c-0.14209,0 -0.27344,-0.0373 -0.39429,-0.112c-0.12085,-0.0745 -0.21289,-0.1756 -0.27661,-0.3025l-1.99268,-3.9856c-0.06225,-0.0234 -0.12402,-0.0481 -0.18555,-0.074c-0.26953,-0.114 -0.52417,-0.2502 -0.7644,-0.4084c-0.26636,-0.1758 -0.51489,-0.3789 -0.74512,-0.6094c-0.23047,-0.2302 -0.43359,-0.4788 -0.60937,-0.7451c-0.1582,-0.2403 -0.29444,-0.4949 -0.40845,-0.7644c-0.11328,-0.2679 -0.20068,-0.5413 -0.26245,-0.8206l0,0c-0.07398,-0.3347 -0.11108,-0.6775 -0.11108,-1.0286c0,-0.351 0.0371,-0.6938 0.11108,-1.0285c0.06177,-0.2793 0.14917,-0.5528 0.26245,-0.8206c0.11401,-0.26953 0.25025,-0.52417 0.40845,-0.7644c0.17578,-0.26636 0.3789,-0.5149 0.60937,-0.74512c0.23023,-0.23047 0.47876,-0.4336 0.74512,-0.60938l0,0c0.24023,-0.1582 0.49487,-0.29444 0.7644,-0.40845c0.26783,-0.11328 0.54126,-0.20068 0.82056,-0.26245l0,0l0,0l0,0c0.33472,-0.07398 0.67749,-0.11109 1.02857,-0.11109l2.93872,0c0.02636,-0.0166 0.05444,-0.03198 0.08349,-0.04589zm0.72876,8.47948l6.08937,2.8716c0.1287,0.0606 0.2598,0.0987 0.3935,0.114c0.0772,0.0088 0.1551,0.0103 0.2337,0.0042c0.0857,-0.0068 0.1687,-0.0217 0.2495,-0.0452c0.1133,-0.0329 0.2219,-0.0822 0.3257,-0.1479c0.104,-0.0659 0.1948,-0.1431 0.2729,-0.2317c0.0554,-0.063 0.1045,-0.1318 0.147,-0.2063c0.0393,-0.0686 0.0713,-0.1397 0.0962,-0.2131c0.043,-0.1277 0.0647,-0.2625 0.0647,-0.4046l0,-10.64651c0,-0.14209 -0.0217,-0.2771 -0.0647,-0.40454c-0.0249,-0.07349 -0.0569,-0.14454 -0.0962,-0.21314c-0.0425,-0.07471 -0.0916,-0.14331 -0.147,-0.2063c-0.0781,-0.08862 -0.1689,-0.16577 -0.2729,-0.23169c-0.1038,-0.06567 -0.2124,-0.11523 -0.3257,-0.14795c-0.0808,-0.02344 -0.1638,-0.03833 -0.2495,-0.04517c-0.0786,-0.0061 -0.1565,-0.00463 -0.2337,0.00415c-0.1337,0.01539 -0.2648,0.05347 -0.3935,0.11402l-6.09034,2.87208l0.00097,7.16405zm13.58447,-7.9121l-2,1c-0.3757,0.18775 -0.8184,0.04029 -1.0063,-0.33545c-0.0552,-0.11035 -0.0813,-0.22656 -0.0813,-0.34033c0,-0.27344 0.1516,-0.53321 0.4167,-0.66602l2,-1c0.3757,-0.18775 0.8186,-0.04004 1.0064,0.33545c0.0551,0.11035 0.0813,0.22656 0.0813,0.34033c0,0.27368 -0.1514,0.53345 -0.4168,0.66602zm-15.08544,8.9785l-2.08667,0l1.30029,2.6006l0.78638,0l0,-2.6006zm0,-7.99998l-2.25,0c-0.24976,0 -0.49317,0.02734 -0.73023,0.08179c-0.18188,0.04174 -0.36011,0.09961 -0.53467,0.17334c-0.17944,0.07593 -0.34961,0.1665 -0.51049,0.27124c-0.18702,0.12231 -0.36133,0.26416 -0.52271,0.42554c-0.16138,0.16137 -0.30322,0.33569 -0.42554,0.52267c-0.10473,0.1609 -0.19531,0.3311 -0.27124,0.5105c-0.07373,0.1746 -0.13159,0.3528 -0.17334,0.5347c-0.05444,0.2371 -0.08178,0.4805 -0.08178,0.7302c0,0.2498 0.02734,0.4932 0.08178,0.7303c0.04175,0.1818 0.09961,0.3601 0.17334,0.5346c0.07593,0.1795 0.16651,0.3496 0.27124,0.5105c0.12232,0.187 0.26416,0.3614 0.42554,0.5227c0.16138,0.1614 0.33569,0.3033 0.52271,0.4256c0.16088,0.1047 0.33105,0.1953 0.51049,0.2712c0.17456,0.0737 0.35279,0.1316 0.53467,0.1734c0.23706,0.0544 0.48047,0.0817 0.73023,0.0817l2.25097,0l-0.00097,-6.49998zm12.75004,2.60058l2,0c0.4199,0 0.75,0.3301 0.75,0.75c0,0.4199 -0.3301,0.75 -0.75,0.75l-2,0c-0.42,0 -0.75,-0.3301 -0.75,-0.75c0,-0.4199 0.33,-0.75 0.75,-0.75zm0.3354,4.0791l2,1c0.2654,0.1326 0.4168,0.3924 0.4168,0.6661c0,0.1137 -0.0262,0.2299 -0.0813,0.3403c-0.1878,0.3755 -0.6307,0.5232 -1.0064,0.3354l-2,-1c-0.2651,-0.1328 -0.4167,-0.3925 -0.4167,-0.666c0,-0.1138 0.0261,-0.23 0.0813,-0.3403c0.1879,-0.3758 0.6306,-0.5232 1.0063,-0.3355z" fill-rule="evenodd"/>\n </g>\n</svg>',
+    /** AI对话 */ aiChat: '\n  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">\n    <defs>\n      <linearGradient id="gradient0" x1="10.667" x2="10.667" y1="0.667" y2="20.667">\n        <stop stop-color="#33D9FF" offset="0.354"/>\n        <stop stop-color="#CE77FF" offset="1"/>\n      </linearGradient>\n      <linearGradient id="gradient1" x1="8.318" x2="8.318" y1="0" y2="18.001">\n        <stop stop-color="#33D9FF" offset="0.354"/>\n        <stop stop-color="#CE77FF" offset="1"/>\n      </linearGradient>\n    </defs>\n    \n    <g transform="scale(1.2) translate(-3, -0.5)">\n      <path d="M6.917 0C8.776 0 10.52 0.738 11.808 2.026C12.45 2.668 12.961 3.43 13.309 4.269C13.442 4.588 13.29 4.954 12.971 5.086C12.653 5.218 12.287 5.067 12.155 4.748C11.87 4.061 11.451 3.436 10.925 2.91C9.868 1.854 8.441 1.25 6.917 1.25C3.787 1.25 1.25 3.787 1.25 6.917C1.25 10.047 3.787 12.584 6.917 12.584C8.441 12.584 9.868 11.981 10.925 10.925C11.169 10.681 11.564 10.681 11.808 10.925C12.052 11.169 12.052 11.565 11.808 11.809C10.666 12.951 9.164 13.661 7.542 13.807L7.542 17.376C7.542 17.721 7.262 18.001 6.917 18.001C6.572 18.001 6.292 17.721 6.292 17.376L6.292 13.807C2.765 13.49 0 10.527 0 6.917C0 3.097 3.097 0 6.917 0ZM11.051 6.495C11.295 6.739 11.295 7.135 11.051 7.379L7.547 10.882C7.303 11.126 6.908 11.126 6.664 10.882C6.42 10.638 6.42 10.242 6.664 9.998L10.167 6.495C10.411 6.251 10.807 6.251 11.051 6.495ZM8.566 4.559L6.501 9.5C6.368 9.818 6.002 9.969 5.684 9.836C5.365 9.703 5.215 9.336 5.348 9.018L5.712 8.147L4.094 6.529L3.198 6.884C2.904 7.001 2.575 6.878 2.424 6.61C2.297 6.289 2.418 5.849 2.739 5.722L7.76 3.736C8.274 3.533 8.779 4.049 8.566 4.559ZM16.614 6.171C16.642 6.236 16.642 6.309 16.614 6.373L15.964 7.848C15.936 7.912 15.936 7.986 15.964 8.05L16.614 9.525C16.67 9.651 16.613 9.799 16.486 9.855C16.422 9.883 16.349 9.883 16.285 9.855L14.809 9.205C14.745 9.176 14.672 9.176 14.608 9.205L13.133 9.855C13.006 9.911 12.859 9.853 12.803 9.727C12.775 9.662 12.775 9.589 12.803 9.525L13.453 8.05C13.482 7.986 13.482 7.912 13.453 7.848L12.803 6.373C12.747 6.247 12.805 6.099 12.931 6.043C12.995 6.015 13.068 6.015 13.133 6.043L14.608 6.694C14.672 6.722 14.745 6.722 14.809 6.694L16.285 6.043C16.411 5.988 16.558 6.045 16.614 6.171ZM6.841 5.443L5.361 6.028L6.233 6.9L6.841 5.443Z" fill="url(#gradient1)" transform="matrix(0.707 -0.707 0.707 0.707 0.085 9.868)"/>\n    </g>\n  </svg>\n  ',
     /** 相机/截图 */ capturePicture: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="capture-picture">\n      	<path d="M6.94 7.51C7.34 7.51 7.7 7.28 7.86 6.91L8.43 5.6C8.59 5.23 8.95 5 9.35 5L14.69 5C15.04 5 15.37 5.18 15.55 5.49L16.45 7.02C16.63 7.33 16.96 7.51 17.31 7.51L18.5 7.51C19.6 7.51 20.5 8.41 20.5 9.51L20.5 17C20.5 18.1 19.6 19 18.5 19L5.5 19C4.39 19 3.5 18.1 3.5 17L3.5 9.51C3.5 8.41 4.39 7.51 5.5 7.51L6.94 7.51Z" stroke-width="1.5"/>\n	      <circle cx="12" cy="12.525146" r="3.068097" stroke-width="1.5"/>\n    </svg>',
     /** 电子放大 */ zoom: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="zoom">\n      <ellipse cx="10.914795" cy="11.25" rx="8.004043" ry="8.25" stroke-width="1.5"/>\n      <path d="M14.31 11.04L8.05 11.14" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M11.13 14.22L11.23 7.95" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M16.45 17.83L19.36 20.83" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n    </svg>',
     /** 隐私遮蔽 */ privacyMasking: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="privacy-masking">\n      <path d="M12 19C11.15 19 10.31 18.82 9.49 18.5" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M20.88 12.46C18.98 15.96 15.49 19 11.99 19" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M19.07 8.92C19.76 9.72 20.38 10.61 20.88 11.53C21.03 11.82 21.03 12.17 20.88 12.46" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M5 19L19 5" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M9.77 14.22C8.54 12.99 8.54 11 9.77 9.77C11 8.54 12.99 8.54 14.22 9.77" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M17.04 6.95C15.49 5.75 13.74 5 12 5C8.5 5 5.01 8.03 3.11 11.53C2.96 11.82 2.96 12.17 3.11 12.46C4.06 14.21 5.41 15.84 6.95 17.04" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n    </svg>',
@@ -756,6 +760,10 @@ var IconComponents = {
         if (attr === void 0) attr = {};
         return createIcon(Icons.broadcast, 'broadcast', attr);
     },
+    aiChat: function(attr) {
+        if (attr === void 0) attr = {};
+        return createIcon(Icons.aiChat, 'aiChat', attr);
+    },
     talkGrowth: function(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.talkGrowth(PREFIX_CLASS), 'talk-growth', attr);
@@ -834,8 +842,8 @@ var IconComponents = {
     }
 };
 
-function _extends$p() {
-    _extends$p = Object.assign || function(target) {
+function _extends$q() {
+    _extends$q = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -846,9 +854,9 @@ function _extends$p() {
         }
         return target;
     };
-    return _extends$p.apply(this, arguments);
+    return _extends$q.apply(this, arguments);
 }
-function _inherits$p(subClass, superClass) {
+function _inherits$q(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -859,25 +867,25 @@ function _inherits$p(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$p(subClass, superClass);
+    if (superClass) _set_prototype_of$q(subClass, superClass);
 }
-function _set_prototype_of$p(o, p) {
-    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$q(o, p) {
+    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$p(o, p);
+    return _set_prototype_of$q(o, p);
 }
 var MESSAGE_DEFAULT_OPTIONS = {};
 /**
  * 消息控件
  * @category Control
  */ var Message = /*#__PURE__*/ function(Control) {
-    _inherits$p(Message, Control);
+    _inherits$q(Message, Control);
     function Message(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$p({}, options, {
+        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$q({}, options, {
             tagName: 'div',
             controlType: 'block'
         }))) || this;
@@ -1030,8 +1038,8 @@ function _create_class$8(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$8(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$o() {
-    _extends$o = Object.assign || function(target) {
+function _extends$p() {
+    _extends$p = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -1042,9 +1050,9 @@ function _extends$o() {
         }
         return target;
     };
-    return _extends$o.apply(this, arguments);
+    return _extends$p.apply(this, arguments);
 }
-function _inherits$o(subClass, superClass) {
+function _inherits$p(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -1055,23 +1063,23 @@ function _inherits$o(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$o(subClass, superClass);
+    if (superClass) _set_prototype_of$p(subClass, superClass);
 }
-function _set_prototype_of$o(o, p) {
-    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$p(o, p) {
+    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$o(o, p);
+    return _set_prototype_of$p(o, p);
 }
 /**
  * 播放/暂停控件
  * @category Control
  */ var Play = /*#__PURE__*/ function(Control) {
-    _inherits$o(Play, Control);
+    _inherits$p(Play, Control);
     function Play(options) {
         var _this;
-        _this = Control.call(this, _extends$o({}, options, {
+        _this = Control.call(this, _extends$p({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'play'
@@ -1687,8 +1695,8 @@ function _create_class$6(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$6(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$n() {
-    _extends$n = Object.assign || function(target) {
+function _extends$o() {
+    _extends$o = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -1699,9 +1707,9 @@ function _extends$n() {
         }
         return target;
     };
-    return _extends$n.apply(this, arguments);
+    return _extends$o.apply(this, arguments);
 }
-function _inherits$n(subClass, superClass) {
+function _inherits$o(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -1712,14 +1720,14 @@ function _inherits$n(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$n(subClass, superClass);
+    if (superClass) _set_prototype_of$o(subClass, superClass);
 }
-function _set_prototype_of$n(o, p) {
-    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$o(o, p) {
+    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$n(o, p);
+    return _set_prototype_of$o(o, p);
 }
 var VOLUME_DEFAULT_OPTIONS = {
     volume: 0.8,
@@ -1733,12 +1741,12 @@ var VOLUME_DEFAULT_OPTIONS = {
  * 音量调节控件
  * @category Control
  */ var Volume = /*#__PURE__*/ function(Control) {
-    _inherits$n(Volume, Control);
+    _inherits$o(Volume, Control);
     function Volume(options) {
         if (options === void 0) options = {};
         var _this;
         var _this__options_props, _this__options_props1, _this__options_props2, _this__options_props3;
-        _this = Control.call(this, _extends$n({}, options, {
+        _this = Control.call(this, _extends$o({}, options, {
             tagName: 'span',
             classNameSuffix: 'volume',
             controlType: 'button'
@@ -1954,7 +1962,7 @@ var VOLUME_DEFAULT_OPTIONS = {
     return Volume;
 }(Control);
 
-function asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
         var value = info.value;
@@ -1968,22 +1976,22 @@ function asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, key, arg) {
         Promise.resolve(value).then(_next, _throw);
     }
 }
-function _async_to_generator$6(fn) {
+function _async_to_generator$7(fn) {
     return function() {
         var self = this, args = arguments;
         return new Promise(function(resolve, reject) {
             var gen = fn.apply(self, args);
             function _next(value) {
-                asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, "next", value);
+                asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, "next", value);
             }
             function _throw(err) {
-                asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, "throw", err);
+                asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, "throw", err);
             }
             _next(undefined);
         });
     };
 }
-function _ts_generator$6(thisArg, body) {
+function _ts_generator$7(thisArg, body) {
     var f, y, t, _ = {
         label: 0,
         sent: function() {
@@ -2197,8 +2205,8 @@ var __fullscreenProvider__ = Provider.getInstance();
    * 全屏
    * @returns Promise<void>
    */ _proto.fullscreen = function fullscreen() {
-        return _async_to_generator$6(function() {
-            return _ts_generator$6(this, function(_state) {
+        return _async_to_generator$7(function() {
+            return _ts_generator$7(this, function(_state) {
                 switch(_state.label){
                     case 0:
                         if (!Utils.isMobile) return [
@@ -2233,8 +2241,8 @@ var __fullscreenProvider__ = Provider.getInstance();
    * 退出全屏
    * @returns Promise<void>
    */ _proto.exitFullscreen = function exitFullscreen() {
-        return _async_to_generator$6(function() {
-            return _ts_generator$6(this, function(_state) {
+        return _async_to_generator$7(function() {
+            return _ts_generator$7(this, function(_state) {
                 switch(_state.label){
                     case 0:
                         if (!Utils.isMobile) return [
@@ -2273,8 +2281,8 @@ var __fullscreenProvider__ = Provider.getInstance();
    * 全屏切换
    * @returns Promise<void>
    */ _proto.toggle = function toggle() {
-        return _async_to_generator$6(function() {
-            return _ts_generator$6(this, function(_state) {
+        return _async_to_generator$7(function() {
+            return _ts_generator$7(this, function(_state) {
                 switch(_state.label){
                     case 0:
                         if (!Utils.isMobile) return [
@@ -2397,8 +2405,8 @@ var __fullscreenProvider__ = Provider.getInstance();
     return Fullscreen;
 }();
 
-function _extends$m() {
-    _extends$m = Object.assign || function(target) {
+function _extends$n() {
+    _extends$n = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -2409,9 +2417,9 @@ function _extends$m() {
         }
         return target;
     };
-    return _extends$m.apply(this, arguments);
+    return _extends$n.apply(this, arguments);
 }
-function _inherits$m(subClass, superClass) {
+function _inherits$n(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -2422,24 +2430,24 @@ function _inherits$m(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$m(subClass, superClass);
+    if (superClass) _set_prototype_of$n(subClass, superClass);
 }
-function _set_prototype_of$m(o, p) {
-    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$n(o, p) {
+    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$m(o, p);
+    return _set_prototype_of$n(o, p);
 }
 /**
  * 全屏控件
  * @category Control
  */ var Fullscreen = /*#__PURE__*/ function(Control) {
-    _inherits$m(Fullscreen, Control);
+    _inherits$n(Fullscreen, Control);
     function Fullscreen(options) {
         var _this;
         var _options_props, _this_options;
-        _this = Control.call(this, _extends$m({
+        _this = Control.call(this, _extends$n({
             tagName: 'span',
             classNameSuffix: 'fullscreen',
             controlType: 'button'
@@ -2504,8 +2512,8 @@ function _set_prototype_of$m(o, p) {
     return Fullscreen;
 }(Control);
 
-function _extends$l() {
-    _extends$l = Object.assign || function(target) {
+function _extends$m() {
+    _extends$m = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -2516,9 +2524,9 @@ function _extends$l() {
         }
         return target;
     };
-    return _extends$l.apply(this, arguments);
+    return _extends$m.apply(this, arguments);
 }
-function _inherits$l(subClass, superClass) {
+function _inherits$m(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -2529,24 +2537,24 @@ function _inherits$l(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$l(subClass, superClass);
+    if (superClass) _set_prototype_of$m(subClass, superClass);
 }
-function _set_prototype_of$l(o, p) {
-    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$m(o, p) {
+    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$l(o, p);
+    return _set_prototype_of$m(o, p);
 }
 /**
  * 回放类型切换（本地回放(sdk 卡)， 云存储回放， 云录制回放）控件
  * @category Control
  */ var Rec = /*#__PURE__*/ function(Control) {
-    _inherits$l(Rec, Control);
+    _inherits$m(Rec, Control);
     function Rec(options) {
         var _this;
         var _options_props;
-        _this = Control.call(this, _extends$l({}, options, {
+        _this = Control.call(this, _extends$m({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'rec'
@@ -2822,6 +2830,7 @@ var zh = {
     BTN_CAPTURE: '截图',
     BTN_TALK: '对讲',
     BTN_BROADCAST: '语音广播',
+    BTN_AICHAT: 'AI对话',
     BTN_ZOOM: '电子放大',
     BTN_3D_ZOOM: '3D定位',
     BTN_PTZ: '云台控制',
@@ -3093,6 +3102,7 @@ var en = {
     BTN_CAPTURE: 'Screenshot',
     BTN_TALK: 'Intercom',
     BTN_BROADCAST: 'Voice broadcast',
+    BTN_AICHAT: 'AI Chat',
     BTN_ZOOM: 'Electronic zoom',
     BTN_3D_ZOOM: '3D positioning',
     BTN_PTZ: 'PTZ control',
@@ -3388,6 +3398,12 @@ var en = {
                 isrender: 1
             },
             {
+                iconId: 'aiChat',
+                part: 'left',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
                 iconId: 'speed',
                 part: 'right',
                 defaultActive: 0,
@@ -3572,6 +3588,12 @@ var en = {
                 isrender: 1
             },
             {
+                iconId: 'aiChat',
+                part: 'left',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
                 iconId: 'speed',
                 part: 'right',
                 defaultActive: 0,
@@ -3731,7 +3753,7 @@ var en = {
     voice: voice
 };
 
-function _inherits$k(subClass, superClass) {
+function _inherits$l(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -3742,20 +3764,20 @@ function _inherits$k(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$k(subClass, superClass);
+    if (superClass) _set_prototype_of$l(subClass, superClass);
 }
-function _set_prototype_of$k(o, p) {
-    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$l(o, p) {
+    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$k(o, p);
+    return _set_prototype_of$l(o, p);
 }
 /**
  * 截图控件
  * @category Content
  */ var Content = /*#__PURE__*/ function(EventEmitter) {
-    _inherits$k(Content, EventEmitter);
+    _inherits$l(Content, EventEmitter);
     function Content(options) {
         var _this;
         _this = EventEmitter.call(this) || this, _this._scaleMode = 0, _this._cleanUpResizeObserver = null, _this._originWidth = 0, _this._originHeight = 0, _this._width = 0, _this._height = 0;
@@ -3870,8 +3892,8 @@ function _set_prototype_of$k(o, p) {
     return Content;
 }(EventEmitter);
 
-function _extends$k() {
-    _extends$k = Object.assign || function(target) {
+function _extends$l() {
+    _extends$l = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -3882,9 +3904,9 @@ function _extends$k() {
         }
         return target;
     };
-    return _extends$k.apply(this, arguments);
+    return _extends$l.apply(this, arguments);
 }
-function _inherits$j(subClass, superClass) {
+function _inherits$k(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -3895,23 +3917,23 @@ function _inherits$j(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$j(subClass, superClass);
+    if (superClass) _set_prototype_of$k(subClass, superClass);
 }
-function _set_prototype_of$j(o, p) {
-    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$k(o, p) {
+    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$j(o, p);
+    return _set_prototype_of$k(o, p);
 }
 /**
  * 更多控件
  * @category Control
  */ var More = /*#__PURE__*/ function(Control) {
-    _inherits$j(More, Control);
+    _inherits$k(More, Control);
     function More(options) {
         var _this;
-        _this = Control.call(this, _extends$k({}, options, {
+        _this = Control.call(this, _extends$l({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'more'
@@ -4117,6 +4139,16 @@ function debounce(func, wait) {
         }
     });
     // =======================================================
+    // AI对话框
+    // =======================================================
+    theme.on(EVENTS.aichatChange, function(active) {
+        var _theme_controls, _theme_controls_aiChatControl, _theme_controls1;
+        if (((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.aiChatControl) && active !== ((_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_aiChatControl = _theme_controls1.aiChatControl) == null ? void 0 : _theme_controls_aiChatControl.active)) {
+            var _theme_controls_aiChatControl1, _theme_controls2;
+            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_aiChatControl1 = _theme_controls2.aiChatControl) == null ? void 0 : _theme_controls_aiChatControl1.emit(EVENTS.aichatChange, active);
+        }
+    });
+    // =======================================================
     // 录制
     // =======================================================
     theme.on(EVENTS.recordingChange, function(recording) {
@@ -4212,7 +4244,7 @@ function debounce(func, wait) {
  *
  * @param theme - Theme
  */ function _controlEventemitter(theme) {
-    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15;
+    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16;
     // Controls
     if (theme._recFooter) {
         theme._recFooter.on(EVENTS.theme.recFooterDestroy, function() {
@@ -4314,8 +4346,17 @@ function debounce(func, wait) {
             theme.emit(EVENTS.control.broadcastDestroy);
         });
     }
+    // AI对话框
+    if ((_theme_controls6 = theme.controls) == null ? void 0 : _theme_controls6.aiChatControl) {
+        theme.controls.aiChatControl.on(EVENTS.control.aichatChange, function(active) {
+            theme.emit(EVENTS.control.aichatChange, active);
+        });
+        theme.controls.aiChatControl.on(EVENTS.control.aichatDestroy, function() {
+            theme.emit(EVENTS.control.aichatDestroy);
+        });
+    }
     // 缩放控件
-    if ((_theme_controls6 = theme.controls) == null ? void 0 : _theme_controls6.zoomControl) {
+    if ((_theme_controls7 = theme.controls) == null ? void 0 : _theme_controls7.zoomControl) {
         theme.controls.zoomControl.on(EVENTS.control.zoomChange, function(value, _percent, _range) {
             if (theme.zoom !== value) {
                 theme.zoom = value;
@@ -4337,7 +4378,7 @@ function debounce(func, wait) {
         });
     }
     // 清晰度控件
-    if ((_theme_controls7 = theme.controls) == null ? void 0 : _theme_controls7.definitionControl) {
+    if ((_theme_controls8 = theme.controls) == null ? void 0 : _theme_controls8.definitionControl) {
         theme.controls.definitionControl.on(EVENTS.control.definitionPanelOpenChange, function(open, definition, item) {
             theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, definition);
             theme.emit(EVENTS.control.definitionPanelOpenChange, open, definition, item);
@@ -4350,7 +4391,7 @@ function debounce(func, wait) {
         });
     }
     // 倍速控件
-    if ((_theme_controls8 = theme.controls) == null ? void 0 : _theme_controls8.speedControl) {
+    if ((_theme_controls9 = theme.controls) == null ? void 0 : _theme_controls9.speedControl) {
         theme.controls.speedControl.on(EVENTS.control.speedPanelOpenChange, function(open, speed, item) {
             theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, speed);
             theme.emit(EVENTS.control.speedPanelOpenChange, open, speed, item);
@@ -4363,7 +4404,7 @@ function debounce(func, wait) {
         });
     }
     // 截图控件
-    if ((_theme_controls9 = theme.controls) == null ? void 0 : _theme_controls9.capturePictureControl) {
+    if ((_theme_controls10 = theme.controls) == null ? void 0 : _theme_controls10.capturePictureControl) {
         theme.controls.capturePictureControl.on(EVENTS.control.capturePicture, function(options) {
             theme.emit(EVENTS.control.capturePicture, options);
         });
@@ -4372,25 +4413,25 @@ function debounce(func, wait) {
         });
     }
     // 全屏控件
-    if ((_theme_controls10 = theme.controls) == null ? void 0 : _theme_controls10.fullscreenControl) {
+    if ((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.fullscreenControl) {
         theme.controls.fullscreenControl.on(EVENTS.control.fullscreenDestroy, function() {
             theme.emit(EVENTS.control.fullscreenDestroy);
         });
     }
     // 全局全屏控件
-    if ((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.globalFullscreenControl) {
+    if ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.globalFullscreenControl) {
         theme.controls.globalFullscreenControl.on(EVENTS.control.globalFullscreenDestroy, function() {
             theme.emit(EVENTS.control.globalFullscreenDestroy);
         });
     }
     // 设备信息控件
-    if ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.deviceControl) {
+    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.deviceControl) {
         theme.controls.deviceControl.on(EVENTS.control.deviceDestroy, function() {
             theme.emit(EVENTS.control.deviceDestroy);
         });
     }
     // 回放类型切换控件
-    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.recControl) {
+    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.recControl) {
         // prettier-ignore
         theme.controls.recControl.on(EVENTS.control.recTypeChange, function(type) {
             if (theme.recType !== type) {
@@ -4411,7 +4452,7 @@ function debounce(func, wait) {
         });
     }
     // 时间轴控件
-    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.timeLineControl) {
+    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.timeLineControl) {
         theme.controls.timeLineControl.on(EVENTS.control.timeLineChange, function(date) {
             theme.emit(EVENTS.control.timeLineChange, date);
         });
@@ -4428,7 +4469,7 @@ function debounce(func, wait) {
         });
     }
     // 日历控件
-    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.dateControl) {
+    if ((_theme_controls16 = theme.controls) == null ? void 0 : _theme_controls16.dateControl) {
         theme.controls.dateControl.on(EVENTS.control.datePanelOpenChange, function(open, date) {
             theme.emit(EVENTS.control.datePanelOpenChange, open, date);
         });
@@ -4523,8 +4564,8 @@ function _create_class$5(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$5(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$j() {
-    _extends$j = Object.assign || function(target) {
+function _extends$k() {
+    _extends$k = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -4535,9 +4576,9 @@ function _extends$j() {
         }
         return target;
     };
-    return _extends$j.apply(this, arguments);
+    return _extends$k.apply(this, arguments);
 }
-function _inherits$i(subClass, superClass) {
+function _inherits$j(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -4548,14 +4589,14 @@ function _inherits$i(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$i(subClass, superClass);
+    if (superClass) _set_prototype_of$j(subClass, superClass);
 }
-function _set_prototype_of$i(o, p) {
-    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$j(o, p) {
+    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$i(o, p);
+    return _set_prototype_of$j(o, p);
 }
 var ZOOM_DEFAULT_OPTIONS = {
     open: false,
@@ -4565,10 +4606,10 @@ var ZOOM_DEFAULT_OPTIONS = {
  * 电子放大控件
  * @category Control
  */ var Zoom$1 = /*#__PURE__*/ function(Control) {
-    _inherits$i(Zoom, Control);
+    _inherits$j(Zoom, Control);
     function Zoom(options) {
         var _this;
-        _this = Control.call(this, _extends$j({}, options, {
+        _this = Control.call(this, _extends$k({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'zoom'
@@ -5425,8 +5466,8 @@ function requireDist$1 () {
 var distExports$1 = requireDist$1();
 var Zoom = /*@__PURE__*/getDefaultExportFromCjs(distExports$1);
 
-function _extends$i() {
-    _extends$i = Object.assign || function(target) {
+function _extends$j() {
+    _extends$j = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -5437,10 +5478,10 @@ function _extends$i() {
         }
         return target;
     };
-    return _extends$i.apply(this, arguments);
+    return _extends$j.apply(this, arguments);
 }
 function __zoom(theme, container, options) {
-    theme.zoomUtil = new Zoom(container, _extends$i({}, options || {}, {
+    theme.zoomUtil = new Zoom(container, _extends$j({}, options || {}, {
         min: 1,
         onChange: function(zoom, reset) {
             if (zoom !== theme._zoom) {
@@ -5458,7 +5499,7 @@ function __zoom(theme, container, options) {
     }));
 }
 
-function asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
         var value = info.value;
@@ -5472,22 +5513,22 @@ function asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, key, arg) {
         Promise.resolve(value).then(_next, _throw);
     }
 }
-function _async_to_generator$5(fn) {
+function _async_to_generator$6(fn) {
     return function() {
         var self = this, args = arguments;
         return new Promise(function(resolve, reject) {
             var gen = fn.apply(self, args);
             function _next(value) {
-                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "next", value);
+                asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, "next", value);
             }
             function _throw(err) {
-                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "throw", err);
+                asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, "throw", err);
             }
             _next(undefined);
         });
     };
 }
-function _ts_generator$5(thisArg, body) {
+function _ts_generator$6(thisArg, body) {
     var f, y, t, _ = {
         label: 0,
         sent: function() {
@@ -5579,9 +5620,9 @@ function _ts_generator$5(thisArg, body) {
     }
 }
 function getThemeDataByTemplate(theme, id) {
-    return _async_to_generator$5(function() {
+    return _async_to_generator$6(function() {
         var _theme_options_token_httpToken, _theme_options_token, url;
-        return _ts_generator$5(this, function(_state) {
+        return _ts_generator$6(this, function(_state) {
             switch(_state.label){
                 case 0:
                     url = theme.options.env.domain + "/api/service/media/template/getDetail?accessToken=" + (theme.options.accessToken || ((_theme_options_token = theme.options.token) == null ? void 0 : (_theme_options_token_httpToken = _theme_options_token.httpToken) == null ? void 0 : _theme_options_token_httpToken.url)) + "&id=" + id;
@@ -5590,8 +5631,8 @@ function getThemeDataByTemplate(theme, id) {
                         fetch(url, {
                             method: 'GET'
                         }).then(function(response) {
-                            return _async_to_generator$5(function() {
-                                return _ts_generator$5(this, function(_state) {
+                            return _async_to_generator$6(function() {
+                                return _ts_generator$6(this, function(_state) {
                                     switch(_state.label){
                                         case 0:
                                             return [
@@ -5636,7 +5677,7 @@ function getThemeDataByTemplate(theme, id) {
     })();
 }
 
-function asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
         var value = info.value;
@@ -5650,23 +5691,23 @@ function asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, key, arg) {
         Promise.resolve(value).then(_next, _throw);
     }
 }
-function _async_to_generator$4(fn) {
+function _async_to_generator$5(fn) {
     return function() {
         var self = this, args = arguments;
         return new Promise(function(resolve, reject) {
             var gen = fn.apply(self, args);
             function _next(value) {
-                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "next", value);
+                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "next", value);
             }
             function _throw(err) {
-                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "throw", err);
+                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "throw", err);
             }
             _next(undefined);
         });
     };
 }
-function _extends$h() {
-    _extends$h = Object.assign || function(target) {
+function _extends$i() {
+    _extends$i = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -5677,9 +5718,9 @@ function _extends$h() {
         }
         return target;
     };
-    return _extends$h.apply(this, arguments);
+    return _extends$i.apply(this, arguments);
 }
-function _ts_generator$4(thisArg, body) {
+function _ts_generator$5(thisArg, body) {
     var f, y, t, _ = {
         label: 0,
         sent: function() {
@@ -5805,7 +5846,7 @@ function _ts_generator$4(thisArg, body) {
         }
         if (item.isrender === 1 && REC_GROUP.includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
-            recControls.push(recControls[0] ? _extends$h({}, item, {
+            recControls.push(recControls[0] ? _extends$i({}, item, {
                 part: recControls[0].part
             }) : item);
             return false;
@@ -5828,7 +5869,7 @@ function _ts_generator$4(thisArg, body) {
         }
         if (item.isrender === 1 && REC_GROUP.includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
-            recControls.push(recControls[0] ? _extends$h({}, item, {
+            recControls.push(recControls[0] ? _extends$i({}, item, {
                 part: recControls[0].part
             }) : item);
             return false;
@@ -5890,9 +5931,9 @@ function _filterLeftRightControls(btnList) {
  * @param data
  * @returns
  */ function getThemeData(theme, data) {
-    return _async_to_generator$4(function() {
+    return _async_to_generator$5(function() {
         var themeData, _theme_logger, template;
-        return _ts_generator$4(this, function(_state) {
+        return _ts_generator$5(this, function(_state) {
             switch(_state.label){
                 case 0:
                     themeData = data;
@@ -6083,6 +6124,51 @@ function rgbOrHexToRgbaWithOpacity(color, opacity) {
     return Component;
 }();
 
+function _extends$h() {
+    _extends$h = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source){
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    };
+    return _extends$h.apply(this, arguments);
+}
+function _inherits$i(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$i(subClass, superClass);
+}
+function _set_prototype_of$i(o, p) {
+    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$i(o, p);
+}
+var Footer = /*#__PURE__*/ function(Component) {
+    _inherits$i(Footer, Component);
+    function Footer(options) {
+        if (options === void 0) options = {};
+        return Component.call(this, _extends$h({}, options, {
+            cType: 'footer'
+        })) || this;
+    }
+    return Footer;
+}(Component);
+
 function _extends$g() {
     _extends$g = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
@@ -6117,56 +6203,11 @@ function _set_prototype_of$h(o, p) {
     };
     return _set_prototype_of$h(o, p);
 }
-var Footer = /*#__PURE__*/ function(Component) {
-    _inherits$h(Footer, Component);
-    function Footer(options) {
-        if (options === void 0) options = {};
-        return Component.call(this, _extends$g({}, options, {
-            cType: 'footer'
-        })) || this;
-    }
-    return Footer;
-}(Component);
-
-function _extends$f() {
-    _extends$f = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
-        }
-        return target;
-    };
-    return _extends$f.apply(this, arguments);
-}
-function _inherits$g(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-        constructor: {
-            value: subClass,
-            writable: true,
-            configurable: true
-        }
-    });
-    if (superClass) _set_prototype_of$g(subClass, superClass);
-}
-function _set_prototype_of$g(o, p) {
-    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
-        o.__proto__ = p;
-        return o;
-    };
-    return _set_prototype_of$g(o, p);
-}
 var Header = /*#__PURE__*/ function(Component) {
-    _inherits$g(Header, Component);
+    _inherits$h(Header, Component);
     function Header(options) {
         if (options === void 0) options = {};
-        return Component.call(this, _extends$f({}, options, {
+        return Component.call(this, _extends$g({}, options, {
             cType: 'header'
         })) || this;
     }
@@ -6332,6 +6373,78 @@ function interactiveHF($container, second, callback) {
     };
 }
 
+function _extends$f() {
+    _extends$f = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source){
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    };
+    return _extends$f.apply(this, arguments);
+}
+function _inherits$g(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$g(subClass, superClass);
+}
+function _set_prototype_of$g(o, p) {
+    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$g(o, p);
+}
+/**
+ * 全局全屏
+ * 主题和播放器不提供全局全屏的api， 如果开发者想要可以参考这个组件自己实现
+ * @category Control
+ */ var GlobalFullscreen = /*#__PURE__*/ function(Fullscreen) {
+    _inherits$g(GlobalFullscreen, Fullscreen);
+    function GlobalFullscreen(options) {
+        return Fullscreen.call(this, _extends$f({}, options, {
+            controlType: 'button',
+            classNameSuffix: 'global-fullscreen'
+        })) || this;
+    }
+    var _proto = GlobalFullscreen.prototype;
+    _proto._render = function _render() {
+        var _this_locale, _this_locale1;
+        this.$container.innerHTML = IconComponents.exitGlobalFullscreen({
+            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_EXIT_GLOBAL_FULLSCREEN
+        }) + IconComponents.globalFullscreen({
+            title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_GLOBAL_FULLSCREEN
+        });
+    };
+    /**
+   * 点击 Control 会触发
+   */ _proto._onControlClick = function _onControlClick() {
+        // 网页全屏的情况下 还可以执行全局全屏
+        if (this.isCurrentFullscreen && this._$rootContainer.classList.contains("" + PREFIX_CLASS + "-global-fullscreen")) {
+            var _this__fullscreenUtil;
+            this._$rootContainer.classList.remove("" + PREFIX_CLASS + "-global-fullscreen");
+            (_this__fullscreenUtil = this._fullscreenUtil) == null ? void 0 : _this__fullscreenUtil.exitFullscreen();
+        } else {
+            var _this__fullscreenUtil1;
+            this._$rootContainer.classList.add("" + PREFIX_CLASS + "-global-fullscreen");
+            (_this__fullscreenUtil1 = this._fullscreenUtil) == null ? void 0 : _this__fullscreenUtil1.fullscreen();
+        }
+    };
+    return GlobalFullscreen;
+}(Fullscreen);
+
 function _extends$e() {
     _extends$e = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
@@ -6367,85 +6480,13 @@ function _set_prototype_of$f(o, p) {
     return _set_prototype_of$f(o, p);
 }
 /**
- * 全局全屏
- * 主题和播放器不提供全局全屏的api， 如果开发者想要可以参考这个组件自己实现
- * @category Control
- */ var GlobalFullscreen = /*#__PURE__*/ function(Fullscreen) {
-    _inherits$f(GlobalFullscreen, Fullscreen);
-    function GlobalFullscreen(options) {
-        return Fullscreen.call(this, _extends$e({}, options, {
-            controlType: 'button',
-            classNameSuffix: 'global-fullscreen'
-        })) || this;
-    }
-    var _proto = GlobalFullscreen.prototype;
-    _proto._render = function _render() {
-        var _this_locale, _this_locale1;
-        this.$container.innerHTML = IconComponents.exitGlobalFullscreen({
-            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_EXIT_GLOBAL_FULLSCREEN
-        }) + IconComponents.globalFullscreen({
-            title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_GLOBAL_FULLSCREEN
-        });
-    };
-    /**
-   * 点击 Control 会触发
-   */ _proto._onControlClick = function _onControlClick() {
-        // 网页全屏的情况下 还可以执行全局全屏
-        if (this.isCurrentFullscreen && this._$rootContainer.classList.contains("" + PREFIX_CLASS + "-global-fullscreen")) {
-            var _this__fullscreenUtil;
-            this._$rootContainer.classList.remove("" + PREFIX_CLASS + "-global-fullscreen");
-            (_this__fullscreenUtil = this._fullscreenUtil) == null ? void 0 : _this__fullscreenUtil.exitFullscreen();
-        } else {
-            var _this__fullscreenUtil1;
-            this._$rootContainer.classList.add("" + PREFIX_CLASS + "-global-fullscreen");
-            (_this__fullscreenUtil1 = this._fullscreenUtil) == null ? void 0 : _this__fullscreenUtil1.fullscreen();
-        }
-    };
-    return GlobalFullscreen;
-}(Fullscreen);
-
-function _extends$d() {
-    _extends$d = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
-        }
-        return target;
-    };
-    return _extends$d.apply(this, arguments);
-}
-function _inherits$e(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-        constructor: {
-            value: subClass,
-            writable: true,
-            configurable: true
-        }
-    });
-    if (superClass) _set_prototype_of$e(subClass, superClass);
-}
-function _set_prototype_of$e(o, p) {
-    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
-        o.__proto__ = p;
-        return o;
-    };
-    return _set_prototype_of$e(o, p);
-}
-/**
  * 截图控件，点击后会触发截图事件， 截图数据会通过 onCapture 回调函数返回
  * @category Control
  */ var CapturePicture = /*#__PURE__*/ function(Control) {
-    _inherits$e(CapturePicture, Control);
+    _inherits$f(CapturePicture, Control);
     function CapturePicture(options) {
         var _this;
-        _this = Control.call(this, _extends$d({}, options, {
+        _this = Control.call(this, _extends$e({}, options, {
             tagName: 'span',
             classNameSuffix: 'capture-picture'
         })) || this, _this._timer = null;
@@ -7454,8 +7495,8 @@ function _create_class$4(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$4(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$c() {
-    _extends$c = Object.assign || function(target) {
+function _extends$d() {
+    _extends$d = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -7466,9 +7507,9 @@ function _extends$c() {
         }
         return target;
     };
-    return _extends$c.apply(this, arguments);
+    return _extends$d.apply(this, arguments);
 }
-function _inherits$d(subClass, superClass) {
+function _inherits$e(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7479,23 +7520,23 @@ function _inherits$d(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$d(subClass, superClass);
+    if (superClass) _set_prototype_of$e(subClass, superClass);
 }
-function _set_prototype_of$d(o, p) {
-    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$e(o, p) {
+    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$d(o, p);
+    return _set_prototype_of$e(o, p);
 }
 /**
  * 云台控件
  * @category Control
  */ var Ptz = /*#__PURE__*/ function(Control) {
-    _inherits$d(Ptz, Control);
+    _inherits$e(Ptz, Control);
     function Ptz(options) {
         var _this;
-        _this = Control.call(this, _extends$c({}, options, {
+        _this = Control.call(this, _extends$d({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'ptz'
@@ -7538,7 +7579,7 @@ function _set_prototype_of$d(o, p) {
             this.$turntable.classList.add("" + PREFIX_CLASS + "-ptz-turntable");
             this.$panel.appendChild(this.$turntable);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            this._ptzControl = new distExports.Ptz(this.$turntable, _extends$c({}, this._options, {
+            this._ptzControl = new distExports.Ptz(this.$turntable, _extends$d({}, this._options, {
                 onSpeedChange: this._onSpeedChange.bind(this),
                 onDirection: this._onDirection.bind(this)
             }));
@@ -7547,7 +7588,7 @@ function _set_prototype_of$d(o, p) {
     };
     _proto.renderMobileExtend = function renderMobileExtend($container) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        if (!this._ptzControl1) this._ptzControl1 = new distExports.MobilePtz($container, _extends$c({}, this._options, {
+        if (!this._ptzControl1) this._ptzControl1 = new distExports.MobilePtz($container, _extends$d({}, this._options, {
             onSpeedChange: this._onSpeedChange.bind(this),
             onDirection: this._onDirection.bind(this)
         }));
@@ -7650,8 +7691,8 @@ function _create_class$3(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$3(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$b() {
-    _extends$b = Object.assign || function(target) {
+function _extends$c() {
+    _extends$c = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -7662,9 +7703,9 @@ function _extends$b() {
         }
         return target;
     };
-    return _extends$b.apply(this, arguments);
+    return _extends$c.apply(this, arguments);
 }
-function _inherits$c(subClass, superClass) {
+function _inherits$d(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7675,14 +7716,14 @@ function _inherits$c(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$c(subClass, superClass);
+    if (superClass) _set_prototype_of$d(subClass, superClass);
 }
-function _set_prototype_of$c(o, p) {
-    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$d(o, p) {
+    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$c(o, p);
+    return _set_prototype_of$d(o, p);
 }
 var RECORD_DEFAULT_OPTIONS = {
     maxDuration: 3600
@@ -7696,10 +7737,10 @@ var RECORD_DEFAULT_OPTIONS = {
  *  2. 录制时间很短可能会因为浏览器的限制或没有I帧而无法生成有效的视频文件
  * @category Control
  */ var Record = /*#__PURE__*/ function(Control) {
-    _inherits$c(Record, Control);
+    _inherits$d(Record, Control);
     function Record(options) {
         var _this;
-        _this = Control.call(this, _extends$b({}, options, {
+        _this = Control.call(this, _extends$c({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'record'
@@ -7798,6 +7839,289 @@ var RECORD_DEFAULT_OPTIONS = {
     return Record;
 }(Control);
 
+function asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, key, arg) {
+    try {
+        var info = gen[key](arg);
+        var value = info.value;
+    } catch (error) {
+        reject(error);
+        return;
+    }
+    if (info.done) {
+        resolve(value);
+    } else {
+        Promise.resolve(value).then(_next, _throw);
+    }
+}
+function _async_to_generator$4(fn) {
+    return function() {
+        var self = this, args = arguments;
+        return new Promise(function(resolve, reject) {
+            var gen = fn.apply(self, args);
+            function _next(value) {
+                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "next", value);
+            }
+            function _throw(err) {
+                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "throw", err);
+            }
+            _next(undefined);
+        });
+    };
+}
+function _defineProperties$2(target, props) {
+    for(var i = 0; i < props.length; i++){
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+    }
+}
+function _create_class$2(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
+    return Constructor;
+}
+function _extends$b() {
+    _extends$b = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source){
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    };
+    return _extends$b.apply(this, arguments);
+}
+function _inherits$c(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$c(subClass, superClass);
+}
+function _set_prototype_of$c(o, p) {
+    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$c(o, p);
+}
+function _ts_generator$4(thisArg, body) {
+    var f, y, t, _ = {
+        label: 0,
+        sent: function() {
+            if (t[0] & 1) throw t[1];
+            return t[1];
+        },
+        trys: [],
+        ops: []
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+        return this;
+    }), g;
+    function verb(n) {
+        return function(v) {
+            return step([
+                n,
+                v
+            ]);
+        };
+    }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while(g && (g = 0, op[0] && (_ = 0)), _)try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [
+                op[0] & 2,
+                t.value
+            ];
+            switch(op[0]){
+                case 0:
+                case 1:
+                    t = op;
+                    break;
+                case 4:
+                    _.label++;
+                    return {
+                        value: op[1],
+                        done: false
+                    };
+                case 5:
+                    _.label++;
+                    y = op[1];
+                    op = [
+                        0
+                    ];
+                    continue;
+                case 7:
+                    op = _.ops.pop();
+                    _.trys.pop();
+                    continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                        _ = 0;
+                        continue;
+                    }
+                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                        _.label = op[1];
+                        break;
+                    }
+                    if (op[0] === 6 && _.label < t[1]) {
+                        _.label = t[1];
+                        t = op;
+                        break;
+                    }
+                    if (t && _.label < t[2]) {
+                        _.label = t[2];
+                        _.ops.push(op);
+                        break;
+                    }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop();
+                    continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) {
+            op = [
+                6,
+                e
+            ];
+            y = 0;
+        } finally{
+            f = t = 0;
+        }
+        if (op[0] & 5) throw op[1];
+        return {
+            value: op[0] ? op[1] : void 0,
+            done: true
+        };
+    }
+}
+/**
+ * 对讲控件
+ *
+ * navigator.mediaDevices.getUserMedia {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia} 返回一个 Promise 对象，
+ * 成功后会resolve回调一个 MediaStream 对象。若用户拒绝了使用权限，或者需要的媒体源不可用，
+ * promise会reject回调一个 PermissionDeniedError 或者 NotFoundError 。
+ *
+ * @category Control
+ */ var Talk = /*#__PURE__*/ function(Control) {
+    _inherits$c(Talk, Control);
+    function Talk(options) {
+        var _this;
+        _this = Control.call(this, _extends$b({}, options, {
+            tagName: 'span',
+            controlType: 'button',
+            classNameSuffix: 'talk'
+        })) || this, _this._value = 0;
+        _this._options = options;
+        _this._render();
+        _this.on(EVENTS.talkingChange, function(talking) {
+            if (_this.active !== talking) {
+                _this.active = talking;
+                _this._render();
+            }
+        });
+        _this.on(EVENTS.talkVolumeChange, function(value) {
+            var _this__options_onChange, _this__options;
+            _this.value = value;
+            (_this__options = _this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, value);
+        });
+        return _this;
+    }
+    var _proto = Talk.prototype;
+    _proto._render = function _render() {
+        var _this_locale, _this_locale1;
+        this.$container.innerHTML = this.active ? IconComponents.talkGrowth({
+            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_TALK
+        }) : IconComponents.talk({
+            title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_TALK
+        });
+    };
+    _proto.reset = function reset(hide) {
+        if (this.active) {
+            this._value = 0;
+            this.active = false;
+            this._render();
+            this.emit(EVENTS.control.talkingChange, false);
+            Control.prototype.reset.call(this, hide);
+        }
+    };
+    /**
+   * 销毁对讲
+   */ _proto.destroy = function destroy() {
+        if (this.active) {
+            this.reset();
+        }
+        Control.prototype.destroy.call(this);
+    };
+    /**
+   * 点击 Control 会触发
+   */ _proto._onControlClick = function _onControlClick(e) {
+        var _this = this, _superprop_get__onControlClick = function() {
+            return Control.prototype._onControlClick;
+        };
+        return _async_to_generator$4(function() {
+            return _ts_generator$4(this, function(_state) {
+                _superprop_get__onControlClick().call(_this, e);
+                this.active = !this.active;
+                this.emit(EVENTS.control.talkingChange, this.active);
+                this._render();
+                return [
+                    2
+                ];
+            });
+        }).call(this);
+    };
+    _create_class$2(Talk, [
+        {
+            key: "value",
+            get: /**
+   * 获取当前值
+   */ function get() {
+                return this._value;
+            },
+            set: /**
+   * 设置当前值 [0-1]
+   */ function set(value) {
+                // 没有激活状态，则不处理
+                if (!this.active) {
+                    return;
+                }
+                if (value < 0 || value > 1) {
+                    return;
+                }
+                this._value = value;
+                var gainType = 'silent';
+                if (value > 0 && value < 0.25) {
+                    gainType = 'low';
+                } else if (value >= 0.25 && value < 0.5) {
+                    gainType = 'normal';
+                } else if (value >= 0.5 && value < 0.75) {
+                    gainType = 'high';
+                } else if (value >= 0.75) {
+                    gainType = 'deafening';
+                }
+                var className = Array.from(this.$container.classList).find(function(className) {
+                    return className.startsWith("" + PREFIX_CLASS + "-talk-gain-");
+                });
+                if (className) this.$container.classList.remove(className);
+                this.$container.classList.add(PREFIX_CLASS + "-talk-gain-" + gainType);
+            }
+        }
+    ]);
+    return Talk;
+}(Control);
+
 function asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -7826,19 +8150,6 @@ function _async_to_generator$3(fn) {
             _next(undefined);
         });
     };
-}
-function _defineProperties$2(target, props) {
-    for(var i = 0; i < props.length; i++){
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-    }
-}
-function _create_class$2(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
-    return Constructor;
 }
 function _extends$a() {
     _extends$a = Object.assign || function(target) {
@@ -7966,74 +8277,66 @@ function _ts_generator$3(thisArg, body) {
     }
 }
 /**
- * 对讲控件
+ * 语音广播控件
  *
- * navigator.mediaDevices.getUserMedia {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia} 返回一个 Promise 对象，
- * 成功后会resolve回调一个 MediaStream 对象。若用户拒绝了使用权限，或者需要的媒体源不可用，
- * promise会reject回调一个 PermissionDeniedError 或者 NotFoundError 。
+ * 用于触发语音广播功能的按钮控件
  *
  * @category Control
- */ var Talk = /*#__PURE__*/ function(Control) {
-    _inherits$b(Talk, Control);
-    function Talk(options) {
+ */ var Broadcast = /*#__PURE__*/ function(Control) {
+    _inherits$b(Broadcast, Control);
+    function Broadcast(options) {
         var _this;
         _this = Control.call(this, _extends$a({}, options, {
             tagName: 'span',
             controlType: 'button',
-            classNameSuffix: 'talk'
-        })) || this, _this._value = 0;
+            classNameSuffix: 'broadcast'
+        })) || this;
         _this._options = options;
         _this._render();
-        _this.on(EVENTS.talkingChange, function(talking) {
-            if (_this.active !== talking) {
-                _this.active = talking;
+        _this.on(EVENTS.broadcastChange, function(active) {
+            if (_this.active !== active) {
+                _this.active = active;
                 _this._render();
             }
         });
-        _this.on(EVENTS.talkVolumeChange, function(value) {
-            var _this__options_onChange, _this__options;
-            _this.value = value;
-            (_this__options = _this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, value);
-        });
         return _this;
     }
-    var _proto = Talk.prototype;
+    var _proto = Broadcast.prototype;
     _proto._render = function _render() {
-        var _this_locale, _this_locale1;
-        this.$container.innerHTML = this.active ? IconComponents.talkGrowth({
-            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_TALK
-        }) : IconComponents.talk({
-            title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_TALK
+        var _this_locale;
+        this.$container.innerHTML = IconComponents.broadcast({
+            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_BROADCAST
         });
     };
     _proto.reset = function reset(hide) {
         if (this.active) {
-            this._value = 0;
             this.active = false;
             this._render();
-            this.emit(EVENTS.control.talkingChange, false);
+            this.emit(EVENTS.control.broadcastChange, false);
             Control.prototype.reset.call(this, hide);
         }
     };
     /**
-   * 销毁对讲
-   */ _proto.destroy = function destroy() {
+     * 销毁语音广播控件
+     */ _proto.destroy = function destroy() {
         if (this.active) {
             this.reset();
         }
         Control.prototype.destroy.call(this);
     };
     /**
-   * 点击 Control 会触发
-   */ _proto._onControlClick = function _onControlClick(e) {
+     * 点击 Control 会触发
+     */ _proto._onControlClick = function _onControlClick(e) {
         var _this = this, _superprop_get__onControlClick = function() {
             return Control.prototype._onControlClick;
         };
         return _async_to_generator$3(function() {
+            var _this__options_onChange, _this__options;
             return _ts_generator$3(this, function(_state) {
                 _superprop_get__onControlClick().call(_this, e);
                 this.active = !this.active;
-                this.emit(EVENTS.control.talkingChange, this.active);
+                this.emit(EVENTS.control.broadcastChange, this.active);
+                (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, this.active);
                 this._render();
                 return [
                     2
@@ -8041,44 +8344,7 @@ function _ts_generator$3(thisArg, body) {
             });
         }).call(this);
     };
-    _create_class$2(Talk, [
-        {
-            key: "value",
-            get: /**
-   * 获取当前值
-   */ function get() {
-                return this._value;
-            },
-            set: /**
-   * 设置当前值 [0-1]
-   */ function set(value) {
-                // 没有激活状态，则不处理
-                if (!this.active) {
-                    return;
-                }
-                if (value < 0 || value > 1) {
-                    return;
-                }
-                this._value = value;
-                var gainType = 'silent';
-                if (value > 0 && value < 0.25) {
-                    gainType = 'low';
-                } else if (value >= 0.25 && value < 0.5) {
-                    gainType = 'normal';
-                } else if (value >= 0.5 && value < 0.75) {
-                    gainType = 'high';
-                } else if (value >= 0.75) {
-                    gainType = 'deafening';
-                }
-                var className = Array.from(this.$container.classList).find(function(className) {
-                    return className.startsWith("" + PREFIX_CLASS + "-talk-gain-");
-                });
-                if (className) this.$container.classList.remove(className);
-                this.$container.classList.add(PREFIX_CLASS + "-talk-gain-" + gainType);
-            }
-        }
-    ]);
-    return Talk;
+    return Broadcast;
 }(Control);
 
 function asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, key, arg) {
@@ -8236,23 +8502,23 @@ function _ts_generator$2(thisArg, body) {
     }
 }
 /**
- * 语音广播控件
+ * AI对话框控件
  *
- * 用于触发语音广播功能的按钮控件
+ * 用于触发AI对话框功能的按钮控件
  *
  * @category Control
- */ var Broadcast = /*#__PURE__*/ function(Control) {
-    _inherits$a(Broadcast, Control);
-    function Broadcast(options) {
+ */ var AIChat = /*#__PURE__*/ function(Control) {
+    _inherits$a(AIChat, Control);
+    function AIChat(options) {
         var _this;
         _this = Control.call(this, _extends$9({}, options, {
             tagName: 'span',
             controlType: 'button',
-            classNameSuffix: 'broadcast'
+            classNameSuffix: 'aichat'
         })) || this;
         _this._options = options;
         _this._render();
-        _this.on(EVENTS.broadcastChange, function(active) {
+        _this.on(EVENTS.aichatChange, function(active) {
             if (_this.active !== active) {
                 _this.active = active;
                 _this._render();
@@ -8260,23 +8526,23 @@ function _ts_generator$2(thisArg, body) {
         });
         return _this;
     }
-    var _proto = Broadcast.prototype;
+    var _proto = AIChat.prototype;
     _proto._render = function _render() {
         var _this_locale;
-        this.$container.innerHTML = IconComponents.broadcast({
-            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_BROADCAST
+        this.$container.innerHTML = IconComponents.aiChat({
+            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_AICHAT
         });
     };
     _proto.reset = function reset(hide) {
         if (this.active) {
             this.active = false;
             this._render();
-            this.emit(EVENTS.control.broadcastChange, false);
+            this.emit(EVENTS.control.aichatChange, false);
             Control.prototype.reset.call(this, hide);
         }
     };
     /**
-     * 销毁语音广播控件
+     * 销毁AI对话框控件
      */ _proto.destroy = function destroy() {
         if (this.active) {
             this.reset();
@@ -8294,7 +8560,7 @@ function _ts_generator$2(thisArg, body) {
             return _ts_generator$2(this, function(_state) {
                 _superprop_get__onControlClick().call(_this, e);
                 this.active = !this.active;
-                this.emit(EVENTS.control.broadcastChange, this.active);
+                this.emit(EVENTS.control.aichatChange, this.active);
                 (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, this.active);
                 this._render();
                 return [
@@ -8303,7 +8569,7 @@ function _ts_generator$2(thisArg, body) {
             });
         }).call(this);
     };
-    return Broadcast;
+    return AIChat;
 }(Control);
 
 function _defineProperties$1(target, props) {
@@ -9297,6 +9563,7 @@ var Controls = {
     record: Record,
     talk: Talk,
     broadcast: Broadcast,
+    aiChat: AIChat,
     zoom: Zoom$1,
     definition: Definition,
     fullscreen: Fullscreen,
@@ -11679,6 +11946,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.0-beta.12';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.1-beta.1';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
