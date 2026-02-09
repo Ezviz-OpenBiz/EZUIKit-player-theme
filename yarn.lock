@@ -42,6 +42,11 @@
   resolved "https://registry.yarnpkg.com/@ezuikit/utils-tools/-/utils-tools-2.0.2.tgz#6fd4de6777725c5ccd5e134db4ac1a5b0c6f27f0"
   integrity sha512-Iay08gfn7URRJ0L16TkEYo8QcBENPN7LLs0O3Cv8Dxfm13rQMN4h03TbzARv/dDGAkKa910CIQ2bKG2QKIZ3nw==
 
+"@ezuikit/utils-tools@2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@ezuikit/utils-tools/-/utils-tools-2.0.3.tgz#11fdf9422288f1355c2378b9d890844168fca6b3"
+  integrity sha512-YvUGDU1ikjSc5YjQLh6kQWGBOpqkOczb3HiocWm7FOk9grW6IAGd3RbRu0e+XyWT20nefcEpbIhRwOYsTejjnA==
+
 "@juggle/resize-observer@^3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
