@@ -1,6 +1,11 @@
 /*
+<<<<<<< HEAD
 * @ezuikit/player-theme v2.1.0-beta.4
 * Copyright (c) 2025-12-31 Ezviz-OpenBiz
+=======
+* @ezuikit/player-theme v2.1.1-beta.1
+* Copyright (c) 2026-02-05 Ezviz-OpenBiz
+>>>>>>> main
 * Released under the MIT License.
 */
 /**
@@ -158,6 +163,11 @@ var EVENTS = {
     /** 控件开始录制 */ recordingChange: 'recordingChange',
     /** 对讲状态变化 */ talkingChange: 'talkingChange',
     /** 麦克风音量变化 */ talkVolumeChange: 'talkVolumeChange',
+<<<<<<< HEAD
+=======
+    /** 语音广播状态变化 */ broadcastChange: 'broadcastChange',
+    /** AI对话框状态变化 */ aichatChange: 'aichatChange',
+>>>>>>> main
     /** 动态切换日志配置 */ setLoggerOptions: 'setLoggerOptions',
     records: 'records',
     ptzSpeedChange: 'ptzSpeedChange',
@@ -201,6 +211,13 @@ var EVENTS = {
         /** 开始对讲 */ talkingChange: 'Control.talkingChange',
         /** 对讲错误, 一般是麦克风权限被拒绝 */ talkError: 'Control.talkError',
         /** 对讲控件销毁 */ talkDestroy: 'Control.talkDestroy',
+<<<<<<< HEAD
+=======
+        /** 语音广播状态变化 */ broadcastChange: 'Control.broadcastChange',
+        /** 语音广播控件销毁 */ broadcastDestroy: 'Control.broadcastDestroy',
+        /** AI对话框状态变化 */ aichatChange: 'Control.aichatChange',
+        /** AI对话框控件销毁 */ aichatDestroy: 'Control.aichatDestroy',
+>>>>>>> main
         /** 缩放比例改变 */ zoomChange: 'Control.zoomChange',
         /** 音量调节面板 展示隐藏变换 */ zoomPanelOpenChange: 'Control.zoomPanelOpenChange',
         /** 缩放控件销毁 */ zoomDestroy: 'Control.zoomDestroy',

@@ -1,6 +1,11 @@
 /*
+<<<<<<< HEAD
 * @ezuikit/player-theme v2.1.0-beta.4
 * Copyright (c) 2025-12-31 Ezviz-OpenBiz
+=======
+* @ezuikit/player-theme v2.1.1-beta.1
+* Copyright (c) 2026-02-05 Ezviz-OpenBiz
+>>>>>>> main
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -488,6 +493,8 @@
 	    /** 控件开始录制 */ recordingChange: 'recordingChange',
 	    /** 对讲状态变化 */ talkingChange: 'talkingChange',
 	    /** 麦克风音量变化 */ talkVolumeChange: 'talkVolumeChange',
+	    /** 语音广播状态变化 */ broadcastChange: 'broadcastChange',
+	    /** AI对话框状态变化 */ aichatChange: 'aichatChange',
 	    /** 动态切换日志配置 */ setLoggerOptions: 'setLoggerOptions',
 	    records: 'records',
 	    ptzSpeedChange: 'ptzSpeedChange',
@@ -531,6 +538,10 @@
 	        /** 开始对讲 */ talkingChange: 'Control.talkingChange',
 	        /** 对讲错误, 一般是麦克风权限被拒绝 */ talkError: 'Control.talkError',
 	        /** 对讲控件销毁 */ talkDestroy: 'Control.talkDestroy',
+	        /** 语音广播状态变化 */ broadcastChange: 'Control.broadcastChange',
+	        /** 语音广播控件销毁 */ broadcastDestroy: 'Control.broadcastDestroy',
+	        /** AI对话框状态变化 */ aichatChange: 'Control.aichatChange',
+	        /** AI对话框控件销毁 */ aichatDestroy: 'Control.aichatDestroy',
 	        /** 缩放比例改变 */ zoomChange: 'Control.zoomChange',
 	        /** 音量调节面板 展示隐藏变换 */ zoomPanelOpenChange: 'Control.zoomPanelOpenChange',
 	        /** 缩放控件销毁 */ zoomDestroy: 'Control.zoomDestroy',
@@ -582,7 +593,7 @@
 	    if (protoProps) _defineProperties$9(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _inherits$r(subClass, superClass) {
+	function _inherits$t(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -593,14 +604,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$r(subClass, superClass);
+	    if (superClass) _set_prototype_of$t(subClass, superClass);
 	}
-	function _set_prototype_of$r(o, p) {
-	    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$t(o, p) {
+	    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$r(o, p);
+	    return _set_prototype_of$t(o, p);
 	}
 	/**
 	 * 控件基类
@@ -614,7 +625,7 @@
 	 * const myControl = new MyControl({})
 	 * ```
 	 */ var Control = /*#__PURE__*/ function(EventEmitter) {
-	    _inherits$r(Control, EventEmitter);
+	    _inherits$t(Control, EventEmitter);
 	    function Control(options) {
 	        var _this;
 	        var _this___options;
@@ -789,8 +800,8 @@
 	    return Control;
 	}(EventEmitter);
 
-	function _extends$q() {
-	    _extends$q = Object.assign || function(target) {
+	function _extends$s() {
+	    _extends$s = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -801,9 +812,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$q.apply(this, arguments);
+	    return _extends$s.apply(this, arguments);
 	}
-	function _inherits$q(subClass, superClass) {
+	function _inherits$s(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -814,25 +825,25 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$q(subClass, superClass);
+	    if (superClass) _set_prototype_of$s(subClass, superClass);
 	}
-	function _set_prototype_of$q(o, p) {
-	    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$s(o, p) {
+	    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$q(o, p);
+	    return _set_prototype_of$s(o, p);
 	}
 	var LOADING_DEFAULT_OPTIONS = {};
 	/**
 	 * 加载动画控件
 	 * @category Control
 	 */ var Loading = /*#__PURE__*/ function(Control) {
-	    _inherits$q(Loading, Control);
+	    _inherits$s(Loading, Control);
 	    function Loading(options) {
 	        if (options === void 0) options = {};
 	        var _this;
-	        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$q({}, options, {
+	        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$s({}, options, {
 	            tagName: 'div',
 	            controlType: 'block',
 	            classNameSuffix: 'loading'
@@ -870,8 +881,8 @@
 	    return Loading;
 	}(Control);
 
-	function _extends$p() {
-	    _extends$p = Object.assign || function(target) {
+	function _extends$r() {
+	    _extends$r = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -882,9 +893,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$p.apply(this, arguments);
+	    return _extends$r.apply(this, arguments);
 	}
-	function _inherits$p(subClass, superClass) {
+	function _inherits$r(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -895,14 +906,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$p(subClass, superClass);
+	    if (superClass) _set_prototype_of$r(subClass, superClass);
 	}
-	function _set_prototype_of$p(o, p) {
-	    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$r(o, p) {
+	    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$p(o, p);
+	    return _set_prototype_of$r(o, p);
 	}
 	// 不放在服务器上 是因为有可能http加载失败
 	// prettier-ignore
@@ -914,11 +925,11 @@
 	 * 封面控件
 	 * @category Control
 	 */ var Poster = /*#__PURE__*/ function(Control) {
-	    _inherits$p(Poster, Control);
+	    _inherits$r(Poster, Control);
 	    function Poster(options) {
 	        if (options === void 0) options = {};
 	        var _this;
-	        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$p({}, options, {
+	        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$r({}, options, {
 	            tagName: 'div',
 	            controlType: 'block',
 	            classNameSuffix: 'poster'
@@ -1013,6 +1024,8 @@
 	    talkGrowth: function(prefix) {
 	        return '<svg width="1em" height="1em" viewBox="0 0 24 24" focusable="false" aria-hidden="true" data-icon="talk-growth">\n      		<g fill="currentColor" stroke="currentColor">\n            <path stroke="none" d="M9.22313 18.9543C9.6588 18.9543 10.0189 19.2133 10.0759 19.5494L10.0837 19.6428L10.0837 21.7847C10.0837 22.1649 9.69841 22.4732 9.22313 22.4732C8.78745 22.4732 8.42739 22.2142 8.37041 21.8781L8.36255 21.7847L8.36255 19.6428C8.36255 19.2626 8.74784 18.9543 9.22313 18.9543Z" fill-rule="evenodd" />\n            <path d="M16.5323 11.3779L16.5323 11.5872C16.5323 15.7472 13.1599 19.1197 8.99981 19.1197C4.83971 19.1197 1.46729 15.7472 1.46729 11.5872L1.46729 11.4335" fill-rule="evenodd" fill="none" stroke-width="1.5" />\n            <path stroke="none" d="M4.07861 6.12978C4.07861 3.589 6.30476 1.5293 9.05085 1.5293C11.7969 1.5293 14.0231 3.589 14.0231 6.12978L14.0231 12.075C14.0231 14.6158 11.7969 16.6755 9.05085 16.6755C6.30476 16.6755 4.07861 14.6158 4.07861 12.075L4.07861 6.12978ZM5.57861 12.075L5.57861 6.12978C5.57861 5.94083 5.597 5.75561 5.63376 5.57412C5.67605 5.36539 5.74265 5.16158 5.83357 4.9627C5.86625 4.8912 5.90164 4.82121 5.93974 4.75272C6.09781 4.4685 6.30245 4.21019 6.55365 3.97777C6.64206 3.89597 6.73424 3.81921 6.83019 3.7475C7.0816 3.55959 7.3589 3.40632 7.66207 3.28767C7.79552 3.23545 7.93107 3.19114 8.06871 3.15475C8.38503 3.07111 8.71241 3.0293 9.05085 3.0293C9.38929 3.0293 9.71668 3.07112 10.033 3.15475C10.1706 3.19114 10.3062 3.23545 10.4396 3.28767C10.7428 3.40632 11.0201 3.55959 11.2715 3.74749C11.3675 3.81921 11.4596 3.89596 11.548 3.97777C11.7993 4.2102 12.0039 4.46853 12.162 4.75276C12.2001 4.82124 12.2354 4.89122 12.2681 4.9627C12.359 5.16157 12.4256 5.36536 12.4679 5.57407C12.5047 5.75558 12.5231 5.94082 12.5231 6.12978L12.5231 12.075C12.5231 12.264 12.5047 12.4492 12.4679 12.6307C12.4256 12.8394 12.359 13.0432 12.2681 13.2421C12.2355 13.3136 12.2001 13.3835 12.162 13.452C12.0039 13.7362 11.7993 13.9946 11.548 14.227C11.4596 14.3088 11.3675 14.3856 11.2715 14.4573C11.0201 14.6452 10.7428 14.7985 10.4396 14.9171C10.3062 14.9693 10.1706 15.0136 10.033 15.05C9.71667 15.1337 9.38929 15.1755 9.05085 15.1755C8.71241 15.1755 8.38503 15.1337 8.06871 15.05C7.93107 15.0136 7.79552 14.9693 7.66207 14.9171C7.3589 14.7985 7.0816 14.6452 6.83019 14.4573C6.73424 14.3856 6.64206 14.3088 6.55365 14.227C6.30244 13.9946 6.09779 13.7363 5.93972 13.452C5.90163 13.3836 5.86625 13.3136 5.83357 13.2421C5.74265 13.0432 5.67605 12.8394 5.63377 12.6307C5.597 12.4492 5.57861 12.264 5.57861 12.075Z" fill-rule="evenodd" />\n          </g>\n          <g class="' + prefix + '-icon-talk-growth-dot">\n            <path class="' + prefix + '-icon-talk-growth-dot1" d="M19.1333 6.40039L22.8667 6.40039" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n            <path class="' + prefix + '-icon-talk-growth-dot2" d="M19.1333 10.1338L21.9331 10.1338" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n            <path class="' + prefix + '-icon-talk-growth-dot3" d="M19.1333 13.8672L20.9995 13.8672" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n            <path class="' + prefix + '-icon-talk-growth-dot4" d="M19.1333 17.6001L20.0669 17.6001" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n          </g>\n      </svg>';
 	    },
+	    /** 语音广播 */ broadcast: '\n  <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="none" focusable="false" aria-hidden="true" data-icon="broadcast">\n <g>\n  <path id="矢量 1" d="m8.52109,6.76609l6.17823,-2.91335c0.2485,-0.11718 0.5027,-0.19531 0.7627,-0.2351c0.2034,-0.03077 0.4104,-0.03809 0.6211,-0.02173c0.2092,0.01636 0.4116,0.05493 0.6069,0.11621c0.2278,0.07129 0.4461,0.1731 0.6548,0.30542c0.2087,0.13232 0.394,0.28638 0.5557,0.46216l0.0002,0l0,0c0.1384,0.15064 0.2598,0.31714 0.3638,0.49951c0.1047,0.18335 0.1865,0.37354 0.2451,0.57081c0.0752,0.25219 0.1128,0.51562 0.1128,0.79004l0,10.64651c0,0.2744 -0.0376,0.5379 -0.1128,0.7901l0,0c-0.0586,0.197 -0.1404,0.3874 -0.2451,0.5708c-0.104,0.1823 -0.2254,0.3488 -0.364,0.4995c-0.1617,0.1758 -0.347,0.3298 -0.5557,0.4621c-0.2087,0.1324 -0.427,0.2342 -0.6548,0.3054c-0.1953,0.0611 -0.3977,0.0999 -0.6069,0.1163c-0.2107,0.0163 -0.4175,0.009 -0.6209,-0.0218c-0.2602,-0.0398 -0.5144,-0.1181 -0.7629,-0.2351l-5.45044,-2.5703l0,2.759c0,0.1036 -0.01831,0.1995 -0.05494,0.2879c-0.03662,0.0886 -0.09155,0.1692 -0.16479,0.2424c-0.14624,0.1465 -0.32324,0.2197 -0.53027,0.2197l-2,0c-0.14209,0 -0.27344,-0.0373 -0.39429,-0.112c-0.12085,-0.0745 -0.21289,-0.1756 -0.27661,-0.3025l-1.99268,-3.9856c-0.06225,-0.0234 -0.12402,-0.0481 -0.18555,-0.074c-0.26953,-0.114 -0.52417,-0.2502 -0.7644,-0.4084c-0.26636,-0.1758 -0.51489,-0.3789 -0.74512,-0.6094c-0.23047,-0.2302 -0.43359,-0.4788 -0.60937,-0.7451c-0.1582,-0.2403 -0.29444,-0.4949 -0.40845,-0.7644c-0.11328,-0.2679 -0.20068,-0.5413 -0.26245,-0.8206l0,0c-0.07398,-0.3347 -0.11108,-0.6775 -0.11108,-1.0286c0,-0.351 0.0371,-0.6938 0.11108,-1.0285c0.06177,-0.2793 0.14917,-0.5528 0.26245,-0.8206c0.11401,-0.26953 0.25025,-0.52417 0.40845,-0.7644c0.17578,-0.26636 0.3789,-0.5149 0.60937,-0.74512c0.23023,-0.23047 0.47876,-0.4336 0.74512,-0.60938l0,0c0.24023,-0.1582 0.49487,-0.29444 0.7644,-0.40845c0.26783,-0.11328 0.54126,-0.20068 0.82056,-0.26245l0,0l0,0l0,0c0.33472,-0.07398 0.67749,-0.11109 1.02857,-0.11109l2.93872,0c0.02636,-0.0166 0.05444,-0.03198 0.08349,-0.04589zm0.72876,8.47948l6.08937,2.8716c0.1287,0.0606 0.2598,0.0987 0.3935,0.114c0.0772,0.0088 0.1551,0.0103 0.2337,0.0042c0.0857,-0.0068 0.1687,-0.0217 0.2495,-0.0452c0.1133,-0.0329 0.2219,-0.0822 0.3257,-0.1479c0.104,-0.0659 0.1948,-0.1431 0.2729,-0.2317c0.0554,-0.063 0.1045,-0.1318 0.147,-0.2063c0.0393,-0.0686 0.0713,-0.1397 0.0962,-0.2131c0.043,-0.1277 0.0647,-0.2625 0.0647,-0.4046l0,-10.64651c0,-0.14209 -0.0217,-0.2771 -0.0647,-0.40454c-0.0249,-0.07349 -0.0569,-0.14454 -0.0962,-0.21314c-0.0425,-0.07471 -0.0916,-0.14331 -0.147,-0.2063c-0.0781,-0.08862 -0.1689,-0.16577 -0.2729,-0.23169c-0.1038,-0.06567 -0.2124,-0.11523 -0.3257,-0.14795c-0.0808,-0.02344 -0.1638,-0.03833 -0.2495,-0.04517c-0.0786,-0.0061 -0.1565,-0.00463 -0.2337,0.00415c-0.1337,0.01539 -0.2648,0.05347 -0.3935,0.11402l-6.09034,2.87208l0.00097,7.16405zm13.58447,-7.9121l-2,1c-0.3757,0.18775 -0.8184,0.04029 -1.0063,-0.33545c-0.0552,-0.11035 -0.0813,-0.22656 -0.0813,-0.34033c0,-0.27344 0.1516,-0.53321 0.4167,-0.66602l2,-1c0.3757,-0.18775 0.8186,-0.04004 1.0064,0.33545c0.0551,0.11035 0.0813,0.22656 0.0813,0.34033c0,0.27368 -0.1514,0.53345 -0.4168,0.66602zm-15.08544,8.9785l-2.08667,0l1.30029,2.6006l0.78638,0l0,-2.6006zm0,-7.99998l-2.25,0c-0.24976,0 -0.49317,0.02734 -0.73023,0.08179c-0.18188,0.04174 -0.36011,0.09961 -0.53467,0.17334c-0.17944,0.07593 -0.34961,0.1665 -0.51049,0.27124c-0.18702,0.12231 -0.36133,0.26416 -0.52271,0.42554c-0.16138,0.16137 -0.30322,0.33569 -0.42554,0.52267c-0.10473,0.1609 -0.19531,0.3311 -0.27124,0.5105c-0.07373,0.1746 -0.13159,0.3528 -0.17334,0.5347c-0.05444,0.2371 -0.08178,0.4805 -0.08178,0.7302c0,0.2498 0.02734,0.4932 0.08178,0.7303c0.04175,0.1818 0.09961,0.3601 0.17334,0.5346c0.07593,0.1795 0.16651,0.3496 0.27124,0.5105c0.12232,0.187 0.26416,0.3614 0.42554,0.5227c0.16138,0.1614 0.33569,0.3033 0.52271,0.4256c0.16088,0.1047 0.33105,0.1953 0.51049,0.2712c0.17456,0.0737 0.35279,0.1316 0.53467,0.1734c0.23706,0.0544 0.48047,0.0817 0.73023,0.0817l2.25097,0l-0.00097,-6.49998zm12.75004,2.60058l2,0c0.4199,0 0.75,0.3301 0.75,0.75c0,0.4199 -0.3301,0.75 -0.75,0.75l-2,0c-0.42,0 -0.75,-0.3301 -0.75,-0.75c0,-0.4199 0.33,-0.75 0.75,-0.75zm0.3354,4.0791l2,1c0.2654,0.1326 0.4168,0.3924 0.4168,0.6661c0,0.1137 -0.0262,0.2299 -0.0813,0.3403c-0.1878,0.3755 -0.6307,0.5232 -1.0064,0.3354l-2,-1c-0.2651,-0.1328 -0.4167,-0.3925 -0.4167,-0.666c0,-0.1138 0.0261,-0.23 0.0813,-0.3403c0.1879,-0.3758 0.6306,-0.5232 1.0063,-0.3355z" fill-rule="evenodd"/>\n </g>\n</svg>',
+	    /** AI对话 */ aiChat: '\n  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">\n    <defs>\n      <linearGradient id="gradient0" x1="10.667" x2="10.667" y1="0.667" y2="20.667">\n        <stop stop-color="#33D9FF" offset="0.354"/>\n        <stop stop-color="#CE77FF" offset="1"/>\n      </linearGradient>\n      <linearGradient id="gradient1" x1="8.318" x2="8.318" y1="0" y2="18.001">\n        <stop stop-color="#33D9FF" offset="0.354"/>\n        <stop stop-color="#CE77FF" offset="1"/>\n      </linearGradient>\n    </defs>\n    \n    <g transform="scale(1.2) translate(-3, -0.5)">\n      <path d="M6.917 0C8.776 0 10.52 0.738 11.808 2.026C12.45 2.668 12.961 3.43 13.309 4.269C13.442 4.588 13.29 4.954 12.971 5.086C12.653 5.218 12.287 5.067 12.155 4.748C11.87 4.061 11.451 3.436 10.925 2.91C9.868 1.854 8.441 1.25 6.917 1.25C3.787 1.25 1.25 3.787 1.25 6.917C1.25 10.047 3.787 12.584 6.917 12.584C8.441 12.584 9.868 11.981 10.925 10.925C11.169 10.681 11.564 10.681 11.808 10.925C12.052 11.169 12.052 11.565 11.808 11.809C10.666 12.951 9.164 13.661 7.542 13.807L7.542 17.376C7.542 17.721 7.262 18.001 6.917 18.001C6.572 18.001 6.292 17.721 6.292 17.376L6.292 13.807C2.765 13.49 0 10.527 0 6.917C0 3.097 3.097 0 6.917 0ZM11.051 6.495C11.295 6.739 11.295 7.135 11.051 7.379L7.547 10.882C7.303 11.126 6.908 11.126 6.664 10.882C6.42 10.638 6.42 10.242 6.664 9.998L10.167 6.495C10.411 6.251 10.807 6.251 11.051 6.495ZM8.566 4.559L6.501 9.5C6.368 9.818 6.002 9.969 5.684 9.836C5.365 9.703 5.215 9.336 5.348 9.018L5.712 8.147L4.094 6.529L3.198 6.884C2.904 7.001 2.575 6.878 2.424 6.61C2.297 6.289 2.418 5.849 2.739 5.722L7.76 3.736C8.274 3.533 8.779 4.049 8.566 4.559ZM16.614 6.171C16.642 6.236 16.642 6.309 16.614 6.373L15.964 7.848C15.936 7.912 15.936 7.986 15.964 8.05L16.614 9.525C16.67 9.651 16.613 9.799 16.486 9.855C16.422 9.883 16.349 9.883 16.285 9.855L14.809 9.205C14.745 9.176 14.672 9.176 14.608 9.205L13.133 9.855C13.006 9.911 12.859 9.853 12.803 9.727C12.775 9.662 12.775 9.589 12.803 9.525L13.453 8.05C13.482 7.986 13.482 7.912 13.453 7.848L12.803 6.373C12.747 6.247 12.805 6.099 12.931 6.043C12.995 6.015 13.068 6.015 13.133 6.043L14.608 6.694C14.672 6.722 14.745 6.722 14.809 6.694L16.285 6.043C16.411 5.988 16.558 6.045 16.614 6.171ZM6.841 5.443L5.361 6.028L6.233 6.9L6.841 5.443Z" fill="url(#gradient1)" transform="matrix(0.707 -0.707 0.707 0.707 0.085 9.868)"/>\n    </g>\n  </svg>\n  ',
 	    /** 相机/截图 */ capturePicture: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="capture-picture">\n      	<path d="M6.94 7.51C7.34 7.51 7.7 7.28 7.86 6.91L8.43 5.6C8.59 5.23 8.95 5 9.35 5L14.69 5C15.04 5 15.37 5.18 15.55 5.49L16.45 7.02C16.63 7.33 16.96 7.51 17.31 7.51L18.5 7.51C19.6 7.51 20.5 8.41 20.5 9.51L20.5 17C20.5 18.1 19.6 19 18.5 19L5.5 19C4.39 19 3.5 18.1 3.5 17L3.5 9.51C3.5 8.41 4.39 7.51 5.5 7.51L6.94 7.51Z" stroke-width="1.5"/>\n	      <circle cx="12" cy="12.525146" r="3.068097" stroke-width="1.5"/>\n    </svg>',
 	    /** 电子放大 */ zoom: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="zoom">\n      <ellipse cx="10.914795" cy="11.25" rx="8.004043" ry="8.25" stroke-width="1.5"/>\n      <path d="M14.31 11.04L8.05 11.14" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M11.13 14.22L11.23 7.95" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M16.45 17.83L19.36 20.83" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n    </svg>',
 	    /** 隐私遮蔽 */ privacyMasking: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="privacy-masking">\n      <path d="M12 19C11.15 19 10.31 18.82 9.49 18.5" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M20.88 12.46C18.98 15.96 15.49 19 11.99 19" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M19.07 8.92C19.76 9.72 20.38 10.61 20.88 11.53C21.03 11.82 21.03 12.17 20.88 12.46" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M5 19L19 5" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M9.77 14.22C8.54 12.99 8.54 11 9.77 9.77C11 8.54 12.99 8.54 14.22 9.77" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n      <path d="M17.04 6.95C15.49 5.75 13.74 5 12 5C8.5 5 5.01 8.03 3.11 11.53C2.96 11.82 2.96 12.17 3.11 12.46C4.06 14.21 5.41 15.84 6.95 17.04" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n    </svg>',
@@ -1097,6 +1110,14 @@
 	        if (attr === void 0) attr = {};
 	        return createIcon(Icons.talk, 'talk', attr);
 	    },
+	    broadcast: function(attr) {
+	        if (attr === void 0) attr = {};
+	        return createIcon(Icons.broadcast, 'broadcast', attr);
+	    },
+	    aiChat: function(attr) {
+	        if (attr === void 0) attr = {};
+	        return createIcon(Icons.aiChat, 'aiChat', attr);
+	    },
 	    talkGrowth: function(attr) {
 	        if (attr === void 0) attr = {};
 	        return createIcon(Icons.talkGrowth(PREFIX_CLASS), 'talk-growth', attr);
@@ -1175,8 +1196,8 @@
 	    }
 	};
 
-	function _extends$o() {
-	    _extends$o = Object.assign || function(target) {
+	function _extends$q() {
+	    _extends$q = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -1187,9 +1208,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$o.apply(this, arguments);
+	    return _extends$q.apply(this, arguments);
 	}
-	function _inherits$o(subClass, superClass) {
+	function _inherits$q(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -1200,25 +1221,25 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$o(subClass, superClass);
+	    if (superClass) _set_prototype_of$q(subClass, superClass);
 	}
-	function _set_prototype_of$o(o, p) {
-	    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$q(o, p) {
+	    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$o(o, p);
+	    return _set_prototype_of$q(o, p);
 	}
 	var MESSAGE_DEFAULT_OPTIONS = {};
 	/**
 	 * 消息控件
 	 * @category Control
 	 */ var Message = /*#__PURE__*/ function(Control) {
-	    _inherits$o(Message, Control);
+	    _inherits$q(Message, Control);
 	    function Message(options) {
 	        if (options === void 0) options = {};
 	        var _this;
-	        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$o({}, options, {
+	        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$q({}, options, {
 	            tagName: 'div',
 	            controlType: 'block'
 	        }))) || this;
@@ -1371,8 +1392,8 @@
 	    if (protoProps) _defineProperties$8(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$n() {
-	    _extends$n = Object.assign || function(target) {
+	function _extends$p() {
+	    _extends$p = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -1383,9 +1404,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$n.apply(this, arguments);
+	    return _extends$p.apply(this, arguments);
 	}
-	function _inherits$n(subClass, superClass) {
+	function _inherits$p(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -1396,23 +1417,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$n(subClass, superClass);
+	    if (superClass) _set_prototype_of$p(subClass, superClass);
 	}
-	function _set_prototype_of$n(o, p) {
-	    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$p(o, p) {
+	    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$n(o, p);
+	    return _set_prototype_of$p(o, p);
 	}
 	/**
 	 * 播放/暂停控件
 	 * @category Control
 	 */ var Play = /*#__PURE__*/ function(Control) {
-	    _inherits$n(Play, Control);
+	    _inherits$p(Play, Control);
 	    function Play(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$n({}, options, {
+	        _this = Control.call(this, _extends$p({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'play'
@@ -2348,19 +2369,27 @@
 	var dist$7 = {};
 
 	/*
-	* @ezuikit/utils-tools v2.0.1
+	* @ezuikit/utils-tools v2.0.2
 	* tools utils
-	* Copyright (c) 2025-12-02 Ezviz-OpenBiz
+	* Copyright (c) 2026-01-07 Ezviz-OpenBiz
 	* Released under the MIT License.
 	*/
 
 	var hasRequiredDist$7;
 
+<<<<<<< HEAD
 	function requireDist$7 () {
 		if (hasRequiredDist$7) return dist$7;
 		hasRequiredDist$7 = 1;
 	var getQuery=function(url){var query=url.split("?")[1],obj={};if(query)for(var vars=query.split("&"),i=0;i<vars.length;i++){var pair=vars[i].split("=");obj[pair[0]]=decodeURIComponent(pair[1]);}return obj};function parseEzopenUrl(url){var obj={};if(/^ezopen:\/\//.test(url)){if(url.includes("@")){var endIndex=url.indexOf("@"),startIndex=url.indexOf("//");obj.validateCode=url.substring(startIndex+2,endIndex),url=url.replace(obj.validateCode+"@","");}obj.protocol=url.split("//")[0],obj.search=url.split("?")[1]?"?"+url.split("?")[1]:"",obj.hostname=url.split("/")[2],obj.origin=obj.protocol+"//"+obj.hostname,obj.pathname=url.split("?")[0].replace(obj.origin,""),obj.href=url;var pathnames=obj.pathname.split("/"),lastPath=pathnames[2].split(".");return obj.deviceSerial=pathnames[1],obj.channelNo=lastPath[0],obj.type=lastPath[lastPath.length-1],"live"===obj.type&&(obj.definition=lastPath.length>2?lastPath[1]:"sd"),"rec"===obj.type&&pathnames[2]&&(obj.recType=pathnames[2].includes(".cloud.")?"cloud":""),obj.searchParams=getQuery(url),obj}return {}}var codec={h264:1,h265:2,h266:4,vp8:8,vp9:16,av1:32};function _array_like_to_array(arr,len){(null==len||len>arr.length)&&(len=arr.length);for(var i=0,arr2=new Array(len);i<len;i++)arr2[i]=arr[i];return arr2}function _instanceof(left,right){return null!=right&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?!!right[Symbol.hasInstance](left):left instanceof right}function _create_for_of_iterator_helper_loose(o,allowArrayLike){var it="undefined"!=typeof Symbol&&o[Symbol.iterator]||o["@@iterator"];if(it)return (it=it.call(o)).next.bind(it);if(Array.isArray(o)||(it=function(o,minLen){if(o){if("string"==typeof o)return _array_like_to_array(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);return "Object"===n&&o.constructor&&(n=o.constructor.name),"Map"===n||"Set"===n?Array.from(n):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?_array_like_to_array(o,minLen):void 0}}(o))||allowArrayLike){it&&(o=it);var i=0;return function(){return i>=o.length?{done:true}:{done:false,value:o[i++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var DateTime=function(){function DateTime(){}return DateTime.fillZero=function(num,len){return void 0===len&&(len=2),num.toString().padStart(len,"0")},DateTime.format=function(input,format){var date;if(_instanceof(input,Date))date=input;else {if("number"!=typeof input&&"string"!=typeof input)throw new Error("Invalid date input");date=DateTime.toDate(input+"");}for(var _step,result=format,_iterator=_create_for_of_iterator_helper_loose([[/(yyyy|YYYY)/g,function(){return DateTime.fillZero(date.getFullYear(),4)}],[/(yy|YY)/g,function(){return DateTime.fillZero(date.getFullYear()%100,2)}],[/(MM)/g,function(){return DateTime.fillZero(date.getMonth()+1,2)}],[/(M)/g,function(){return (date.getMonth()+1).toString()}],[/(dd|DD)/g,function(){return DateTime.fillZero(date.getDate(),2)}],[/(d|D)/g,function(){return date.getDate().toString()}],[/(HH|hh)/g,function(){return DateTime.fillZero(date.getHours(),2)}],[/(H|h)/g,function(){return date.getHours().toString()}],[/(mm)/g,function(){return DateTime.fillZero(date.getMinutes(),2)}],[/(m)/g,function(){return date.getMinutes().toString()}],[/(ss|SS)/g,function(){return DateTime.fillZero(date.getSeconds(),2)}],[/(s|S)/g,function(){return date.getSeconds().toString()}],[/(fff)/g,function(){return DateTime.fillZero(date.getMilliseconds(),3)}]]);!(_step=_iterator()).done;){var _step_value=_step.value,regexp=_step_value[0],fn=_step_value[1];result=result.replace(regexp,fn);}return result},DateTime.toDate=function(str){if(_instanceof(str,Date))return str;str=(str+"").trim().replace(/\/|\./gi,"-"),/^\d{4}$/.test(str)&&(str+="-01"),/^\d{4}-\d{2}$/.test(str)&&(str+="-01");try{return /^\d{4}-\d{2}-\d{2}$/.test(str)?new Date(str+"T00:00:00"):/^\d{8}$/.test(str)?(str+="",new Date(str.slice(0,4)+"-"+str.slice(4,6)+"-"+str.slice(6,8)+"T00:00:00")):/^\d{14}$/.test(str)?(str+="",new Date(str.slice(0,4)+"-"+str.slice(4,6)+"-"+str.slice(6,8)+"T"+str.slice(8,10)+":"+str.slice(10,12)+":"+str.slice(12,14))):/^\d{13}$/.test(str)?new Date(Number(str)):/^\d{10}$/.test(str)?new Date(1e3*Number(str)):new Date(str)}catch(error){throw new Error("Invalid date string")}},DateTime.diff=function(date1,date2,type){ void 0===type&&(type="second");var d1=DateTime.toDate(date1),d2=DateTime.toDate(date2);return "second"===type?Math.floor((d1.getTime()-d2.getTime())/1e3):"minute"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60):"hour"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60):"day"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60/24):Math.abs(d1.getTime()-d2.getTime())},DateTime}();dist$7.DateTime=DateTime,dist$7.addVc=function(url,codecs){ void 0===codecs&&(codecs=["h264"]);var vc=(codecs||["h264"]).reduce((function(acc,key){return key=key.toLowerCase(),acc+(codec[key]||0)}),0),host=url.split("?")[0],query=url.split("?")[1];return query=(query||"").split("&").filter((function(item){return !/^vc=\d?/.test(item)})).join("&"),host+"?"+(query+=(query?"&":"")+"vc="+vc)},dist$7.getQuery=getQuery,dist$7.getStaticPath=function(path,base){ void 0===base&&(base="");var protocolReg=/^(https?:\/\/|^\/\/)/;if(""===path||void 0===path)return "";if(protocolReg.test(path))return path;path=path.replace(/\/+/g,"/"),base=protocolReg.test(base||"")?base:window.location.href;try{return new URL(path,base).href}catch(error){return path}},dist$7.isHttp=function(url){return /^http[s]?:\/\//.test(url)},dist$7.isMobile=function(agent){var _navigator,_navigator1,_navigator2,_window;return /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone|Opera Mini)/i.test(null!=agent?agent:null==(_navigator=navigator)?void 0:_navigator.userAgent)||/Macintosh/i.test(agent||(null==(_navigator1=navigator)?void 0:_navigator1.userAgent))&&(null==(_navigator2=navigator)?void 0:_navigator2.maxTouchPoints)>1||!!(null==(_window=window)?void 0:_window.__IS_MOBILE_SIMULATOR__)},dist$7.parseEzopenUrl=parseEzopenUrl,dist$7.pick=function(obj,keys){return Object.entries(obj).reduce((function(acc,param){var key=param[0],value=param[1];return keys.includes(key)&&(acc[key]=value),acc}),{})},dist$7.switchEzopenUrl=function(url,options){var _ref=null!=options?options:{},type=_ref.type,recType=_ref.recType,search=_ref.search,definition=_ref.definition,channelNo=_ref.channelNo,deviceSerial=_ref.deviceSerial,validateCode=_ref.validateCode,obj=parseEzopenUrl(url);if(search){var ns=Object.assign({},obj.searchParams,getQuery("?"+search.replace("?","")));search=Object.entries(ns).reduce((function(acc,param){var key=param[0],value=param[1];return ""===value?acc:acc+=key+"="+encodeURIComponent(value)+"&"}),"?").replace(/&$/,"");}else search=obj.search;return type=type||obj.type,recType=null!=recType?recType:obj.recType,definition=null!=definition?definition:obj.definition,channelNo=channelNo||obj.channelNo,deviceSerial=deviceSerial||obj.deviceSerial,validateCode=null!=validateCode?validateCode:obj.validateCode,obj.protocol+"//"+(validateCode?validateCode+"@":"")+obj.hostname+"/"+deviceSerial+"/"+channelNo+("rec"===type&&recType?"."+recType:"")+("live"===type&&"hd"===definition?"."+definition:"")+"."+type+search};
 		return dist$7;
+=======
+	function requireDist$9 () {
+		if (hasRequiredDist$9) return dist$9;
+		hasRequiredDist$9 = 1;
+	var getQuery=function(url){var query=url.split("?")[1],obj={};if(query)for(var vars=query.split("&"),i=0;i<vars.length;i++){var pair=vars[i].split("=");obj[pair[0]]=decodeURIComponent(pair[1]);}return obj};function parseEzopenUrl(url){var obj={};if(/^ezopen:\/\//.test(url)){if(url.includes("@")){var endIndex=url.indexOf("@"),startIndex=url.indexOf("//");obj.validateCode=url.substring(startIndex+2,endIndex),url=url.replace(obj.validateCode+"@","");}obj.protocol=url.split("//")[0],obj.search=url.split("?")[1]?"?"+url.split("?")[1]:"",obj.hostname=url.split("/")[2],obj.origin=obj.protocol+"//"+obj.hostname,obj.pathname=url.split("?")[0].replace(obj.origin,""),obj.href=url;var pathnames=obj.pathname.split("/"),lastPath=pathnames[2].split(".");return obj.deviceSerial=pathnames[1],obj.channelNo=lastPath[0],obj.type=lastPath[lastPath.length-1],"live"===obj.type&&(obj.definition=lastPath.length>2?lastPath[1]:"sd"),"rec"===obj.type&&pathnames[2]&&(obj.recType=pathnames[2].includes(".cloud.")?"cloud":""),obj.searchParams=getQuery(url),obj}return {}}var codec={h264:1,h265:2,h266:4,vp8:8,vp9:16,av1:32};function _array_like_to_array(arr,len){(null==len||len>arr.length)&&(len=arr.length);for(var i=0,arr2=new Array(len);i<len;i++)arr2[i]=arr[i];return arr2}function _instanceof(left,right){return null!=right&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?!!right[Symbol.hasInstance](left):left instanceof right}function _create_for_of_iterator_helper_loose(o,allowArrayLike){var it="undefined"!=typeof Symbol&&o[Symbol.iterator]||o["@@iterator"];if(it)return (it=it.call(o)).next.bind(it);if(Array.isArray(o)||(it=function(o,minLen){if(o){if("string"==typeof o)return _array_like_to_array(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);return "Object"===n&&o.constructor&&(n=o.constructor.name),"Map"===n||"Set"===n?Array.from(n):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?_array_like_to_array(o,minLen):void 0}}(o))||allowArrayLike){it&&(o=it);var i=0;return function(){return i>=o.length?{done:true}:{done:false,value:o[i++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var DateTime=function(){function DateTime(){}return DateTime.fillZero=function(num,len){return void 0===len&&(len=2),num.toString().padStart(len,"0")},DateTime.format=function(input,format){var date;if(_instanceof(input,Date))date=input;else {if("number"!=typeof input&&"string"!=typeof input)throw new Error("Invalid date input");date=DateTime.toDate(input+"");}for(var _step,result=format,_iterator=_create_for_of_iterator_helper_loose([[/(yyyy|YYYY)/g,function(){return DateTime.fillZero(date.getFullYear(),4)}],[/(yy|YY)/g,function(){return DateTime.fillZero(date.getFullYear()%100,2)}],[/(MM)/g,function(){return DateTime.fillZero(date.getMonth()+1,2)}],[/(M)/g,function(){return (date.getMonth()+1).toString()}],[/(dd|DD)/g,function(){return DateTime.fillZero(date.getDate(),2)}],[/(d|D)/g,function(){return date.getDate().toString()}],[/(HH|hh)/g,function(){return DateTime.fillZero(date.getHours(),2)}],[/(H|h)/g,function(){return date.getHours().toString()}],[/(mm)/g,function(){return DateTime.fillZero(date.getMinutes(),2)}],[/(m)/g,function(){return date.getMinutes().toString()}],[/(ss|SS)/g,function(){return DateTime.fillZero(date.getSeconds(),2)}],[/(s|S)/g,function(){return date.getSeconds().toString()}],[/(fff)/g,function(){return DateTime.fillZero(date.getMilliseconds(),3)}]]);!(_step=_iterator()).done;){var _step_value=_step.value,regexp=_step_value[0],fn=_step_value[1];result=result.replace(regexp,fn);}return result},DateTime.toDate=function(str){if(_instanceof(str,Date))return str;str=(str+"").trim().replace(/\/|\./gi,"-"),/^\d{4}$/.test(str)&&(str+="-01"),/^\d{4}-\d{2}$/.test(str)&&(str+="-01");try{return /^\d{4}-\d{2}-\d{2}$/.test(str)?new Date(+str.slice(0,4),+str.slice(5,7)-1,+str.slice(8,10),0,0,0):/^\d{8}$/.test(str)?(str+="",new Date(+str.slice(0,4),+str.slice(4,6)-1,+str.slice(6,8),0,0,0)):/^\d{14}$/.test(str)?(str+="",new Date(+str.slice(0,4),+str.slice(4,6)-1,+str.slice(6,8),+str.slice(8,10),+str.slice(10,12),+str.slice(12,14))):/^\d{13}$/.test(str)?new Date(Number(str)):/^\d{10}$/.test(str)?new Date(1e3*Number(str)):new Date(str)}catch(error){throw new Error("Invalid date string")}},DateTime.diff=function(date1,date2,type){ void 0===type&&(type="second");var d1=DateTime.toDate(date1),d2=DateTime.toDate(date2);return "second"===type?Math.floor((d1.getTime()-d2.getTime())/1e3):"minute"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60):"hour"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60):"day"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60/24):Math.abs(d1.getTime()-d2.getTime())},DateTime}();dist$9.DateTime=DateTime,dist$9.addVc=function(url,codecs){ void 0===codecs&&(codecs=["h264"]);var vc=(codecs||["h264"]).reduce(function(acc,key){return key=key.toLowerCase(),acc+(codec[key]||0)},0),host=url.split("?")[0],query=url.split("?")[1];return query=(query||"").split("&").filter(function(item){return !/^vc=\d?/.test(item)}).join("&"),host+"?"+(query+=(query?"&":"")+"vc="+vc)},dist$9.getQuery=getQuery,dist$9.getStaticPath=function(path,base){ void 0===base&&(base="");var protocolReg=/^(https?:\/\/|^\/\/)/;if(""===path||void 0===path)return "";if(protocolReg.test(path))return path;path=path.replace(/\/+/g,"/"),base=protocolReg.test(base||"")?base:window.location.href;try{return new URL(path,base).href}catch(error){return path}},dist$9.isHttp=function(url){return /^http[s]?:\/\//.test(url)},dist$9.isMobile=function(agent){var _navigator,_navigator1,_navigator2,_window;return /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone|Opera Mini)/i.test(null!=agent?agent:null==(_navigator=navigator)?void 0:_navigator.userAgent)||/Macintosh/i.test(agent||(null==(_navigator1=navigator)?void 0:_navigator1.userAgent))&&(null==(_navigator2=navigator)?void 0:_navigator2.maxTouchPoints)>1||!!(null==(_window=window)?void 0:_window.__IS_MOBILE_SIMULATOR__)},dist$9.isRealMobile=function(agent){var _navigator,ua=(null!=agent?agent:null==(_navigator=navigator)?void 0:_navigator.userAgent).toLowerCase();if(/ipad|tablet|playbook|silk|android(?!.*mobile)/i.test(ua))return  false;var hasTouch="ontouchstart"in window||navigator.maxTouchPoints>0;return /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(ua)&&hasTouch},dist$9.parseEzopenUrl=parseEzopenUrl,dist$9.pick=function(obj,keys){return Object.entries(obj).reduce(function(acc,param){var key=param[0],value=param[1];return keys.includes(key)&&(acc[key]=value),acc},{})},dist$9.switchEzopenUrl=function(url,options){var _ref=null!=options?options:{},type=_ref.type,recType=_ref.recType,search=_ref.search,definition=_ref.definition,channelNo=_ref.channelNo,deviceSerial=_ref.deviceSerial,validateCode=_ref.validateCode,obj=parseEzopenUrl(url);if(search){var ns=Object.assign({},obj.searchParams,getQuery("?"+search.replace("?","")));search=Object.entries(ns).reduce(function(acc,param){var key=param[0],value=param[1];return ""===value?acc:acc+=key+"="+encodeURIComponent(value)+"&"},"?").replace(/&$/,"");}else search=obj.search;return type=type||obj.type,recType=null!=recType?recType:obj.recType,definition=null!=definition?definition:obj.definition,channelNo=channelNo||obj.channelNo,deviceSerial=deviceSerial||obj.deviceSerial,validateCode=null!=validateCode?validateCode:obj.validateCode,obj.protocol+"//"+(validateCode?validateCode+"@":"")+obj.hostname+"/"+deviceSerial+"/"+channelNo+("rec"===type&&recType?"."+recType:"")+("live"===type&&"hd"===definition?"."+definition:"")+"."+type+search};
+		return dist$9;
+>>>>>>> main
 	}
 
 	var distExports$6 = requireDist$7();
@@ -2930,8 +2959,8 @@
 	    if (protoProps) _defineProperties$6(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$m() {
-	    _extends$m = Object.assign || function(target) {
+	function _extends$o() {
+	    _extends$o = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -2942,9 +2971,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$m.apply(this, arguments);
+	    return _extends$o.apply(this, arguments);
 	}
-	function _inherits$m(subClass, superClass) {
+	function _inherits$o(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -2955,14 +2984,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$m(subClass, superClass);
+	    if (superClass) _set_prototype_of$o(subClass, superClass);
 	}
-	function _set_prototype_of$m(o, p) {
-	    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$o(o, p) {
+	    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$m(o, p);
+	    return _set_prototype_of$o(o, p);
 	}
 	var VOLUME_DEFAULT_OPTIONS = {
 	    volume: 0.8,
@@ -2976,12 +3005,12 @@
 	 * 音量调节控件
 	 * @category Control
 	 */ var Volume = /*#__PURE__*/ function(Control) {
-	    _inherits$m(Volume, Control);
+	    _inherits$o(Volume, Control);
 	    function Volume(options) {
 	        if (options === void 0) options = {};
 	        var _this;
 	        var _this__options_props, _this__options_props1, _this__options_props2, _this__options_props3;
-	        _this = Control.call(this, _extends$m({}, options, {
+	        _this = Control.call(this, _extends$o({}, options, {
 	            tagName: 'span',
 	            classNameSuffix: 'volume',
 	            controlType: 'button'
@@ -3396,7 +3425,7 @@
 	var screenfullExports = requireScreenfull();
 	var screenfull = /*@__PURE__*/getDefaultExportFromCjs(screenfullExports);
 
-	function asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, key, arg) {
+	function asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, key, arg) {
 	    try {
 	        var info = gen[key](arg);
 	        var value = info.value;
@@ -3410,22 +3439,22 @@
 	        Promise.resolve(value).then(_next, _throw);
 	    }
 	}
-	function _async_to_generator$5(fn) {
+	function _async_to_generator$7(fn) {
 	    return function() {
 	        var self = this, args = arguments;
 	        return new Promise(function(resolve, reject) {
 	            var gen = fn.apply(self, args);
 	            function _next(value) {
-	                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "next", value);
+	                asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, "next", value);
 	            }
 	            function _throw(err) {
-	                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "throw", err);
+	                asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, "throw", err);
 	            }
 	            _next(undefined);
 	        });
 	    };
 	}
-	function _ts_generator$5(thisArg, body) {
+	function _ts_generator$7(thisArg, body) {
 	    var f, y, t, _ = {
 	        label: 0,
 	        sent: function() {
@@ -3639,8 +3668,8 @@
 	   * 全屏
 	   * @returns Promise<void>
 	   */ _proto.fullscreen = function fullscreen() {
-	        return _async_to_generator$5(function() {
-	            return _ts_generator$5(this, function(_state) {
+	        return _async_to_generator$7(function() {
+	            return _ts_generator$7(this, function(_state) {
 	                switch(_state.label){
 	                    case 0:
 	                        if (!Utils.isMobile) return [
@@ -3675,8 +3704,8 @@
 	   * 退出全屏
 	   * @returns Promise<void>
 	   */ _proto.exitFullscreen = function exitFullscreen() {
-	        return _async_to_generator$5(function() {
-	            return _ts_generator$5(this, function(_state) {
+	        return _async_to_generator$7(function() {
+	            return _ts_generator$7(this, function(_state) {
 	                switch(_state.label){
 	                    case 0:
 	                        if (!Utils.isMobile) return [
@@ -3715,8 +3744,8 @@
 	   * 全屏切换
 	   * @returns Promise<void>
 	   */ _proto.toggle = function toggle() {
-	        return _async_to_generator$5(function() {
-	            return _ts_generator$5(this, function(_state) {
+	        return _async_to_generator$7(function() {
+	            return _ts_generator$7(this, function(_state) {
 	                switch(_state.label){
 	                    case 0:
 	                        if (!Utils.isMobile) return [
@@ -3839,8 +3868,8 @@
 	    return Fullscreen;
 	}();
 
-	function _extends$l() {
-	    _extends$l = Object.assign || function(target) {
+	function _extends$n() {
+	    _extends$n = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -3851,9 +3880,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$l.apply(this, arguments);
+	    return _extends$n.apply(this, arguments);
 	}
-	function _inherits$l(subClass, superClass) {
+	function _inherits$n(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -3864,24 +3893,24 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$l(subClass, superClass);
+	    if (superClass) _set_prototype_of$n(subClass, superClass);
 	}
-	function _set_prototype_of$l(o, p) {
-	    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$n(o, p) {
+	    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$l(o, p);
+	    return _set_prototype_of$n(o, p);
 	}
 	/**
 	 * 全屏控件
 	 * @category Control
 	 */ var Fullscreen = /*#__PURE__*/ function(Control) {
-	    _inherits$l(Fullscreen, Control);
+	    _inherits$n(Fullscreen, Control);
 	    function Fullscreen(options) {
 	        var _this;
 	        var _options_props, _this_options;
-	        _this = Control.call(this, _extends$l({
+	        _this = Control.call(this, _extends$n({
 	            tagName: 'span',
 	            classNameSuffix: 'fullscreen',
 	            controlType: 'button'
@@ -3946,8 +3975,8 @@
 	    return Fullscreen;
 	}(Control);
 
-	function _extends$k() {
-	    _extends$k = Object.assign || function(target) {
+	function _extends$m() {
+	    _extends$m = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -3958,9 +3987,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$k.apply(this, arguments);
+	    return _extends$m.apply(this, arguments);
 	}
-	function _inherits$k(subClass, superClass) {
+	function _inherits$m(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -3971,24 +4000,24 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$k(subClass, superClass);
+	    if (superClass) _set_prototype_of$m(subClass, superClass);
 	}
-	function _set_prototype_of$k(o, p) {
-	    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$m(o, p) {
+	    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$k(o, p);
+	    return _set_prototype_of$m(o, p);
 	}
 	/**
 	 * 回放类型切换（本地回放(sdk 卡)， 云存储回放， 云录制回放）控件
 	 * @category Control
 	 */ var Rec = /*#__PURE__*/ function(Control) {
-	    _inherits$k(Rec, Control);
+	    _inherits$m(Rec, Control);
 	    function Rec(options) {
 	        var _this;
 	        var _options_props;
-	        _this = Control.call(this, _extends$k({}, options, {
+	        _this = Control.call(this, _extends$m({}, options, {
 	            tagName: 'div',
 	            controlType: 'block',
 	            classNameSuffix: 'rec'
@@ -4443,6 +4472,8 @@
 	    BTN_RECORDVIDEO: '录屏',
 	    BTN_CAPTURE: '截图',
 	    BTN_TALK: '对讲',
+	    BTN_BROADCAST: '语音广播',
+	    BTN_AICHAT: 'AI对话',
 	    BTN_ZOOM: '电子放大',
 	    BTN_3D_ZOOM: '3D定位',
 	    BTN_PTZ: '云台控制',
@@ -4713,6 +4744,8 @@
 	    BTN_RECORDVIDEO: 'Screen recording',
 	    BTN_CAPTURE: 'Screenshot',
 	    BTN_TALK: 'Intercom',
+	    BTN_BROADCAST: 'Voice broadcast',
+	    BTN_AICHAT: 'AI Chat',
 	    BTN_ZOOM: 'Electronic zoom',
 	    BTN_3D_ZOOM: '3D positioning',
 	    BTN_PTZ: 'PTZ control',
@@ -4900,6 +4933,11 @@
 	                isrender: 1
 	            },
 	            {
+	                iconId: 'broadcast',
+	                part: 'left',
+	                isrender: 1
+	            },
+	            {
 	                iconId: 'zoom',
 	                part: 'left',
 	                isrender: 1
@@ -5003,6 +5041,12 @@
 	                isrender: 1
 	            },
 	            {
+	                iconId: 'aiChat',
+	                part: 'left',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
 	                iconId: 'speed',
 	                part: 'right',
 	                defaultActive: 0,
@@ -5081,6 +5125,12 @@
 	            },
 	            {
 	                iconId: 'talk',
+	                part: 'left',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'broadcast',
 	                part: 'left',
 	                defaultActive: 0,
 	                isrender: 1
@@ -5176,6 +5226,12 @@
 	            },
 	            {
 	                iconId: 'zoom',
+	                part: 'left',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'aiChat',
 	                part: 'left',
 	                defaultActive: 0,
 	                isrender: 1
@@ -5340,7 +5396,7 @@
 	    voice: voice
 	};
 
-	function _inherits$j(subClass, superClass) {
+	function _inherits$l(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -5351,23 +5407,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$j(subClass, superClass);
+	    if (superClass) _set_prototype_of$l(subClass, superClass);
 	}
-	function _set_prototype_of$j(o, p) {
-	    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$l(o, p) {
+	    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$j(o, p);
+	    return _set_prototype_of$l(o, p);
 	}
 	/**
 	 * 截图控件
 	 * @category Content
 	 */ var Content = /*#__PURE__*/ function(EventEmitter) {
-	    _inherits$j(Content, EventEmitter);
+	    _inherits$l(Content, EventEmitter);
 	    function Content(options) {
 	        var _this;
-	        _this = EventEmitter.call(this) || this, _this._scaleMode = 0, _this._originWidth = 0, _this._originHeight = 0, _this._width = 0, _this._height = 0;
+	        _this = EventEmitter.call(this) || this, _this._scaleMode = 0, _this._cleanUpResizeObserver = null, _this._originWidth = 0, _this._originHeight = 0, _this._width = 0, _this._height = 0;
 	        _this.options = options;
 	        _this._scaleMode = options.scaleMode || 0;
 	        _this.$wrapper = document.createElement('div');
@@ -5383,11 +5439,12 @@
 	            $popupContainer.appendChild(_this.$wrapper);
 	        }
 	        _this.on(EVENTS.videoInfo, function(originWidth, originHeight) {
-	            _this._rerender(originWidth, originHeight);
+	            _this.rerender(originWidth, originHeight);
 	        });
-	        _this.on(EVENTS.resize, function() {
-	            _this._rerender();
-	        });
+	        // prettier-ignore
+	        _this._cleanUpResizeObserver = Utils.resizeObserver(_this.$wrapper, throttle(function() {
+	            _this.rerender();
+	        }, 20));
 	        return _this;
 	    }
 	    var _proto = Content.prototype;
@@ -5396,7 +5453,7 @@
 	   * @param {number} originWidth 画面宽度
 	   * @param {number} originHeight 画面高度
 	   * @returns {void}
-	   */ _proto._rerender = function _rerender(originWidth, originHeight) {
+	   */ _proto.rerender = function rerender(originWidth, originHeight) {
 	        if (originWidth === void 0) originWidth = 0;
 	        if (originHeight === void 0) originHeight = 0;
 	        var width = this.$wrapper.clientWidth;
@@ -5420,6 +5477,7 @@
 	        if (this._scaleMode === THEME_SCALE_MODE_TYPE.fullAuto) {
 	            objectFill = 'cover';
 	        }
+	        //
 	        if (width > 0 && height > 0 && this._originWidth > 0 && this._originHeight > 0 && this.$video) {
 	            var left = (width - this._originWidth) / 2;
 	            var top = (height - this._originHeight) / 2;
@@ -5449,10 +5507,15 @@
 	    _proto.setScaleMode = function setScaleMode(scaleMode) {
 	        if (scaleMode === void 0) scaleMode = 0;
 	        this._scaleMode = scaleMode;
-	        this._rerender();
+	        this.rerender();
 	    };
 	    _proto.destroy = function destroy() {
 	        var _this_$wrapper;
+	        if (this._cleanUpResizeObserver) {
+	            this._cleanUpResizeObserver.unobserve();
+	            // this._cleanUpResizeObserver.disconnect();
+	            this._cleanUpResizeObserver = null;
+	        }
 	        if (this.$video) {
 	            this.$video.remove();
 	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -5472,8 +5535,8 @@
 	    return Content;
 	}(EventEmitter);
 
-	function _extends$j() {
-	    _extends$j = Object.assign || function(target) {
+	function _extends$l() {
+	    _extends$l = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -5484,9 +5547,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$j.apply(this, arguments);
+	    return _extends$l.apply(this, arguments);
 	}
-	function _inherits$i(subClass, superClass) {
+	function _inherits$k(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -5497,23 +5560,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$i(subClass, superClass);
+	    if (superClass) _set_prototype_of$k(subClass, superClass);
 	}
-	function _set_prototype_of$i(o, p) {
-	    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$k(o, p) {
+	    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$i(o, p);
+	    return _set_prototype_of$k(o, p);
 	}
 	/**
 	 * 更多控件
 	 * @category Control
 	 */ var More = /*#__PURE__*/ function(Control) {
-	    _inherits$i(More, Control);
+	    _inherits$k(More, Control);
 	    function More(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$j({}, options, {
+	        _this = Control.call(this, _extends$l({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'more'
@@ -5557,11 +5620,13 @@
 	    /**
 	   * 添加
 	   * @param control
-	   */ _proto.add = function add(key, part, control) {
+	   */ _proto.add = function add(key, part, control, props) {
 	        this.list.unshift({
 	            part: part,
 	            key: key,
-	            control: control
+	            control: control,
+	            width: props.width,
+	            height: props.height
 	        });
 	    };
 	    /**
@@ -5707,6 +5772,26 @@
 	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_talkControl = _theme_controls.talkControl) == null ? void 0 : (_theme_controls_talkControl_emit = _theme_controls_talkControl.emit) == null ? void 0 : _theme_controls_talkControl_emit.call(_theme_controls_talkControl, EVENTS.talkVolumeChange, value);
 	    });
 	    // =======================================================
+	    // 语音广播
+	    // =======================================================
+	    theme.on(EVENTS.broadcastChange, function(active) {
+	        var _theme_controls, _theme_controls_broadcastControl, _theme_controls1;
+	        if (((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.broadcastControl) && active !== ((_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_broadcastControl = _theme_controls1.broadcastControl) == null ? void 0 : _theme_controls_broadcastControl.active)) {
+	            var _theme_controls_broadcastControl1, _theme_controls2;
+	            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_broadcastControl1 = _theme_controls2.broadcastControl) == null ? void 0 : _theme_controls_broadcastControl1.emit(EVENTS.broadcastChange, active);
+	        }
+	    });
+	    // =======================================================
+	    // AI对话框
+	    // =======================================================
+	    theme.on(EVENTS.aichatChange, function(active) {
+	        var _theme_controls, _theme_controls_aiChatControl, _theme_controls1;
+	        if (((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.aiChatControl) && active !== ((_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_aiChatControl = _theme_controls1.aiChatControl) == null ? void 0 : _theme_controls_aiChatControl.active)) {
+	            var _theme_controls_aiChatControl1, _theme_controls2;
+	            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_aiChatControl1 = _theme_controls2.aiChatControl) == null ? void 0 : _theme_controls_aiChatControl1.emit(EVENTS.aichatChange, active);
+	        }
+	    });
+	    // =======================================================
 	    // 录制
 	    // =======================================================
 	    theme.on(EVENTS.recordingChange, function(recording) {
@@ -5802,7 +5887,7 @@
 	 *
 	 * @param theme - Theme
 	 */ function _controlEventemitter(theme) {
-	    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14;
+	    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16;
 	    // Controls
 	    if (theme._recFooter) {
 	        theme._recFooter.on(EVENTS.theme.recFooterDestroy, function() {
@@ -5895,8 +5980,26 @@
 	            theme.emit(EVENTS.control.talkDestroy);
 	        });
 	    }
+	    // 语音广播控件
+	    if ((_theme_controls5 = theme.controls) == null ? void 0 : _theme_controls5.broadcastControl) {
+	        theme.controls.broadcastControl.on(EVENTS.control.broadcastChange, function(active) {
+	            theme.emit(EVENTS.control.broadcastChange, active);
+	        });
+	        theme.controls.broadcastControl.on(EVENTS.control.broadcastDestroy, function() {
+	            theme.emit(EVENTS.control.broadcastDestroy);
+	        });
+	    }
+	    // AI对话框
+	    if ((_theme_controls6 = theme.controls) == null ? void 0 : _theme_controls6.aiChatControl) {
+	        theme.controls.aiChatControl.on(EVENTS.control.aichatChange, function(active) {
+	            theme.emit(EVENTS.control.aichatChange, active);
+	        });
+	        theme.controls.aiChatControl.on(EVENTS.control.aichatDestroy, function() {
+	            theme.emit(EVENTS.control.aichatDestroy);
+	        });
+	    }
 	    // 缩放控件
-	    if ((_theme_controls5 = theme.controls) == null ? void 0 : _theme_controls5.zoomControl) {
+	    if ((_theme_controls7 = theme.controls) == null ? void 0 : _theme_controls7.zoomControl) {
 	        theme.controls.zoomControl.on(EVENTS.control.zoomChange, function(value, _percent, _range) {
 	            if (theme.zoom !== value) {
 	                theme.zoom = value;
@@ -5918,7 +6021,7 @@
 	        });
 	    }
 	    // 清晰度控件
-	    if ((_theme_controls6 = theme.controls) == null ? void 0 : _theme_controls6.definitionControl) {
+	    if ((_theme_controls8 = theme.controls) == null ? void 0 : _theme_controls8.definitionControl) {
 	        theme.controls.definitionControl.on(EVENTS.control.definitionPanelOpenChange, function(open, definition, item) {
 	            theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, definition);
 	            theme.emit(EVENTS.control.definitionPanelOpenChange, open, definition, item);
@@ -5931,7 +6034,7 @@
 	        });
 	    }
 	    // 倍速控件
-	    if ((_theme_controls7 = theme.controls) == null ? void 0 : _theme_controls7.speedControl) {
+	    if ((_theme_controls9 = theme.controls) == null ? void 0 : _theme_controls9.speedControl) {
 	        theme.controls.speedControl.on(EVENTS.control.speedPanelOpenChange, function(open, speed, item) {
 	            theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, speed);
 	            theme.emit(EVENTS.control.speedPanelOpenChange, open, speed, item);
@@ -5944,7 +6047,7 @@
 	        });
 	    }
 	    // 截图控件
-	    if ((_theme_controls8 = theme.controls) == null ? void 0 : _theme_controls8.capturePictureControl) {
+	    if ((_theme_controls10 = theme.controls) == null ? void 0 : _theme_controls10.capturePictureControl) {
 	        theme.controls.capturePictureControl.on(EVENTS.control.capturePicture, function(options) {
 	            theme.emit(EVENTS.control.capturePicture, options);
 	        });
@@ -5953,25 +6056,25 @@
 	        });
 	    }
 	    // 全屏控件
-	    if ((_theme_controls9 = theme.controls) == null ? void 0 : _theme_controls9.fullscreenControl) {
+	    if ((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.fullscreenControl) {
 	        theme.controls.fullscreenControl.on(EVENTS.control.fullscreenDestroy, function() {
 	            theme.emit(EVENTS.control.fullscreenDestroy);
 	        });
 	    }
 	    // 全局全屏控件
-	    if ((_theme_controls10 = theme.controls) == null ? void 0 : _theme_controls10.globalFullscreenControl) {
+	    if ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.globalFullscreenControl) {
 	        theme.controls.globalFullscreenControl.on(EVENTS.control.globalFullscreenDestroy, function() {
 	            theme.emit(EVENTS.control.globalFullscreenDestroy);
 	        });
 	    }
 	    // 设备信息控件
-	    if ((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.deviceControl) {
+	    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.deviceControl) {
 	        theme.controls.deviceControl.on(EVENTS.control.deviceDestroy, function() {
 	            theme.emit(EVENTS.control.deviceDestroy);
 	        });
 	    }
 	    // 回放类型切换控件
-	    if ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.recControl) {
+	    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.recControl) {
 	        // prettier-ignore
 	        theme.controls.recControl.on(EVENTS.control.recTypeChange, function(type) {
 	            if (theme.recType !== type) {
@@ -5992,7 +6095,7 @@
 	        });
 	    }
 	    // 时间轴控件
-	    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.timeLineControl) {
+	    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.timeLineControl) {
 	        theme.controls.timeLineControl.on(EVENTS.control.timeLineChange, function(date) {
 	            theme.emit(EVENTS.control.timeLineChange, date);
 	        });
@@ -6009,7 +6112,7 @@
 	        });
 	    }
 	    // 日历控件
-	    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.dateControl) {
+	    if ((_theme_controls16 = theme.controls) == null ? void 0 : _theme_controls16.dateControl) {
 	        theme.controls.dateControl.on(EVENTS.control.datePanelOpenChange, function(open, date) {
 	            theme.emit(EVENTS.control.datePanelOpenChange, open, date);
 	        });
@@ -6018,12 +6121,6 @@
 	        });
 	        theme.controls.dateControl.on(EVENTS.control.dateDestroy, function() {
 	            theme.emit(EVENTS.control.recDestroy);
-	        });
-	    }
-	    // content
-	    if (theme.contentControl) {
-	        theme.contentControl.on(EVENTS.control.contentRerender, function(info) {
-	            theme.emit(EVENTS.control.contentRerender, info);
 	        });
 	    }
 	}
@@ -6110,8 +6207,8 @@
 	    if (protoProps) _defineProperties$5(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$i() {
-	    _extends$i = Object.assign || function(target) {
+	function _extends$k() {
+	    _extends$k = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -6122,9 +6219,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$i.apply(this, arguments);
+	    return _extends$k.apply(this, arguments);
 	}
-	function _inherits$h(subClass, superClass) {
+	function _inherits$j(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -6135,14 +6232,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$h(subClass, superClass);
+	    if (superClass) _set_prototype_of$j(subClass, superClass);
 	}
-	function _set_prototype_of$h(o, p) {
-	    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$j(o, p) {
+	    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$h(o, p);
+	    return _set_prototype_of$j(o, p);
 	}
 	var ZOOM_DEFAULT_OPTIONS = {
 	    open: false,
@@ -6152,10 +6249,10 @@
 	 * 电子放大控件
 	 * @category Control
 	 */ var Zoom$1 = /*#__PURE__*/ function(Control) {
-	    _inherits$h(Zoom, Control);
+	    _inherits$j(Zoom, Control);
 	    function Zoom(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$i({}, options, {
+	        _this = Control.call(this, _extends$k({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'zoom'
@@ -7008,8 +7105,8 @@
 	var distExports$3 = requireDist$4();
 	var Zoom = /*@__PURE__*/getDefaultExportFromCjs(distExports$3);
 
-	function _extends$h() {
-	    _extends$h = Object.assign || function(target) {
+	function _extends$j() {
+	    _extends$j = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7020,10 +7117,10 @@
 	        }
 	        return target;
 	    };
-	    return _extends$h.apply(this, arguments);
+	    return _extends$j.apply(this, arguments);
 	}
 	function __zoom(theme, container, options) {
-	    theme.zoomUtil = new Zoom(container, _extends$h({}, options || {}, {
+	    theme.zoomUtil = new Zoom(container, _extends$j({}, options || {}, {
 	        min: 1,
 	        onChange: function(zoom, reset) {
 	            if (zoom !== theme._zoom) {
@@ -7041,7 +7138,7 @@
 	    }));
 	}
 
-	function asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, key, arg) {
+	function asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, key, arg) {
 	    try {
 	        var info = gen[key](arg);
 	        var value = info.value;
@@ -7055,22 +7152,22 @@
 	        Promise.resolve(value).then(_next, _throw);
 	    }
 	}
-	function _async_to_generator$4(fn) {
+	function _async_to_generator$6(fn) {
 	    return function() {
 	        var self = this, args = arguments;
 	        return new Promise(function(resolve, reject) {
 	            var gen = fn.apply(self, args);
 	            function _next(value) {
-	                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "next", value);
+	                asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, "next", value);
 	            }
 	            function _throw(err) {
-	                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "throw", err);
+	                asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, "throw", err);
 	            }
 	            _next(undefined);
 	        });
 	    };
 	}
-	function _ts_generator$4(thisArg, body) {
+	function _ts_generator$6(thisArg, body) {
 	    var f, y, t, _ = {
 	        label: 0,
 	        sent: function() {
@@ -7162,9 +7259,9 @@
 	    }
 	}
 	function getThemeDataByTemplate(theme, id) {
-	    return _async_to_generator$4(function() {
+	    return _async_to_generator$6(function() {
 	        var _theme_options_token_httpToken, _theme_options_token, url;
-	        return _ts_generator$4(this, function(_state) {
+	        return _ts_generator$6(this, function(_state) {
 	            switch(_state.label){
 	                case 0:
 	                    url = theme.options.env.domain + "/api/service/media/template/getDetail?accessToken=" + (theme.options.accessToken || ((_theme_options_token = theme.options.token) == null ? void 0 : (_theme_options_token_httpToken = _theme_options_token.httpToken) == null ? void 0 : _theme_options_token_httpToken.url)) + "&id=" + id;
@@ -7173,8 +7270,8 @@
 	                        fetch(url, {
 	                            method: 'GET'
 	                        }).then(function(response) {
-	                            return _async_to_generator$4(function() {
-	                                return _ts_generator$4(this, function(_state) {
+	                            return _async_to_generator$6(function() {
+	                                return _ts_generator$6(this, function(_state) {
 	                                    switch(_state.label){
 	                                        case 0:
 	                                            return [
@@ -7219,7 +7316,7 @@
 	    })();
 	}
 
-	function asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, key, arg) {
+	function asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, key, arg) {
 	    try {
 	        var info = gen[key](arg);
 	        var value = info.value;
@@ -7233,23 +7330,23 @@
 	        Promise.resolve(value).then(_next, _throw);
 	    }
 	}
-	function _async_to_generator$3(fn) {
+	function _async_to_generator$5(fn) {
 	    return function() {
 	        var self = this, args = arguments;
 	        return new Promise(function(resolve, reject) {
 	            var gen = fn.apply(self, args);
 	            function _next(value) {
-	                asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, "next", value);
+	                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "next", value);
 	            }
 	            function _throw(err) {
-	                asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, "throw", err);
+	                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "throw", err);
 	            }
 	            _next(undefined);
 	        });
 	    };
 	}
-	function _extends$g() {
-	    _extends$g = Object.assign || function(target) {
+	function _extends$i() {
+	    _extends$i = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7260,9 +7357,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$g.apply(this, arguments);
+	    return _extends$i.apply(this, arguments);
 	}
-	function _ts_generator$3(thisArg, body) {
+	function _ts_generator$5(thisArg, body) {
 	    var f, y, t, _ = {
 	        label: 0,
 	        sent: function() {
@@ -7388,7 +7485,7 @@
 	        }
 	        if (item.isrender === 1 && REC_GROUP.includes(item.iconId)) {
 	            // TODO: 因为回放是一组， 位置以第一个位置为准
-	            recControls.push(recControls[0] ? _extends$g({}, item, {
+	            recControls.push(recControls[0] ? _extends$i({}, item, {
 	                part: recControls[0].part
 	            }) : item);
 	            return false;
@@ -7411,7 +7508,7 @@
 	        }
 	        if (item.isrender === 1 && REC_GROUP.includes(item.iconId)) {
 	            // TODO: 因为回放是一组， 位置以第一个位置为准
-	            recControls.push(recControls[0] ? _extends$g({}, item, {
+	            recControls.push(recControls[0] ? _extends$i({}, item, {
 	                part: recControls[0].part
 	            }) : item);
 	            return false;
@@ -7473,9 +7570,9 @@
 	 * @param data
 	 * @returns
 	 */ function getThemeData(theme, data) {
-	    return _async_to_generator$3(function() {
+	    return _async_to_generator$5(function() {
 	        var themeData, _theme_logger, template;
-	        return _ts_generator$3(this, function(_state) {
+	        return _ts_generator$5(this, function(_state) {
 	            switch(_state.label){
 	                case 0:
 	                    themeData = data;
@@ -7666,8 +7763,8 @@
 	    return Component;
 	}();
 
-	function _extends$f() {
-	    _extends$f = Object.assign || function(target) {
+	function _extends$h() {
+	    _extends$h = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7678,9 +7775,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$f.apply(this, arguments);
+	    return _extends$h.apply(this, arguments);
 	}
-	function _inherits$g(subClass, superClass) {
+	function _inherits$i(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7691,28 +7788,28 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$g(subClass, superClass);
+	    if (superClass) _set_prototype_of$i(subClass, superClass);
 	}
-	function _set_prototype_of$g(o, p) {
-	    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$i(o, p) {
+	    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$g(o, p);
+	    return _set_prototype_of$i(o, p);
 	}
 	var Footer = /*#__PURE__*/ function(Component) {
-	    _inherits$g(Footer, Component);
+	    _inherits$i(Footer, Component);
 	    function Footer(options) {
 	        if (options === void 0) options = {};
-	        return Component.call(this, _extends$f({}, options, {
+	        return Component.call(this, _extends$h({}, options, {
 	            cType: 'footer'
 	        })) || this;
 	    }
 	    return Footer;
 	}(Component);
 
-	function _extends$e() {
-	    _extends$e = Object.assign || function(target) {
+	function _extends$g() {
+	    _extends$g = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7723,9 +7820,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$e.apply(this, arguments);
+	    return _extends$g.apply(this, arguments);
 	}
-	function _inherits$f(subClass, superClass) {
+	function _inherits$h(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7736,20 +7833,20 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$f(subClass, superClass);
+	    if (superClass) _set_prototype_of$h(subClass, superClass);
 	}
-	function _set_prototype_of$f(o, p) {
-	    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$h(o, p) {
+	    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$f(o, p);
+	    return _set_prototype_of$h(o, p);
 	}
 	var Header = /*#__PURE__*/ function(Component) {
-	    _inherits$f(Header, Component);
+	    _inherits$h(Header, Component);
 	    function Header(options) {
 	        if (options === void 0) options = {};
-	        return Component.call(this, _extends$e({}, options, {
+	        return Component.call(this, _extends$g({}, options, {
 	            cType: 'header'
 	        })) || this;
 	    }
@@ -7915,8 +8012,8 @@
 	    };
 	}
 
-	function _extends$d() {
-	    _extends$d = Object.assign || function(target) {
+	function _extends$f() {
+	    _extends$f = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7927,9 +8024,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$d.apply(this, arguments);
+	    return _extends$f.apply(this, arguments);
 	}
-	function _inherits$e(subClass, superClass) {
+	function _inherits$g(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7940,23 +8037,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$e(subClass, superClass);
+	    if (superClass) _set_prototype_of$g(subClass, superClass);
 	}
-	function _set_prototype_of$e(o, p) {
-	    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$g(o, p) {
+	    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$e(o, p);
+	    return _set_prototype_of$g(o, p);
 	}
 	/**
 	 * 全局全屏
 	 * 主题和播放器不提供全局全屏的api， 如果开发者想要可以参考这个组件自己实现
 	 * @category Control
 	 */ var GlobalFullscreen = /*#__PURE__*/ function(Fullscreen) {
-	    _inherits$e(GlobalFullscreen, Fullscreen);
+	    _inherits$g(GlobalFullscreen, Fullscreen);
 	    function GlobalFullscreen(options) {
-	        return Fullscreen.call(this, _extends$d({}, options, {
+	        return Fullscreen.call(this, _extends$f({}, options, {
 	            controlType: 'button',
 	            classNameSuffix: 'global-fullscreen'
 	        })) || this;
@@ -7987,8 +8084,8 @@
 	    return GlobalFullscreen;
 	}(Fullscreen);
 
-	function _extends$c() {
-	    _extends$c = Object.assign || function(target) {
+	function _extends$e() {
+	    _extends$e = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7999,9 +8096,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$c.apply(this, arguments);
+	    return _extends$e.apply(this, arguments);
 	}
-	function _inherits$d(subClass, superClass) {
+	function _inherits$f(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -8012,23 +8109,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$d(subClass, superClass);
+	    if (superClass) _set_prototype_of$f(subClass, superClass);
 	}
-	function _set_prototype_of$d(o, p) {
-	    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$f(o, p) {
+	    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$d(o, p);
+	    return _set_prototype_of$f(o, p);
 	}
 	/**
 	 * 截图控件，点击后会触发截图事件， 截图数据会通过 onCapture 回调函数返回
 	 * @category Control
 	 */ var CapturePicture = /*#__PURE__*/ function(Control) {
-	    _inherits$d(CapturePicture, Control);
+	    _inherits$f(CapturePicture, Control);
 	    function CapturePicture(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$c({}, options, {
+	        _this = Control.call(this, _extends$e({}, options, {
 	            tagName: 'span',
 	            classNameSuffix: 'capture-picture'
 	        })) || this, _this._timer = null;
@@ -8081,7 +8178,29 @@
 	    return CapturePicture;
 	}(Control);
 
+<<<<<<< HEAD
 	var dist$3 = {};
+=======
+	var dist$5 = {};
+
+	var dist$4 = {};
+
+	/*
+	* @ezuikit/utils-tools v2.0.1
+	* tools utils
+	* Copyright (c) 2025-12-02 Ezviz-OpenBiz
+	* Released under the MIT License.
+	*/
+
+	var hasRequiredDist$5;
+
+	function requireDist$5 () {
+		if (hasRequiredDist$5) return dist$4;
+		hasRequiredDist$5 = 1;
+	var getQuery=function(url){var query=url.split("?")[1],obj={};if(query)for(var vars=query.split("&"),i=0;i<vars.length;i++){var pair=vars[i].split("=");obj[pair[0]]=decodeURIComponent(pair[1]);}return obj};function parseEzopenUrl(url){var obj={};if(/^ezopen:\/\//.test(url)){if(url.includes("@")){var endIndex=url.indexOf("@"),startIndex=url.indexOf("//");obj.validateCode=url.substring(startIndex+2,endIndex),url=url.replace(obj.validateCode+"@","");}obj.protocol=url.split("//")[0],obj.search=url.split("?")[1]?"?"+url.split("?")[1]:"",obj.hostname=url.split("/")[2],obj.origin=obj.protocol+"//"+obj.hostname,obj.pathname=url.split("?")[0].replace(obj.origin,""),obj.href=url;var pathnames=obj.pathname.split("/"),lastPath=pathnames[2].split(".");return obj.deviceSerial=pathnames[1],obj.channelNo=lastPath[0],obj.type=lastPath[lastPath.length-1],"live"===obj.type&&(obj.definition=lastPath.length>2?lastPath[1]:"sd"),"rec"===obj.type&&pathnames[2]&&(obj.recType=pathnames[2].includes(".cloud.")?"cloud":""),obj.searchParams=getQuery(url),obj}return {}}var codec={h264:1,h265:2,h266:4,vp8:8,vp9:16,av1:32};function _array_like_to_array(arr,len){(null==len||len>arr.length)&&(len=arr.length);for(var i=0,arr2=new Array(len);i<len;i++)arr2[i]=arr[i];return arr2}function _instanceof(left,right){return null!=right&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?!!right[Symbol.hasInstance](left):left instanceof right}function _create_for_of_iterator_helper_loose(o,allowArrayLike){var it="undefined"!=typeof Symbol&&o[Symbol.iterator]||o["@@iterator"];if(it)return (it=it.call(o)).next.bind(it);if(Array.isArray(o)||(it=function(o,minLen){if(o){if("string"==typeof o)return _array_like_to_array(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);return "Object"===n&&o.constructor&&(n=o.constructor.name),"Map"===n||"Set"===n?Array.from(n):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?_array_like_to_array(o,minLen):void 0}}(o))||allowArrayLike){it&&(o=it);var i=0;return function(){return i>=o.length?{done:true}:{done:false,value:o[i++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var DateTime=function(){function DateTime(){}return DateTime.fillZero=function(num,len){return void 0===len&&(len=2),num.toString().padStart(len,"0")},DateTime.format=function(input,format){var date;if(_instanceof(input,Date))date=input;else {if("number"!=typeof input&&"string"!=typeof input)throw new Error("Invalid date input");date=DateTime.toDate(input+"");}for(var _step,result=format,_iterator=_create_for_of_iterator_helper_loose([[/(yyyy|YYYY)/g,function(){return DateTime.fillZero(date.getFullYear(),4)}],[/(yy|YY)/g,function(){return DateTime.fillZero(date.getFullYear()%100,2)}],[/(MM)/g,function(){return DateTime.fillZero(date.getMonth()+1,2)}],[/(M)/g,function(){return (date.getMonth()+1).toString()}],[/(dd|DD)/g,function(){return DateTime.fillZero(date.getDate(),2)}],[/(d|D)/g,function(){return date.getDate().toString()}],[/(HH|hh)/g,function(){return DateTime.fillZero(date.getHours(),2)}],[/(H|h)/g,function(){return date.getHours().toString()}],[/(mm)/g,function(){return DateTime.fillZero(date.getMinutes(),2)}],[/(m)/g,function(){return date.getMinutes().toString()}],[/(ss|SS)/g,function(){return DateTime.fillZero(date.getSeconds(),2)}],[/(s|S)/g,function(){return date.getSeconds().toString()}],[/(fff)/g,function(){return DateTime.fillZero(date.getMilliseconds(),3)}]]);!(_step=_iterator()).done;){var _step_value=_step.value,regexp=_step_value[0],fn=_step_value[1];result=result.replace(regexp,fn);}return result},DateTime.toDate=function(str){if(_instanceof(str,Date))return str;str=(str+"").trim().replace(/\/|\./gi,"-"),/^\d{4}$/.test(str)&&(str+="-01"),/^\d{4}-\d{2}$/.test(str)&&(str+="-01");try{return /^\d{4}-\d{2}-\d{2}$/.test(str)?new Date(str+"T00:00:00"):/^\d{8}$/.test(str)?(str+="",new Date(str.slice(0,4)+"-"+str.slice(4,6)+"-"+str.slice(6,8)+"T00:00:00")):/^\d{14}$/.test(str)?(str+="",new Date(str.slice(0,4)+"-"+str.slice(4,6)+"-"+str.slice(6,8)+"T"+str.slice(8,10)+":"+str.slice(10,12)+":"+str.slice(12,14))):/^\d{13}$/.test(str)?new Date(Number(str)):/^\d{10}$/.test(str)?new Date(1e3*Number(str)):new Date(str)}catch(error){throw new Error("Invalid date string")}},DateTime.diff=function(date1,date2,type){ void 0===type&&(type="second");var d1=DateTime.toDate(date1),d2=DateTime.toDate(date2);return "second"===type?Math.floor((d1.getTime()-d2.getTime())/1e3):"minute"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60):"hour"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60):"day"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60/24):Math.abs(d1.getTime()-d2.getTime())},DateTime}();dist$4.DateTime=DateTime,dist$4.addVc=function(url,codecs){ void 0===codecs&&(codecs=["h264"]);var vc=(codecs||["h264"]).reduce((function(acc,key){return key=key.toLowerCase(),acc+(codec[key]||0)}),0),host=url.split("?")[0],query=url.split("?")[1];return query=(query||"").split("&").filter((function(item){return !/^vc=\d?/.test(item)})).join("&"),host+"?"+(query+=(query?"&":"")+"vc="+vc)},dist$4.getQuery=getQuery,dist$4.getStaticPath=function(path,base){ void 0===base&&(base="");var protocolReg=/^(https?:\/\/|^\/\/)/;if(""===path||void 0===path)return "";if(protocolReg.test(path))return path;path=path.replace(/\/+/g,"/"),base=protocolReg.test(base||"")?base:window.location.href;try{return new URL(path,base).href}catch(error){return path}},dist$4.isHttp=function(url){return /^http[s]?:\/\//.test(url)},dist$4.isMobile=function(agent){var _navigator,_navigator1,_navigator2,_window;return /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone|Opera Mini)/i.test(null!=agent?agent:null==(_navigator=navigator)?void 0:_navigator.userAgent)||/Macintosh/i.test(agent||(null==(_navigator1=navigator)?void 0:_navigator1.userAgent))&&(null==(_navigator2=navigator)?void 0:_navigator2.maxTouchPoints)>1||!!(null==(_window=window)?void 0:_window.__IS_MOBILE_SIMULATOR__)},dist$4.parseEzopenUrl=parseEzopenUrl,dist$4.pick=function(obj,keys){return Object.entries(obj).reduce((function(acc,param){var key=param[0],value=param[1];return keys.includes(key)&&(acc[key]=value),acc}),{})},dist$4.switchEzopenUrl=function(url,options){var _ref=null!=options?options:{},type=_ref.type,recType=_ref.recType,search=_ref.search,definition=_ref.definition,channelNo=_ref.channelNo,deviceSerial=_ref.deviceSerial,validateCode=_ref.validateCode,obj=parseEzopenUrl(url);if(search){var ns=Object.assign({},obj.searchParams,getQuery("?"+search.replace("?","")));search=Object.entries(ns).reduce((function(acc,param){var key=param[0],value=param[1];return ""===value?acc:acc+=key+"="+encodeURIComponent(value)+"&"}),"?").replace(/&$/,"");}else search=obj.search;return type=type||obj.type,recType=null!=recType?recType:obj.recType,definition=null!=definition?definition:obj.definition,channelNo=channelNo||obj.channelNo,deviceSerial=deviceSerial||obj.deviceSerial,validateCode=null!=validateCode?validateCode:obj.validateCode,obj.protocol+"//"+(validateCode?validateCode+"@":"")+obj.hostname+"/"+deviceSerial+"/"+channelNo+("rec"===type&&recType?"."+recType:"")+("live"===type&&"hd"===definition?"."+definition:"")+"."+type+search};
+		return dist$4;
+	}
+>>>>>>> main
 
 	/*
 	* @ezuikit/control-ptz v0.0.1
@@ -9037,8 +9156,8 @@
 	    if (protoProps) _defineProperties$4(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$b() {
-	    _extends$b = Object.assign || function(target) {
+	function _extends$d() {
+	    _extends$d = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -9049,9 +9168,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$b.apply(this, arguments);
+	    return _extends$d.apply(this, arguments);
 	}
-	function _inherits$c(subClass, superClass) {
+	function _inherits$e(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -9062,23 +9181,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$c(subClass, superClass);
+	    if (superClass) _set_prototype_of$e(subClass, superClass);
 	}
-	function _set_prototype_of$c(o, p) {
-	    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$e(o, p) {
+	    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$c(o, p);
+	    return _set_prototype_of$e(o, p);
 	}
 	/**
 	 * 云台控件
 	 * @category Control
 	 */ var Ptz = /*#__PURE__*/ function(Control) {
-	    _inherits$c(Ptz, Control);
+	    _inherits$e(Ptz, Control);
 	    function Ptz(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$b({}, options, {
+	        _this = Control.call(this, _extends$d({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'ptz'
@@ -9121,7 +9240,7 @@
 	            this.$turntable.classList.add("" + PREFIX_CLASS + "-ptz-turntable");
 	            this.$panel.appendChild(this.$turntable);
 	            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-	            this._ptzControl = new distExports$2.Ptz(this.$turntable, _extends$b({}, this._options, {
+	            this._ptzControl = new distExports$2.Ptz(this.$turntable, _extends$d({}, this._options, {
 	                onSpeedChange: this._onSpeedChange.bind(this),
 	                onDirection: this._onDirection.bind(this)
 	            }));
@@ -9130,7 +9249,7 @@
 	    };
 	    _proto.renderMobileExtend = function renderMobileExtend($container) {
 	        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-	        if (!this._ptzControl1) this._ptzControl1 = new distExports$2.MobilePtz($container, _extends$b({}, this._options, {
+	        if (!this._ptzControl1) this._ptzControl1 = new distExports$2.MobilePtz($container, _extends$d({}, this._options, {
 	            onSpeedChange: this._onSpeedChange.bind(this),
 	            onDirection: this._onDirection.bind(this)
 	        }));
@@ -9233,8 +9352,8 @@
 	    if (protoProps) _defineProperties$3(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$a() {
-	    _extends$a = Object.assign || function(target) {
+	function _extends$c() {
+	    _extends$c = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -9245,9 +9364,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$a.apply(this, arguments);
+	    return _extends$c.apply(this, arguments);
 	}
-	function _inherits$b(subClass, superClass) {
+	function _inherits$d(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -9258,14 +9377,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$b(subClass, superClass);
+	    if (superClass) _set_prototype_of$d(subClass, superClass);
 	}
-	function _set_prototype_of$b(o, p) {
-	    _set_prototype_of$b = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$d(o, p) {
+	    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$b(o, p);
+	    return _set_prototype_of$d(o, p);
 	}
 	var RECORD_DEFAULT_OPTIONS = {
 	    maxDuration: 3600
@@ -9279,10 +9398,10 @@
 	 *  2. 录制时间很短可能会因为浏览器的限制或没有I帧而无法生成有效的视频文件
 	 * @category Control
 	 */ var Record = /*#__PURE__*/ function(Control) {
-	    _inherits$b(Record, Control);
+	    _inherits$d(Record, Control);
 	    function Record(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$a({}, options, {
+	        _this = Control.call(this, _extends$c({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'record'
@@ -9381,6 +9500,514 @@
 	    return Record;
 	}(Control);
 
+	function asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, key, arg) {
+	    try {
+	        var info = gen[key](arg);
+	        var value = info.value;
+	    } catch (error) {
+	        reject(error);
+	        return;
+	    }
+	    if (info.done) {
+	        resolve(value);
+	    } else {
+	        Promise.resolve(value).then(_next, _throw);
+	    }
+	}
+	function _async_to_generator$4(fn) {
+	    return function() {
+	        var self = this, args = arguments;
+	        return new Promise(function(resolve, reject) {
+	            var gen = fn.apply(self, args);
+	            function _next(value) {
+	                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "next", value);
+	            }
+	            function _throw(err) {
+	                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "throw", err);
+	            }
+	            _next(undefined);
+	        });
+	    };
+	}
+	function _defineProperties$2(target, props) {
+	    for(var i = 0; i < props.length; i++){
+	        var descriptor = props[i];
+	        descriptor.enumerable = descriptor.enumerable || false;
+	        descriptor.configurable = true;
+	        if ("value" in descriptor) descriptor.writable = true;
+	        Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	}
+	function _create_class$2(Constructor, protoProps, staticProps) {
+	    if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
+	    return Constructor;
+	}
+	function _extends$b() {
+	    _extends$b = Object.assign || function(target) {
+	        for(var i = 1; i < arguments.length; i++){
+	            var source = arguments[i];
+	            for(var key in source){
+	                if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                    target[key] = source[key];
+	                }
+	            }
+	        }
+	        return target;
+	    };
+	    return _extends$b.apply(this, arguments);
+	}
+	function _inherits$c(subClass, superClass) {
+	    if (typeof superClass !== "function" && superClass !== null) {
+	        throw new TypeError("Super expression must either be null or a function");
+	    }
+	    subClass.prototype = Object.create(superClass && superClass.prototype, {
+	        constructor: {
+	            value: subClass,
+	            writable: true,
+	            configurable: true
+	        }
+	    });
+	    if (superClass) _set_prototype_of$c(subClass, superClass);
+	}
+	function _set_prototype_of$c(o, p) {
+	    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	        o.__proto__ = p;
+	        return o;
+	    };
+	    return _set_prototype_of$c(o, p);
+	}
+	function _ts_generator$4(thisArg, body) {
+	    var f, y, t, _ = {
+	        label: 0,
+	        sent: function() {
+	            if (t[0] & 1) throw t[1];
+	            return t[1];
+	        },
+	        trys: [],
+	        ops: []
+	    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+	    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+	        return this;
+	    }), g;
+	    function verb(n) {
+	        return function(v) {
+	            return step([
+	                n,
+	                v
+	            ]);
+	        };
+	    }
+	    function step(op) {
+	        if (f) throw new TypeError("Generator is already executing.");
+	        while(g && (g = 0, op[0] && (_ = 0)), _)try {
+	            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+	            if (y = 0, t) op = [
+	                op[0] & 2,
+	                t.value
+	            ];
+	            switch(op[0]){
+	                case 0:
+	                case 1:
+	                    t = op;
+	                    break;
+	                case 4:
+	                    _.label++;
+	                    return {
+	                        value: op[1],
+	                        done: false
+	                    };
+	                case 5:
+	                    _.label++;
+	                    y = op[1];
+	                    op = [
+	                        0
+	                    ];
+	                    continue;
+	                case 7:
+	                    op = _.ops.pop();
+	                    _.trys.pop();
+	                    continue;
+	                default:
+	                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+	                        _ = 0;
+	                        continue;
+	                    }
+	                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+	                        _.label = op[1];
+	                        break;
+	                    }
+	                    if (op[0] === 6 && _.label < t[1]) {
+	                        _.label = t[1];
+	                        t = op;
+	                        break;
+	                    }
+	                    if (t && _.label < t[2]) {
+	                        _.label = t[2];
+	                        _.ops.push(op);
+	                        break;
+	                    }
+	                    if (t[2]) _.ops.pop();
+	                    _.trys.pop();
+	                    continue;
+	            }
+	            op = body.call(thisArg, _);
+	        } catch (e) {
+	            op = [
+	                6,
+	                e
+	            ];
+	            y = 0;
+	        } finally{
+	            f = t = 0;
+	        }
+	        if (op[0] & 5) throw op[1];
+	        return {
+	            value: op[0] ? op[1] : void 0,
+	            done: true
+	        };
+	    }
+	}
+	/**
+	 * 对讲控件
+	 *
+	 * navigator.mediaDevices.getUserMedia {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia} 返回一个 Promise 对象，
+	 * 成功后会resolve回调一个 MediaStream 对象。若用户拒绝了使用权限，或者需要的媒体源不可用，
+	 * promise会reject回调一个 PermissionDeniedError 或者 NotFoundError 。
+	 *
+	 * @category Control
+	 */ var Talk = /*#__PURE__*/ function(Control) {
+	    _inherits$c(Talk, Control);
+	    function Talk(options) {
+	        var _this;
+	        _this = Control.call(this, _extends$b({}, options, {
+	            tagName: 'span',
+	            controlType: 'button',
+	            classNameSuffix: 'talk'
+	        })) || this, _this._value = 0;
+	        _this._options = options;
+	        _this._render();
+	        _this.on(EVENTS.talkingChange, function(talking) {
+	            if (_this.active !== talking) {
+	                _this.active = talking;
+	                _this._render();
+	            }
+	        });
+	        _this.on(EVENTS.talkVolumeChange, function(value) {
+	            var _this__options_onChange, _this__options;
+	            _this.value = value;
+	            (_this__options = _this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, value);
+	        });
+	        return _this;
+	    }
+	    var _proto = Talk.prototype;
+	    _proto._render = function _render() {
+	        var _this_locale, _this_locale1;
+	        this.$container.innerHTML = this.active ? IconComponents.talkGrowth({
+	            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_TALK
+	        }) : IconComponents.talk({
+	            title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_TALK
+	        });
+	    };
+	    _proto.reset = function reset(hide) {
+	        if (this.active) {
+	            this._value = 0;
+	            this.active = false;
+	            this._render();
+	            this.emit(EVENTS.control.talkingChange, false);
+	            Control.prototype.reset.call(this, hide);
+	        }
+	    };
+	    /**
+	   * 销毁对讲
+	   */ _proto.destroy = function destroy() {
+	        if (this.active) {
+	            this.reset();
+	        }
+	        Control.prototype.destroy.call(this);
+	    };
+	    /**
+	   * 点击 Control 会触发
+	   */ _proto._onControlClick = function _onControlClick(e) {
+	        var _this = this, _superprop_get__onControlClick = function() {
+	            return Control.prototype._onControlClick;
+	        };
+	        return _async_to_generator$4(function() {
+	            return _ts_generator$4(this, function(_state) {
+	                _superprop_get__onControlClick().call(_this, e);
+	                this.active = !this.active;
+	                this.emit(EVENTS.control.talkingChange, this.active);
+	                this._render();
+	                return [
+	                    2
+	                ];
+	            });
+	        }).call(this);
+	    };
+	    _create_class$2(Talk, [
+	        {
+	            key: "value",
+	            get: /**
+	   * 获取当前值
+	   */ function get() {
+	                return this._value;
+	            },
+	            set: /**
+	   * 设置当前值 [0-1]
+	   */ function set(value) {
+	                // 没有激活状态，则不处理
+	                if (!this.active) {
+	                    return;
+	                }
+	                if (value < 0 || value > 1) {
+	                    return;
+	                }
+	                this._value = value;
+	                var gainType = 'silent';
+	                if (value > 0 && value < 0.25) {
+	                    gainType = 'low';
+	                } else if (value >= 0.25 && value < 0.5) {
+	                    gainType = 'normal';
+	                } else if (value >= 0.5 && value < 0.75) {
+	                    gainType = 'high';
+	                } else if (value >= 0.75) {
+	                    gainType = 'deafening';
+	                }
+	                var className = Array.from(this.$container.classList).find(function(className) {
+	                    return className.startsWith("" + PREFIX_CLASS + "-talk-gain-");
+	                });
+	                if (className) this.$container.classList.remove(className);
+	                this.$container.classList.add(PREFIX_CLASS + "-talk-gain-" + gainType);
+	            }
+	        }
+	    ]);
+	    return Talk;
+	}(Control);
+
+	function asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, key, arg) {
+	    try {
+	        var info = gen[key](arg);
+	        var value = info.value;
+	    } catch (error) {
+	        reject(error);
+	        return;
+	    }
+	    if (info.done) {
+	        resolve(value);
+	    } else {
+	        Promise.resolve(value).then(_next, _throw);
+	    }
+	}
+	function _async_to_generator$3(fn) {
+	    return function() {
+	        var self = this, args = arguments;
+	        return new Promise(function(resolve, reject) {
+	            var gen = fn.apply(self, args);
+	            function _next(value) {
+	                asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, "next", value);
+	            }
+	            function _throw(err) {
+	                asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, "throw", err);
+	            }
+	            _next(undefined);
+	        });
+	    };
+	}
+	function _extends$a() {
+	    _extends$a = Object.assign || function(target) {
+	        for(var i = 1; i < arguments.length; i++){
+	            var source = arguments[i];
+	            for(var key in source){
+	                if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                    target[key] = source[key];
+	                }
+	            }
+	        }
+	        return target;
+	    };
+	    return _extends$a.apply(this, arguments);
+	}
+	function _inherits$b(subClass, superClass) {
+	    if (typeof superClass !== "function" && superClass !== null) {
+	        throw new TypeError("Super expression must either be null or a function");
+	    }
+	    subClass.prototype = Object.create(superClass && superClass.prototype, {
+	        constructor: {
+	            value: subClass,
+	            writable: true,
+	            configurable: true
+	        }
+	    });
+	    if (superClass) _set_prototype_of$b(subClass, superClass);
+	}
+	function _set_prototype_of$b(o, p) {
+	    _set_prototype_of$b = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	        o.__proto__ = p;
+	        return o;
+	    };
+	    return _set_prototype_of$b(o, p);
+	}
+	function _ts_generator$3(thisArg, body) {
+	    var f, y, t, _ = {
+	        label: 0,
+	        sent: function() {
+	            if (t[0] & 1) throw t[1];
+	            return t[1];
+	        },
+	        trys: [],
+	        ops: []
+	    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+	    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+	        return this;
+	    }), g;
+	    function verb(n) {
+	        return function(v) {
+	            return step([
+	                n,
+	                v
+	            ]);
+	        };
+	    }
+	    function step(op) {
+	        if (f) throw new TypeError("Generator is already executing.");
+	        while(g && (g = 0, op[0] && (_ = 0)), _)try {
+	            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+	            if (y = 0, t) op = [
+	                op[0] & 2,
+	                t.value
+	            ];
+	            switch(op[0]){
+	                case 0:
+	                case 1:
+	                    t = op;
+	                    break;
+	                case 4:
+	                    _.label++;
+	                    return {
+	                        value: op[1],
+	                        done: false
+	                    };
+	                case 5:
+	                    _.label++;
+	                    y = op[1];
+	                    op = [
+	                        0
+	                    ];
+	                    continue;
+	                case 7:
+	                    op = _.ops.pop();
+	                    _.trys.pop();
+	                    continue;
+	                default:
+	                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+	                        _ = 0;
+	                        continue;
+	                    }
+	                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+	                        _.label = op[1];
+	                        break;
+	                    }
+	                    if (op[0] === 6 && _.label < t[1]) {
+	                        _.label = t[1];
+	                        t = op;
+	                        break;
+	                    }
+	                    if (t && _.label < t[2]) {
+	                        _.label = t[2];
+	                        _.ops.push(op);
+	                        break;
+	                    }
+	                    if (t[2]) _.ops.pop();
+	                    _.trys.pop();
+	                    continue;
+	            }
+	            op = body.call(thisArg, _);
+	        } catch (e) {
+	            op = [
+	                6,
+	                e
+	            ];
+	            y = 0;
+	        } finally{
+	            f = t = 0;
+	        }
+	        if (op[0] & 5) throw op[1];
+	        return {
+	            value: op[0] ? op[1] : void 0,
+	            done: true
+	        };
+	    }
+	}
+	/**
+	 * 语音广播控件
+	 *
+	 * 用于触发语音广播功能的按钮控件
+	 *
+	 * @category Control
+	 */ var Broadcast = /*#__PURE__*/ function(Control) {
+	    _inherits$b(Broadcast, Control);
+	    function Broadcast(options) {
+	        var _this;
+	        _this = Control.call(this, _extends$a({}, options, {
+	            tagName: 'span',
+	            controlType: 'button',
+	            classNameSuffix: 'broadcast'
+	        })) || this;
+	        _this._options = options;
+	        _this._render();
+	        _this.on(EVENTS.broadcastChange, function(active) {
+	            if (_this.active !== active) {
+	                _this.active = active;
+	                _this._render();
+	            }
+	        });
+	        return _this;
+	    }
+	    var _proto = Broadcast.prototype;
+	    _proto._render = function _render() {
+	        var _this_locale;
+	        this.$container.innerHTML = IconComponents.broadcast({
+	            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_BROADCAST
+	        });
+	    };
+	    _proto.reset = function reset(hide) {
+	        if (this.active) {
+	            this.active = false;
+	            this._render();
+	            this.emit(EVENTS.control.broadcastChange, false);
+	            Control.prototype.reset.call(this, hide);
+	        }
+	    };
+	    /**
+	     * 销毁语音广播控件
+	     */ _proto.destroy = function destroy() {
+	        if (this.active) {
+	            this.reset();
+	        }
+	        Control.prototype.destroy.call(this);
+	    };
+	    /**
+	     * 点击 Control 会触发
+	     */ _proto._onControlClick = function _onControlClick(e) {
+	        var _this = this, _superprop_get__onControlClick = function() {
+	            return Control.prototype._onControlClick;
+	        };
+	        return _async_to_generator$3(function() {
+	            var _this__options_onChange, _this__options;
+	            return _ts_generator$3(this, function(_state) {
+	                _superprop_get__onControlClick().call(_this, e);
+	                this.active = !this.active;
+	                this.emit(EVENTS.control.broadcastChange, this.active);
+	                (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, this.active);
+	                this._render();
+	                return [
+	                    2
+	                ];
+	            });
+	        }).call(this);
+	    };
+	    return Broadcast;
+	}(Control);
+
 	function asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, key, arg) {
 	    try {
 	        var info = gen[key](arg);
@@ -9409,19 +10036,6 @@
 	            _next(undefined);
 	        });
 	    };
-	}
-	function _defineProperties$2(target, props) {
-	    for(var i = 0; i < props.length; i++){
-	        var descriptor = props[i];
-	        descriptor.enumerable = descriptor.enumerable || false;
-	        descriptor.configurable = true;
-	        if ("value" in descriptor) descriptor.writable = true;
-	        Object.defineProperty(target, descriptor.key, descriptor);
-	    }
-	}
-	function _create_class$2(Constructor, protoProps, staticProps) {
-	    if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
-	    return Constructor;
 	}
 	function _extends$9() {
 	    _extends$9 = Object.assign || function(target) {
@@ -9549,74 +10163,66 @@
 	    }
 	}
 	/**
-	 * 对讲控件
+	 * AI对话框控件
 	 *
-	 * navigator.mediaDevices.getUserMedia {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia} 返回一个 Promise 对象，
-	 * 成功后会resolve回调一个 MediaStream 对象。若用户拒绝了使用权限，或者需要的媒体源不可用，
-	 * promise会reject回调一个 PermissionDeniedError 或者 NotFoundError 。
+	 * 用于触发AI对话框功能的按钮控件
 	 *
 	 * @category Control
-	 */ var Talk = /*#__PURE__*/ function(Control) {
-	    _inherits$a(Talk, Control);
-	    function Talk(options) {
+	 */ var AIChat = /*#__PURE__*/ function(Control) {
+	    _inherits$a(AIChat, Control);
+	    function AIChat(options) {
 	        var _this;
 	        _this = Control.call(this, _extends$9({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
-	            classNameSuffix: 'talk'
-	        })) || this, _this._value = 0;
+	            classNameSuffix: 'aichat'
+	        })) || this;
 	        _this._options = options;
 	        _this._render();
-	        _this.on(EVENTS.talkingChange, function(talking) {
-	            if (_this.active !== talking) {
-	                _this.active = talking;
+	        _this.on(EVENTS.aichatChange, function(active) {
+	            if (_this.active !== active) {
+	                _this.active = active;
 	                _this._render();
 	            }
 	        });
-	        _this.on(EVENTS.talkVolumeChange, function(value) {
-	            var _this__options_onChange, _this__options;
-	            _this.value = value;
-	            (_this__options = _this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, value);
-	        });
 	        return _this;
 	    }
-	    var _proto = Talk.prototype;
+	    var _proto = AIChat.prototype;
 	    _proto._render = function _render() {
-	        var _this_locale, _this_locale1;
-	        this.$container.innerHTML = this.active ? IconComponents.talkGrowth({
-	            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_TALK
-	        }) : IconComponents.talk({
-	            title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_TALK
+	        var _this_locale;
+	        this.$container.innerHTML = IconComponents.aiChat({
+	            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_AICHAT
 	        });
 	    };
 	    _proto.reset = function reset(hide) {
 	        if (this.active) {
-	            this._value = 0;
 	            this.active = false;
 	            this._render();
-	            this.emit(EVENTS.control.talkingChange, false);
+	            this.emit(EVENTS.control.aichatChange, false);
 	            Control.prototype.reset.call(this, hide);
 	        }
 	    };
 	    /**
-	   * 销毁对讲
-	   */ _proto.destroy = function destroy() {
+	     * 销毁AI对话框控件
+	     */ _proto.destroy = function destroy() {
 	        if (this.active) {
 	            this.reset();
 	        }
 	        Control.prototype.destroy.call(this);
 	    };
 	    /**
-	   * 点击 Control 会触发
-	   */ _proto._onControlClick = function _onControlClick(e) {
+	     * 点击 Control 会触发
+	     */ _proto._onControlClick = function _onControlClick(e) {
 	        var _this = this, _superprop_get__onControlClick = function() {
 	            return Control.prototype._onControlClick;
 	        };
 	        return _async_to_generator$2(function() {
+	            var _this__options_onChange, _this__options;
 	            return _ts_generator$2(this, function(_state) {
 	                _superprop_get__onControlClick().call(_this, e);
 	                this.active = !this.active;
-	                this.emit(EVENTS.control.talkingChange, this.active);
+	                this.emit(EVENTS.control.aichatChange, this.active);
+	                (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, this.active);
 	                this._render();
 	                return [
 	                    2
@@ -9624,44 +10230,7 @@
 	            });
 	        }).call(this);
 	    };
-	    _create_class$2(Talk, [
-	        {
-	            key: "value",
-	            get: /**
-	   * 获取当前值
-	   */ function get() {
-	                return this._value;
-	            },
-	            set: /**
-	   * 设置当前值 [0-1]
-	   */ function set(value) {
-	                // 没有激活状态，则不处理
-	                if (!this.active) {
-	                    return;
-	                }
-	                if (value < 0 || value > 1) {
-	                    return;
-	                }
-	                this._value = value;
-	                var gainType = 'silent';
-	                if (value > 0 && value < 0.25) {
-	                    gainType = 'low';
-	                } else if (value >= 0.25 && value < 0.5) {
-	                    gainType = 'normal';
-	                } else if (value >= 0.5 && value < 0.75) {
-	                    gainType = 'high';
-	                } else if (value >= 0.75) {
-	                    gainType = 'deafening';
-	                }
-	                var className = Array.from(this.$container.classList).find(function(className) {
-	                    return className.startsWith("" + PREFIX_CLASS + "-talk-gain-");
-	                });
-	                if (className) this.$container.classList.remove(className);
-	                this.$container.classList.add(PREFIX_CLASS + "-talk-gain-" + gainType);
-	            }
-	        }
-	    ]);
-	    return Talk;
+	    return AIChat;
 	}(Control);
 
 	function _defineProperties$1(target, props) {
@@ -10260,19 +10829,50 @@
 
 	var dist$2 = {};
 
+	var dist$2 = {};
+
 	/*
+<<<<<<< HEAD
 	* @ezuikit/control-date-picker v1.0.4
 	* Copyright (c) 2025-12-31 Ezviz-OpenBiz
+=======
+	* @ezuikit/utils-tools v2.0.2
+	* tools utils
+	* Copyright (c) 2026-01-05 Ezviz-OpenBiz
+>>>>>>> main
+	* Released under the MIT License.
+	*/
+
+	var hasRequiredDist$2;
+
+<<<<<<< HEAD
+	function requireDist$2 () {
+		if (hasRequiredDist$2) return dist$2;
+		hasRequiredDist$2 = 1;
+	var delegate=requireDelegate(),utilsTools=requireDist$7(),deepmerge=requireCjs(),Picker=requireDist$8(),Util=function(){function Util(){}return Util.fillZero=function(num,len){return void 0===len&&(len=2),num.toString().padStart(len,"0")},Util.chunkBySize=function(arr,size){return Array.from({length:Math.ceil(arr.length/size)}).map(function(_,index){return arr.slice(index*size,(index+1)*size)})},Util.generateYears=function(year){for(var years=[],i=year%10+1;i>=0;i--)years.push(year-i);for(var i1=1;years.length<12;i1++)years.push(year+i1);return years},Util.getDaysInMonth=function(year,month){return new Date(year,month+1,0).getDate()},Util.getFirstDayOfMonth=function(year,month,startOfWeek){return void 0===startOfWeek&&(startOfWeek=0),(new Date(year,month).getDay()-startOfWeek+7)%7},Util.generateWeeksByYearMonth=function(year,month,startOfWeek){ void 0===startOfWeek&&(startOfWeek=0),month-=1;for(var daysInMonth=Util.getDaysInMonth(year,month),firstDay=Util.getFirstDayOfMonth(year,month,startOfWeek),weeks=[],i=1;i<=firstDay+daysInMonth;i++){var day=i-firstDay;day<1?weeks.push((0===month?year-1:year)+"-"+Util.fillZero((month+12-1)%12+1)+"-"+Util.fillZero(Util.getDaysInMonth(year,month-1)+day)):day>daysInMonth?weeks.push((11===month?year+1:year)+"-"+Util.fillZero((month+1)%12+1)+"-"+(day-daysInMonth)):weeks.push(year+"-"+Util.fillZero(month+1)+"-"+Util.fillZero(day));}for(var nextDay=1;weeks.length<42;)weeks.push((11===month?year+1:year)+"-"+Util.fillZero((month+1)%12+1)+"-"+Util.fillZero(nextDay++));return weeks},Util.generateHours=function(){for(var hours=[],i=0;i<24;i++)hours.push(Util.fillZero(i));return hours},Util.generateMinutesOrSeconds=function(){for(var hours=[],i=0;i<=59;i++)hours.push(Util.fillZero(i));return hours},Util}(),__$CALENDAR_LOCALES$__={en:{year:"",month:"",weeks:["Su","Mo","Tu","We","Th","Fr","Sa"],today:"Today",ok:"OK",months:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]},zh:{year:"年",month:"月",weeks:["日","一","二","三","四","五","六"],today:"今天",ok:"确定",months:["01","02","03","04","05","06","07","08","09","10","11","12"]}},__DEFAULT_COMPONENTS_OPTIONS__={showSuperPrevIcon:false,showSuperNextIcon:false,showPrevIcon:false,showNextIcon:false,showHeaderClose:false,showHeaderOk:false,renderSuperPrevIcon:'<span class="edate-super-prev-icon"></span>',renderSuperNextIcon:'<span class="edate-super-next-icon"></span>',renderPrevIcon:'<span class="edate-prev-icon"></span>',renderNextIcon:'<span class="edate-next-icon"></span>',renderHeaderCloseIcon:'<span class="edate-close-icon">\n      <svg viewBox="0 0 24 24" fill="none" width="1em" height="1em" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="close">\n\t    <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,0.707114,-0.707114,0.707099,6.34277,6.34326)" />\n\t\t  <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,-0.707114,0.707114,0.707099,6.34277,17.6567)" />\n    </svg>\n  </span>',renderHeaderOkIcon:function(locale){return '<span class="edate-btn-text">'+((null==locale?void 0:locale.ok)||"确定")+"</span>"}},Header=function(){function Header(options){this.$header=null,this.options=deepmerge.all([{},__DEFAULT_COMPONENTS_OPTIONS__,options],{clone:false}),this.$header=document.createElement("div"),this.$header.classList.add("edate-header",options.prefixCls+"-header"),options.className&&this.$header.classList.add(options.className),this._render(),this._eventListeners();}var _proto=Header.prototype;return _proto._render=function(){var _this__getStrOrFunToStr,_this__getStrOrFunToStr1,_this__getStrOrFunToStr2,_this__getStrOrFunToStr3,_this__getStrOrFunToStr4,_this__getStrOrFunToStr5;this.$header&&(this.$header.innerHTML="\n            "+(this.options.showHeaderClose?'<div class="edate-close-btn">\n                    '+(null!=(_this__getStrOrFunToStr=this._getStrOrFunToStr(this.options.renderHeaderCloseIcon))?_this__getStrOrFunToStr:__DEFAULT_COMPONENTS_OPTIONS__.renderHeaderCloseIcon)+"\n                  </div>":this.options.showHeaderOk?"<span></span>":"")+"\n            "+(this.options.showSuperPrevIcon||this.options.showPrevIcon?'\n                <div class="edate-prev-btns">\n                  '+(this.options.showSuperPrevIcon?'<div class="edate-super-prev-btn '+this.options.prefixCls+'-super-prev-btn">\n                        '+(null!=(_this__getStrOrFunToStr1=this._getStrOrFunToStr(this.options.renderSuperPrevIcon))?_this__getStrOrFunToStr1:__DEFAULT_COMPONENTS_OPTIONS__.renderSuperPrevIcon)+"\n                      </div>":"")+"\n                  "+(this.options.showPrevIcon?'<div class="edate-prev-btn '+this.options.prefixCls+'-prev-btn">\n                          '+(null!=(_this__getStrOrFunToStr2=this._getStrOrFunToStr(this.options.renderPrevIcon))?_this__getStrOrFunToStr2:__DEFAULT_COMPONENTS_OPTIONS__.renderPrevIcon)+"\n                        </div>":"")+"\n                </div>\n              ":"")+'\n\n            <div class="edate-header-view '+this.options.prefixCls+'-header-view"></div>\n\n            '+(this.options.showNextIcon||this.options.showSuperNextIcon?'\n                  <div class="edate-next-btns">\n                    '+(this.options.showNextIcon?'<div class="edate-next-btn '+this.options.prefixCls+'-next-btn">\n                            '+(null!=(_this__getStrOrFunToStr3=this._getStrOrFunToStr(this.options.renderNextIcon))?_this__getStrOrFunToStr3:__DEFAULT_COMPONENTS_OPTIONS__.renderNextIcon)+"\n                          </div>":"")+"\n                    "+(this.options.showSuperNextIcon?'<div class="edate-super-next-btn '+this.options.prefixCls+'-super-next-btn">\n                          '+(null!=(_this__getStrOrFunToStr4=this._getStrOrFunToStr(this.options.renderSuperNextIcon))?_this__getStrOrFunToStr4:__DEFAULT_COMPONENTS_OPTIONS__.renderSuperNextIcon)+"\n                        </div>":"")+"\n                </div>\n              ":"")+"\n            "+(this.options.showHeaderOk?'<div class="edate-ok-btn">\n                    '+(null!=(_this__getStrOrFunToStr5=this._getStrOrFunToStr(this.options.renderHeaderOkIcon))?_this__getStrOrFunToStr5:__DEFAULT_COMPONENTS_OPTIONS__.renderHeaderOkIcon)+"\n                  </div>":this.options.showHeaderClose?"<span></span>":""));},_proto._getStrOrFunToStr=function(value){if(null!=value){var _this_options;if("function"==typeof value)return this._getStrOrFunToStr(null==value?void 0:value(null==(_this_options=this.options)?void 0:_this_options.locale));if("string"==typeof value)return value}},_proto.renderContent=function(html){if(this.$header){var _$content=this.$header.querySelector(".edate-header-view");if(!_$content)return;_$content.innerHTML=html;}},_proto.destroy=function(){this.$header&&this.$header.remove();},_proto._eventListeners=function(){var _this=this;_this.$header&&(delegate(_this.$header,".edate-super-prev-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onSuperPrev||_this.options.onSuperPrev.call(_this.options);}),delegate(_this.$header,".edate-prev-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onPrev||_this.options.onPrev.call(_this.options);}),delegate(_this.$header,".edate-next-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onNext||_this.options.onNext.call(_this.options);}),delegate(_this.$header,".edate-super-next-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onSuperNext||_this.options.onSuperNext.call(_this.options);}),delegate(_this.$header,".edate-close-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||(null==_this.options.onClose||_this.options.onClose.call(_this.options),event.stopPropagation(),event.preventDefault());}),delegate(_this.$header,".edate-ok-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||(null==_this.options.onOk||_this.options.onOk.call(_this.options),event.stopPropagation(),event.preventDefault());}));},Header}();function _extends$2(){return _extends$2=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$2.apply(this,arguments)}var _CONTAINER_DEFAULT_OPTIONS_={prefixCls:"edate",locales:__$CALENDAR_LOCALES$__,showHeader:true},Container=function(){function Container(popupContainer,options){this.$panel=document.createElement("div"),this.$body=document.createElement("div"),this.$container=document.createElement("div"),this.language="zh",this.header=null,this.locale=__$CALENDAR_LOCALES$__.zh,this.options=deepmerge.all([{},_CONTAINER_DEFAULT_OPTIONS_,options],{clone:false}),this.$popupContainer=popupContainer?"function"==typeof popupContainer?popupContainer():popupContainer:document.body,this._setLocale(),this.$container.classList.add("edate-container",(this.options.prefixCls||"edate")+"-container"),options.isMobile&&this.$container.classList.add("edate-mobile",this.options.prefixCls+"-mobile"),this.options.wrapClassName&&this.$container.classList.add(this.options.wrapClassName),this.$panel.classList.add("edate-panel",(this.options.prefixCls||"edate")+"-panel"),this.options.showHeader&&(this.header=new Header(_extends$2({},this.options,{locale:this.locale,onPrev:this._onPrev.bind(this),onNext:this._onNext.bind(this),onSuperPrev:this._onSuperPrev.bind(this),onSuperNext:this._onSuperNext.bind(this),onClose:this._onClose.bind(this),onOk:this._onOk.bind(this)})),this.$panel.appendChild(this.header.$header)),this.$body.classList.add("edate-body",(this.options.prefixCls||"edate")+"-body"),this.$container.appendChild(this.$panel),this.$popupContainer.appendChild(this.$container);}var _proto=Container.prototype;return _proto._setLocale=function(){if(this.options.locales)if("string"==typeof this.options.language){var language=this.options.language||navigator.language;this.options.locales[language]?this.locale=this.options.locales[language]:this.locale=this.options.locales.zh;}else this.locale=this.options.locales.zh;},_proto.destroy=function(){var _this_$container;(null==(_this_$container=this.$container)?void 0:_this_$container.parentNode)&&this.$container.parentNode.removeChild(this.$container),this.header=null,this.$container=null;},_proto.setLocale=function(locale){"string"==typeof locale?this._setLocale():this.locale=locale;},_proto._onSuperPrev=function(){},_proto._onSuperNext=function(){},_proto._onPrev=function(){},_proto._onNext=function(){},_proto._onClose=function(){},_proto._onOk=function(){},Container}();function _create_class$3(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends$1(){return _extends$1=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$1.apply(this,arguments)}function _set_prototype_of$3(o,p){return _set_prototype_of$3=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$3(o,p)}var _CALENDAR_DEFAULT_OPTIONS_={startOfWeek:0,showHeader:true,showSuperPrevIcon:true,showSuperNextIcon:true,showPrevIcon:true,showNextIcon:true,language:"zh",renderBadge:'<span class="ecalendar-badge"></span>',badges:[]},Calendar=function(Container){function Calendar(container,options){var _this,_this_options_badges,_this_options,_this_options1,_this_options2;return (_this=Container.call(this,container,_extends$1({},_CALENDAR_DEFAULT_OPTIONS_,options,{prefixCls:"ecalendar"}))||this).badges=[],(null==(_this_options_badges=_this.options.badges)?void 0:_this_options_badges.length)&&_this._updateBadges(_this.options.badges,false),(null==(_this_options=_this.options)?void 0:_this_options.startOfWeek)&&((null==(_this_options1=_this.options)?void 0:_this_options1.startOfWeek)>6||(null==(_this_options2=_this.options)?void 0:_this_options2.startOfWeek)<0)&&(_this.options.startOfWeek=0),_this._render(),_this.setCurrent(_this.options.current,false),_this._onHeader(),_this._onCell(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$3(subClass,superClass);}(Calendar,Container);var _proto=Calendar.prototype;return _proto.setCurrent=function(date,change){if(void 0===change&&(change=true),"string"==typeof date||(left=date,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right))try{if(date="string"==typeof date?utilsTools.DateTime.toDate(date):date,(!this._current||utilsTools.DateTime.format(date,"YYYY-MM-DD")!==utilsTools.DateTime.format(this._current,"YYYY-MM-DD"))&&(this._current=date,change&&(null==this.options.onChange||this.options.onChange.call(this.options,date,utilsTools.DateTime.format(date,"YYYY-MM-DD"))),this.$body)){var _this_$body_querySelector,_this_$body_querySelector1;null==(_this_$body_querySelector=this.$body.querySelector(".ecalendar-cell-selected"))||_this_$body_querySelector.classList.remove("ecalendar-cell-selected");var title=utilsTools.DateTime.format(this._current,"YYYY-MM-DD");null==(_this_$body_querySelector1=this.$body.querySelector(".ecalendar-cell-in-view[title='"+title+"']"))||_this_$body_querySelector1.classList.add("ecalendar-cell-selected");}this._setRenderCurrent(this._current);}catch(error){this._setRenderCurrent(new Date);}else this._setRenderCurrent(new Date);var left,right;},_proto.updateBadges=function(badges){this._updateBadges(badges);},_proto._updateBadges=function(badges,rerender){ void 0===rerender&&(rerender=true),(null==badges?void 0:badges.length)>=0&&(this.badges=badges.map(function(date){return utilsTools.DateTime.format(date,"YYYY-MM-DD")}),rerender&&this._renderDate());},_proto._setRenderCurrent=function(date){(!this._renderCurrent||date&&utilsTools.DateTime.format(this._renderCurrent,"YYYY-MM")!==utilsTools.DateTime.format(date,"YYYY-MM"))&&(this._renderCurrent=date||new Date,this._renderDate());},_proto._onCell=function(){var _this=this;delegate(this.$body,".ecalendar-cell","click",function(event){var date=new Date(event.delegateTarget.getAttribute("title").replace(/\//gi,"/")),disabled=event.delegateTarget.classList.contains("edate-disabled");disabled||_this.setCurrent(date),null==_this.options.onCell||_this.options.onCell.call(_this.options,date,utilsTools.DateTime.format(_this._renderCurrent,"YYYY-MM-DD"),disabled),event.stopPropagation(),event.preventDefault();});},_proto._onSuperPrev=function(){var date=new Date(this._renderCurrent);date.setFullYear(date.getFullYear()-1,date.getMonth(),date.getDate()),this._setRenderCurrent(date),null==this.options.onPrevMonth||this.options.onPrevMonth.call(this.options,this._current,this._renderCurrent);},_proto._onSuperNext=function(){var date=new Date(this._renderCurrent);date.setFullYear(date.getFullYear()+1,date.getMonth(),date.getDate()),this._setRenderCurrent(date),null==this.options.onNextMonth||this.options.onNextMonth.call(this.options,this._current,this._renderCurrent);},_proto._onPrev=function(){var date=new Date(this._renderCurrent);date.setMonth(date.getMonth()-1,date.getDate()),this._setRenderCurrent(date),null==this.options.onPrevMonth||this.options.onPrevMonth.call(this.options,this._current,this._renderCurrent);},_proto._onNext=function(){var date=new Date(this._renderCurrent);date.setMonth(date.getMonth()+1,date.getDate()),this._setRenderCurrent(date),null==this.options.onNextMonth||this.options.onNextMonth.call(this.options,this._current,this._renderCurrent);},_proto._onHeader=function(){var _this=this;delegate(this.$panel,".ecalendar-header-month-btn","click",function(){null==_this.options.onMonth||_this.options.onMonth.call(_this.options,_this._current,_this._renderCurrent);}),delegate(this.$panel,".ecalendar-header-year-btn","click",function(){null==_this.options.onYear||_this.options.onYear.call(_this.options,_this._current,_this._renderCurrent);});},_proto._onOk=function(){null==this.options.onOk||this.options.onOk.call(this.options,this.current);},_proto._onClose=function(){null==this.options.onClose||this.options.onClose.call(this.options,this.current);},_proto._render=function(){var _this_locale,_this_locale1,shiftedCustomDays=[].concat(((null==(_this_locale=this.locale)?void 0:_this_locale.weeks)||[]).slice(this.options.startOfWeek),((null==(_this_locale1=this.locale)?void 0:_this_locale1.weeks)||[]).slice(0,this.options.startOfWeek));this.$body.innerHTML='<table class="ecalendar-content">\n          <thead><tr>'+shiftedCustomDays.map(function(day){return "<th>"+day+"</th>"}).join("")+"</tr></thead>\n          <tbody></tbody>\n        </table>",this.$panel.appendChild(this.$body);},_proto._renderDate=function(){var _this_header,_this_$body_querySelector,_this=this;if(this.$body){var _this_locale_months,_this_locale,_this_locale1,_this_locale2,_this_locale3,_this_locale_months1,_this_locale4,_this_locale5,_this_$body_querySelector1,todayStr=utilsTools.DateTime.format(new Date,"YYYY-MM-DD"),year=this._renderCurrent.getFullYear(),month=this._renderCurrent.getMonth()+1,dayGroupArray=Util.chunkBySize(Util.generateWeeksByYearMonth(year,month,this.options.startOfWeek),7),allowMonthClick="function"==typeof this.options.onMonth,allowYearClick="function"==typeof this.options.onYear;if(null==(_this_header=this.header)?void 0:_this_header.$header)this.header.renderContent("\n      "+("zh"!==this.options.language?'<span class="ecalendar-header-month-btn '+(allowMonthClick?"edate-header-title-hover":"")+'">'+(null==(_this_locale=this.locale)||null==(_this_locale_months=_this_locale.months)?void 0:_this_locale_months[+(month-1)])+((null==(_this_locale1=this.locale)?void 0:_this_locale1.month)||"")+'</span>  <span class="ecalendar-header-year-btn '+(allowYearClick?"edate-header-title-hover":"")+'">'+year+((null==(_this_locale2=this.locale)?void 0:_this_locale2.year)||"")+"</span>":'<span class="ecalendar-header-year-btn '+(allowYearClick?"edate-header-title-hover":"")+'">'+year+((null==(_this_locale3=this.locale)?void 0:_this_locale3.year)||"")+'</span>  <span class="ecalendar-header-month-btn '+(allowMonthClick?"edate-header-title-hover":"")+'">'+(null==(_this_locale4=this.locale)||null==(_this_locale_months1=_this_locale4.months)?void 0:_this_locale_months1[+(month-1)])+((null==(_this_locale5=this.locale)?void 0:_this_locale5.month)||"")+"</span>"));if(null==(_this_$body_querySelector=this.$body.querySelector(".ecalendar-content"))?void 0:_this_$body_querySelector.querySelector("tbody"))(null==(_this_$body_querySelector1=this.$body.querySelector(".ecalendar-content"))?void 0:_this_$body_querySelector1.querySelector("tbody")).innerHTML="\n              "+dayGroupArray.slice(0,7).map(function(dates){return "<tr>\n                  "+dates.map(function(dateStr){var _this_options,_dateStr_split=dateStr.split("-"),y=_dateStr_split[0],m=_dateStr_split[1],d=_dateStr_split[2],date=new Date(+y,+m,+d),classNames=[month===+m?"ecalendar-cell-in-view":"",todayStr===dateStr?"ecalendar-cell-today":"",_this._current&&utilsTools.DateTime.format(_this._current,"YYYY-MM-DD")===dateStr?"ecalendar-cell-selected":"","function"==typeof(null==(_this_options=_this.options)?void 0:_this_options.disabledDate)&&_this.options.disabledDate(utilsTools.DateTime.toDate(dateStr),dateStr)?"edate-disabled":""].filter(Boolean),badgeHtml=_this._renderBadge(date,dateStr);return '<td title="'+dateStr+'" class="ecalendar-cell '+classNames.join(" ")+'">\n                        '+("function"==typeof _this.options.renderDate?_this.options.renderDate(date,dateStr):'<span class="ecalendar-cell-inner">'+Util.fillZero(+d)+"</span>")+"\n                        "+badgeHtml+"\n                      </td>"}).join("")+"\n              </tr>"}).join("");}},_proto._renderBadge=function(date,dateStr){var badgeHtml="";badgeHtml="function"==typeof this.options.renderBadge?this.options.renderBadge(date,dateStr):"string"==typeof this.options.renderBadge?this.options.renderBadge:"";var showBadge="function"==typeof this.options.showBadge&&this.options.showBadge(date,dateStr);return this.badges.includes(dateStr)||showBadge||(badgeHtml=""),badgeHtml},_create_class$3(Calendar,[{key:"current",get:function(){return this._current}}]),Calendar}(Container);function _create_class$2(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$2(o,p){return _set_prototype_of$2=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$2(o,p)}Calendar.DateTime=utilsTools.DateTime;var _Month_DEFAULT_OPTIONS_={showHeader:true,showSuperPrevIcon:true,showSuperNextIcon:true,language:"zh"},Month=function(Container){function Month(popupContainer,options){var _this;return (_this=Container.call(this,popupContainer,deepmerge.all([{},_Month_DEFAULT_OPTIONS_,options||{},{showPrevIcon:false,showNextIcon:false,prefixCls:"emonth"}],{clone:false}))||this)._render(),_this.setCurrent(_this.options.current,false),_this._onHeaderTitle(),_this._onCell(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$2(subClass,superClass);}(Month,Container);var _proto=Month.prototype;return _proto.setCurrent=function(date,change){ void 0===change&&(change=true),this._setCurrent(date,change);},_proto._setCurrent=function(date,change){if("string"==typeof date||(left=date,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right))try{var d=date;"string"==typeof d&&(d=utilsTools.DateTime.toDate(d));var current=d;this._current&&utilsTools.DateTime.format(current,"YYYY-MM-DD")===utilsTools.DateTime.format(this._current,"YYYY-MM-DD")||(this._current=current,"function"==typeof this.options.onChange&&change&&(null==this.options.onChange||this.options.onChange.call(this.options,current,utilsTools.DateTime.format(current,"YYYY-MM")))),this._setRenderCurrent(current);}catch(error){this._setRenderCurrent(new Date);}else this._setRenderCurrent(new Date);var left,right;},_proto._setRenderCurrent=function(date){if((!this._renderCurrent||this._renderCurrent&&utilsTools.DateTime.format(date,"YYYY")!==utilsTools.DateTime.format(this._renderCurrent,"YYYY"))&&(this._renderCurrent=date,this._renderMonths(date.getFullYear())),this._current){var _this_$body_querySelector,_this_$body_querySelector1;null==(_this_$body_querySelector=this.$body.querySelector(".emonth-cell-selected"))||_this_$body_querySelector.classList.remove("emonth-cell-selected");var selectedTitle=utilsTools.DateTime.format(this._current,"YYYY-MM");null==(_this_$body_querySelector1=this.$body.querySelector(".emonth-cell-in-view[title='"+selectedTitle+"']"))||_this_$body_querySelector1.classList.add("emonth-cell-selected");}this._setHeader();},_proto._onOk=function(){null==this.options.onOk||this.options.onOk.call(this.options,this.current);},_proto._onClose=function(){null==this.options.onClose||this.options.onClose.call(this.options,this.current);},_proto._onCell=function(){var _this=this;delegate(this.$body,".emonth-cell","click",function(e){e.stopPropagation(),e.preventDefault();var month=+e.delegateTarget.getAttribute("data-month"),newDate=utilsTools.DateTime.toDate(utilsTools.DateTime.format(_this._current,"yyyy-MM-dd HH:mm:ss"));newDate.setMonth(month-1);var disabled=e.delegateTarget.classList.contains("edate-disabled");disabled||_this.setCurrent(newDate),null==_this.options.onCell||_this.options.onCell.call(_this.options,newDate,utilsTools.DateTime.format(newDate,"YYYY-MM"),disabled);});},_proto._onSuperPrev=function(){var year=this._renderCurrent.getFullYear()-1,date=utilsTools.DateTime.toDate(year+utilsTools.DateTime.format(this._renderCurrent,"-MM-DDTHH:mm:ss"));this._setRenderCurrent(date),null==this.options.onSuperPrev||this.options.onSuperPrev.call(this.options,this._current,this._renderCurrent);},_proto._onSuperNext=function(){var year=this._renderCurrent.getFullYear()+1,date=utilsTools.DateTime.toDate(year+utilsTools.DateTime.format(this._renderCurrent,"-MM-DDTHH:mm:ss"));this._setRenderCurrent(date),null==this.options.onSuperNext||this.options.onSuperNext.call(this.options,this._current,this._renderCurrent);},_proto._onHeaderTitle=function(){var _this=this;delegate(this.$panel,".edate-header-title-hover","click",function(){null==_this.options.onYear||_this.options.onYear.call(_this.options,_this._current,_this._renderCurrent);});},_proto._setHeader=function(){if(this.$panel.querySelector(".emonth-header-view")){var allowClick="function"==typeof this.options.onYear;this.$panel.querySelector(".emonth-header-view").innerHTML='<span class="'+(allowClick?"edate-header-title-hover":"")+'">'+this._renderCurrent.getFullYear()+this.locale.year+"</span>";}},_proto._setDisabled=function(){for(var year=this._renderCurrent.getFullYear(),i=0;i<12;i++){var $cell=this.$body.querySelector(".emonth-cell[title='"+year+"-"+Util.fillZero(i+1)+"']");if($cell){var date=utilsTools.DateTime.toDate(year+"-"+Util.fillZero(i+1)+"-"+utilsTools.DateTime.format(this._renderCurrent,"DDTHH:mm:ss"));"function"==typeof this.options.disabledMonth&&this.options.disabledMonth(date,utilsTools.DateTime.format(date,"YYYY-MM"))?$cell.classList.add("edate-disabled"):$cell.classList.remove("edate-disabled");}}},_proto._render=function(){this.$body.innerHTML='<table class="emonth-content"></table>',this.$panel.appendChild(this.$body);},_proto._renderMonths=function(year){var _this=this;this.$body.querySelector(".emonth-content")&&(this.$body.querySelector(".emonth-content").innerHTML="\n              <tbody>\n                "+Util.chunkBySize(this.locale.months,3).slice(0,4).map(function(month,index){return "<tr>\n                            "+month.map(function(m,i){return '<td title="'+year+"-"+Util.fillZero(3*index+i+1)+'" data-month="'+Util.fillZero(3*index+i+1)+'" class="emonth-cell emonth-cell-in-view">\n                                        <span class="emonth-cell-inner">'+(_this.options.monthRender&&"function"==typeof _this.options.monthRender?_this.options.monthRender(utilsTools.DateTime.toDate(year+"-"+Util.fillZero(3*index+i+1)),year+"-"+Util.fillZero(3*index+i+1))||"":m)+"</span>\n                                      </td>"}).join("")+"\n                            </tr>"}).join("")+"\n              </tbody>"),this._setDisabled();},_create_class$2(Month,[{key:"current",get:function(){return this._current}}]),Month}(Container);function _create_class$1(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$1(o,p){return _set_prototype_of$1=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1(o,p)}var _YEAR_DEFAULT_OPTIONS_={showHeader:true,showSuperPrevIcon:true,showSuperNextIcon:true,language:"zh",prefixCls:"eyear"},Year=function(Container){function Year(popupContainer,options){var _this;return (_this=Container.call(this,popupContainer,deepmerge.all([{},_YEAR_DEFAULT_OPTIONS_,options||{},{showPrevIcon:false,showNextIcon:false,renderPrevIcon:"",renderNextIcon:""}],{clone:false}))||this)._render(),_this._setCurrent(_this.options.current,false),_this._onCell(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1(subClass,superClass);}(Year,Container);var _proto=Year.prototype;return _proto.setCurrent=function(year,change){ void 0===change&&(change=true),this._setCurrent(year,change);},_proto._setCurrent=function(year,change){ void 0===change&&(change=true);var left,right,_year="number"==typeof year?utilsTools.DateTime.toDate(year):(left=year,(null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)?year:new Date);this._current&&utilsTools.DateTime.format(_year,"YYYY-MM-DD")===utilsTools.DateTime.format(this._current,"YYYY-MM-DD")||(this._current=_year,"function"==typeof this.options.onChange&&change&&this.options.onChange(_year)),this._renderTenYear=(this._current||new Date).getFullYear(),this._renderYearList();},_proto._onOk=function(){null==this.options.onOk||this.options.onOk.call(this.options,this.current);},_proto._onClose=function(){null==this.options.onClose||this.options.onClose.call(this.options,this.current);},_proto._onCell=function(){var _this=this;delegate(this.$body,".eyear-cell","click",function(e){var yearStr=+e.delegateTarget.getAttribute("title"),newDate=utilsTools.DateTime.toDate(utilsTools.DateTime.format(_this._current,"yyyy-MM-dd HH:mm:ss"));newDate.setFullYear(yearStr);var disabled=e.delegateTarget.classList.contains("edate-disabled");disabled||_this._setCurrent(newDate),null==_this.options.onCell||_this.options.onCell.call(_this.options,newDate,utilsTools.DateTime.format(newDate,"YYYY"),disabled),e.stopPropagation(),e.preventDefault();});},_proto._onSuperPrev=function(){this._renderTenYear=this._renderTenYear-10,null==this.options.onPrevYear||this.options.onPrevYear.call(this.options,this._current,Util.generateYears(this._renderTenYear)),this._renderYearList();},_proto._onSuperNext=function(){this._renderTenYear=this._renderTenYear+10,null==this.options.onNextYear||this.options.onNextYear.call(this.options,this._current,Util.generateYears(this._renderTenYear)),this._renderYearList();},_proto._render=function(){this.$body.innerHTML='<table class="eyear-content"></table>',this.$panel.appendChild(this.$body);},_proto._renderYearList=function(){var _this_header,_this=this,list=Util.generateYears(this._renderTenYear);null==(_this_header=this.header)||_this_header.renderContent(list[1]+" - "+list[list.length-2]),this.$body.querySelector(".eyear-content")&&(this.$body.querySelector(".eyear-content").innerHTML="\n          <tbody>\n            "+Util.chunkBySize(list,3).slice(0,4).map(function(years,i){return "<tr>\n                        "+years.map(function(y,j){var classNames=0===i&&0===j||3===i&&2===j?"eyear-cell":"eyear-cell eyear-cell-in-view";return +y===+_this._current.getFullYear()&&(classNames+=" eyear-cell-selected"),"function"==typeof _this.options.disabledYear&&_this.options.disabledYear(utilsTools.DateTime.toDate(y),y)&&(classNames+=" edate-disabled"),'<td title="'+y+'" class="'+classNames+'">\n                              '+(_this.options.yearRender&&"function"==typeof _this.options.yearRender?_this.options.yearRender(utilsTools.DateTime.toDate(y),y):'<span class="eyear-cell-inner">'+ +y+"</span>")+"\n                            </td>"}).join("")+"\n                      </tr>"}).join("")+"\n          </tbody>\n        ");},_create_class$1(Year,[{key:"current",get:function(){return this._current}}]),Year}(Container);function _create_class(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends(){return _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends.apply(this,arguments)}function _set_prototype_of(o,p){return _set_prototype_of=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of(o,p)}var _DATEPICKER_MODE_ARRAY=["date","month","year"],_DATEPICKER_DEFAULT_OPTIONS_={getPopupContainer:function(){return document.body},language:"zh",isMobile:false,mode:_DATEPICKER_MODE_ARRAY[0]},DatePicker=function(Picker){function DatePicker(container,options){var _this;return (_this=Picker.call(this,container,deepmerge.all([{},_DATEPICKER_DEFAULT_OPTIONS_,options||{},{wrapClassName:("edate-picker-container "+((null==options?void 0:options.wrapClassName)||"")).trim()}],{clone:false}))||this).current=null,_this._current=null,_this._calendar=null,_this._month=null,_this._year=null,_this._currentMode="date",_this.options=deepmerge.all([{},_DATEPICKER_DEFAULT_OPTIONS_,options||{}],{clone:false}),_this.options.current&&(_this.current=_this.options.current,_this._current=_this.options.current),_this._currentMode=_this.options.mode,_this._switchMode(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of(subClass,superClass);}(DatePicker,Picker);var _proto=DatePicker.prototype;return _proto.setCurrent=function(date,change){ void 0===change&&(change=true),this._setCurrent(date,change);},_proto.updateBadges=function(badges){var _this__calendar;(null==badges?void 0:badges.length)>=0&&(null==(_this__calendar=this._calendar)||_this__calendar.updateBadges(badges));},_proto.destroy=function(){var _this__calendar,_this__month,_this__year;null==(_this__calendar=this._calendar)||_this__calendar.destroy(),this._calendar=null,null==(_this__month=this._month)||_this__month.destroy(),this._month=null,null==(_this__year=this._year)||_this__year.destroy(),this._year=null,Picker.prototype.destroy.call(this);},_proto._setCurrent=function(date,change){var _this__calendar,_this__month,_this__year;void 0===change&&(change=true),this._current=date,null==(_this__calendar=this._calendar)||_this__calendar.setCurrent(date,change),null==(_this__month=this._month)||_this__month.setCurrent(date,change),null==(_this__year=this._year)||_this__year.setCurrent(date,change);},_proto._switchMode=function(){this.$body.classList.add("edate-picker-"+this._currentMode),"date"===this._currentMode?this._initCalendar():"month"===this._currentMode?this._initMonth():"year"===this._currentMode&&this._initYear(),this.setPlacement(this.options.placement||"top");},_proto.hide=function(){this.open=false;},_proto._onOpenChange=function(open){Picker.prototype._onOpenChange.call(this,open),open&&(this._removeCurrentTypeClass(),this._currentMode=this.options.mode||"date",this._switchMode(),this._setCurrent(this.current,false)),open||null==this.options.onClose||this.options.onClose.call(this.options,this.current,this._currentMode);},_proto._initCalendar=function(){var _this=this;this._calendar||(this._calendar=new Calendar(this.$body,_extends({},this.options,{current:this._current||new Date,onCell:this._onCell.bind(this),showHeaderOk:this.options.isMobile,showHeaderClose:this.options.isMobile,onOk:this._onOk.bind(this),onClose:this._onClose.bind(this),onMonth:this._onMonth.bind(this),onYear:this._onYear.bind(this),onChange:function(date){var _this__calendar;_this._current&&utilsTools.DateTime.format(_this._current,"YYYY-MM-DD")===utilsTools.DateTime.format(date,"YYYY-MM-DD")||_this._onChange(date,null==(_this__calendar=_this._calendar)?void 0:_this__calendar.options.showHeaderOk);}})));},_proto._initMonth=function(){var _this=this;this._month||(this._month=new Month(this.$body,_extends({},this.options,{current:this._current||new Date,onCell:this._onCell.bind(this),onOk:this._onOk.bind(this),onClose:this._onClose.bind(this),showHeaderOk:this.options.isMobile,showHeaderClose:this.options.isMobile,onChange:function(date){var _this__month;_this._current&&utilsTools.DateTime.format(_this._current,"YYYY-MM")===utilsTools.DateTime.format(date,"YYYY-MM")||_this._onChange(date,null==(_this__month=_this._month)?void 0:_this__month.options.showHeaderOk);},onYear:this._onYear.bind(this)})));},_proto._initYear=function(){var _this=this;this._year||(this._year=new Year(this.$body,_extends({},this.options,{current:this._current||new Date,onCell:this._onCell.bind(this),onOk:this._onOk.bind(this),onClose:this._onClose.bind(this),showHeaderOk:this.options.isMobile,showHeaderClose:this.options.isMobile,onChange:function(date){var _this__year;_this._current&&utilsTools.DateTime.format(_this._current,"YYYY")===utilsTools.DateTime.format(date,"YYYY")||_this._onChange(date,null==(_this__year=_this._year)?void 0:_this__year.options.showHeaderOk);}})));},_proto._onOk=function(date){this.current=date||this._current,this._setCurrent(date||this._current),null==this.options.onOk||this.options.onOk.call(this.options,this.current,this._currentMode),this.hide();},_proto._onClose=function(){this.hide();},_proto._onChange=function(date,_showHeaderOk){this._setCurrent(date,true);},_proto._onCell=function(date,_renderDate,disabled){null==this.options.onCell||this.options.onCell.call(this.options,date,this._currentMode),this.options.isMobile||this._currentMode!==this.options.mode||disabled||this._current&&utilsTools.DateTime.format(date,"YYYY-MM-DD")!==utilsTools.DateTime.format(this._current,"YYYY-MM-DD")||(this.current=date,null==this.options.onChange||this.options.onChange.call(this.options,date,this._currentMode)),disabled||this._prvMode();},_proto._prvMode=function(){this._currentMode!==this.options.mode||this.options.isMobile||this.hide();var index=_DATEPICKER_MODE_ARRAY.indexOf(this._currentMode);index>=1&&(index--,this._removeCurrentTypeClass(),this._currentMode=_DATEPICKER_MODE_ARRAY[index],this._switchMode());},_proto._onYear=function(){this._removeCurrentTypeClass(),this._currentMode="year",this._switchMode();},_proto._onMonth=function(){this._removeCurrentTypeClass(),this._currentMode="month",this._switchMode();},_proto._removeCurrentTypeClass=function(){this.$body.classList.remove("edate-picker-"+this._currentMode);},_create_class(DatePicker,[{key:"_minModeIndex",get:function(){return _DATEPICKER_MODE_ARRAY.indexOf(this.options.mode)}}]),DatePicker}(Picker);dist$2.Calendar=Calendar,dist$2.DatePicker=DatePicker,dist$2.Header=Header,dist$2.Month=Month,dist$2.Year=Year;
+		return dist$2;
+=======
+	function requireDist$3 () {
+		if (hasRequiredDist$3) return dist$2;
+		hasRequiredDist$3 = 1;
+	var getQuery=function(url){var query=url.split("?")[1],obj={};if(query)for(var vars=query.split("&"),i=0;i<vars.length;i++){var pair=vars[i].split("=");obj[pair[0]]=decodeURIComponent(pair[1]);}return obj};function parseEzopenUrl(url){var obj={};if(/^ezopen:\/\//.test(url)){if(url.includes("@")){var endIndex=url.indexOf("@"),startIndex=url.indexOf("//");obj.validateCode=url.substring(startIndex+2,endIndex),url=url.replace(obj.validateCode+"@","");}obj.protocol=url.split("//")[0],obj.search=url.split("?")[1]?"?"+url.split("?")[1]:"",obj.hostname=url.split("/")[2],obj.origin=obj.protocol+"//"+obj.hostname,obj.pathname=url.split("?")[0].replace(obj.origin,""),obj.href=url;var pathnames=obj.pathname.split("/"),lastPath=pathnames[2].split(".");return obj.deviceSerial=pathnames[1],obj.channelNo=lastPath[0],obj.type=lastPath[lastPath.length-1],"live"===obj.type&&(obj.definition=lastPath.length>2?lastPath[1]:"sd"),"rec"===obj.type&&pathnames[2]&&(obj.recType=pathnames[2].includes(".cloud.")?"cloud":""),obj.searchParams=getQuery(url),obj}return {}}var codec={h264:1,h265:2,h266:4,vp8:8,vp9:16,av1:32};function _array_like_to_array(arr,len){(null==len||len>arr.length)&&(len=arr.length);for(var i=0,arr2=new Array(len);i<len;i++)arr2[i]=arr[i];return arr2}function _instanceof(left,right){return null!=right&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?!!right[Symbol.hasInstance](left):left instanceof right}function _create_for_of_iterator_helper_loose(o,allowArrayLike){var it="undefined"!=typeof Symbol&&o[Symbol.iterator]||o["@@iterator"];if(it)return (it=it.call(o)).next.bind(it);if(Array.isArray(o)||(it=function(o,minLen){if(o){if("string"==typeof o)return _array_like_to_array(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);return "Object"===n&&o.constructor&&(n=o.constructor.name),"Map"===n||"Set"===n?Array.from(n):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?_array_like_to_array(o,minLen):void 0}}(o))||allowArrayLike){it&&(o=it);var i=0;return function(){return i>=o.length?{done:true}:{done:false,value:o[i++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var DateTime=function(){function DateTime(){}return DateTime.fillZero=function(num,len){return void 0===len&&(len=2),num.toString().padStart(len,"0")},DateTime.format=function(input,format){var date;if(_instanceof(input,Date))date=input;else {if("number"!=typeof input&&"string"!=typeof input)throw new Error("Invalid date input");date=DateTime.toDate(input+"");}for(var _step,result=format,_iterator=_create_for_of_iterator_helper_loose([[/(yyyy|YYYY)/g,function(){return DateTime.fillZero(date.getFullYear(),4)}],[/(yy|YY)/g,function(){return DateTime.fillZero(date.getFullYear()%100,2)}],[/(MM)/g,function(){return DateTime.fillZero(date.getMonth()+1,2)}],[/(M)/g,function(){return (date.getMonth()+1).toString()}],[/(dd|DD)/g,function(){return DateTime.fillZero(date.getDate(),2)}],[/(d|D)/g,function(){return date.getDate().toString()}],[/(HH|hh)/g,function(){return DateTime.fillZero(date.getHours(),2)}],[/(H|h)/g,function(){return date.getHours().toString()}],[/(mm)/g,function(){return DateTime.fillZero(date.getMinutes(),2)}],[/(m)/g,function(){return date.getMinutes().toString()}],[/(ss|SS)/g,function(){return DateTime.fillZero(date.getSeconds(),2)}],[/(s|S)/g,function(){return date.getSeconds().toString()}],[/(fff)/g,function(){return DateTime.fillZero(date.getMilliseconds(),3)}]]);!(_step=_iterator()).done;){var _step_value=_step.value,regexp=_step_value[0],fn=_step_value[1];result=result.replace(regexp,fn);}return result},DateTime.toDate=function(str){if(_instanceof(str,Date))return str;str=(str+"").trim().replace(/\/|\./gi,"-"),/^\d{4}$/.test(str)&&(str+="-01"),/^\d{4}-\d{2}$/.test(str)&&(str+="-01");try{return /^\d{4}-\d{2}-\d{2}$/.test(str)?new Date(+str.slice(0,4),+str.slice(5,7)-1,+str.slice(8,10),0,0,0):/^\d{8}$/.test(str)?(str+="",new Date(+str.slice(0,4),+str.slice(4,6)-1,+str.slice(6,8),0,0)):/^\d{14}$/.test(str)?(str+="",new Date(+str.slice(0,4),+str.slice(4,6)-1,+str.slice(6,8),+str.slice(8,10),+str.slice(10,12),+str.slice(12,14))):/^\d{13}$/.test(str)?new Date(Number(str)):/^\d{10}$/.test(str)?new Date(1e3*Number(str)):new Date(str)}catch(error){throw new Error("Invalid date string")}},DateTime.diff=function(date1,date2,type){ void 0===type&&(type="second");var d1=DateTime.toDate(date1),d2=DateTime.toDate(date2);return "second"===type?Math.floor((d1.getTime()-d2.getTime())/1e3):"minute"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60):"hour"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60):"day"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60/24):Math.abs(d1.getTime()-d2.getTime())},DateTime}();dist$2.DateTime=DateTime,dist$2.addVc=function(url,codecs){ void 0===codecs&&(codecs=["h264"]);var vc=(codecs||["h264"]).reduce(function(acc,key){return key=key.toLowerCase(),acc+(codec[key]||0)},0),host=url.split("?")[0],query=url.split("?")[1];return query=(query||"").split("&").filter(function(item){return !/^vc=\d?/.test(item)}).join("&"),host+"?"+(query+=(query?"&":"")+"vc="+vc)},dist$2.getQuery=getQuery,dist$2.getStaticPath=function(path,base){ void 0===base&&(base="");var protocolReg=/^(https?:\/\/|^\/\/)/;if(""===path||void 0===path)return "";if(protocolReg.test(path))return path;path=path.replace(/\/+/g,"/"),base=protocolReg.test(base||"")?base:window.location.href;try{return new URL(path,base).href}catch(error){return path}},dist$2.isHttp=function(url){return /^http[s]?:\/\//.test(url)},dist$2.isMobile=function(agent){var _navigator,_navigator1,_navigator2,_window;return /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone|Opera Mini)/i.test(null!=agent?agent:null==(_navigator=navigator)?void 0:_navigator.userAgent)||/Macintosh/i.test(agent||(null==(_navigator1=navigator)?void 0:_navigator1.userAgent))&&(null==(_navigator2=navigator)?void 0:_navigator2.maxTouchPoints)>1||!!(null==(_window=window)?void 0:_window.__IS_MOBILE_SIMULATOR__)},dist$2.isRealMobile=function(agent){var _navigator,ua=(null!=agent?agent:null==(_navigator=navigator)?void 0:_navigator.userAgent).toLowerCase();if(/ipad|tablet|playbook|silk|android(?!.*mobile)/i.test(ua))return  false;var hasTouch="ontouchstart"in window||navigator.maxTouchPoints>0;return /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(ua)&&hasTouch},dist$2.parseEzopenUrl=parseEzopenUrl,dist$2.pick=function(obj,keys){return Object.entries(obj).reduce(function(acc,param){var key=param[0],value=param[1];return keys.includes(key)&&(acc[key]=value),acc},{})},dist$2.switchEzopenUrl=function(url,options){var _ref=null!=options?options:{},type=_ref.type,recType=_ref.recType,search=_ref.search,definition=_ref.definition,channelNo=_ref.channelNo,deviceSerial=_ref.deviceSerial,validateCode=_ref.validateCode,obj=parseEzopenUrl(url);if(search){var ns=Object.assign({},obj.searchParams,getQuery("?"+search.replace("?","")));search=Object.entries(ns).reduce(function(acc,param){var key=param[0],value=param[1];return ""===value?acc:acc+=key+"="+encodeURIComponent(value)+"&"},"?").replace(/&$/,"");}else search=obj.search;return type=type||obj.type,recType=null!=recType?recType:obj.recType,definition=null!=definition?definition:obj.definition,channelNo=channelNo||obj.channelNo,deviceSerial=deviceSerial||obj.deviceSerial,validateCode=null!=validateCode?validateCode:obj.validateCode,obj.protocol+"//"+(validateCode?validateCode+"@":"")+obj.hostname+"/"+deviceSerial+"/"+channelNo+("rec"===type&&recType?"."+recType:"")+("live"===type&&"hd"===definition?"."+definition:"")+"."+type+search};
+		return dist$2;
+	}
+
+	/*
+	* @ezuikit/control-date-picker v1.0.5
+	* Copyright (c) 2026-01-05 Ezviz-OpenBiz
 	* Released under the MIT License.
 	*/
 
 	var hasRequiredDist$2;
 
 	function requireDist$2 () {
-		if (hasRequiredDist$2) return dist$2;
+		if (hasRequiredDist$2) return dist$3;
 		hasRequiredDist$2 = 1;
-	var delegate=requireDelegate(),utilsTools=requireDist$7(),deepmerge=requireCjs(),Picker=requireDist$8(),Util=function(){function Util(){}return Util.fillZero=function(num,len){return void 0===len&&(len=2),num.toString().padStart(len,"0")},Util.chunkBySize=function(arr,size){return Array.from({length:Math.ceil(arr.length/size)}).map(function(_,index){return arr.slice(index*size,(index+1)*size)})},Util.generateYears=function(year){for(var years=[],i=year%10+1;i>=0;i--)years.push(year-i);for(var i1=1;years.length<12;i1++)years.push(year+i1);return years},Util.getDaysInMonth=function(year,month){return new Date(year,month+1,0).getDate()},Util.getFirstDayOfMonth=function(year,month,startOfWeek){return void 0===startOfWeek&&(startOfWeek=0),(new Date(year,month).getDay()-startOfWeek+7)%7},Util.generateWeeksByYearMonth=function(year,month,startOfWeek){ void 0===startOfWeek&&(startOfWeek=0),month-=1;for(var daysInMonth=Util.getDaysInMonth(year,month),firstDay=Util.getFirstDayOfMonth(year,month,startOfWeek),weeks=[],i=1;i<=firstDay+daysInMonth;i++){var day=i-firstDay;day<1?weeks.push((0===month?year-1:year)+"-"+Util.fillZero((month+12-1)%12+1)+"-"+Util.fillZero(Util.getDaysInMonth(year,month-1)+day)):day>daysInMonth?weeks.push((11===month?year+1:year)+"-"+Util.fillZero((month+1)%12+1)+"-"+(day-daysInMonth)):weeks.push(year+"-"+Util.fillZero(month+1)+"-"+Util.fillZero(day));}for(var nextDay=1;weeks.length<42;)weeks.push((11===month?year+1:year)+"-"+Util.fillZero((month+1)%12+1)+"-"+Util.fillZero(nextDay++));return weeks},Util.generateHours=function(){for(var hours=[],i=0;i<24;i++)hours.push(Util.fillZero(i));return hours},Util.generateMinutesOrSeconds=function(){for(var hours=[],i=0;i<=59;i++)hours.push(Util.fillZero(i));return hours},Util}(),__$CALENDAR_LOCALES$__={en:{year:"",month:"",weeks:["Su","Mo","Tu","We","Th","Fr","Sa"],today:"Today",ok:"OK",months:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]},zh:{year:"年",month:"月",weeks:["日","一","二","三","四","五","六"],today:"今天",ok:"确定",months:["01","02","03","04","05","06","07","08","09","10","11","12"]}},__DEFAULT_COMPONENTS_OPTIONS__={showSuperPrevIcon:false,showSuperNextIcon:false,showPrevIcon:false,showNextIcon:false,showHeaderClose:false,showHeaderOk:false,renderSuperPrevIcon:'<span class="edate-super-prev-icon"></span>',renderSuperNextIcon:'<span class="edate-super-next-icon"></span>',renderPrevIcon:'<span class="edate-prev-icon"></span>',renderNextIcon:'<span class="edate-next-icon"></span>',renderHeaderCloseIcon:'<span class="edate-close-icon">\n      <svg viewBox="0 0 24 24" fill="none" width="1em" height="1em" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="close">\n\t    <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,0.707114,-0.707114,0.707099,6.34277,6.34326)" />\n\t\t  <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,-0.707114,0.707114,0.707099,6.34277,17.6567)" />\n    </svg>\n  </span>',renderHeaderOkIcon:function(locale){return '<span class="edate-btn-text">'+((null==locale?void 0:locale.ok)||"确定")+"</span>"}},Header=function(){function Header(options){this.$header=null,this.options=deepmerge.all([{},__DEFAULT_COMPONENTS_OPTIONS__,options],{clone:false}),this.$header=document.createElement("div"),this.$header.classList.add("edate-header",options.prefixCls+"-header"),options.className&&this.$header.classList.add(options.className),this._render(),this._eventListeners();}var _proto=Header.prototype;return _proto._render=function(){var _this__getStrOrFunToStr,_this__getStrOrFunToStr1,_this__getStrOrFunToStr2,_this__getStrOrFunToStr3,_this__getStrOrFunToStr4,_this__getStrOrFunToStr5;this.$header&&(this.$header.innerHTML="\n            "+(this.options.showHeaderClose?'<div class="edate-close-btn">\n                    '+(null!=(_this__getStrOrFunToStr=this._getStrOrFunToStr(this.options.renderHeaderCloseIcon))?_this__getStrOrFunToStr:__DEFAULT_COMPONENTS_OPTIONS__.renderHeaderCloseIcon)+"\n                  </div>":this.options.showHeaderOk?"<span></span>":"")+"\n            "+(this.options.showSuperPrevIcon||this.options.showPrevIcon?'\n                <div class="edate-prev-btns">\n                  '+(this.options.showSuperPrevIcon?'<div class="edate-super-prev-btn '+this.options.prefixCls+'-super-prev-btn">\n                        '+(null!=(_this__getStrOrFunToStr1=this._getStrOrFunToStr(this.options.renderSuperPrevIcon))?_this__getStrOrFunToStr1:__DEFAULT_COMPONENTS_OPTIONS__.renderSuperPrevIcon)+"\n                      </div>":"")+"\n                  "+(this.options.showPrevIcon?'<div class="edate-prev-btn '+this.options.prefixCls+'-prev-btn">\n                          '+(null!=(_this__getStrOrFunToStr2=this._getStrOrFunToStr(this.options.renderPrevIcon))?_this__getStrOrFunToStr2:__DEFAULT_COMPONENTS_OPTIONS__.renderPrevIcon)+"\n                        </div>":"")+"\n                </div>\n              ":"")+'\n\n            <div class="edate-header-view '+this.options.prefixCls+'-header-view"></div>\n\n            '+(this.options.showNextIcon||this.options.showSuperNextIcon?'\n                  <div class="edate-next-btns">\n                    '+(this.options.showNextIcon?'<div class="edate-next-btn '+this.options.prefixCls+'-next-btn">\n                            '+(null!=(_this__getStrOrFunToStr3=this._getStrOrFunToStr(this.options.renderNextIcon))?_this__getStrOrFunToStr3:__DEFAULT_COMPONENTS_OPTIONS__.renderNextIcon)+"\n                          </div>":"")+"\n                    "+(this.options.showSuperNextIcon?'<div class="edate-super-next-btn '+this.options.prefixCls+'-super-next-btn">\n                          '+(null!=(_this__getStrOrFunToStr4=this._getStrOrFunToStr(this.options.renderSuperNextIcon))?_this__getStrOrFunToStr4:__DEFAULT_COMPONENTS_OPTIONS__.renderSuperNextIcon)+"\n                        </div>":"")+"\n                </div>\n              ":"")+"\n            "+(this.options.showHeaderOk?'<div class="edate-ok-btn">\n                    '+(null!=(_this__getStrOrFunToStr5=this._getStrOrFunToStr(this.options.renderHeaderOkIcon))?_this__getStrOrFunToStr5:__DEFAULT_COMPONENTS_OPTIONS__.renderHeaderOkIcon)+"\n                  </div>":this.options.showHeaderClose?"<span></span>":""));},_proto._getStrOrFunToStr=function(value){if(null!=value){var _this_options;if("function"==typeof value)return this._getStrOrFunToStr(null==value?void 0:value(null==(_this_options=this.options)?void 0:_this_options.locale));if("string"==typeof value)return value}},_proto.renderContent=function(html){if(this.$header){var _$content=this.$header.querySelector(".edate-header-view");if(!_$content)return;_$content.innerHTML=html;}},_proto.destroy=function(){this.$header&&this.$header.remove();},_proto._eventListeners=function(){var _this=this;_this.$header&&(delegate(_this.$header,".edate-super-prev-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onSuperPrev||_this.options.onSuperPrev.call(_this.options);}),delegate(_this.$header,".edate-prev-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onPrev||_this.options.onPrev.call(_this.options);}),delegate(_this.$header,".edate-next-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onNext||_this.options.onNext.call(_this.options);}),delegate(_this.$header,".edate-super-next-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onSuperNext||_this.options.onSuperNext.call(_this.options);}),delegate(_this.$header,".edate-close-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||(null==_this.options.onClose||_this.options.onClose.call(_this.options),event.stopPropagation(),event.preventDefault());}),delegate(_this.$header,".edate-ok-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||(null==_this.options.onOk||_this.options.onOk.call(_this.options),event.stopPropagation(),event.preventDefault());}));},Header}();function _extends$2(){return _extends$2=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$2.apply(this,arguments)}var _CONTAINER_DEFAULT_OPTIONS_={prefixCls:"edate",locales:__$CALENDAR_LOCALES$__,showHeader:true},Container=function(){function Container(popupContainer,options){this.$panel=document.createElement("div"),this.$body=document.createElement("div"),this.$container=document.createElement("div"),this.language="zh",this.header=null,this.locale=__$CALENDAR_LOCALES$__.zh,this.options=deepmerge.all([{},_CONTAINER_DEFAULT_OPTIONS_,options],{clone:false}),this.$popupContainer=popupContainer?"function"==typeof popupContainer?popupContainer():popupContainer:document.body,this._setLocale(),this.$container.classList.add("edate-container",(this.options.prefixCls||"edate")+"-container"),options.isMobile&&this.$container.classList.add("edate-mobile",this.options.prefixCls+"-mobile"),this.options.wrapClassName&&this.$container.classList.add(this.options.wrapClassName),this.$panel.classList.add("edate-panel",(this.options.prefixCls||"edate")+"-panel"),this.options.showHeader&&(this.header=new Header(_extends$2({},this.options,{locale:this.locale,onPrev:this._onPrev.bind(this),onNext:this._onNext.bind(this),onSuperPrev:this._onSuperPrev.bind(this),onSuperNext:this._onSuperNext.bind(this),onClose:this._onClose.bind(this),onOk:this._onOk.bind(this)})),this.$panel.appendChild(this.header.$header)),this.$body.classList.add("edate-body",(this.options.prefixCls||"edate")+"-body"),this.$container.appendChild(this.$panel),this.$popupContainer.appendChild(this.$container);}var _proto=Container.prototype;return _proto._setLocale=function(){if(this.options.locales)if("string"==typeof this.options.language){var language=this.options.language||navigator.language;this.options.locales[language]?this.locale=this.options.locales[language]:this.locale=this.options.locales.zh;}else this.locale=this.options.locales.zh;},_proto.destroy=function(){var _this_$container;(null==(_this_$container=this.$container)?void 0:_this_$container.parentNode)&&this.$container.parentNode.removeChild(this.$container),this.header=null,this.$container=null;},_proto.setLocale=function(locale){"string"==typeof locale?this._setLocale():this.locale=locale;},_proto._onSuperPrev=function(){},_proto._onSuperNext=function(){},_proto._onPrev=function(){},_proto._onNext=function(){},_proto._onClose=function(){},_proto._onOk=function(){},Container}();function _create_class$3(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends$1(){return _extends$1=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$1.apply(this,arguments)}function _set_prototype_of$3(o,p){return _set_prototype_of$3=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$3(o,p)}var _CALENDAR_DEFAULT_OPTIONS_={startOfWeek:0,showHeader:true,showSuperPrevIcon:true,showSuperNextIcon:true,showPrevIcon:true,showNextIcon:true,language:"zh",renderBadge:'<span class="ecalendar-badge"></span>',badges:[]},Calendar=function(Container){function Calendar(container,options){var _this,_this_options_badges,_this_options,_this_options1,_this_options2;return (_this=Container.call(this,container,_extends$1({},_CALENDAR_DEFAULT_OPTIONS_,options,{prefixCls:"ecalendar"}))||this).badges=[],(null==(_this_options_badges=_this.options.badges)?void 0:_this_options_badges.length)&&_this._updateBadges(_this.options.badges,false),(null==(_this_options=_this.options)?void 0:_this_options.startOfWeek)&&((null==(_this_options1=_this.options)?void 0:_this_options1.startOfWeek)>6||(null==(_this_options2=_this.options)?void 0:_this_options2.startOfWeek)<0)&&(_this.options.startOfWeek=0),_this._render(),_this.setCurrent(_this.options.current,false),_this._onHeader(),_this._onCell(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$3(subClass,superClass);}(Calendar,Container);var _proto=Calendar.prototype;return _proto.setCurrent=function(date,change){if(void 0===change&&(change=true),"string"==typeof date||(left=date,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right))try{if(date="string"==typeof date?utilsTools.DateTime.toDate(date):date,(!this._current||utilsTools.DateTime.format(date,"YYYY-MM-DD")!==utilsTools.DateTime.format(this._current,"YYYY-MM-DD"))&&(this._current=date,change&&(null==this.options.onChange||this.options.onChange.call(this.options,date,utilsTools.DateTime.format(date,"YYYY-MM-DD"))),this.$body)){var _this_$body_querySelector,_this_$body_querySelector1;null==(_this_$body_querySelector=this.$body.querySelector(".ecalendar-cell-selected"))||_this_$body_querySelector.classList.remove("ecalendar-cell-selected");var title=utilsTools.DateTime.format(this._current,"YYYY-MM-DD");null==(_this_$body_querySelector1=this.$body.querySelector(".ecalendar-cell-in-view[title='"+title+"']"))||_this_$body_querySelector1.classList.add("ecalendar-cell-selected");}this._setRenderCurrent(this._current);}catch(error){this._setRenderCurrent(new Date);}else this._setRenderCurrent(new Date);var left,right;},_proto.updateBadges=function(badges){this._updateBadges(badges);},_proto._updateBadges=function(badges,rerender){ void 0===rerender&&(rerender=true),(null==badges?void 0:badges.length)>=0&&(this.badges=badges.map(function(date){return utilsTools.DateTime.format(date,"YYYY-MM-DD")}),rerender&&this._renderDate());},_proto._setRenderCurrent=function(date){(!this._renderCurrent||date&&utilsTools.DateTime.format(this._renderCurrent,"YYYY-MM")!==utilsTools.DateTime.format(date,"YYYY-MM"))&&(this._renderCurrent=date||new Date,this._renderDate());},_proto._onCell=function(){var _this=this;delegate(this.$body,".ecalendar-cell","click",function(event){var date=new Date(event.delegateTarget.getAttribute("title").replace(/\//gi,"/")),disabled=event.delegateTarget.classList.contains("edate-disabled");disabled||_this.setCurrent(date),null==_this.options.onCell||_this.options.onCell.call(_this.options,date,utilsTools.DateTime.format(_this._renderCurrent,"YYYY-MM-DD"),disabled),event.stopPropagation(),event.preventDefault();});},_proto._onSuperPrev=function(){var date=new Date(this._renderCurrent);date.setFullYear(date.getFullYear()-1,date.getMonth(),date.getDate()),this._setRenderCurrent(date),null==this.options.onPrevMonth||this.options.onPrevMonth.call(this.options,this._current,this._renderCurrent);},_proto._onSuperNext=function(){var date=new Date(this._renderCurrent);date.setFullYear(date.getFullYear()+1,date.getMonth(),date.getDate()),this._setRenderCurrent(date),null==this.options.onNextMonth||this.options.onNextMonth.call(this.options,this._current,this._renderCurrent);},_proto._onPrev=function(){var date=new Date(this._renderCurrent);date.setMonth(date.getMonth()-1,date.getDate()),this._setRenderCurrent(date),null==this.options.onPrevMonth||this.options.onPrevMonth.call(this.options,this._current,this._renderCurrent);},_proto._onNext=function(){var date=new Date(this._renderCurrent);date.setMonth(date.getMonth()+1,date.getDate()),this._setRenderCurrent(date),null==this.options.onNextMonth||this.options.onNextMonth.call(this.options,this._current,this._renderCurrent);},_proto._onHeader=function(){var _this=this;delegate(this.$panel,".ecalendar-header-month-btn","click",function(){null==_this.options.onMonth||_this.options.onMonth.call(_this.options,_this._current,_this._renderCurrent);}),delegate(this.$panel,".ecalendar-header-year-btn","click",function(){null==_this.options.onYear||_this.options.onYear.call(_this.options,_this._current,_this._renderCurrent);});},_proto._onOk=function(){null==this.options.onOk||this.options.onOk.call(this.options,this.current);},_proto._onClose=function(){null==this.options.onClose||this.options.onClose.call(this.options,this.current);},_proto._render=function(){var _this_locale,_this_locale1,shiftedCustomDays=[].concat(((null==(_this_locale=this.locale)?void 0:_this_locale.weeks)||[]).slice(this.options.startOfWeek),((null==(_this_locale1=this.locale)?void 0:_this_locale1.weeks)||[]).slice(0,this.options.startOfWeek));this.$body.innerHTML='<table class="ecalendar-content">\n          <thead><tr>'+shiftedCustomDays.map(function(day){return "<th>"+day+"</th>"}).join("")+"</tr></thead>\n          <tbody></tbody>\n        </table>",this.$panel.appendChild(this.$body);},_proto._renderDate=function(){var _this_header,_this_$body_querySelector,_this=this;if(this.$body){var _this_locale_months,_this_locale,_this_locale1,_this_locale2,_this_locale3,_this_locale_months1,_this_locale4,_this_locale5,_this_$body_querySelector1,todayStr=utilsTools.DateTime.format(new Date,"YYYY-MM-DD"),year=this._renderCurrent.getFullYear(),month=this._renderCurrent.getMonth()+1,dayGroupArray=Util.chunkBySize(Util.generateWeeksByYearMonth(year,month,this.options.startOfWeek),7),allowMonthClick="function"==typeof this.options.onMonth,allowYearClick="function"==typeof this.options.onYear;if(null==(_this_header=this.header)?void 0:_this_header.$header)this.header.renderContent("\n      "+("zh"!==this.options.language?'<span class="ecalendar-header-month-btn '+(allowMonthClick?"edate-header-title-hover":"")+'">'+(null==(_this_locale=this.locale)||null==(_this_locale_months=_this_locale.months)?void 0:_this_locale_months[+(month-1)])+((null==(_this_locale1=this.locale)?void 0:_this_locale1.month)||"")+'</span>  <span class="ecalendar-header-year-btn '+(allowYearClick?"edate-header-title-hover":"")+'">'+year+((null==(_this_locale2=this.locale)?void 0:_this_locale2.year)||"")+"</span>":'<span class="ecalendar-header-year-btn '+(allowYearClick?"edate-header-title-hover":"")+'">'+year+((null==(_this_locale3=this.locale)?void 0:_this_locale3.year)||"")+'</span>  <span class="ecalendar-header-month-btn '+(allowMonthClick?"edate-header-title-hover":"")+'">'+(null==(_this_locale4=this.locale)||null==(_this_locale_months1=_this_locale4.months)?void 0:_this_locale_months1[+(month-1)])+((null==(_this_locale5=this.locale)?void 0:_this_locale5.month)||"")+"</span>"));if(null==(_this_$body_querySelector=this.$body.querySelector(".ecalendar-content"))?void 0:_this_$body_querySelector.querySelector("tbody"))(null==(_this_$body_querySelector1=this.$body.querySelector(".ecalendar-content"))?void 0:_this_$body_querySelector1.querySelector("tbody")).innerHTML="\n              "+dayGroupArray.slice(0,7).map(function(dates){return "<tr>\n                  "+dates.map(function(dateStr){var _this_options,_dateStr_split=dateStr.split("-"),y=_dateStr_split[0],m=_dateStr_split[1],d=_dateStr_split[2],date=new Date(+y,+m,+d),classNames=[month===+m?"ecalendar-cell-in-view":"",todayStr===dateStr?"ecalendar-cell-today":"",_this._current&&utilsTools.DateTime.format(_this._current,"YYYY-MM-DD")===dateStr?"ecalendar-cell-selected":"","function"==typeof(null==(_this_options=_this.options)?void 0:_this_options.disabledDate)&&_this.options.disabledDate(utilsTools.DateTime.toDate(dateStr),dateStr)?"edate-disabled":""].filter(Boolean),badgeHtml=_this._renderBadge(date,dateStr);return '<td title="'+dateStr+'" class="ecalendar-cell '+classNames.join(" ")+'">\n                        '+("function"==typeof _this.options.renderDate?_this.options.renderDate(date,dateStr):'<span class="ecalendar-cell-inner">'+Util.fillZero(+d)+"</span>")+"\n                        "+badgeHtml+"\n                      </td>"}).join("")+"\n              </tr>"}).join("");}},_proto._renderBadge=function(date,dateStr){var badgeHtml="";badgeHtml="function"==typeof this.options.renderBadge?this.options.renderBadge(date,dateStr):"string"==typeof this.options.renderBadge?this.options.renderBadge:"";var showBadge="function"==typeof this.options.showBadge&&this.options.showBadge(date,dateStr);return this.badges.includes(dateStr)||showBadge||(badgeHtml=""),badgeHtml},_create_class$3(Calendar,[{key:"current",get:function(){return this._current}}]),Calendar}(Container);function _create_class$2(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$2(o,p){return _set_prototype_of$2=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$2(o,p)}Calendar.DateTime=utilsTools.DateTime;var _Month_DEFAULT_OPTIONS_={showHeader:true,showSuperPrevIcon:true,showSuperNextIcon:true,language:"zh"},Month=function(Container){function Month(popupContainer,options){var _this;return (_this=Container.call(this,popupContainer,deepmerge.all([{},_Month_DEFAULT_OPTIONS_,options||{},{showPrevIcon:false,showNextIcon:false,prefixCls:"emonth"}],{clone:false}))||this)._render(),_this.setCurrent(_this.options.current,false),_this._onHeaderTitle(),_this._onCell(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$2(subClass,superClass);}(Month,Container);var _proto=Month.prototype;return _proto.setCurrent=function(date,change){ void 0===change&&(change=true),this._setCurrent(date,change);},_proto._setCurrent=function(date,change){if("string"==typeof date||(left=date,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right))try{var d=date;"string"==typeof d&&(d=utilsTools.DateTime.toDate(d));var current=d;this._current&&utilsTools.DateTime.format(current,"YYYY-MM-DD")===utilsTools.DateTime.format(this._current,"YYYY-MM-DD")||(this._current=current,"function"==typeof this.options.onChange&&change&&(null==this.options.onChange||this.options.onChange.call(this.options,current,utilsTools.DateTime.format(current,"YYYY-MM")))),this._setRenderCurrent(current);}catch(error){this._setRenderCurrent(new Date);}else this._setRenderCurrent(new Date);var left,right;},_proto._setRenderCurrent=function(date){if((!this._renderCurrent||this._renderCurrent&&utilsTools.DateTime.format(date,"YYYY")!==utilsTools.DateTime.format(this._renderCurrent,"YYYY"))&&(this._renderCurrent=date,this._renderMonths(date.getFullYear())),this._current){var _this_$body_querySelector,_this_$body_querySelector1;null==(_this_$body_querySelector=this.$body.querySelector(".emonth-cell-selected"))||_this_$body_querySelector.classList.remove("emonth-cell-selected");var selectedTitle=utilsTools.DateTime.format(this._current,"YYYY-MM");null==(_this_$body_querySelector1=this.$body.querySelector(".emonth-cell-in-view[title='"+selectedTitle+"']"))||_this_$body_querySelector1.classList.add("emonth-cell-selected");}this._setHeader();},_proto._onOk=function(){null==this.options.onOk||this.options.onOk.call(this.options,this.current);},_proto._onClose=function(){null==this.options.onClose||this.options.onClose.call(this.options,this.current);},_proto._onCell=function(){var _this=this;delegate(this.$body,".emonth-cell","click",function(e){e.stopPropagation(),e.preventDefault();var month=+e.delegateTarget.getAttribute("data-month"),newDate=utilsTools.DateTime.toDate(utilsTools.DateTime.format(_this._current,"yyyy-MM-dd HH:mm:ss"));newDate.setMonth(month-1);var disabled=e.delegateTarget.classList.contains("edate-disabled");disabled||_this.setCurrent(newDate),null==_this.options.onCell||_this.options.onCell.call(_this.options,newDate,utilsTools.DateTime.format(newDate,"YYYY-MM"),disabled);});},_proto._onSuperPrev=function(){var year=this._renderCurrent.getFullYear()-1,date=utilsTools.DateTime.toDate(year+utilsTools.DateTime.format(this._renderCurrent,"-MM-DDTHH:mm:ss"));this._setRenderCurrent(date),null==this.options.onSuperPrev||this.options.onSuperPrev.call(this.options,this._current,this._renderCurrent);},_proto._onSuperNext=function(){var year=this._renderCurrent.getFullYear()+1,date=utilsTools.DateTime.toDate(year+utilsTools.DateTime.format(this._renderCurrent,"-MM-DDTHH:mm:ss"));this._setRenderCurrent(date),null==this.options.onSuperNext||this.options.onSuperNext.call(this.options,this._current,this._renderCurrent);},_proto._onHeaderTitle=function(){var _this=this;delegate(this.$panel,".edate-header-title-hover","click",function(){null==_this.options.onYear||_this.options.onYear.call(_this.options,_this._current,_this._renderCurrent);});},_proto._setHeader=function(){if(this.$panel.querySelector(".emonth-header-view")){var allowClick="function"==typeof this.options.onYear;this.$panel.querySelector(".emonth-header-view").innerHTML='<span class="'+(allowClick?"edate-header-title-hover":"")+'">'+this._renderCurrent.getFullYear()+this.locale.year+"</span>";}},_proto._setDisabled=function(){for(var year=this._renderCurrent.getFullYear(),i=0;i<12;i++){var $cell=this.$body.querySelector(".emonth-cell[title='"+year+"-"+Util.fillZero(i+1)+"']");if($cell){var date=utilsTools.DateTime.toDate(year+"-"+Util.fillZero(i+1)+"-"+utilsTools.DateTime.format(this._renderCurrent,"DDTHH:mm:ss"));"function"==typeof this.options.disabledMonth&&this.options.disabledMonth(date,utilsTools.DateTime.format(date,"YYYY-MM"))?$cell.classList.add("edate-disabled"):$cell.classList.remove("edate-disabled");}}},_proto._render=function(){this.$body.innerHTML='<table class="emonth-content"></table>',this.$panel.appendChild(this.$body);},_proto._renderMonths=function(year){var _this=this;this.$body.querySelector(".emonth-content")&&(this.$body.querySelector(".emonth-content").innerHTML="\n              <tbody>\n                "+Util.chunkBySize(this.locale.months,3).slice(0,4).map(function(month,index){return "<tr>\n                            "+month.map(function(m,i){return '<td title="'+year+"-"+Util.fillZero(3*index+i+1)+'" data-month="'+Util.fillZero(3*index+i+1)+'" class="emonth-cell emonth-cell-in-view">\n                                        <span class="emonth-cell-inner">'+(_this.options.monthRender&&"function"==typeof _this.options.monthRender?_this.options.monthRender(utilsTools.DateTime.toDate(year+"-"+Util.fillZero(3*index+i+1)),year+"-"+Util.fillZero(3*index+i+1))||"":m)+"</span>\n                                      </td>"}).join("")+"\n                            </tr>"}).join("")+"\n              </tbody>"),this._setDisabled();},_create_class$2(Month,[{key:"current",get:function(){return this._current}}]),Month}(Container);function _create_class$1(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$1(o,p){return _set_prototype_of$1=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1(o,p)}var _YEAR_DEFAULT_OPTIONS_={showHeader:true,showSuperPrevIcon:true,showSuperNextIcon:true,language:"zh",prefixCls:"eyear"},Year=function(Container){function Year(popupContainer,options){var _this;return (_this=Container.call(this,popupContainer,deepmerge.all([{},_YEAR_DEFAULT_OPTIONS_,options||{},{showPrevIcon:false,showNextIcon:false,renderPrevIcon:"",renderNextIcon:""}],{clone:false}))||this)._render(),_this._setCurrent(_this.options.current,false),_this._onCell(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1(subClass,superClass);}(Year,Container);var _proto=Year.prototype;return _proto.setCurrent=function(year,change){ void 0===change&&(change=true),this._setCurrent(year,change);},_proto._setCurrent=function(year,change){ void 0===change&&(change=true);var left,right,_year="number"==typeof year?utilsTools.DateTime.toDate(year):(left=year,(null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)?year:new Date);this._current&&utilsTools.DateTime.format(_year,"YYYY-MM-DD")===utilsTools.DateTime.format(this._current,"YYYY-MM-DD")||(this._current=_year,"function"==typeof this.options.onChange&&change&&this.options.onChange(_year)),this._renderTenYear=(this._current||new Date).getFullYear(),this._renderYearList();},_proto._onOk=function(){null==this.options.onOk||this.options.onOk.call(this.options,this.current);},_proto._onClose=function(){null==this.options.onClose||this.options.onClose.call(this.options,this.current);},_proto._onCell=function(){var _this=this;delegate(this.$body,".eyear-cell","click",function(e){var yearStr=+e.delegateTarget.getAttribute("title"),newDate=utilsTools.DateTime.toDate(utilsTools.DateTime.format(_this._current,"yyyy-MM-dd HH:mm:ss"));newDate.setFullYear(yearStr);var disabled=e.delegateTarget.classList.contains("edate-disabled");disabled||_this._setCurrent(newDate),null==_this.options.onCell||_this.options.onCell.call(_this.options,newDate,utilsTools.DateTime.format(newDate,"YYYY"),disabled),e.stopPropagation(),e.preventDefault();});},_proto._onSuperPrev=function(){this._renderTenYear=this._renderTenYear-10,null==this.options.onPrevYear||this.options.onPrevYear.call(this.options,this._current,Util.generateYears(this._renderTenYear)),this._renderYearList();},_proto._onSuperNext=function(){this._renderTenYear=this._renderTenYear+10,null==this.options.onNextYear||this.options.onNextYear.call(this.options,this._current,Util.generateYears(this._renderTenYear)),this._renderYearList();},_proto._render=function(){this.$body.innerHTML='<table class="eyear-content"></table>',this.$panel.appendChild(this.$body);},_proto._renderYearList=function(){var _this_header,_this=this,list=Util.generateYears(this._renderTenYear);null==(_this_header=this.header)||_this_header.renderContent(list[1]+" - "+list[list.length-2]),this.$body.querySelector(".eyear-content")&&(this.$body.querySelector(".eyear-content").innerHTML="\n          <tbody>\n            "+Util.chunkBySize(list,3).slice(0,4).map(function(years,i){return "<tr>\n                        "+years.map(function(y,j){var classNames=0===i&&0===j||3===i&&2===j?"eyear-cell":"eyear-cell eyear-cell-in-view";return +y===+_this._current.getFullYear()&&(classNames+=" eyear-cell-selected"),"function"==typeof _this.options.disabledYear&&_this.options.disabledYear(utilsTools.DateTime.toDate(y),y)&&(classNames+=" edate-disabled"),'<td title="'+y+'" class="'+classNames+'">\n                              '+(_this.options.yearRender&&"function"==typeof _this.options.yearRender?_this.options.yearRender(utilsTools.DateTime.toDate(y),y):'<span class="eyear-cell-inner">'+ +y+"</span>")+"\n                            </td>"}).join("")+"\n                      </tr>"}).join("")+"\n          </tbody>\n        ");},_create_class$1(Year,[{key:"current",get:function(){return this._current}}]),Year}(Container);function _create_class(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends(){return _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends.apply(this,arguments)}function _set_prototype_of(o,p){return _set_prototype_of=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of(o,p)}var _DATEPICKER_MODE_ARRAY=["date","month","year"],_DATEPICKER_DEFAULT_OPTIONS_={getPopupContainer:function(){return document.body},language:"zh",isMobile:false,mode:_DATEPICKER_MODE_ARRAY[0]},DatePicker=function(Picker){function DatePicker(container,options){var _this;return (_this=Picker.call(this,container,deepmerge.all([{},_DATEPICKER_DEFAULT_OPTIONS_,options||{},{wrapClassName:("edate-picker-container "+((null==options?void 0:options.wrapClassName)||"")).trim()}],{clone:false}))||this).current=null,_this._current=null,_this._calendar=null,_this._month=null,_this._year=null,_this._currentMode="date",_this.options=deepmerge.all([{},_DATEPICKER_DEFAULT_OPTIONS_,options||{}],{clone:false}),_this.options.current&&(_this.current=_this.options.current,_this._current=_this.options.current),_this._currentMode=_this.options.mode,_this._switchMode(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of(subClass,superClass);}(DatePicker,Picker);var _proto=DatePicker.prototype;return _proto.setCurrent=function(date,change){ void 0===change&&(change=true),this._setCurrent(date,change);},_proto.updateBadges=function(badges){var _this__calendar;(null==badges?void 0:badges.length)>=0&&(null==(_this__calendar=this._calendar)||_this__calendar.updateBadges(badges));},_proto.destroy=function(){var _this__calendar,_this__month,_this__year;null==(_this__calendar=this._calendar)||_this__calendar.destroy(),this._calendar=null,null==(_this__month=this._month)||_this__month.destroy(),this._month=null,null==(_this__year=this._year)||_this__year.destroy(),this._year=null,Picker.prototype.destroy.call(this);},_proto._setCurrent=function(date,change){var _this__calendar,_this__month,_this__year;void 0===change&&(change=true),this._current=date,null==(_this__calendar=this._calendar)||_this__calendar.setCurrent(date,change),null==(_this__month=this._month)||_this__month.setCurrent(date,change),null==(_this__year=this._year)||_this__year.setCurrent(date,change);},_proto._switchMode=function(){this.$body.classList.add("edate-picker-"+this._currentMode),"date"===this._currentMode?this._initCalendar():"month"===this._currentMode?this._initMonth():"year"===this._currentMode&&this._initYear(),this.setPlacement(this.options.placement||"top");},_proto.hide=function(){this.open=false;},_proto._onOpenChange=function(open){Picker.prototype._onOpenChange.call(this,open),open&&(this._removeCurrentTypeClass(),this._currentMode=this.options.mode||"date",this._switchMode(),this._setCurrent(this.current,false)),open||null==this.options.onClose||this.options.onClose.call(this.options,this.current,this._currentMode);},_proto._initCalendar=function(){var _this=this;this._calendar||(this._calendar=new Calendar(this.$body,_extends({},this.options,{current:this._current||new Date,onCell:this._onCell.bind(this),showHeaderOk:this.options.isMobile,showHeaderClose:this.options.isMobile,onOk:this._onOk.bind(this),onClose:this._onClose.bind(this),onMonth:this._onMonth.bind(this),onYear:this._onYear.bind(this),onChange:function(date){var _this__calendar;_this._current&&utilsTools.DateTime.format(_this._current,"YYYY-MM-DD")===utilsTools.DateTime.format(date,"YYYY-MM-DD")||_this._onChange(date,null==(_this__calendar=_this._calendar)?void 0:_this__calendar.options.showHeaderOk);}})));},_proto._initMonth=function(){var _this=this;this._month||(this._month=new Month(this.$body,_extends({},this.options,{current:this._current||new Date,onCell:this._onCell.bind(this),onOk:this._onOk.bind(this),onClose:this._onClose.bind(this),showHeaderOk:this.options.isMobile,showHeaderClose:this.options.isMobile,onChange:function(date){var _this__month;_this._current&&utilsTools.DateTime.format(_this._current,"YYYY-MM")===utilsTools.DateTime.format(date,"YYYY-MM")||_this._onChange(date,null==(_this__month=_this._month)?void 0:_this__month.options.showHeaderOk);},onYear:this._onYear.bind(this)})));},_proto._initYear=function(){var _this=this;this._year||(this._year=new Year(this.$body,_extends({},this.options,{current:this._current||new Date,onCell:this._onCell.bind(this),onOk:this._onOk.bind(this),onClose:this._onClose.bind(this),showHeaderOk:this.options.isMobile,showHeaderClose:this.options.isMobile,onChange:function(date){var _this__year;_this._current&&utilsTools.DateTime.format(_this._current,"YYYY")===utilsTools.DateTime.format(date,"YYYY")||_this._onChange(date,null==(_this__year=_this._year)?void 0:_this__year.options.showHeaderOk);}})));},_proto._onOk=function(date){this.current=date||this._current,this._setCurrent(date||this._current),null==this.options.onOk||this.options.onOk.call(this.options,this.current,this._currentMode),this.hide();},_proto._onClose=function(){this.hide();},_proto._onChange=function(date,_showHeaderOk){this._setCurrent(date,true);},_proto._onCell=function(date,_renderDate,disabled){null==this.options.onCell||this.options.onCell.call(this.options,date,this._currentMode),this.options.isMobile||this._currentMode!==this.options.mode||disabled||this._current&&utilsTools.DateTime.format(date,"YYYY-MM-DD")!==utilsTools.DateTime.format(this._current,"YYYY-MM-DD")||(this.current=date,null==this.options.onChange||this.options.onChange.call(this.options,date,this._currentMode)),disabled||this._prvMode();},_proto._prvMode=function(){this._currentMode!==this.options.mode||this.options.isMobile||this.hide();var index=_DATEPICKER_MODE_ARRAY.indexOf(this._currentMode);index>=1&&(index--,this._removeCurrentTypeClass(),this._currentMode=_DATEPICKER_MODE_ARRAY[index],this._switchMode());},_proto._onYear=function(){this._removeCurrentTypeClass(),this._currentMode="year",this._switchMode();},_proto._onMonth=function(){this._removeCurrentTypeClass(),this._currentMode="month",this._switchMode();},_proto._removeCurrentTypeClass=function(){this.$body.classList.remove("edate-picker-"+this._currentMode);},_create_class(DatePicker,[{key:"_minModeIndex",get:function(){return _DATEPICKER_MODE_ARRAY.indexOf(this.options.mode)}}]),DatePicker}(Picker);dist$2.Calendar=Calendar,dist$2.DatePicker=DatePicker,dist$2.Header=Header,dist$2.Month=Month,dist$2.Year=Year;
-		return dist$2;
+	var delegate=requireDelegate(),utilsTools=requireDist$3(),deepmerge=requireCjs(),Picker=requireDist$a(),Util=function(){function Util(){}return Util.fillZero=function(num,len){return void 0===len&&(len=2),num.toString().padStart(len,"0")},Util.chunkBySize=function(arr,size){return Array.from({length:Math.ceil(arr.length/size)}).map(function(_,index){return arr.slice(index*size,(index+1)*size)})},Util.generateYears=function(year){for(var years=[],i=year%10+1;i>=0;i--)years.push(year-i);for(var i1=1;years.length<12;i1++)years.push(year+i1);return years},Util.getDaysInMonth=function(year,month){return new Date(year,month+1,0).getDate()},Util.getFirstDayOfMonth=function(year,month,startOfWeek){return void 0===startOfWeek&&(startOfWeek=0),(new Date(year,month).getDay()-startOfWeek+7)%7},Util.generateWeeksByYearMonth=function(year,month,startOfWeek){ void 0===startOfWeek&&(startOfWeek=0),month-=1;for(var daysInMonth=Util.getDaysInMonth(year,month),firstDay=Util.getFirstDayOfMonth(year,month,startOfWeek),weeks=[],i=1;i<=firstDay+daysInMonth;i++){var day=i-firstDay;day<1?weeks.push((0===month?year-1:year)+"-"+Util.fillZero((month+12-1)%12+1)+"-"+Util.fillZero(Util.getDaysInMonth(year,month-1)+day)):day>daysInMonth?weeks.push((11===month?year+1:year)+"-"+Util.fillZero((month+1)%12+1)+"-"+(day-daysInMonth)):weeks.push(year+"-"+Util.fillZero(month+1)+"-"+Util.fillZero(day));}for(var nextDay=1;weeks.length<42;)weeks.push((11===month?year+1:year)+"-"+Util.fillZero((month+1)%12+1)+"-"+Util.fillZero(nextDay++));return weeks},Util.generateHours=function(){for(var hours=[],i=0;i<24;i++)hours.push(Util.fillZero(i));return hours},Util.generateMinutesOrSeconds=function(){for(var hours=[],i=0;i<=59;i++)hours.push(Util.fillZero(i));return hours},Util}(),__$CALENDAR_LOCALES$__={en:{year:"",month:"",weeks:["Su","Mo","Tu","We","Th","Fr","Sa"],today:"Today",ok:"OK",months:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]},zh:{year:"年",month:"月",weeks:["日","一","二","三","四","五","六"],today:"今天",ok:"确定",months:["01","02","03","04","05","06","07","08","09","10","11","12"]}},__DEFAULT_COMPONENTS_OPTIONS__={showSuperPrevIcon:false,showSuperNextIcon:false,showPrevIcon:false,showNextIcon:false,showHeaderClose:false,showHeaderOk:false,renderSuperPrevIcon:'<span class="edate-super-prev-icon"></span>',renderSuperNextIcon:'<span class="edate-super-next-icon"></span>',renderPrevIcon:'<span class="edate-prev-icon"></span>',renderNextIcon:'<span class="edate-next-icon"></span>',renderHeaderCloseIcon:'<span class="edate-close-icon">\n      <svg viewBox="0 0 24 24" fill="none" width="1em" height="1em" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="close">\n\t    <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,0.707114,-0.707114,0.707099,6.34277,6.34326)" />\n\t\t  <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,-0.707114,0.707114,0.707099,6.34277,17.6567)" />\n    </svg>\n  </span>',renderHeaderOkIcon:function(locale){return '<span class="edate-btn-text">'+((null==locale?void 0:locale.ok)||"确定")+"</span>"}},Header=function(){function Header(options){this.$header=null,this.options=deepmerge.all([{},__DEFAULT_COMPONENTS_OPTIONS__,options],{clone:false}),this.$header=document.createElement("div"),this.$header.classList.add("edate-header",options.prefixCls+"-header"),options.className&&this.$header.classList.add(options.className),this._render(),this._eventListeners();}var _proto=Header.prototype;return _proto._render=function(){var _this__getStrOrFunToStr,_this__getStrOrFunToStr1,_this__getStrOrFunToStr2,_this__getStrOrFunToStr3,_this__getStrOrFunToStr4,_this__getStrOrFunToStr5;this.$header&&(this.$header.innerHTML="\n            "+(this.options.showHeaderClose?'<div class="edate-close-btn">\n                    '+(null!=(_this__getStrOrFunToStr=this._getStrOrFunToStr(this.options.renderHeaderCloseIcon))?_this__getStrOrFunToStr:__DEFAULT_COMPONENTS_OPTIONS__.renderHeaderCloseIcon)+"\n                  </div>":this.options.showHeaderOk?"<span></span>":"")+"\n            "+(this.options.showSuperPrevIcon||this.options.showPrevIcon?'\n                <div class="edate-prev-btns">\n                  '+(this.options.showSuperPrevIcon?'<div class="edate-super-prev-btn '+this.options.prefixCls+'-super-prev-btn">\n                        '+(null!=(_this__getStrOrFunToStr1=this._getStrOrFunToStr(this.options.renderSuperPrevIcon))?_this__getStrOrFunToStr1:__DEFAULT_COMPONENTS_OPTIONS__.renderSuperPrevIcon)+"\n                      </div>":"")+"\n                  "+(this.options.showPrevIcon?'<div class="edate-prev-btn '+this.options.prefixCls+'-prev-btn">\n                          '+(null!=(_this__getStrOrFunToStr2=this._getStrOrFunToStr(this.options.renderPrevIcon))?_this__getStrOrFunToStr2:__DEFAULT_COMPONENTS_OPTIONS__.renderPrevIcon)+"\n                        </div>":"")+"\n                </div>\n              ":"")+'\n\n            <div class="edate-header-view '+this.options.prefixCls+'-header-view"></div>\n\n            '+(this.options.showNextIcon||this.options.showSuperNextIcon?'\n                  <div class="edate-next-btns">\n                    '+(this.options.showNextIcon?'<div class="edate-next-btn '+this.options.prefixCls+'-next-btn">\n                            '+(null!=(_this__getStrOrFunToStr3=this._getStrOrFunToStr(this.options.renderNextIcon))?_this__getStrOrFunToStr3:__DEFAULT_COMPONENTS_OPTIONS__.renderNextIcon)+"\n                          </div>":"")+"\n                    "+(this.options.showSuperNextIcon?'<div class="edate-super-next-btn '+this.options.prefixCls+'-super-next-btn">\n                          '+(null!=(_this__getStrOrFunToStr4=this._getStrOrFunToStr(this.options.renderSuperNextIcon))?_this__getStrOrFunToStr4:__DEFAULT_COMPONENTS_OPTIONS__.renderSuperNextIcon)+"\n                        </div>":"")+"\n                </div>\n              ":"")+"\n            "+(this.options.showHeaderOk?'<div class="edate-ok-btn">\n                    '+(null!=(_this__getStrOrFunToStr5=this._getStrOrFunToStr(this.options.renderHeaderOkIcon))?_this__getStrOrFunToStr5:__DEFAULT_COMPONENTS_OPTIONS__.renderHeaderOkIcon)+"\n                  </div>":this.options.showHeaderClose?"<span></span>":""));},_proto._getStrOrFunToStr=function(value){if(null!=value){var _this_options;if("function"==typeof value)return this._getStrOrFunToStr(null==value?void 0:value(null==(_this_options=this.options)?void 0:_this_options.locale));if("string"==typeof value)return value}},_proto.renderContent=function(html){if(this.$header){var _$content=this.$header.querySelector(".edate-header-view");if(!_$content)return;_$content.innerHTML=html;}},_proto.destroy=function(){this.$header&&this.$header.remove();},_proto._eventListeners=function(){var _this=this;_this.$header&&(delegate(_this.$header,".edate-super-prev-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onSuperPrev||_this.options.onSuperPrev.call(_this.options);}),delegate(_this.$header,".edate-prev-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onPrev||_this.options.onPrev.call(_this.options);}),delegate(_this.$header,".edate-next-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onNext||_this.options.onNext.call(_this.options);}),delegate(_this.$header,".edate-super-next-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||null==_this.options.onSuperNext||_this.options.onSuperNext.call(_this.options);}),delegate(_this.$header,".edate-close-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||(null==_this.options.onClose||_this.options.onClose.call(_this.options),event.stopPropagation(),event.preventDefault());}),delegate(_this.$header,".edate-ok-btn","click",function(event){event.delegateTarget.classList.contains("edate-disabled")||(null==_this.options.onOk||_this.options.onOk.call(_this.options),event.stopPropagation(),event.preventDefault());}));},Header}();function _extends$2(){return _extends$2=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$2.apply(this,arguments)}var _CONTAINER_DEFAULT_OPTIONS_={prefixCls:"edate",locales:__$CALENDAR_LOCALES$__,showHeader:true},Container=function(){function Container(popupContainer,options){this.$panel=document.createElement("div"),this.$body=document.createElement("div"),this.$container=document.createElement("div"),this.language="zh",this.header=null,this.locale=__$CALENDAR_LOCALES$__.zh,this.options=deepmerge.all([{},_CONTAINER_DEFAULT_OPTIONS_,options],{clone:false}),this.$popupContainer=popupContainer?"function"==typeof popupContainer?popupContainer():popupContainer:document.body,this._setLocale(),this.$container.classList.add("edate-container",(this.options.prefixCls||"edate")+"-container"),options.isMobile&&this.$container.classList.add("edate-mobile",this.options.prefixCls+"-mobile"),this.options.wrapClassName&&this.$container.classList.add(this.options.wrapClassName),this.$panel.classList.add("edate-panel",(this.options.prefixCls||"edate")+"-panel"),this.options.showHeader&&(this.header=new Header(_extends$2({},this.options,{locale:this.locale,onPrev:this._onPrev.bind(this),onNext:this._onNext.bind(this),onSuperPrev:this._onSuperPrev.bind(this),onSuperNext:this._onSuperNext.bind(this),onClose:this._onClose.bind(this),onOk:this._onOk.bind(this)})),this.$panel.appendChild(this.header.$header)),this.$body.classList.add("edate-body",(this.options.prefixCls||"edate")+"-body"),this.$container.appendChild(this.$panel),this.$popupContainer.appendChild(this.$container);}var _proto=Container.prototype;return _proto._setLocale=function(){if(this.options.locales)if("string"==typeof this.options.language){var language=this.options.language||navigator.language;this.options.locales[language]?this.locale=this.options.locales[language]:this.locale=this.options.locales.zh;}else this.locale=this.options.locales.zh;},_proto.destroy=function(){var _this_$container;(null==(_this_$container=this.$container)?void 0:_this_$container.parentNode)&&this.$container.parentNode.removeChild(this.$container),this.header=null,this.$container=null;},_proto.setLocale=function(locale){"string"==typeof locale?this._setLocale():this.locale=locale;},_proto._onSuperPrev=function(){},_proto._onSuperNext=function(){},_proto._onPrev=function(){},_proto._onNext=function(){},_proto._onClose=function(){},_proto._onOk=function(){},Container}();function _create_class$3(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends$1(){return _extends$1=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$1.apply(this,arguments)}function _set_prototype_of$3(o,p){return _set_prototype_of$3=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$3(o,p)}var _CALENDAR_DEFAULT_OPTIONS_={startOfWeek:0,showHeader:true,showSuperPrevIcon:true,showSuperNextIcon:true,showPrevIcon:true,showNextIcon:true,language:"zh",renderBadge:'<span class="ecalendar-badge"></span>',badges:[]},Calendar=function(Container){function Calendar(container,options){var _this,_this_options_badges,_this_options,_this_options1,_this_options2;return (_this=Container.call(this,container,_extends$1({},_CALENDAR_DEFAULT_OPTIONS_,options,{prefixCls:"ecalendar"}))||this).badges=[],(null==(_this_options_badges=_this.options.badges)?void 0:_this_options_badges.length)&&_this._updateBadges(_this.options.badges,false),(null==(_this_options=_this.options)?void 0:_this_options.startOfWeek)&&((null==(_this_options1=_this.options)?void 0:_this_options1.startOfWeek)>6||(null==(_this_options2=_this.options)?void 0:_this_options2.startOfWeek)<0)&&(_this.options.startOfWeek=0),_this._render(),_this.setCurrent(_this.options.current,false),_this._onHeader(),_this._onCell(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$3(subClass,superClass);}(Calendar,Container);var _proto=Calendar.prototype;return _proto.setCurrent=function(date,change){if(void 0===change&&(change=true),"string"==typeof date||(left=date,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right))try{if(date="string"==typeof date?utilsTools.DateTime.toDate(date):date,(!this._current||utilsTools.DateTime.format(date,"YYYY-MM-DD")!==utilsTools.DateTime.format(this._current,"YYYY-MM-DD"))&&(this._current=date,change&&(null==this.options.onChange||this.options.onChange.call(this.options,date,utilsTools.DateTime.format(date,"YYYY-MM-DD"))),this.$body)){var _this_$body_querySelector,_this_$body_querySelector1;null==(_this_$body_querySelector=this.$body.querySelector(".ecalendar-cell-selected"))||_this_$body_querySelector.classList.remove("ecalendar-cell-selected");var title=utilsTools.DateTime.format(this._current,"YYYY-MM-DD");null==(_this_$body_querySelector1=this.$body.querySelector(".ecalendar-cell-in-view[title='"+title+"']"))||_this_$body_querySelector1.classList.add("ecalendar-cell-selected");}this._setRenderCurrent(this._current);}catch(error){this._setRenderCurrent(new Date);}else this._setRenderCurrent(new Date);var left,right;},_proto.updateBadges=function(badges){this._updateBadges(badges);},_proto._updateBadges=function(badges,rerender){ void 0===rerender&&(rerender=true),(null==badges?void 0:badges.length)>=0&&(this.badges=badges.map(function(date){return utilsTools.DateTime.format(date,"YYYY-MM-DD")}),rerender&&this._renderDate());},_proto._setRenderCurrent=function(date){(!this._renderCurrent||date&&utilsTools.DateTime.format(this._renderCurrent,"YYYY-MM")!==utilsTools.DateTime.format(date,"YYYY-MM"))&&(this._renderCurrent=date||new Date,this._renderDate());},_proto._onCell=function(){var _this=this;delegate(this.$body,".ecalendar-cell","click",function(event){var date=new Date(event.delegateTarget.getAttribute("title").replace(/\//gi,"/")),disabled=event.delegateTarget.classList.contains("edate-disabled");disabled||_this.setCurrent(date),null==_this.options.onCell||_this.options.onCell.call(_this.options,date,utilsTools.DateTime.format(_this._renderCurrent,"YYYY-MM-DD"),disabled),event.stopPropagation(),event.preventDefault();});},_proto._onSuperPrev=function(){var date=new Date(this._renderCurrent);date.setFullYear(date.getFullYear()-1,date.getMonth(),date.getDate()),this._setRenderCurrent(date),null==this.options.onPrevMonth||this.options.onPrevMonth.call(this.options,this._current,this._renderCurrent);},_proto._onSuperNext=function(){var date=new Date(this._renderCurrent);date.setFullYear(date.getFullYear()+1,date.getMonth(),date.getDate()),this._setRenderCurrent(date),null==this.options.onNextMonth||this.options.onNextMonth.call(this.options,this._current,this._renderCurrent);},_proto._onPrev=function(){var date=new Date(this._renderCurrent);date.setMonth(date.getMonth()-1,date.getDate()),this._setRenderCurrent(date),null==this.options.onPrevMonth||this.options.onPrevMonth.call(this.options,this._current,this._renderCurrent);},_proto._onNext=function(){var date=new Date(this._renderCurrent);date.setMonth(date.getMonth()+1,date.getDate()),this._setRenderCurrent(date),null==this.options.onNextMonth||this.options.onNextMonth.call(this.options,this._current,this._renderCurrent);},_proto._onHeader=function(){var _this=this;delegate(this.$panel,".ecalendar-header-month-btn","click",function(){null==_this.options.onMonth||_this.options.onMonth.call(_this.options,_this._current,_this._renderCurrent);}),delegate(this.$panel,".ecalendar-header-year-btn","click",function(){null==_this.options.onYear||_this.options.onYear.call(_this.options,_this._current,_this._renderCurrent);});},_proto._onOk=function(){null==this.options.onOk||this.options.onOk.call(this.options,this.current);},_proto._onClose=function(){null==this.options.onClose||this.options.onClose.call(this.options,this.current);},_proto._render=function(){var _this_locale,_this_locale1,shiftedCustomDays=[].concat(((null==(_this_locale=this.locale)?void 0:_this_locale.weeks)||[]).slice(this.options.startOfWeek),((null==(_this_locale1=this.locale)?void 0:_this_locale1.weeks)||[]).slice(0,this.options.startOfWeek));this.$body.innerHTML='<table class="ecalendar-content">\n          <thead><tr>'+shiftedCustomDays.map(function(day){return "<th>"+day+"</th>"}).join("")+"</tr></thead>\n          <tbody></tbody>\n        </table>",this.$panel.appendChild(this.$body);},_proto._renderDate=function(){var _this_header,_this_$body_querySelector,_this=this;if(this.$body){var _this_locale_months,_this_locale,_this_locale1,_this_locale2,_this_locale3,_this_locale_months1,_this_locale4,_this_locale5,_this_$body_querySelector1,todayStr=utilsTools.DateTime.format(new Date,"YYYY-MM-DD"),year=this._renderCurrent.getFullYear(),month=this._renderCurrent.getMonth()+1,dayGroupArray=Util.chunkBySize(Util.generateWeeksByYearMonth(year,month,this.options.startOfWeek),7),allowMonthClick="function"==typeof this.options.onMonth,allowYearClick="function"==typeof this.options.onYear;if(null==(_this_header=this.header)?void 0:_this_header.$header)this.header.renderContent("\n      "+("zh"!==this.options.language?'<span class="ecalendar-header-month-btn '+(allowMonthClick?"edate-header-title-hover":"")+'">'+(null==(_this_locale=this.locale)||null==(_this_locale_months=_this_locale.months)?void 0:_this_locale_months[+(month-1)])+((null==(_this_locale1=this.locale)?void 0:_this_locale1.month)||"")+'</span>  <span class="ecalendar-header-year-btn '+(allowYearClick?"edate-header-title-hover":"")+'">'+year+((null==(_this_locale2=this.locale)?void 0:_this_locale2.year)||"")+"</span>":'<span class="ecalendar-header-year-btn '+(allowYearClick?"edate-header-title-hover":"")+'">'+year+((null==(_this_locale3=this.locale)?void 0:_this_locale3.year)||"")+'</span>  <span class="ecalendar-header-month-btn '+(allowMonthClick?"edate-header-title-hover":"")+'">'+(null==(_this_locale4=this.locale)||null==(_this_locale_months1=_this_locale4.months)?void 0:_this_locale_months1[+(month-1)])+((null==(_this_locale5=this.locale)?void 0:_this_locale5.month)||"")+"</span>"));if(null==(_this_$body_querySelector=this.$body.querySelector(".ecalendar-content"))?void 0:_this_$body_querySelector.querySelector("tbody"))(null==(_this_$body_querySelector1=this.$body.querySelector(".ecalendar-content"))?void 0:_this_$body_querySelector1.querySelector("tbody")).innerHTML="\n              "+dayGroupArray.slice(0,7).map(function(dates){return "<tr>\n                  "+dates.map(function(dateStr){var _this_options,_dateStr_split=dateStr.split("-"),y=_dateStr_split[0],m=_dateStr_split[1],d=_dateStr_split[2],date=new Date(+y,+m,+d),classNames=[month===+m?"ecalendar-cell-in-view":"",todayStr===dateStr?"ecalendar-cell-today":"",_this._current&&utilsTools.DateTime.format(_this._current,"YYYY-MM-DD")===dateStr?"ecalendar-cell-selected":"","function"==typeof(null==(_this_options=_this.options)?void 0:_this_options.disabledDate)&&_this.options.disabledDate(utilsTools.DateTime.toDate(dateStr),dateStr)?"edate-disabled":""].filter(Boolean),badgeHtml=_this._renderBadge(date,dateStr);return '<td title="'+dateStr+'" class="ecalendar-cell '+classNames.join(" ")+'">\n                        '+("function"==typeof _this.options.renderDate?_this.options.renderDate(date,dateStr):'<span class="ecalendar-cell-inner">'+Util.fillZero(+d)+"</span>")+"\n                        "+badgeHtml+"\n                      </td>"}).join("")+"\n              </tr>"}).join("");}},_proto._renderBadge=function(date,dateStr){var badgeHtml="";badgeHtml="function"==typeof this.options.renderBadge?this.options.renderBadge(date,dateStr):"string"==typeof this.options.renderBadge?this.options.renderBadge:"";var showBadge="function"==typeof this.options.showBadge&&this.options.showBadge(date,dateStr);return this.badges.includes(dateStr)||showBadge||(badgeHtml=""),badgeHtml},_create_class$3(Calendar,[{key:"current",get:function(){return this._current}}]),Calendar}(Container);function _create_class$2(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$2(o,p){return _set_prototype_of$2=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$2(o,p)}Calendar.DateTime=utilsTools.DateTime;var _Month_DEFAULT_OPTIONS_={showHeader:true,showSuperPrevIcon:true,showSuperNextIcon:true,language:"zh"},Month=function(Container){function Month(popupContainer,options){var _this;return (_this=Container.call(this,popupContainer,deepmerge.all([{},_Month_DEFAULT_OPTIONS_,options||{},{showPrevIcon:false,showNextIcon:false,prefixCls:"emonth"}],{clone:false}))||this)._render(),_this.setCurrent(_this.options.current,false),_this._onHeaderTitle(),_this._onCell(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$2(subClass,superClass);}(Month,Container);var _proto=Month.prototype;return _proto.setCurrent=function(date,change){ void 0===change&&(change=true),this._setCurrent(date,change);},_proto._setCurrent=function(date,change){if("string"==typeof date||(left=date,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right))try{var d=date;"string"==typeof d&&(d=utilsTools.DateTime.toDate(d));var current=d;this._current&&utilsTools.DateTime.format(current,"YYYY-MM-DD")===utilsTools.DateTime.format(this._current,"YYYY-MM-DD")||(this._current=current,"function"==typeof this.options.onChange&&change&&(null==this.options.onChange||this.options.onChange.call(this.options,current,utilsTools.DateTime.format(current,"YYYY-MM")))),this._setRenderCurrent(current);}catch(error){this._setRenderCurrent(new Date);}else this._setRenderCurrent(new Date);var left,right;},_proto._setRenderCurrent=function(date){if((!this._renderCurrent||this._renderCurrent&&utilsTools.DateTime.format(date,"YYYY")!==utilsTools.DateTime.format(this._renderCurrent,"YYYY"))&&(this._renderCurrent=date,this._renderMonths(date.getFullYear())),this._current){var _this_$body_querySelector,_this_$body_querySelector1;null==(_this_$body_querySelector=this.$body.querySelector(".emonth-cell-selected"))||_this_$body_querySelector.classList.remove("emonth-cell-selected");var selectedTitle=utilsTools.DateTime.format(this._current,"YYYY-MM");null==(_this_$body_querySelector1=this.$body.querySelector(".emonth-cell-in-view[title='"+selectedTitle+"']"))||_this_$body_querySelector1.classList.add("emonth-cell-selected");}this._setHeader();},_proto._onOk=function(){null==this.options.onOk||this.options.onOk.call(this.options,this.current);},_proto._onClose=function(){null==this.options.onClose||this.options.onClose.call(this.options,this.current);},_proto._onCell=function(){var _this=this;delegate(this.$body,".emonth-cell","click",function(e){e.stopPropagation(),e.preventDefault();var month=+e.delegateTarget.getAttribute("data-month"),newDate=utilsTools.DateTime.toDate(utilsTools.DateTime.format(_this._current,"yyyy-MM-dd HH:mm:ss"));newDate.setMonth(month-1);var disabled=e.delegateTarget.classList.contains("edate-disabled");disabled||_this.setCurrent(newDate),null==_this.options.onCell||_this.options.onCell.call(_this.options,newDate,utilsTools.DateTime.format(newDate,"YYYY-MM"),disabled);});},_proto._onSuperPrev=function(){var year=this._renderCurrent.getFullYear()-1,date=utilsTools.DateTime.toDate(year+utilsTools.DateTime.format(this._renderCurrent,"-MM-DDTHH:mm:ss"));this._setRenderCurrent(date),null==this.options.onSuperPrev||this.options.onSuperPrev.call(this.options,this._current,this._renderCurrent);},_proto._onSuperNext=function(){var year=this._renderCurrent.getFullYear()+1,date=utilsTools.DateTime.toDate(year+utilsTools.DateTime.format(this._renderCurrent,"-MM-DDTHH:mm:ss"));this._setRenderCurrent(date),null==this.options.onSuperNext||this.options.onSuperNext.call(this.options,this._current,this._renderCurrent);},_proto._onHeaderTitle=function(){var _this=this;delegate(this.$panel,".edate-header-title-hover","click",function(){null==_this.options.onYear||_this.options.onYear.call(_this.options,_this._current,_this._renderCurrent);});},_proto._setHeader=function(){if(this.$panel.querySelector(".emonth-header-view")){var allowClick="function"==typeof this.options.onYear;this.$panel.querySelector(".emonth-header-view").innerHTML='<span class="'+(allowClick?"edate-header-title-hover":"")+'">'+this._renderCurrent.getFullYear()+this.locale.year+"</span>";}},_proto._setDisabled=function(){for(var year=this._renderCurrent.getFullYear(),i=0;i<12;i++){var $cell=this.$body.querySelector(".emonth-cell[title='"+year+"-"+Util.fillZero(i+1)+"']");if($cell){var date=utilsTools.DateTime.toDate(year+"-"+Util.fillZero(i+1)+"-"+utilsTools.DateTime.format(this._renderCurrent,"DDTHH:mm:ss"));"function"==typeof this.options.disabledMonth&&this.options.disabledMonth(date,utilsTools.DateTime.format(date,"YYYY-MM"))?$cell.classList.add("edate-disabled"):$cell.classList.remove("edate-disabled");}}},_proto._render=function(){this.$body.innerHTML='<table class="emonth-content"></table>',this.$panel.appendChild(this.$body);},_proto._renderMonths=function(year){var _this=this;this.$body.querySelector(".emonth-content")&&(this.$body.querySelector(".emonth-content").innerHTML="\n              <tbody>\n                "+Util.chunkBySize(this.locale.months,3).slice(0,4).map(function(month,index){return "<tr>\n                            "+month.map(function(m,i){return '<td title="'+year+"-"+Util.fillZero(3*index+i+1)+'" data-month="'+Util.fillZero(3*index+i+1)+'" class="emonth-cell emonth-cell-in-view">\n                                        <span class="emonth-cell-inner">'+(_this.options.monthRender&&"function"==typeof _this.options.monthRender?_this.options.monthRender(utilsTools.DateTime.toDate(year+"-"+Util.fillZero(3*index+i+1)),year+"-"+Util.fillZero(3*index+i+1))||"":m)+"</span>\n                                      </td>"}).join("")+"\n                            </tr>"}).join("")+"\n              </tbody>"),this._setDisabled();},_create_class$2(Month,[{key:"current",get:function(){return this._current}}]),Month}(Container);function _create_class$1(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$1(o,p){return _set_prototype_of$1=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1(o,p)}var _YEAR_DEFAULT_OPTIONS_={showHeader:true,showSuperPrevIcon:true,showSuperNextIcon:true,language:"zh",prefixCls:"eyear"},Year=function(Container){function Year(popupContainer,options){var _this;return (_this=Container.call(this,popupContainer,deepmerge.all([{},_YEAR_DEFAULT_OPTIONS_,options||{},{showPrevIcon:false,showNextIcon:false,renderPrevIcon:"",renderNextIcon:""}],{clone:false}))||this)._render(),_this._setCurrent(_this.options.current,false),_this._onCell(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1(subClass,superClass);}(Year,Container);var _proto=Year.prototype;return _proto.setCurrent=function(year,change){ void 0===change&&(change=true),this._setCurrent(year,change);},_proto._setCurrent=function(year,change){ void 0===change&&(change=true);var left,right,_year="number"==typeof year?utilsTools.DateTime.toDate(year):(left=year,(null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)?year:new Date);this._current&&utilsTools.DateTime.format(_year,"YYYY-MM-DD")===utilsTools.DateTime.format(this._current,"YYYY-MM-DD")||(this._current=_year,"function"==typeof this.options.onChange&&change&&this.options.onChange(_year)),this._renderTenYear=(this._current||new Date).getFullYear(),this._renderYearList();},_proto._onOk=function(){null==this.options.onOk||this.options.onOk.call(this.options,this.current);},_proto._onClose=function(){null==this.options.onClose||this.options.onClose.call(this.options,this.current);},_proto._onCell=function(){var _this=this;delegate(this.$body,".eyear-cell","click",function(e){var yearStr=+e.delegateTarget.getAttribute("title"),newDate=utilsTools.DateTime.toDate(utilsTools.DateTime.format(_this._current,"yyyy-MM-dd HH:mm:ss"));newDate.setFullYear(yearStr);var disabled=e.delegateTarget.classList.contains("edate-disabled");disabled||_this._setCurrent(newDate),null==_this.options.onCell||_this.options.onCell.call(_this.options,newDate,utilsTools.DateTime.format(newDate,"YYYY"),disabled),e.stopPropagation(),e.preventDefault();});},_proto._onSuperPrev=function(){this._renderTenYear=this._renderTenYear-10,null==this.options.onPrevYear||this.options.onPrevYear.call(this.options,this._current,Util.generateYears(this._renderTenYear)),this._renderYearList();},_proto._onSuperNext=function(){this._renderTenYear=this._renderTenYear+10,null==this.options.onNextYear||this.options.onNextYear.call(this.options,this._current,Util.generateYears(this._renderTenYear)),this._renderYearList();},_proto._render=function(){this.$body.innerHTML='<table class="eyear-content"></table>',this.$panel.appendChild(this.$body);},_proto._renderYearList=function(){var _this_header,_this=this,list=Util.generateYears(this._renderTenYear);null==(_this_header=this.header)||_this_header.renderContent(list[1]+" - "+list[list.length-2]),this.$body.querySelector(".eyear-content")&&(this.$body.querySelector(".eyear-content").innerHTML="\n          <tbody>\n            "+Util.chunkBySize(list,3).slice(0,4).map(function(years,i){return "<tr>\n                        "+years.map(function(y,j){var classNames=0===i&&0===j||3===i&&2===j?"eyear-cell":"eyear-cell eyear-cell-in-view";return +y===+_this._current.getFullYear()&&(classNames+=" eyear-cell-selected"),"function"==typeof _this.options.disabledYear&&_this.options.disabledYear(utilsTools.DateTime.toDate(y),y)&&(classNames+=" edate-disabled"),'<td title="'+y+'" class="'+classNames+'">\n                              '+(_this.options.yearRender&&"function"==typeof _this.options.yearRender?_this.options.yearRender(utilsTools.DateTime.toDate(y),y):'<span class="eyear-cell-inner">'+ +y+"</span>")+"\n                            </td>"}).join("")+"\n                      </tr>"}).join("")+"\n          </tbody>\n        ");},_create_class$1(Year,[{key:"current",get:function(){return this._current}}]),Year}(Container);function _create_class(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends(){return _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends.apply(this,arguments)}function _set_prototype_of(o,p){return _set_prototype_of=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of(o,p)}var _DATEPICKER_MODE_ARRAY=["date","month","year"],_DATEPICKER_DEFAULT_OPTIONS_={getPopupContainer:function(){return document.body},language:"zh",isMobile:false,mode:_DATEPICKER_MODE_ARRAY[0]},DatePicker=function(Picker){function DatePicker(container,options){var _this;return (_this=Picker.call(this,container,deepmerge.all([{},_DATEPICKER_DEFAULT_OPTIONS_,options||{},{wrapClassName:("edate-picker-container "+((null==options?void 0:options.wrapClassName)||"")).trim()}],{clone:false}))||this).current=null,_this._current=null,_this._calendar=null,_this._month=null,_this._year=null,_this._currentMode="date",_this.options=deepmerge.all([{},_DATEPICKER_DEFAULT_OPTIONS_,options||{}],{clone:false}),_this.options.current&&(_this.current=_this.options.current,_this._current=_this.options.current),_this._currentMode=_this.options.mode,_this._switchMode(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of(subClass,superClass);}(DatePicker,Picker);var _proto=DatePicker.prototype;return _proto.setCurrent=function(date,change){ void 0===change&&(change=true),this._setCurrent(date,change);},_proto.updateBadges=function(badges){var _this__calendar;(null==badges?void 0:badges.length)>=0&&(null==(_this__calendar=this._calendar)||_this__calendar.updateBadges(badges));},_proto.destroy=function(){var _this__calendar,_this__month,_this__year;null==(_this__calendar=this._calendar)||_this__calendar.destroy(),this._calendar=null,null==(_this__month=this._month)||_this__month.destroy(),this._month=null,null==(_this__year=this._year)||_this__year.destroy(),this._year=null,Picker.prototype.destroy.call(this);},_proto._setCurrent=function(date,change){var _this__calendar,_this__month,_this__year;void 0===change&&(change=true),this._current=date,null==(_this__calendar=this._calendar)||_this__calendar.setCurrent(date,change),null==(_this__month=this._month)||_this__month.setCurrent(date,change),null==(_this__year=this._year)||_this__year.setCurrent(date,change);},_proto._switchMode=function(){this.$body.classList.add("edate-picker-"+this._currentMode),"date"===this._currentMode?this._initCalendar():"month"===this._currentMode?this._initMonth():"year"===this._currentMode&&this._initYear(),this.setPlacement(this.options.placement||"top");},_proto.hide=function(){this.open=false;},_proto._onOpenChange=function(open){Picker.prototype._onOpenChange.call(this,open),open&&(this._removeCurrentTypeClass(),this._currentMode=this.options.mode||"date",this._switchMode(),this._setCurrent(this.current,false)),open||null==this.options.onClose||this.options.onClose.call(this.options,this.current,this._currentMode);},_proto._initCalendar=function(){var _this=this;this._calendar||(this._calendar=new Calendar(this.$body,_extends({},this.options,{current:this._current||new Date,onCell:this._onCell.bind(this),showHeaderOk:this.options.isMobile,showHeaderClose:this.options.isMobile,onOk:this._onOk.bind(this),onClose:this._onClose.bind(this),onMonth:this._onMonth.bind(this),onYear:this._onYear.bind(this),onChange:function(date){var _this__calendar;_this._current&&utilsTools.DateTime.format(_this._current,"YYYY-MM-DD")===utilsTools.DateTime.format(date,"YYYY-MM-DD")||_this._onChange(date,null==(_this__calendar=_this._calendar)?void 0:_this__calendar.options.showHeaderOk);}})));},_proto._initMonth=function(){var _this=this;this._month||(this._month=new Month(this.$body,_extends({},this.options,{current:this._current||new Date,onCell:this._onCell.bind(this),onOk:this._onOk.bind(this),onClose:this._onClose.bind(this),showHeaderOk:this.options.isMobile,showHeaderClose:this.options.isMobile,onChange:function(date){var _this__month;_this._current&&utilsTools.DateTime.format(_this._current,"YYYY-MM")===utilsTools.DateTime.format(date,"YYYY-MM")||_this._onChange(date,null==(_this__month=_this._month)?void 0:_this__month.options.showHeaderOk);},onYear:this._onYear.bind(this)})));},_proto._initYear=function(){var _this=this;this._year||(this._year=new Year(this.$body,_extends({},this.options,{current:this._current||new Date,onCell:this._onCell.bind(this),onOk:this._onOk.bind(this),onClose:this._onClose.bind(this),showHeaderOk:this.options.isMobile,showHeaderClose:this.options.isMobile,onChange:function(date){var _this__year;_this._current&&utilsTools.DateTime.format(_this._current,"YYYY")===utilsTools.DateTime.format(date,"YYYY")||_this._onChange(date,null==(_this__year=_this._year)?void 0:_this__year.options.showHeaderOk);}})));},_proto._onOk=function(date){this.current=date||this._current,this._setCurrent(date||this._current),null==this.options.onOk||this.options.onOk.call(this.options,this.current,this._currentMode),this.hide();},_proto._onClose=function(){this.hide();},_proto._onChange=function(date,_showHeaderOk){this._setCurrent(date,true);},_proto._onCell=function(date,_renderDate,disabled){null==this.options.onCell||this.options.onCell.call(this.options,date,this._currentMode),this.options.isMobile||this._currentMode!==this.options.mode||disabled||this._current&&utilsTools.DateTime.format(date,"YYYY-MM-DD")!==utilsTools.DateTime.format(this._current,"YYYY-MM-DD")||(this.current=date,null==this.options.onChange||this.options.onChange.call(this.options,date,this._currentMode)),disabled||this._prvMode();},_proto._prvMode=function(){this._currentMode!==this.options.mode||this.options.isMobile||this.hide();var index=_DATEPICKER_MODE_ARRAY.indexOf(this._currentMode);index>=1&&(index--,this._removeCurrentTypeClass(),this._currentMode=_DATEPICKER_MODE_ARRAY[index],this._switchMode());},_proto._onYear=function(){this._removeCurrentTypeClass(),this._currentMode="year",this._switchMode();},_proto._onMonth=function(){this._removeCurrentTypeClass(),this._currentMode="month",this._switchMode();},_proto._removeCurrentTypeClass=function(){this.$body.classList.remove("edate-picker-"+this._currentMode);},_create_class(DatePicker,[{key:"_minModeIndex",get:function(){return _DATEPICKER_MODE_ARRAY.indexOf(this.options.mode)}}]),DatePicker}(Picker);dist$3.Calendar=Calendar,dist$3.DatePicker=DatePicker,dist$3.Header=Header,dist$3.Month=Month,dist$3.Year=Year;
+		return dist$3;
+>>>>>>> main
 	}
 
 	var distExports$1 = requireDist$2();
@@ -10892,8 +11492,13 @@
 	}
 
 	/*
+<<<<<<< HEAD
 	* @ezuikit/control-time-line v1.0.6
 	* Copyright (c) 2025-12-31 Ezviz-OpenBiz
+=======
+	* @ezuikit/control-time-line v1.0.7
+	* Copyright (c) 2026-01-05 Ezviz-OpenBiz
+>>>>>>> main
 	* Released under the MIT License.
 	*/
 
@@ -10902,7 +11507,11 @@
 	function requireDist () {
 		if (hasRequiredDist) return dist$1;
 		hasRequiredDist = 1;
+<<<<<<< HEAD
 	var deepmerge=requireCjs(),I18n=requireDist$6(),Picker=requireDist$8(),utilsTools=requireDist$7(),DragScroll=requireDist$1(),delegate=requireDelegate(),_$TIMELINE_LOCALES$_={zh:{title:"包含{{len}}段录像",foldTitle:"{{len}}个录像"},en:{title:"Includes {{len}} {{unit}}",foldTitle:"{{len}} {{unit}}"}};function _create_class$2(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}var _$BASE_TIME_LINE_DEFAULT_OPTIONS$_={current:new Date,language:"zh",timeSections:[],readOnly:false,className:"",timeWidth:0,width:"100%",timePointColor:"#1890ff",timeTextColor:"#FFF",timeScaleColor:"#FFF",timeSectionColor:"rgba(24, 144, 255, 0.5)",timeAxisBgColor:"#000",onChange:function(){},onDragStart:function(){},onDragging:function(){},onDragEnd:function(){},onDestroy:function(){}},BaseTimeLine=function(){function BaseTimeLine(container,options){if(this._current=new Date,this._readOnly=false,this._width=0,this._height=0,this._destroyed=false,this._timeWidth=0,this._timeSections=[],this.$container=container,!container)throw new Error("container is required");var left,right;this.options=deepmerge(_$BASE_TIME_LINE_DEFAULT_OPTIONS$_,options,{clone:false}),this.options.timeSections&&Array.isArray(this.options.timeSections)&&(this._timeSections=this.options.timeSections),this.options.readOnly&&(this.readOnly=this.options.readOnly),this.options.className&&this.$container.classList.add(this.options.className),this.$container.style.position="relative",this.options.current&&(left=this.options.current,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)?this._current=this.options.current||new Date:this._current=new Date,this.i18n=new I18n(deepmerge(_$TIMELINE_LOCALES$_,this.options.locales||{},{clone:false}),{defaultLocale:this.options.language||"zh"}),this._timeWidth=this.options.timeWidth||0,this._resize(this.options.width||"100%",this.options.height);}var _proto=BaseTimeLine.prototype;return _proto.setReadOnly=function(readOnly){this.readOnly=readOnly;},_proto.update=function(current){this._current=current;},_proto.updateTimeSections=function(timeSections){timeSections&&Array.isArray(timeSections)&&(this._timeSections=timeSections);},_proto.resize=function(width,height){this._resize(width,height);},_proto._resize=function(width,height){var cssText="";/^\d+(\.\d+)?$/.test(width+"")?cssText+="width: "+width+"px;":width&&(cssText+="width: "+width+";"),/^\d+(\.\d+)?$/.test(height+"")?cssText+="height: "+height+"px;":height&&(cssText+="height: "+height+";"),this.$container&&(this.$container.style.cssText+=cssText),this._width=Math.floor(this.$container.clientWidth),this._height=Math.floor(this.$container.clientHeight);},_proto.setTimeWidth=function(timeWidth){[0,1,2,3,4,5].includes(timeWidth)&&(this._timeWidth=timeWidth);},_proto.destroy=function(){this._current=null,null==this.options.onDestroy||this.options.onDestroy.call(this.options),this._timeSections=[],this._readOnly=false,this._destroyed=true;},_create_class$2(BaseTimeLine,[{key:"current",get:function(){return this._current},set:function(current){this._current=current;}},{key:"readOnly",get:function(){return this._readOnly},set:function(readOnly){this._readOnly!==readOnly&&(this._readOnly=readOnly,this.$container.style.cursor=readOnly?"not-allowed":"pointer");}},{key:"timeSections",get:function(){return this._timeSections}},{key:"width",get:function(){return this._width}},{key:"height",get:function(){return this._height}},{key:"timeWidth",get:function(){return this._timeWidth}}]),BaseTimeLine}();BaseTimeLine.LOCALES=_$TIMELINE_LOCALES$_;var TimeLineUtil=function(){function TimeLineUtil(){}return TimeLineUtil.timeToSecond=function(time){var e=time.split(":");return 60*Number(e[0])*60+60*Number(e[1])+(Number(e[2])||0)},TimeLineUtil.minuteToTime=function(minute){var hour=Math.floor(minute/60),m=minute%60;return (hour>9?hour:"0"+hour)+":"+(m>9?m:"0"+m)},TimeLineUtil.timeToMinute=function(time){var e=time.split(":");return 60*Number(e[0])+Number(e[1])},TimeLineUtil.tranTimeToString=function(start,end){var _DateTime_toDate,_DateTime_toDate1,secondNum=Math.floor((null==(_DateTime_toDate=utilsTools.DateTime.toDate(end))?void 0:_DateTime_toDate.getTime())-(null==(_DateTime_toDate1=utilsTools.DateTime.toDate(start))?void 0:_DateTime_toDate1.getTime()))/1e3,second=secondNum%60,minute=Math.floor(secondNum/60);return (minute>0?utilsTools.DateTime.fillZero(minute)+"'":"0'")+utilsTools.DateTime.fillZero(second)+"''"},TimeLineUtil}(),_$TIMELINE_ICONS$__tip='<svg viewBox="0 0 57 24" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="tip">\n        <path class="ez-time-line-icon-tip" fill-rule="evenodd" d="m4,0l44,0c2.2091,0 4,1.7909 4,4l0,3.8218l4.9399,3.3572c0.5839,0.3968 0.5839,1.2574 0,1.6542l-4.9399,3.3572l0,3.8096c0,2.2091 -1.7909,4 -4,4l-44,0c-2.2091,0 -4,-1.7909 -4,-4l0,-16c0,-2.2091 1.7909,-4 4,-4z"/>\n  </svg>',_$TIMELINE_ICONS$__plus='\n  <svg viewBox="0 0 16 16" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="plus">\n    <path d="M0 0L10.6667 0" stroke="rgb(44,44,44)" stroke-linecap="round" stroke-width="1.5" transform="matrix(0,1,-1,0,8,2.66663)"/>\n    <path d="M2.66669 8L13.3334 8" stroke="rgb(44,44,44)" stroke-linecap="round" stroke-width="1.5"/>\n  </svg>\n  ',_$TIMELINE_ICONS$__minus='\n    <svg viewBox="0 0 16 16" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="minus">\n      <path d="M2.66669 8L13.3334 8" stroke="rgb(44,44,44)" stroke-linecap="round" stroke-width="1.5"/>\n    </svg>\n  ',_$TIMELINE_ICONS$__close='\n    <svg viewBox="0 0 24 24" fill="none" width="1em" height="1em" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="close">\n\t    <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,0.707114,-0.707114,0.707099,6.34277,6.34326)" />\n\t\t  <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,-0.707114,0.707114,0.707099,6.34277,17.6567)" />\n    </svg>\n  ',_$TIMELINE_ICONS$__pause='<svg viewBox="0 0 20 20" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="pause">\n\t\t  <path d="M9.43914 2.47881L13.4688 8.4912C14.3594 9.81998 13.4071 11.6047 11.8074 11.6047L3.74811 11.6047C2.14849 11.6047 1.19616 9.81998 2.08675 8.4912L6.11641 2.47881C6.90863 1.2968 8.64693 1.2968 9.43914 2.47881Z" fill-rule="evenodd" transform="matrix(0,1,-1,0,16.5781,2.22229)" />\n    </svg>\n  ',_$TIMELINE_ICONS$__picture='\n    <svg viewBox="0 0 19.1613 19.4583" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="picture">\n        <path xmlns="http://www.w3.org/2000/svg" id="形状结合" d="M15.3276 2.63477L3.83173 2.63477C2.70848 2.63477 1.79541 3.55027 1.79541 4.68419L1.79541 14.7737C1.79541 15.9076 2.70848 16.8231 3.83173 16.8231L15.3276 16.8231C16.4504 16.8231 17.364 15.9074 17.364 14.7737L17.364 4.68419C17.364 3.55027 16.4509 2.63477 15.3276 2.63477ZM3.83247 3.851L15.3284 3.851C15.7936 3.851 16.1671 4.22551 16.1671 4.68429L16.1671 14.7738C16.1671 15.2323 15.7932 15.6071 15.3284 15.6071L3.83247 15.6071C3.36725 15.6071 2.99373 15.2326 2.99373 14.7738L2.99373 12.2622L6.7356 9.56381L6.78139 9.53916C6.84532 9.51493 6.91856 9.52524 6.9742 9.56947L13.2644 14.5698L13.3381 14.62C13.5918 14.7666 13.9197 14.7063 14.105 14.4658C14.3089 14.2014 14.263 13.8192 14.0026 13.6122L7.71239 8.61184L7.60526 8.5346C7.12945 8.22451 6.51026 8.23473 6.04222 8.57224L2.99373 10.7706L2.99373 4.68429C2.99373 4.22551 3.36725 3.851 3.83247 3.851ZM10.5794 7.29679C10.5794 6.06542 11.5624 5.0672 12.7749 5.0672C13.9875 5.0672 14.9705 6.06542 14.9705 7.29679C14.9705 8.52817 13.9875 9.52639 12.7749 9.52639C11.5624 9.52639 10.5794 8.52817 10.5794 7.29679ZM13.7722 7.2967C13.7722 6.73699 13.3254 6.28325 12.7742 6.28325C12.223 6.28325 11.7762 6.73699 11.7762 7.2967C11.7762 7.85642 12.223 8.31015 12.7742 8.31015C13.3254 8.31015 13.7722 7.85642 13.7722 7.2967Z" fill-rule="evenodd"/>\n    </svg>\n    ',TIME_WIDTH=[[1,10,10,"单位 1秒"],[60,20,5,"单位 1分钟"],[600,20,6,"单位 10分钟"],[3600,30,6,"单位 1小时"],[14400,40,2,"单位 4小时"],[43200,80,2,"单位 12小时"]],MOBILE_TIME_WIDTH=[[1,10,10,"单位 1分钟"],[10,20,5,"单位 10分钟"],[30,20,6,"单位 30分钟"],[60,30,6,"单位 1小时"],[120,40,2,"单位 2小时"],[240,80,2,"单位 4小时"]],__$IMAGE_LAZY_LOADER_DEFAULT_OPTIONS$__={targets:[],root:null,rootMargin:"0px",threshold:.1,loadingClass:"ez-lazy-image-loading",loadedClass:"ez-lazy-image-loaded",loadedErrorClass:"ez-lazy-image-error",onLoadError:function(){}},ImageLazyLoader=function(){function ImageLazyLoader(options){ void 0===options&&(options={}),this.options=Object.assign({},__$IMAGE_LAZY_LOADER_DEFAULT_OPTIONS$__,options),this._observer=null,this._init();}var _proto=ImageLazyLoader.prototype;return _proto._init=function(){var _this=this;ImageLazyLoader.isSupported&&(this._observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){var _this__observer;entry.isIntersecting&&(_this._loadImage(entry.target),null==(_this__observer=_this._observer)||_this__observer.unobserve(entry.target));});},this.options)),this.addImages(this.options.targets);},_proto._loadImage=function(img){var _img_classList,_img_classList1,_img_classList2,_this=this;if(img&&!(null==(_img_classList=img.classList)?void 0:_img_classList.contains(this.options.loadingClass))&&!(null==(_img_classList1=img.classList)?void 0:_img_classList1.contains(this.options.loadedClass))&&!(null==(_img_classList2=img.classList)?void 0:_img_classList2.contains(this.options.loadedErrorClass))&&img.hasAttribute("data-src")){var _this1=this;img.classList.add(this.options.loadingClass);var tempImg=new Image;tempImg.onload=function(){img.src=img.dataset.src,img.classList.remove(_this.options.loadingClass),img.classList.add(_this.options.loadedClass),img.dispatchEvent(new Event("lazyloaded"));},tempImg.onerror=function(e){img.classList.remove(_this.options.loadingClass),img.classList.add(_this.options.loadedErrorClass),null==_this1.options.onLoadError||_this1.options.onLoadError.call(_this1.options,img);},tempImg.src=img.dataset.src;}},_proto.addImages=function(targets){var _this=this;(null==targets?void 0:targets.length)&&targets.forEach(function(target){var _this__observer;(null==target?void 0:target.hasAttribute("data-src"))&&(ImageLazyLoader.isSupported&&_this._observer?null==(_this__observer=_this._observer)||_this__observer.observe(target):_this._loadImage(target));});},_proto.destroy=function(){this._observer&&(this._observer.disconnect(),this._observer=null);},ImageLazyLoader}();function _create_class$1(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends$1(){return _extends$1=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$1.apply(this,arguments)}function _set_prototype_of$1(o,p){return _set_prototype_of$1=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1(o,p)}ImageLazyLoader.isSupported="IntersectionObserver"in window;var _$MOBILE_TIME_LINE_DEFAULT_OPTIONS$_=Object.assign({},_$BASE_TIME_LINE_DEFAULT_OPTIONS$_,{height:400,width:"100%",timeWidth:0,readOnly:false,timePointColor:"#648FFC",timeTextColor:"#666666",timeScaleColor:"transparent",timeSectionColor:"#369FFF",timeAxisBgColor:"#BDCDFF",currentTimeBgColor:"#648FFC",currentTimeColor:"#FFFFFF",showTimeWidthBtn:true,showCoverFold:true}),MobileTimeLine=function(BaseTimeLine){function MobileTimeLine(container,options){var _this;return (_this=BaseTimeLine.call(this,container,deepmerge(_$MOBILE_TIME_LINE_DEFAULT_OPTIONS$_,options,{clone:false}))||this)._isTouchStart=false,_this._dragScroll=null,_this._moveStartX=0,_this._moveStartY=0,_this._imageLazyLoader=null,_this._imageLazyLoaderPicker=null,_this.state={start:"00:00:00",end:"24:00:00",current:null,timeArr:[],availTimeLine:[],index:0},_this._onImageError=_this._onImageError.bind(_this),_this._plusClick=_this._plusClick.bind(_this),_this._minusClick=_this._minusClick.bind(_this),_this._onPickerClose=_this._onPickerClose.bind(_this),_this._onClickItem=_this._onClickItem.bind(_this),_this._onClickCoverFold=_this._onClickCoverFold.bind(_this),_this._imageLazyLoader=new ImageLazyLoader({root:_this.$container,onLoadError:function(img){null==_this._onImageError||_this._onImageError.call(_this,img);}}),_this._render(),_this.options.timeSections&&Array.isArray(_this.options.timeSections)&&_this.updateTimeSections(_this.options.timeSections),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1(subClass,superClass);}(MobileTimeLine,BaseTimeLine);var _proto=MobileTimeLine.prototype;return _proto.setReadOnly=function(readOnly){BaseTimeLine.prototype.setReadOnly.call(this,readOnly),this._dragScroll&&(this._dragScroll.readonly=readOnly);},_proto.setTimeWidth=function(timeWidth){MOBILE_TIME_WIDTH[timeWidth]&&(BaseTimeLine.prototype.setTimeWidth.call(this,timeWidth),this._matchTimeDot());},_proto.updateTimeSections=function(timeSections,defaultIndex){BaseTimeLine.prototype.updateTimeSections.call(this,timeSections);var list=timeSections.map(function(record){return _extends$1({},record,{startTime:utilsTools.DateTime.format(record.startTime,"HH:mm:ss"),endTime:utilsTools.DateTime.format(record.endTime,"HH:mm:ss")})});if(list.length>0){ void 0===defaultIndex&&(defaultIndex=list.length-1);var current=this.state.current;this._setState({availTimeLine:list,start:list[defaultIndex].startTime,end:list[defaultIndex].endTime,current:null===current?list[defaultIndex].startTime:current}),this._matchTimeDot();}else this._setState({availTimeLine:[],current:utilsTools.DateTime.format(this.current||(new Date).getTime(),"HH:mm:ss")}),this._matchTimeDot();},_proto.update=function(time){var _this__dragScroll;time&&!(null==(_this__dragScroll=this._dragScroll)?void 0:_this__dragScroll.isDragging)&&(this._setState({current:utilsTools.DateTime.format(time,"HH:mm:ss")}),this._currentOffsetH());},_proto.destroy=function(){var _this__dragScroll;if(this._scrollTimer&&(clearInterval(this._scrollTimer),this._scrollTimer=null),this._$currentTime)try{this.$container.removeChild(this._$currentTime),this._$currentTime=null;}catch(error){}if(this._$itemContainer&&this._$itemList)try{this._$itemContainer.removeChild(this._$itemList),this._$itemList=null;}catch(error){}if(this._$itemContainer)try{this.$container.removeChild(this._$itemContainer),this._$itemContainer=null;}catch(error){}if(this._$op)try{this.$container.removeChild(this._$op),this._$op=null;}catch(error){}this._picker&&(this._picker.destroy(),this._picker=null),this._imageLazyLoader&&(this._imageLazyLoader.destroy(),this._imageLazyLoader=null),this._imageLazyLoaderPicker&&(this._imageLazyLoaderPicker.destroy(),this._imageLazyLoaderPicker=null),this._removeEventListener(),null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.destroy(),this._dragScroll=null,BaseTimeLine.prototype.destroy.call(this);},_proto._setState=function(obj){var _this=this;Object.keys(obj).forEach(function(key){var _this__dragScroll,_this_timeSections_;"current"===key&&obj[key]?(_this._setCurrentDOM(obj[key]),_this.state.current===obj[key]||(null==(_this__dragScroll=_this._dragScroll)?void 0:_this__dragScroll.isDragging)||(_this.state[key]=obj[key],_this.current=new Date(utilsTools.DateTime.format((null==(_this_timeSections_=_this.timeSections[0])?void 0:_this_timeSections_.endTime)||(new Date).getTime(),"YYYY-MM-DD")+"T"+obj[key]),null==_this.options.onChange||_this.options.onChange.call(_this.options,_this.current))):_this.state[key]=obj[key];});},_proto._setCurrentDOM=function(time){this._$currentTime&&(this._$currentTime.querySelector(".ez-time-line-current-value").innerHTML=time);},_proto._matchTimeDot=function(){for(var scaleWidth=this._scaleWidth,timeArr=[],minute=TimeLineUtil.timeToMinute("24:00:00"),i=minute=Math.floor(minute/scaleWidth)*scaleWidth;i>=0;){var marginTop=0,marginBottom=0;i==minute&&(marginTop=70),0==i&&(marginBottom=this.$container.clientHeight-70);var time=TimeLineUtil.minuteToTime(i);timeArr.push({id:i,current:time,label:"a"+i,marginTop:marginTop,marginBottom:marginBottom,recArr:[],coverArr:this._filterTimeSectionsByTime(time)}),i-=scaleWidth;}this._setState({timeArr:timeArr}),this._matchRecTimeDot();},_proto._matchRecTimeDot=function(){var _this_state=this.state,availTimeLine=_this_state.availTimeLine,timeArr=_this_state.timeArr,scaleWidth=this._scaleWidth,len=availTimeLine.length;if(0===len)for(var j=0;j<timeArr.length;j++)timeArr[j].recArr=[];else {for(var k=0;k<timeArr.length;k++)timeArr[k].recArr=[];for(var i=0;i<len;i++){var stAvailPercent,etAvailPercent,temp=availTimeLine[i],st=TimeLineUtil.timeToSecond(temp.startTime),et=TimeLineUtil.timeToSecond(temp.endTime),stMinute=Math.floor(st/(60*scaleWidth))*scaleWidth;stAvailPercent=(st-60*stMinute)/scaleWidth;var etMinute=Math.floor(et/(60*scaleWidth))*scaleWidth;etAvailPercent=(et-60*etMinute)/scaleWidth;for(var j1=0;j1<timeArr.length;j1++)if(timeArr[j1].id==stMinute&&timeArr[j1].id==etMinute){var height=etAvailPercent-stAvailPercent,top=60-etAvailPercent;timeArr[j1].recArr.push({height:height,top:top});}else timeArr[j1].id==stMinute?timeArr[j1].recArr.push({height:60-stAvailPercent,top:0}):timeArr[j1].id==etMinute?timeArr[j1].recArr.push({height:etAvailPercent,top:60-etAvailPercent}):timeArr[j1].id>stMinute&&timeArr[j1].id<etMinute&&timeArr[j1].recArr.push({height:60,top:0});}}this._setState({timeArr:timeArr}),this._renderDateLine();},_proto._renderDateLine=function(){var _this=this,timeArr=this.state.timeArr,container=this._$itemList;container.innerHTML="",timeArr.forEach(function(item,index){var _this__imageLazyLoader,timeItemDOM=document.createElement("div");timeItemDOM.setAttribute("class","ez-time-line-time-scale-area"),item.marginTop&&(timeItemDOM.style.cssText+="margin-top: "+item.marginTop+"px;"),item.marginBottom&&(timeItemDOM.style.cssText+="margin-bottom: "+item.marginBottom+"px;"),timeItemDOM.style.cssText+="border-right-color: "+(_this.options.timeAxisBgColor||"rgba(189, 205, 255, 1)")+";",timeItemDOM.setAttribute("data-time",item.current),timeItemDOM.setAttribute("data-index",index+""),document.createElement("div").setAttribute("class","ez-time-line-scale");var timeItemHtml="";item.coverArr.length&&_this.options.showCoverFold&&(timeItemHtml+='\n            <div class="ez-time-line-time-cover-fold '+(item.coverArr.length>1?"ez-time-line-time-cover-fold-multiple":"")+'"\n            data-start="'+item.current+'">\n              '+(item.coverArr.length>1?'<div class="ez-time-line-cover-fold-placeholder" style="color: #FFF"></div>':"")+'\n              <div class="ez-time-line-time-cover-fold-img">\n                <img data-src="'+_this._setImageScr(item.coverArr[0].coverPic)+'" class="ez-time-line-img"/>\n                <span class="ez-time-line-time-cover-fold-len">\n                '+(item.coverArr.length>1?_this.i18n.t("foldTitle",{len:item.coverArr.length,unit:"videos"}):""+utilsTools.DateTime.format(item.coverArr[0].startTime,"HH:mm"))+"\n                </span>\n                "+(1===item.coverArr.length?'<span class="ez-time-line-time-cover-fold-time">'+TimeLineUtil.tranTimeToString(item.coverArr[0].startTime,item.coverArr[0].endTime)+"</span>":"")+'\n                <span class="ez-time-line-time-cover-fold-pause">'+_$TIMELINE_ICONS$__pause+"</span>\n              </div>\n            </div>"),item.recArr.forEach(function(i){timeItemHtml+='<div class="ez-time-line-time-unavail"\n                              style="height: '+i.height+"px;background-color:"+(_this.options.timeSectionColor||"#369FFF")+"; top: "+i.top+'px">\n                        </div>';}),timeItemHtml+="<div id="+item.label+' class="ez-time-line-time-label" style="color: '+(_this.options.timeTextColor||"#666")+'">'+item.current+"</div>",timeItemDOM.innerHTML=timeItemHtml,container.appendChild(timeItemDOM),item.coverArr.length&&_this.options.showCoverFold&&(null==(_this__imageLazyLoader=_this._imageLazyLoader)||_this__imageLazyLoader.addImages(container.querySelectorAll("img.ez-time-line-img")||[]));}),this._currentOffsetH();},_proto._currentOffsetH=function(){var current=this.state.current;if(current){var _this__dragScroll,y=(86400-TimeLineUtil.timeToSecond(current)||0)/this._scaleWidth;null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.scrollToY(y+60,false);}},_proto._render=function(){var _this=this;if(this._$currentTime=document.createElement("div"),this._$currentTime.classList.add("ez-time-line-current"),this._$currentTime.innerHTML='<div class="ez-time-line-current-content" style="color: '+(this.options.currentTimeBgColor||"#648FFC")+'">\n      <span class="ez-time-line-current-tip">'+_$TIMELINE_ICONS$__tip+'</span>\n      <span class="ez-time-line-current-tip-line" style="background-color: '+(this.options.timePointColor||"#648FFC")+';"></span>\n      <div class="ez-time-line-current-value" style="color: '+(this.options.currentTimeColor||"#FFFFFF")+'">00:00:00</div>\n    </div>',this.$container.appendChild(this._$currentTime),this._$itemContainer=document.createElement("div"),this._$itemContainer.classList.add("ez-time-line-container"),this.$container.appendChild(this._$itemContainer),this._dragScroll=new DragScroll(this._$itemContainer,{hideScrollbar:true,onChange:function(state){var result=_this._offsetYToTime(state.y);result[1]!==_this.state.current&&_this._setCurrentDOM(result[0]>=86400?"23:59:59":result[1]);},onDragStart:function(e){_this._moveStartX=e.clientX,_this._moveStartY=e.clientY,null==_this.options.onDragStart||_this.options.onDragStart.call(_this.options,_this.state.current);},onDragging:function(){null==_this.options.onDragging||_this.options.onDragging.call(_this.options,_this.state.current);},onDragEnd:function(){var _this__dragScroll,result=_this._offsetYToTime(null==(_this__dragScroll=_this._dragScroll)?void 0:_this__dragScroll.currentY);result[1]!==_this.state.current&&_this._setState({current:result[0]>=86400?"23:59:59":result[1]}),null==_this.options.onDragEnd||_this.options.onDragEnd.call(_this.options,_this.state.current);}}),/\d/.test(this.options.height))this._$itemContainer.style.cssText+="height: "+this.options.height+"px";else if("string"==typeof this.options.height)this._$itemContainer.style.cssText+="height: "+this.options.height;else {var height=this.$container.clientHeight;this._$itemContainer.style.cssText+="height: "+height+"px";}this._$itemList=document.createElement("div"),this._$itemList.classList.add("ez-time-line-item"),this._dragScroll.$content.appendChild(this._$itemList),this.options.showTimeWidthBtn&&(this._$op=document.createElement("div"),this._$op.classList.add("ez-time-line-op"),this._$op.innerHTML='<span class="ez-time-line-op-wrapper"><span class="ez-time-line-icon-plus">'+_$TIMELINE_ICONS$__plus+'</span> <span class="ez-time-line-icon-minus">'+_$TIMELINE_ICONS$__minus+"</span></span>",this.$container.appendChild(this._$op)),this.options.showCoverFold&&(this._picker=new Picker(null,{isMobile:true,wrapClassName:"ez-time-line-picker",onOpenChange:function(isOpen){var _this_options_onPickerOpenChange,_this_options;null==(_this_options=_this.options)||null==(_this_options_onPickerOpenChange=_this_options.onPickerOpenChange)||_this_options_onPickerOpenChange.call(_this_options,isOpen);}}),this._imageLazyLoaderPicker=new ImageLazyLoader({root:this._picker.$body,onLoadError:function(img){null==_this._onImageError||_this._onImageError.call(_this,img);}})),this._addEventListener();},_proto._addEventListener=function(){var _this__$op_querySelector,_this__$op_querySelector1;this.options.showTimeWidthBtn&&this._$op&&(null==(_this__$op_querySelector=this._$op.querySelector(".ez-time-line-icon-plus"))||_this__$op_querySelector.addEventListener("click",this._plusClick,false),null==(_this__$op_querySelector1=this._$op.querySelector(".ez-time-line-icon-minus"))||_this__$op_querySelector1.addEventListener("click",this._minusClick,false));this._matchTimeDot(),this._picker&&(this._delegatePickerClose=delegate(this._picker.$body,".ez-time-line-picker-close","click",this._onPickerClose,false),this._delegateItemContent=delegate(this._picker.$body,".ez-time-line-picker-item-content","click",this._onClickItem,false),this._delegateCoverFold=delegate(this._$itemList,".ez-time-line-time-cover-fold","click",this._onClickCoverFold,false));},_proto._removeEventListener=function(){var _this__$op_querySelector,_this__$op_querySelector1,_this__picker_$body_querySelector,_this__picker_$body;this.options.showTimeWidthBtn&&this._$op&&(null==(_this__$op_querySelector=this._$op.querySelector(".ez-time-line-icon-plus"))||_this__$op_querySelector.removeEventListener("click",this._plusClick),null==(_this__$op_querySelector1=this._$op.querySelector(".ez-time-line-icon-minus"))||_this__$op_querySelector1.removeEventListener("click",this._minusClick));this._picker&&(null==(_this__picker_$body=this._picker.$body)||null==(_this__picker_$body_querySelector=_this__picker_$body.querySelector(".ez-time-line-picker-close"))||_this__picker_$body_querySelector.removeEventListener("click",this._onPickerClose),this._delegateItemContent&&(this._delegateItemContent.forEach(function(delegation){delegation.destroy();}),this._delegateItemContent=null),this._delegatePickerClose&&(this._delegatePickerClose.forEach(function(delegation){delegation.destroy();}),this._delegatePickerClose=null),this._delegateCoverFold&&(this._delegateCoverFold.forEach(function(delegation){delegation.destroy();}),this._delegateCoverFold=null));},_proto._plusClick=function(){var timeWidth=this.timeWidth+1;timeWidth>0&&timeWidth<MOBILE_TIME_WIDTH.length&&this.setTimeWidth(timeWidth);},_proto._minusClick=function(){var timeWidth=this.timeWidth-1;timeWidth>=0&&timeWidth<MOBILE_TIME_WIDTH.length&&this.setTimeWidth(Math.floor(timeWidth));},_proto._timeSectionsToGroupsByHour=function(list){var obj={};return list.forEach(function(item,index){var hour=utilsTools.DateTime.format(item.startTime,"HH");obj[+hour]?obj[+hour].push(_extends$1({},item,{_index:index})):obj[+hour]=[_extends$1({},item,{_index:index})];}),obj},_proto._filterTimeSectionsByTime=function(start){if(!start)return [];var startSecond=TimeLineUtil.timeToSecond(start+":00"),endSecond=TimeLineUtil.timeToSecond(start+":00")+60*this._scaleWidth;return this.timeSections.filter(function(item){var _$start=TimeLineUtil.timeToSecond(utilsTools.DateTime.format(item.startTime,"HH:mm:ss"));return _$start>=startSecond&&_$start<endSecond})},_proto._renderPickerContent=function(start){var _this__picker_innerHTML,_this__picker,_this__picker1,_this__picker2,_this__imageLazyLoaderPicker,_this=this,list=this._filterTimeSectionsByTime(start),hourGroups=this._timeSectionsToGroupsByHour(list);(null==(_this__picker=this._picker)||null==(_this__picker_innerHTML=_this__picker.innerHTML)||_this__picker_innerHTML.call(_this__picker,'<div class="ez-time-line-picker-container">\n        <div class="ez-time-line-picker-header">\n          <span class="ez-time-line-picker-close">'+_$TIMELINE_ICONS$__close+"</span>\n          "+this.i18n.t("title",{len:list.length,unit:list.length>1?"videos":"video"})+'\n        </div>\n        <div class="ez-time-line-picker-content">\n          <div class="ez-time-line-picker-list">\n             '+Object.keys(hourGroups).reverse().map(function(key){return '<div class="ez-time-line-picker-item">\n                  <div class="ez-time-line-picker-item-title">'+key+':00</div>\n                  <div class="ez-time-line-picker-item-list">\n                    '+hourGroups[key].reverse().map(function(item){return '<div class="ez-time-line-picker-item-content"\n                                      data-start="'+utilsTools.DateTime.format(item.startTime,"YYYYMMDDTHHmmssZ")+'"\n                                      data-end="'+utilsTools.DateTime.format(item.endTime,"YYYYMMDDTHHmmssZ")+'"\n                                      data-index="'+item._index+'">\n                                    <span class="ez-time-line-picker-item-time">'+utilsTools.DateTime.format(item.startTime,"HH:mm")+'</span>\n                                    <span class="ez-time-line-picker-item-duration">\n                                      '+TimeLineUtil.tranTimeToString(item.startTime,item.endTime)+'\n                                    </span>\n                                  <img class="ez-time-line-picker-item-cover" data-src="'+_this._setImageScr(item.coverPic)+'"/>\n                                </div>'}).join("")+"\n                  </div>\n              </div>"}).join("")+"\n          </div>\n          </div>\n        </div>\n      </div>"),null==(_this__picker1=this._picker)?void 0:_this__picker1.$body)&&(null==(_this__imageLazyLoaderPicker=this._imageLazyLoaderPicker)||_this__imageLazyLoaderPicker.addImages((null==(_this__picker2=this._picker)?void 0:_this__picker2.$body.querySelectorAll("img"))||[]));},_proto._onImageError=function(img){if(!img.hasAttribute("data-error")){var _img_parentNode,placeholder=document.createElement("div");placeholder.classList.add("ez-time-line-item-cover-placeholder"),placeholder.innerHTML=""+_$TIMELINE_ICONS$__picture,null==(_img_parentNode=img.parentNode)||_img_parentNode.appendChild(placeholder),img.setAttribute("data-error","true"),img.remove();}},_proto._onPickerClose=function(){this._picker&&(this._picker.open=false);},_proto._onClickItem=function(e){var _e_delegateTarget_getAttribute,_e_delegateTarget,index=null==(_e_delegateTarget=e.delegateTarget)||null==(_e_delegateTarget_getAttribute=_e_delegateTarget.getAttribute)?void 0:_e_delegateTarget_getAttribute.call(_e_delegateTarget,"data-index");this._picker&&(this._picker.open=false),null==this.options.onPickerSelect||this.options.onPickerSelect.call(this.options,this.timeSections[+index]);},_proto._onClickCoverFold=function(e){var _e_delegateTarget_parentElement_getAttribute,_e_delegateTarget_parentElement,_e_delegateTarget;e.preventDefault();var time=null==(_e_delegateTarget=e.delegateTarget)||null==(_e_delegateTarget_parentElement=_e_delegateTarget.parentElement)||null==(_e_delegateTarget_parentElement_getAttribute=_e_delegateTarget_parentElement.getAttribute)?void 0:_e_delegateTarget_parentElement_getAttribute.call(_e_delegateTarget_parentElement,"data-time"),moveX=Math.abs(this._moveStartX-e.clientX),moveY=Math.abs(this._moveStartY-e.clientY);this._picker&&time&&!(moveX>=1||moveY>=1)&&(this._renderPickerContent(time),this._picker.open=true);},_proto._setImageScr=function(src){if(src){var query="x=200&"+(this.options.coverQuery||"");return src+(src.includes("?")?"&":"?")+query}return ""},_proto._offsetYToTime=function(offsetY){var _this__dragScroll,y=offsetY;offsetY<60&&(y=60,null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.scrollToY(y));var second=86400-Math.floor((y-60)*this._scaleWidth);return [second,utilsTools.DateTime.fillZero(Math.floor(second/3600))+":"+utilsTools.DateTime.fillZero(Math.floor(second%3600/60))+":"+utilsTools.DateTime.fillZero(second%60)]},_create_class$1(MobileTimeLine,[{key:"_scaleWidth",get:function(){return (MOBILE_TIME_WIDTH[this.timeWidth]||MOBILE_TIME_WIDTH[0])[0]}}]),MobileTimeLine}(BaseTimeLine);function isOverlap(a_start,a_end,b_start,b_end){return Math.max(a_start,b_start)<=Math.min(a_end,b_end)}function _create_class(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends(){return _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends.apply(this,arguments)}function _set_prototype_of(o,p){return _set_prototype_of=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of(o,p)}var _$TIMELINE_DEFAULT_OPTIONS$_={height:36,dpr:window.devicePixelRatio||2,scaleOffsetTop:4,showYearMonthDay:true},TimeLine=function(BaseTimeLine){function TimeLine(container,options){var _this;return (_this=BaseTimeLine.call(this,container,deepmerge(_$TIMELINE_DEFAULT_OPTIONS$_,options,{clone:true}))||this)._$canvas=null,_this._ctx=null,_this._timeWidthArray=TIME_WIDTH[0],_this._centerPositionX=0,_this._isMouseDown=false,_this._mousePosition=0,_this._oldTime=null,_this._isOver=false,_this._moved=false,_this._isCtrlKeyDown=false,_this._lastTouchDist=0,_this.$container=container,_this._mousemoveFun=_this._mousemoveFun.bind(_this),_this._mouseoverFun=_this._mouseoverFun.bind(_this),_this._mouseleaveFun=_this._mouseleaveFun.bind(_this),_this._mousedownFun=_this._mousedownFun.bind(_this),_this._mouseUpFun=_this._mouseUpFun.bind(_this),_this._mousewheelFun=_this._mousewheelFun.bind(_this),_this._touchstartFun=_this._touchstartFun.bind(_this),_this._touchmoveFun=_this._touchmoveFun.bind(_this),_this._touchendFun=_this._touchendFun.bind(_this),_this._ctrlKeyDownFun=_this._ctrlKeyDownFun.bind(_this),_this._ctrlKeyUpFun=_this._ctrlKeyUpFun.bind(_this),_this._init(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of(subClass,superClass);}(TimeLine,BaseTimeLine);var _proto=TimeLine.prototype;return _proto._init=function(){this._$canvas=document.createElement("canvas"),this._ctx=this._$canvas.getContext("2d"),this.readOnly||(this._$canvas.style.cssText+="cursor: pointer;"),this.$container.appendChild(this._$canvas),this.resize(this.width,this.height),this._update({current:this.current,timeWidth:this.timeWidth,timeSections:this.timeSections}),this._addEventListener();},_proto.resize=function(width,height){BaseTimeLine.prototype.resize.call(this,width,height),this._$canvas&&width&&(this._$canvas.width=this.width*this.options.dpr,this._$canvas.style.cssText+="width: "+this.width+"px;"),this._$canvas&&height&&(this._$canvas.height=this.height*this.options.dpr,this._$canvas.style.cssText+="height: "+this.height+"px;"),this._draw();},_proto.setTimeWidth=function(timeWidth){this._update({timeWidth:timeWidth});},_proto.updateTimeSections=function(timeSections){this._update({timeSections:timeSections});},_proto.update=function(time){time&&!this._isMouseDown&&this._update({current:utilsTools.DateTime.toDate(time)});},_proto._update=function(options){var left,right,_this__$canvas;(void 0===options&&(options={}),(null==options?void 0:options.current)&&(left=options.current,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)&&(this.current=options.current),(null==options?void 0:options.timeSections)&&BaseTimeLine.prototype.updateTimeSections.call(this,this._mergeTimeSections(options.timeSections)),"number"==typeof(null==options?void 0:options.timeWidth)&&(null==options?void 0:options.timeWidth)<TIME_WIDTH.length&&(BaseTimeLine.prototype.setTimeWidth.call(this,options.timeWidth),this._timeWidthArray=TIME_WIDTH[Math.floor(this.timeWidth)]),"number"==typeof(null==options?void 0:options.timeWidth)&&this._timeWidthArray)&&(this._timeWidthArray[3]&&(null==(_this__$canvas=this._$canvas)||_this__$canvas.setAttribute("data-title",this._timeWidthArray[3])));this._draw();},_proto.setReadOnly=function(readOnly){BaseTimeLine.prototype.setReadOnly.call(this,readOnly),this._$canvas&&(this._$canvas.style.cssText+="cursor: "+(readOnly?"not-allowed":"pointer"));},_proto.destroy=function(){if(this._removeEventListener(),this._$canvas)try{this.$container.removeChild(this._$canvas),this._$canvas=null;}catch(e){}BaseTimeLine.prototype.destroy.call(this);},_proto._draw=function(){this._ctx&&(this._ctx.fillStyle=this.options.timeAxisBgColor,this._ctx.fillRect(0,0,this.width*this.options.dpr,this.height*this.options.dpr)),this._drawSections(),this._drawScale();},_proto._drawScale=function(){var lineWidth=1*this.options.dpr;this._centerPositionX=parseInt(this.width*this.options.dpr/2+"");for(var centerPosition={x:this.width*this.options.dpr/2,y:this.height*this.options.dpr},curScaleTime=Math.floor(this.current.getTime()/1e3),offsetSecond=(curScaleTime-Math.floor(utilsTools.DateTime.toDate(utilsTools.DateTime.format(new Date(1e3*curScaleTime),"YYYY-MM-DD")).getTime()/1e3))%this._timeWidthArray[0],padding=this.height*this.options.dpr/20,spacing=this._curScaleSpacing*this.options.dpr,rightLastScaleTimeX=Math.floor(this._centerPositionX+(this._timeWidthArray[0]-offsetSecond)/this._timeWidthArray[0]*spacing),leftLastScaleTime=curScaleTime-offsetSecond,rightLastScaleTime=leftLastScaleTime+this._timeWidthArray[0],x=rightLastScaleTimeX-spacing;x>0;x-=spacing){0===(leftLastScaleTime-Math.floor(utilsTools.DateTime.toDate(utilsTools.DateTime.format(new Date(1e3*leftLastScaleTime),"YYYY-MM-DD")).getTime()/1e3))%(this._timeWidthArray[0]*this._timeWidthArray[2])?(this._drawSolidLine(x,padding,x,padding+(this.options.scaleOffsetTop+4)*this.options.dpr,lineWidth),this._drawTextString(utilsTools.DateTime.format(new Date(1e3*leftLastScaleTime),"YYYY-MM-DD HH:mm:ss"),x,padding+(this.options.scaleOffsetTop+4+4)*this.options.dpr,"center")):this._drawSolidLine(x,padding,x,padding+this.options.scaleOffsetTop*this.options.dpr,lineWidth),leftLastScaleTime-=this._timeWidthArray[0];}for(var x1=rightLastScaleTimeX;x1<=this.width*this.options.dpr;x1+=spacing){0===(rightLastScaleTime-Math.floor(utilsTools.DateTime.toDate(utilsTools.DateTime.format(new Date(1e3*rightLastScaleTime),"YYYY-MM-DD")).getTime()/1e3))%(this._timeWidthArray[0]*this._timeWidthArray[2])?(this._drawSolidLine(x1,padding,x1,padding+(this.options.scaleOffsetTop+4)*this.options.dpr,lineWidth),this._drawTextString(utilsTools.DateTime.format(new Date(1e3*rightLastScaleTime),"YYYY-MM-DD HH:mm:ss"),x1,padding+(this.options.scaleOffsetTop+4+4)*this.options.dpr,"center")):this._drawSolidLine(x1,padding,x1,padding+this.options.scaleOffsetTop*this.options.dpr,lineWidth),rightLastScaleTime+=this._timeWidthArray[0];}this._drawSolidLine(centerPosition.x,0,centerPosition.x,centerPosition.y,lineWidth,this.options.timePointColor);},_proto._drawSolidLine=function(startX,startY,endX,endY,lineWidth,color){this._ctx&&(this._ctx.save(),this._ctx.strokeStyle=null!=color?color:this.options.timeScaleColor,this._ctx.lineWidth=lineWidth,this._ctx.beginPath(),this._ctx.moveTo(startX,startY),this._ctx.lineTo(endX,endY),this._ctx.stroke(),this._ctx.restore());},_proto._drawTextString=function(text,x,y,align){if(this._ctx){var timeTexts=text.split(" ");this._ctx.font=12*this.options.dpr*1+"px serif",this._ctx.fillStyle=this.options.timeTextColor,this._ctx.textAlign=align||"left",this._timeWidthArray[0]%60==0&&(timeTexts[1]=timeTexts[1].replace(/:00$/,"")),this._ctx.fillText(timeTexts[1],x,y+8*this.options.dpr),!this.options.showYearMonthDay||"00:00:00"!==timeTexts[1]&&"00:00"!==timeTexts[1]&&this._timeWidthArray[0]*this._timeWidthArray[2]!==86400||(this._ctx.textAlign=align||"left",this._ctx.fillText(timeTexts[0],x,y+18*this.options.dpr));}},_proto._drawSections=function(){for(var timeArr=this.timeSections||[],i=0;i<timeArr.length;i++){var position=this._findPosition(timeArr[i]);this._ctx&&isOverlap(0,this.width*this.options.dpr,position.x1,position.x2)&&(this._ctx.fillStyle=this.options.timeSectionColor,this._ctx.fillRect(position.x1,0,position.x2-position.x1,this.height*this.options.dpr));}},_proto._findPosition=function(item){var x1=(parseInt((item.startTime-this.current.getTime())/1e3+"",10)/this._timeWidthArray[0]*this._curScaleSpacing+this.width/2)*this.options.dpr;return {x1:x1,x2:x1+parseInt((item.endTime-item.startTime)/1e3+"",10)/this._timeWidthArray[0]*this._curScaleSpacing*this.options.dpr}},_proto._mergeTimeSections=function(timeSections){if(0===timeSections.length)return timeSections;for(var merged=[(timeSections=timeSections.map(function(item){return 10===(item.startTime+"").length&&(item.startTime=1e3*item.startTime),10===(item.endTime+"").length&&(item.endTime=1e3*item.endTime),_extends({},item,{startTime:item.startTime,endTime:item.endTime})}))[0]],i=1;i<timeSections.length;i++){var prev=merged[merged.length-1],curr=timeSections[i];prev.endTime>=curr.startTime?prev.endTime=Math.max(prev.endTime,curr.endTime):merged.push(curr);}return merged},_proto._addEventListener=function(){this._$canvas&&(this._$canvas.addEventListener("mousemove",this._mousemoveFun),this._$canvas.addEventListener("mouseover",this._mouseoverFun),this._$canvas.addEventListener("mouseleave",this._mouseleaveFun),this._$canvas.addEventListener("mousedown",this._mousedownFun),this._$canvas.addEventListener("mouseup",this._mouseUpFun),this._$canvas.addEventListener("wheel",this._mousewheelFun),this.$container.addEventListener("wheel",function(e){e.preventDefault();},{passive:false}),this._$canvas.addEventListener("keydown",this._ctrlKeyDownFun),this._$canvas.addEventListener("keyup",this._ctrlKeyUpFun),document.addEventListener("keydown",this._ctrlKeyDownFun,false),document.addEventListener("keyup",this._ctrlKeyUpFun,false),this._$canvas.addEventListener("touchstart",this._touchstartFun,{passive:false}),this._$canvas.addEventListener("touchmove",this._touchmoveFun,{passive:false}),this._$canvas.addEventListener("touchend",this._touchendFun,{passive:false}));},_proto._removeEventListener=function(){this._$canvas&&(this._$canvas.removeEventListener("mousemove",this._mousemoveFun),this._$canvas.removeEventListener("mouseover",this._mouseoverFun),this._$canvas.removeEventListener("mouseleave",this._mouseleaveFun),this._$canvas.removeEventListener("mousedown",this._mousedownFun),this._$canvas.removeEventListener("mouseup",this._mouseUpFun),this._$canvas.removeEventListener("wheel",this._mousewheelFun),this._$canvas.removeEventListener("keydown",this._ctrlKeyDownFun),this._$canvas.removeEventListener("keyup",this._ctrlKeyUpFun),document.removeEventListener("keydown",this._ctrlKeyDownFun),document.removeEventListener("keyup",this._ctrlKeyUpFun),this._$canvas.removeEventListener("touchstart",this._touchstartFun),this._$canvas.removeEventListener("touchmove",this._touchmoveFun),this._$canvas.removeEventListener("touchend",this._touchendFun));},_proto._mousedownFun=function(e){this.readOnly||(this._isMouseDown=true,this._mousePosition=e.pageX,this._oldTime=this.current,null==this.options.onDragStart||this.options.onDragStart.call(this.options,this.current));},_proto._mouseoverFun=function(){this.readOnly||(this._isOver=true);},_proto._mouseleaveFun=function(e){this.readOnly||(this._isOver=false,this._moveEndOrTouchEndFun(e));},_proto._mouseUpFun=function(e){this._moveEndOrTouchEndFun(e);},_proto._mousemoveFun=function(e){if(!this.readOnly)if(this._isMouseDown&&this._isOver)this._moveUpdateFun(e.pageX);else {var left=parseInt(this.$container.offsetLeft+"",10);this._mousePosition=e.pageX-left,this._update();}},_proto._mousewheelFun=function(e){e.preventDefault(),this.readOnly;},_proto._ctrlKeyDownFun=function(e){(e.ctrlKey||"Control"===e.key)&&(this._isCtrlKeyDown=true);},_proto._ctrlKeyUpFun=function(e){(e.ctrlKey||"Control"===e.key)&&(this._isCtrlKeyDown=false);},_proto._getTouchDistance=function(touches){var touch1=touches[0],touch2=touches[1],dx=touch2.clientX-touch1.clientX,dy=touch2.clientY-touch1.clientY;return Math.sqrt(dx*dx+dy*dy)},_proto._touchstartFun=function(e){if(!this.readOnly)if(this._oldTime=this.current,this._isOver=true,1===e.touches.length){var touch=e.touches[0];this._isMouseDown=true,this._mousePosition=touch.clientX;}else 2===e.touches.length&&(this._lastTouchDist=this._getTouchDistance(e.touches));},_proto._touchmoveFun=function(e){if(e.preventDefault(),e.stopPropagation(),!this.readOnly)if(1===e.touches.length){var touch=e.touches[0];this._moveUpdateFun(touch.clientX);}else if(2===e.touches.length){this._getTouchDistance(e.touches);this._lastTouchDist;}},_proto._touchendFun=function(e){this.readOnly||this._moveEndOrTouchEndFun(e);},_proto._moveEndOrTouchEndFun=function(e){e.preventDefault(),this.readOnly||this._isMouseDown&&(this._isMouseDown=false,this._moved&&(this._moved=false,this._update({current:this.current}),this._oldTime=this.current,null==this.options.onDragEnd||this.options.onDragEnd.call(this.options,this.current,this._isOver)),this._isOver&&Math.abs(this._mousePosition-(e.pageX||0))>5&&(null==this.options.onChange||this.options.onChange.call(this.options,this.current)),this._mousePosition=0,this._lastTouchDist=0);},_proto._moveUpdateFun=function(x){var mouseOffset=this._mousePosition-x;if(0!==mouseOffset){if(this._oldTime){var currentTime=this._oldTime.getTime()+1e3*parseInt(mouseOffset/this._curScaleSpacing*this._timeWidthArray[0]+"",10);this._update({current:new Date(currentTime)}),null==this.options.onDragging||this.options.onDragging.call(this.options,new Date(currentTime));}this._moved=true;}},_create_class(TimeLine,[{key:"_curScaleSpacing",get:function(){var _this__timeWidthArray,_this__timeWidthArray1;return Math.floor((null==(_this__timeWidthArray=this._timeWidthArray)?void 0:_this__timeWidthArray[1])-(null==(_this__timeWidthArray1=this._timeWidthArray)?void 0:_this__timeWidthArray1[1])*+(this.timeWidth%1/2).toFixed(2))}}]),TimeLine}(BaseTimeLine);TimeLine.TIME_WIDTH=TIME_WIDTH,dist$1.BaseTimeLine=BaseTimeLine,dist$1.MobileTimeLine=MobileTimeLine,dist$1.TimeLine=TimeLine;
+=======
+	var deepmerge=requireCjs(),I18n=requireDist$8(),Picker=requireDist$a(),utilsTools=requireDist$3(),DragScroll=requireDist$1(),delegate=requireDelegate(),_$TIMELINE_LOCALES$_={zh:{title:"包含{{len}}段录像",foldTitle:"{{len}}个录像"},en:{title:"Includes {{len}} {{unit}}",foldTitle:"{{len}} {{unit}}"}};function _create_class$2(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}var _$BASE_TIME_LINE_DEFAULT_OPTIONS$_={current:new Date,language:"zh",timeSections:[],readOnly:false,className:"",timeWidth:0,width:"100%",timePointColor:"#1890ff",timeTextColor:"#FFF",timeScaleColor:"#FFF",timeSectionColor:"rgba(24, 144, 255, 0.5)",timeAxisBgColor:"#000",onChange:function(){},onDragStart:function(){},onDragging:function(){},onDragEnd:function(){},onDestroy:function(){}},BaseTimeLine=function(){function BaseTimeLine(container,options){if(this._current=new Date,this._readOnly=false,this._width=0,this._height=0,this._destroyed=false,this._timeWidth=0,this._timeSections=[],this.$container=container,!container)throw new Error("container is required");var left,right;this.options=deepmerge(_$BASE_TIME_LINE_DEFAULT_OPTIONS$_,options,{clone:false}),this.options.timeSections&&Array.isArray(this.options.timeSections)&&(this._timeSections=this.options.timeSections),this.options.readOnly&&(this.readOnly=this.options.readOnly),this.options.className&&this.$container.classList.add(this.options.className),this.$container.style.position="relative",this.options.current&&(left=this.options.current,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)?this._current=this.options.current||new Date:this._current=new Date,this.i18n=new I18n(deepmerge(_$TIMELINE_LOCALES$_,this.options.locales||{},{clone:false}),{defaultLocale:this.options.language||"zh"}),this._timeWidth=this.options.timeWidth||0,this._resize(this.options.width||"100%",this.options.height);}var _proto=BaseTimeLine.prototype;return _proto.setReadOnly=function(readOnly){this.readOnly=readOnly;},_proto.update=function(current){this._current=current;},_proto.updateTimeSections=function(timeSections){timeSections&&Array.isArray(timeSections)&&(this._timeSections=timeSections);},_proto.resize=function(width,height){this._resize(width,height);},_proto._resize=function(width,height){var cssText="";/^\d+(\.\d+)?$/.test(width+"")?cssText+="width: "+width+"px;":width&&(cssText+="width: "+width+";"),/^\d+(\.\d+)?$/.test(height+"")?cssText+="height: "+height+"px;":height&&(cssText+="height: "+height+";"),this.$container&&(this.$container.style.cssText+=cssText),this._width=Math.floor(this.$container.clientWidth),this._height=Math.floor(this.$container.clientHeight);},_proto.setTimeWidth=function(timeWidth){[0,1,2,3,4,5].includes(timeWidth)&&(this._timeWidth=timeWidth);},_proto.destroy=function(){this._current=null,null==this.options.onDestroy||this.options.onDestroy.call(this.options),this._timeSections=[],this._readOnly=false,this._destroyed=true;},_create_class$2(BaseTimeLine,[{key:"current",get:function(){return this._current},set:function(current){this._current=current;}},{key:"readOnly",get:function(){return this._readOnly},set:function(readOnly){this._readOnly!==readOnly&&(this._readOnly=readOnly,this.$container.style.cursor=readOnly?"not-allowed":"pointer");}},{key:"timeSections",get:function(){return this._timeSections}},{key:"width",get:function(){return this._width}},{key:"height",get:function(){return this._height}},{key:"timeWidth",get:function(){return this._timeWidth}}]),BaseTimeLine}();BaseTimeLine.LOCALES=_$TIMELINE_LOCALES$_;var TimeLineUtil=function(){function TimeLineUtil(){}return TimeLineUtil.timeToSecond=function(time){var e=time.split(":");return 60*Number(e[0])*60+60*Number(e[1])+(Number(e[2])||0)},TimeLineUtil.minuteToTime=function(minute){var hour=Math.floor(minute/60),m=minute%60;return (hour>9?hour:"0"+hour)+":"+(m>9?m:"0"+m)},TimeLineUtil.timeToMinute=function(time){var e=time.split(":");return 60*Number(e[0])+Number(e[1])},TimeLineUtil.tranTimeToString=function(start,end){var _DateTime_toDate,_DateTime_toDate1,secondNum=Math.floor((null==(_DateTime_toDate=utilsTools.DateTime.toDate(end))?void 0:_DateTime_toDate.getTime())-(null==(_DateTime_toDate1=utilsTools.DateTime.toDate(start))?void 0:_DateTime_toDate1.getTime()))/1e3,second=secondNum%60,minute=Math.floor(secondNum/60);return (minute>0?utilsTools.DateTime.fillZero(minute)+"'":"0'")+utilsTools.DateTime.fillZero(second)+"''"},TimeLineUtil}(),_$TIMELINE_ICONS$__tip='<svg viewBox="0 0 57 24" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="tip">\n        <path class="ez-time-line-icon-tip" fill-rule="evenodd" d="m4,0l44,0c2.2091,0 4,1.7909 4,4l0,3.8218l4.9399,3.3572c0.5839,0.3968 0.5839,1.2574 0,1.6542l-4.9399,3.3572l0,3.8096c0,2.2091 -1.7909,4 -4,4l-44,0c-2.2091,0 -4,-1.7909 -4,-4l0,-16c0,-2.2091 1.7909,-4 4,-4z"/>\n  </svg>',_$TIMELINE_ICONS$__plus='\n  <svg viewBox="0 0 16 16" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="plus">\n    <path d="M0 0L10.6667 0" stroke="rgb(44,44,44)" stroke-linecap="round" stroke-width="1.5" transform="matrix(0,1,-1,0,8,2.66663)"/>\n    <path d="M2.66669 8L13.3334 8" stroke="rgb(44,44,44)" stroke-linecap="round" stroke-width="1.5"/>\n  </svg>\n  ',_$TIMELINE_ICONS$__minus='\n    <svg viewBox="0 0 16 16" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="minus">\n      <path d="M2.66669 8L13.3334 8" stroke="rgb(44,44,44)" stroke-linecap="round" stroke-width="1.5"/>\n    </svg>\n  ',_$TIMELINE_ICONS$__close='\n    <svg viewBox="0 0 24 24" fill="none" width="1em" height="1em" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="close">\n\t    <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,0.707114,-0.707114,0.707099,6.34277,6.34326)" />\n\t\t  <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,-0.707114,0.707114,0.707099,6.34277,17.6567)" />\n    </svg>\n  ',_$TIMELINE_ICONS$__pause='<svg viewBox="0 0 20 20" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="pause">\n\t\t  <path d="M9.43914 2.47881L13.4688 8.4912C14.3594 9.81998 13.4071 11.6047 11.8074 11.6047L3.74811 11.6047C2.14849 11.6047 1.19616 9.81998 2.08675 8.4912L6.11641 2.47881C6.90863 1.2968 8.64693 1.2968 9.43914 2.47881Z" fill-rule="evenodd" transform="matrix(0,1,-1,0,16.5781,2.22229)" />\n    </svg>\n  ',_$TIMELINE_ICONS$__picture='\n    <svg viewBox="0 0 19.1613 19.4583" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="picture">\n        <path xmlns="http://www.w3.org/2000/svg" id="形状结合" d="M15.3276 2.63477L3.83173 2.63477C2.70848 2.63477 1.79541 3.55027 1.79541 4.68419L1.79541 14.7737C1.79541 15.9076 2.70848 16.8231 3.83173 16.8231L15.3276 16.8231C16.4504 16.8231 17.364 15.9074 17.364 14.7737L17.364 4.68419C17.364 3.55027 16.4509 2.63477 15.3276 2.63477ZM3.83247 3.851L15.3284 3.851C15.7936 3.851 16.1671 4.22551 16.1671 4.68429L16.1671 14.7738C16.1671 15.2323 15.7932 15.6071 15.3284 15.6071L3.83247 15.6071C3.36725 15.6071 2.99373 15.2326 2.99373 14.7738L2.99373 12.2622L6.7356 9.56381L6.78139 9.53916C6.84532 9.51493 6.91856 9.52524 6.9742 9.56947L13.2644 14.5698L13.3381 14.62C13.5918 14.7666 13.9197 14.7063 14.105 14.4658C14.3089 14.2014 14.263 13.8192 14.0026 13.6122L7.71239 8.61184L7.60526 8.5346C7.12945 8.22451 6.51026 8.23473 6.04222 8.57224L2.99373 10.7706L2.99373 4.68429C2.99373 4.22551 3.36725 3.851 3.83247 3.851ZM10.5794 7.29679C10.5794 6.06542 11.5624 5.0672 12.7749 5.0672C13.9875 5.0672 14.9705 6.06542 14.9705 7.29679C14.9705 8.52817 13.9875 9.52639 12.7749 9.52639C11.5624 9.52639 10.5794 8.52817 10.5794 7.29679ZM13.7722 7.2967C13.7722 6.73699 13.3254 6.28325 12.7742 6.28325C12.223 6.28325 11.7762 6.73699 11.7762 7.2967C11.7762 7.85642 12.223 8.31015 12.7742 8.31015C13.3254 8.31015 13.7722 7.85642 13.7722 7.2967Z" fill-rule="evenodd"/>\n    </svg>\n    ',TIME_WIDTH=[[1,10,10,"单位 1秒"],[60,20,5,"单位 1分钟"],[600,20,6,"单位 10分钟"],[3600,30,6,"单位 1小时"],[14400,40,2,"单位 4小时"],[43200,80,2,"单位 12小时"]],MOBILE_TIME_WIDTH=[[1,10,10,"单位 1分钟"],[10,20,5,"单位 10分钟"],[30,20,6,"单位 30分钟"],[60,30,6,"单位 1小时"],[120,40,2,"单位 2小时"],[240,80,2,"单位 4小时"]],__$IMAGE_LAZY_LOADER_DEFAULT_OPTIONS$__={targets:[],root:null,rootMargin:"0px",threshold:.1,loadingClass:"ez-lazy-image-loading",loadedClass:"ez-lazy-image-loaded",loadedErrorClass:"ez-lazy-image-error",onLoadError:function(){}},ImageLazyLoader=function(){function ImageLazyLoader(options){ void 0===options&&(options={}),this.options=Object.assign({},__$IMAGE_LAZY_LOADER_DEFAULT_OPTIONS$__,options),this._observer=null,this._init();}var _proto=ImageLazyLoader.prototype;return _proto._init=function(){var _this=this;ImageLazyLoader.isSupported&&(this._observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){var _this__observer;entry.isIntersecting&&(_this._loadImage(entry.target),null==(_this__observer=_this._observer)||_this__observer.unobserve(entry.target));});},this.options)),this.addImages(this.options.targets);},_proto._loadImage=function(img){var _img_classList,_img_classList1,_img_classList2,_this=this;if(img&&!(null==(_img_classList=img.classList)?void 0:_img_classList.contains(this.options.loadingClass))&&!(null==(_img_classList1=img.classList)?void 0:_img_classList1.contains(this.options.loadedClass))&&!(null==(_img_classList2=img.classList)?void 0:_img_classList2.contains(this.options.loadedErrorClass))&&img.hasAttribute("data-src")){var _this1=this;img.classList.add(this.options.loadingClass);var tempImg=new Image;tempImg.onload=function(){img.src=img.dataset.src,img.classList.remove(_this.options.loadingClass),img.classList.add(_this.options.loadedClass),img.dispatchEvent(new Event("lazyloaded"));},tempImg.onerror=function(e){img.classList.remove(_this.options.loadingClass),img.classList.add(_this.options.loadedErrorClass),null==_this1.options.onLoadError||_this1.options.onLoadError.call(_this1.options,img);},tempImg.src=img.dataset.src;}},_proto.addImages=function(targets){var _this=this;(null==targets?void 0:targets.length)&&targets.forEach(function(target){var _this__observer;(null==target?void 0:target.hasAttribute("data-src"))&&(ImageLazyLoader.isSupported&&_this._observer?null==(_this__observer=_this._observer)||_this__observer.observe(target):_this._loadImage(target));});},_proto.destroy=function(){this._observer&&(this._observer.disconnect(),this._observer=null);},ImageLazyLoader}();function _create_class$1(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends$1(){return _extends$1=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$1.apply(this,arguments)}function _set_prototype_of$1(o,p){return _set_prototype_of$1=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1(o,p)}ImageLazyLoader.isSupported="IntersectionObserver"in window;var _$MOBILE_TIME_LINE_DEFAULT_OPTIONS$_=Object.assign({},_$BASE_TIME_LINE_DEFAULT_OPTIONS$_,{height:400,width:"100%",timeWidth:0,readOnly:false,timePointColor:"#648FFC",timeTextColor:"#666666",timeScaleColor:"transparent",timeSectionColor:"#369FFF",timeAxisBgColor:"#BDCDFF",currentTimeBgColor:"#648FFC",currentTimeColor:"#FFFFFF",showTimeWidthBtn:true,showCoverFold:true}),MobileTimeLine=function(BaseTimeLine){function MobileTimeLine(container,options){var _this;return (_this=BaseTimeLine.call(this,container,deepmerge(_$MOBILE_TIME_LINE_DEFAULT_OPTIONS$_,options,{clone:false}))||this)._isTouchStart=false,_this._dragScroll=null,_this._moveStartX=0,_this._moveStartY=0,_this._imageLazyLoader=null,_this._imageLazyLoaderPicker=null,_this.state={start:"00:00:00",end:"24:00:00",current:null,timeArr:[],availTimeLine:[],index:0},_this._onImageError=_this._onImageError.bind(_this),_this._plusClick=_this._plusClick.bind(_this),_this._minusClick=_this._minusClick.bind(_this),_this._onPickerClose=_this._onPickerClose.bind(_this),_this._onClickItem=_this._onClickItem.bind(_this),_this._onClickCoverFold=_this._onClickCoverFold.bind(_this),_this._imageLazyLoader=new ImageLazyLoader({root:_this.$container,onLoadError:function(img){null==_this._onImageError||_this._onImageError.call(_this,img);}}),_this._render(),_this.options.timeSections&&Array.isArray(_this.options.timeSections)&&_this.updateTimeSections(_this.options.timeSections),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1(subClass,superClass);}(MobileTimeLine,BaseTimeLine);var _proto=MobileTimeLine.prototype;return _proto.setReadOnly=function(readOnly){BaseTimeLine.prototype.setReadOnly.call(this,readOnly),this._dragScroll&&(this._dragScroll.readonly=readOnly);},_proto.setTimeWidth=function(timeWidth){MOBILE_TIME_WIDTH[timeWidth]&&(BaseTimeLine.prototype.setTimeWidth.call(this,timeWidth),this._matchTimeDot());},_proto.updateTimeSections=function(timeSections,defaultIndex){BaseTimeLine.prototype.updateTimeSections.call(this,timeSections);var list=timeSections.map(function(record){return _extends$1({},record,{startTime:utilsTools.DateTime.format(record.startTime,"HH:mm:ss"),endTime:utilsTools.DateTime.format(record.endTime,"HH:mm:ss")})});if(list.length>0){ void 0===defaultIndex&&(defaultIndex=list.length-1);var current=this.state.current;this._setState({availTimeLine:list,start:list[defaultIndex].startTime,end:list[defaultIndex].endTime,current:null===current?list[defaultIndex].startTime:current}),this._matchTimeDot();}else this._setState({availTimeLine:[],current:utilsTools.DateTime.format(this.current||(new Date).getTime(),"HH:mm:ss")}),this._matchTimeDot();},_proto.update=function(time){var _this__dragScroll;time&&!(null==(_this__dragScroll=this._dragScroll)?void 0:_this__dragScroll.isDragging)&&(this._setState({current:utilsTools.DateTime.format(time,"HH:mm:ss")}),this._currentOffsetH());},_proto.destroy=function(){var _this__dragScroll;if(this._scrollTimer&&(clearInterval(this._scrollTimer),this._scrollTimer=null),this._$currentTime)try{this.$container.removeChild(this._$currentTime),this._$currentTime=null;}catch(error){}if(this._$itemContainer&&this._$itemList)try{this._$itemContainer.removeChild(this._$itemList),this._$itemList=null;}catch(error){}if(this._$itemContainer)try{this.$container.removeChild(this._$itemContainer),this._$itemContainer=null;}catch(error){}if(this._$op)try{this.$container.removeChild(this._$op),this._$op=null;}catch(error){}this._picker&&(this._picker.destroy(),this._picker=null),this._imageLazyLoader&&(this._imageLazyLoader.destroy(),this._imageLazyLoader=null),this._imageLazyLoaderPicker&&(this._imageLazyLoaderPicker.destroy(),this._imageLazyLoaderPicker=null),this._removeEventListener(),null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.destroy(),this._dragScroll=null,BaseTimeLine.prototype.destroy.call(this);},_proto._setState=function(obj){var _this=this;Object.keys(obj).forEach(function(key){var _this__dragScroll,_this_timeSections_;"current"===key&&obj[key]?(_this._setCurrentDOM(obj[key]),_this.state.current===obj[key]||(null==(_this__dragScroll=_this._dragScroll)?void 0:_this__dragScroll.isDragging)||(_this.state[key]=obj[key],_this.current=new Date(utilsTools.DateTime.format((null==(_this_timeSections_=_this.timeSections[0])?void 0:_this_timeSections_.endTime)||(new Date).getTime(),"YYYY-MM-DD")+"T"+obj[key]),null==_this.options.onChange||_this.options.onChange.call(_this.options,_this.current))):_this.state[key]=obj[key];});},_proto._setCurrentDOM=function(time){this._$currentTime&&(this._$currentTime.querySelector(".ez-time-line-current-value").innerHTML=time);},_proto._matchTimeDot=function(){for(var scaleWidth=this._scaleWidth,timeArr=[],minute=TimeLineUtil.timeToMinute("24:00:00"),i=minute=Math.floor(minute/scaleWidth)*scaleWidth;i>=0;){var marginTop=0,marginBottom=0;i==minute&&(marginTop=70),0==i&&(marginBottom=this.$container.clientHeight-70);var time=TimeLineUtil.minuteToTime(i);timeArr.push({id:i,current:time,label:"a"+i,marginTop:marginTop,marginBottom:marginBottom,recArr:[],coverArr:this._filterTimeSectionsByTime(time)}),i-=scaleWidth;}this._setState({timeArr:timeArr}),this._matchRecTimeDot();},_proto._matchRecTimeDot=function(){var _this_state=this.state,availTimeLine=_this_state.availTimeLine,timeArr=_this_state.timeArr,scaleWidth=this._scaleWidth,len=availTimeLine.length;if(0===len)for(var j=0;j<timeArr.length;j++)timeArr[j].recArr=[];else {for(var k=0;k<timeArr.length;k++)timeArr[k].recArr=[];for(var i=0;i<len;i++){var stAvailPercent,etAvailPercent,temp=availTimeLine[i],st=TimeLineUtil.timeToSecond(temp.startTime),et=TimeLineUtil.timeToSecond(temp.endTime),stMinute=Math.floor(st/(60*scaleWidth))*scaleWidth;stAvailPercent=(st-60*stMinute)/scaleWidth;var etMinute=Math.floor(et/(60*scaleWidth))*scaleWidth;etAvailPercent=(et-60*etMinute)/scaleWidth;for(var j1=0;j1<timeArr.length;j1++)if(timeArr[j1].id==stMinute&&timeArr[j1].id==etMinute){var height=etAvailPercent-stAvailPercent,top=60-etAvailPercent;timeArr[j1].recArr.push({height:height,top:top});}else timeArr[j1].id==stMinute?timeArr[j1].recArr.push({height:60-stAvailPercent,top:0}):timeArr[j1].id==etMinute?timeArr[j1].recArr.push({height:etAvailPercent,top:60-etAvailPercent}):timeArr[j1].id>stMinute&&timeArr[j1].id<etMinute&&timeArr[j1].recArr.push({height:60,top:0});}}this._setState({timeArr:timeArr}),this._renderDateLine();},_proto._renderDateLine=function(){var _this=this,timeArr=this.state.timeArr,container=this._$itemList;container.innerHTML="",timeArr.forEach(function(item,index){var _this__imageLazyLoader,timeItemDOM=document.createElement("div");timeItemDOM.setAttribute("class","ez-time-line-time-scale-area"),item.marginTop&&(timeItemDOM.style.cssText+="margin-top: "+item.marginTop+"px;"),item.marginBottom&&(timeItemDOM.style.cssText+="margin-bottom: "+item.marginBottom+"px;"),timeItemDOM.style.cssText+="border-right-color: "+(_this.options.timeAxisBgColor||"rgba(189, 205, 255, 1)")+";",timeItemDOM.setAttribute("data-time",item.current),timeItemDOM.setAttribute("data-index",index+""),document.createElement("div").setAttribute("class","ez-time-line-scale");var timeItemHtml="";item.coverArr.length&&_this.options.showCoverFold&&(timeItemHtml+='\n            <div class="ez-time-line-time-cover-fold '+(item.coverArr.length>1?"ez-time-line-time-cover-fold-multiple":"")+'"\n            data-start="'+item.current+'">\n              '+(item.coverArr.length>1?'<div class="ez-time-line-cover-fold-placeholder" style="color: #FFF"></div>':"")+'\n              <div class="ez-time-line-time-cover-fold-img">\n                <img data-src="'+_this._setImageScr(item.coverArr[0].coverPic)+'" class="ez-time-line-img"/>\n                <span class="ez-time-line-time-cover-fold-len">\n                '+(item.coverArr.length>1?_this.i18n.t("foldTitle",{len:item.coverArr.length,unit:"videos"}):""+utilsTools.DateTime.format(item.coverArr[0].startTime,"HH:mm"))+"\n                </span>\n                "+(1===item.coverArr.length?'<span class="ez-time-line-time-cover-fold-time">'+TimeLineUtil.tranTimeToString(item.coverArr[0].startTime,item.coverArr[0].endTime)+"</span>":"")+'\n                <span class="ez-time-line-time-cover-fold-pause">'+_$TIMELINE_ICONS$__pause+"</span>\n              </div>\n            </div>"),item.recArr.forEach(function(i){timeItemHtml+='<div class="ez-time-line-time-unavail"\n                              style="height: '+i.height+"px;background-color:"+(_this.options.timeSectionColor||"#369FFF")+"; top: "+i.top+'px">\n                        </div>';}),timeItemHtml+="<div id="+item.label+' class="ez-time-line-time-label" style="color: '+(_this.options.timeTextColor||"#666")+'">'+item.current+"</div>",timeItemDOM.innerHTML=timeItemHtml,container.appendChild(timeItemDOM),item.coverArr.length&&_this.options.showCoverFold&&(null==(_this__imageLazyLoader=_this._imageLazyLoader)||_this__imageLazyLoader.addImages(container.querySelectorAll("img.ez-time-line-img")||[]));}),this._currentOffsetH();},_proto._currentOffsetH=function(){var current=this.state.current;if(current){var _this__dragScroll,y=(86400-TimeLineUtil.timeToSecond(current)||0)/this._scaleWidth;null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.scrollToY(y+60,false);}},_proto._render=function(){var _this=this;if(this._$currentTime=document.createElement("div"),this._$currentTime.classList.add("ez-time-line-current"),this._$currentTime.innerHTML='<div class="ez-time-line-current-content" style="color: '+(this.options.currentTimeBgColor||"#648FFC")+'">\n      <span class="ez-time-line-current-tip">'+_$TIMELINE_ICONS$__tip+'</span>\n      <span class="ez-time-line-current-tip-line" style="background-color: '+(this.options.timePointColor||"#648FFC")+';"></span>\n      <div class="ez-time-line-current-value" style="color: '+(this.options.currentTimeColor||"#FFFFFF")+'">00:00:00</div>\n    </div>',this.$container.appendChild(this._$currentTime),this._$itemContainer=document.createElement("div"),this._$itemContainer.classList.add("ez-time-line-container"),this.$container.appendChild(this._$itemContainer),this._dragScroll=new DragScroll(this._$itemContainer,{hideScrollbar:true,onChange:function(state){var result=_this._offsetYToTime(state.y);result[1]!==_this.state.current&&_this._setCurrentDOM(result[0]>=86400?"23:59:59":result[1]);},onDragStart:function(e){_this._moveStartX=e.clientX,_this._moveStartY=e.clientY,null==_this.options.onDragStart||_this.options.onDragStart.call(_this.options,_this.state.current);},onDragging:function(){null==_this.options.onDragging||_this.options.onDragging.call(_this.options,_this.state.current);},onDragEnd:function(){var _this__dragScroll,result=_this._offsetYToTime(null==(_this__dragScroll=_this._dragScroll)?void 0:_this__dragScroll.currentY);result[1]!==_this.state.current&&_this._setState({current:result[0]>=86400?"23:59:59":result[1]}),null==_this.options.onDragEnd||_this.options.onDragEnd.call(_this.options,_this.state.current);}}),/\d/.test(this.options.height))this._$itemContainer.style.cssText+="height: "+this.options.height+"px";else if("string"==typeof this.options.height)this._$itemContainer.style.cssText+="height: "+this.options.height;else {var height=this.$container.clientHeight;this._$itemContainer.style.cssText+="height: "+height+"px";}this._$itemList=document.createElement("div"),this._$itemList.classList.add("ez-time-line-item"),this._dragScroll.$content.appendChild(this._$itemList),this.options.showTimeWidthBtn&&(this._$op=document.createElement("div"),this._$op.classList.add("ez-time-line-op"),this._$op.innerHTML='<span class="ez-time-line-op-wrapper"><span class="ez-time-line-icon-plus">'+_$TIMELINE_ICONS$__plus+'</span> <span class="ez-time-line-icon-minus">'+_$TIMELINE_ICONS$__minus+"</span></span>",this.$container.appendChild(this._$op)),this.options.showCoverFold&&(this._picker=new Picker(null,{isMobile:true,wrapClassName:"ez-time-line-picker",onOpenChange:function(isOpen){var _this_options_onPickerOpenChange,_this_options;null==(_this_options=_this.options)||null==(_this_options_onPickerOpenChange=_this_options.onPickerOpenChange)||_this_options_onPickerOpenChange.call(_this_options,isOpen);}}),this._imageLazyLoaderPicker=new ImageLazyLoader({root:this._picker.$body,onLoadError:function(img){null==_this._onImageError||_this._onImageError.call(_this,img);}})),this._addEventListener();},_proto._addEventListener=function(){var _this__$op_querySelector,_this__$op_querySelector1;this.options.showTimeWidthBtn&&this._$op&&(null==(_this__$op_querySelector=this._$op.querySelector(".ez-time-line-icon-plus"))||_this__$op_querySelector.addEventListener("click",this._plusClick,false),null==(_this__$op_querySelector1=this._$op.querySelector(".ez-time-line-icon-minus"))||_this__$op_querySelector1.addEventListener("click",this._minusClick,false));this._matchTimeDot(),this._picker&&(this._delegatePickerClose=delegate(this._picker.$body,".ez-time-line-picker-close","click",this._onPickerClose,false),this._delegateItemContent=delegate(this._picker.$body,".ez-time-line-picker-item-content","click",this._onClickItem,false),this._delegateCoverFold=delegate(this._$itemList,".ez-time-line-time-cover-fold","click",this._onClickCoverFold,false));},_proto._removeEventListener=function(){var _this__$op_querySelector,_this__$op_querySelector1,_this__picker_$body_querySelector,_this__picker_$body;this.options.showTimeWidthBtn&&this._$op&&(null==(_this__$op_querySelector=this._$op.querySelector(".ez-time-line-icon-plus"))||_this__$op_querySelector.removeEventListener("click",this._plusClick),null==(_this__$op_querySelector1=this._$op.querySelector(".ez-time-line-icon-minus"))||_this__$op_querySelector1.removeEventListener("click",this._minusClick));this._picker&&(null==(_this__picker_$body=this._picker.$body)||null==(_this__picker_$body_querySelector=_this__picker_$body.querySelector(".ez-time-line-picker-close"))||_this__picker_$body_querySelector.removeEventListener("click",this._onPickerClose),this._delegateItemContent&&(this._delegateItemContent.forEach(function(delegation){delegation.destroy();}),this._delegateItemContent=null),this._delegatePickerClose&&(this._delegatePickerClose.forEach(function(delegation){delegation.destroy();}),this._delegatePickerClose=null),this._delegateCoverFold&&(this._delegateCoverFold.forEach(function(delegation){delegation.destroy();}),this._delegateCoverFold=null));},_proto._plusClick=function(){var timeWidth=this.timeWidth+1;timeWidth>0&&timeWidth<MOBILE_TIME_WIDTH.length&&this.setTimeWidth(timeWidth);},_proto._minusClick=function(){var timeWidth=this.timeWidth-1;timeWidth>=0&&timeWidth<MOBILE_TIME_WIDTH.length&&this.setTimeWidth(Math.floor(timeWidth));},_proto._timeSectionsToGroupsByHour=function(list){var obj={};return list.forEach(function(item,index){var hour=utilsTools.DateTime.format(item.startTime,"HH");obj[+hour]?obj[+hour].push(_extends$1({},item,{_index:index})):obj[+hour]=[_extends$1({},item,{_index:index})];}),obj},_proto._filterTimeSectionsByTime=function(start){if(!start)return [];var startSecond=TimeLineUtil.timeToSecond(start+":00"),endSecond=TimeLineUtil.timeToSecond(start+":00")+60*this._scaleWidth;return this.timeSections.filter(function(item){var _$start=TimeLineUtil.timeToSecond(utilsTools.DateTime.format(item.startTime,"HH:mm:ss"));return _$start>=startSecond&&_$start<endSecond})},_proto._renderPickerContent=function(start){var _this__picker_innerHTML,_this__picker,_this__picker1,_this__picker2,_this__imageLazyLoaderPicker,_this=this,list=this._filterTimeSectionsByTime(start),hourGroups=this._timeSectionsToGroupsByHour(list);(null==(_this__picker=this._picker)||null==(_this__picker_innerHTML=_this__picker.innerHTML)||_this__picker_innerHTML.call(_this__picker,'<div class="ez-time-line-picker-container">\n        <div class="ez-time-line-picker-header">\n          <span class="ez-time-line-picker-close">'+_$TIMELINE_ICONS$__close+"</span>\n          "+this.i18n.t("title",{len:list.length,unit:list.length>1?"videos":"video"})+'\n        </div>\n        <div class="ez-time-line-picker-content">\n          <div class="ez-time-line-picker-list">\n             '+Object.keys(hourGroups).reverse().map(function(key){return '<div class="ez-time-line-picker-item">\n                  <div class="ez-time-line-picker-item-title">'+key+':00</div>\n                  <div class="ez-time-line-picker-item-list">\n                    '+hourGroups[key].reverse().map(function(item){return '<div class="ez-time-line-picker-item-content"\n                                      data-start="'+utilsTools.DateTime.format(item.startTime,"YYYYMMDDTHHmmssZ")+'"\n                                      data-end="'+utilsTools.DateTime.format(item.endTime,"YYYYMMDDTHHmmssZ")+'"\n                                      data-index="'+item._index+'">\n                                    <span class="ez-time-line-picker-item-time">'+utilsTools.DateTime.format(item.startTime,"HH:mm")+'</span>\n                                    <span class="ez-time-line-picker-item-duration">\n                                      '+TimeLineUtil.tranTimeToString(item.startTime,item.endTime)+'\n                                    </span>\n                                  <img class="ez-time-line-picker-item-cover" data-src="'+_this._setImageScr(item.coverPic)+'"/>\n                                </div>'}).join("")+"\n                  </div>\n              </div>"}).join("")+"\n          </div>\n          </div>\n        </div>\n      </div>"),null==(_this__picker1=this._picker)?void 0:_this__picker1.$body)&&(null==(_this__imageLazyLoaderPicker=this._imageLazyLoaderPicker)||_this__imageLazyLoaderPicker.addImages((null==(_this__picker2=this._picker)?void 0:_this__picker2.$body.querySelectorAll("img"))||[]));},_proto._onImageError=function(img){if(!img.hasAttribute("data-error")){var _img_parentNode,placeholder=document.createElement("div");placeholder.classList.add("ez-time-line-item-cover-placeholder"),placeholder.innerHTML=""+_$TIMELINE_ICONS$__picture,null==(_img_parentNode=img.parentNode)||_img_parentNode.appendChild(placeholder),img.setAttribute("data-error","true"),img.remove();}},_proto._onPickerClose=function(){this._picker&&(this._picker.open=false);},_proto._onClickItem=function(e){var _e_delegateTarget_getAttribute,_e_delegateTarget,index=null==(_e_delegateTarget=e.delegateTarget)||null==(_e_delegateTarget_getAttribute=_e_delegateTarget.getAttribute)?void 0:_e_delegateTarget_getAttribute.call(_e_delegateTarget,"data-index");this._picker&&(this._picker.open=false),null==this.options.onPickerSelect||this.options.onPickerSelect.call(this.options,this.timeSections[+index]);},_proto._onClickCoverFold=function(e){var _e_delegateTarget_parentElement_getAttribute,_e_delegateTarget_parentElement,_e_delegateTarget;e.preventDefault();var time=null==(_e_delegateTarget=e.delegateTarget)||null==(_e_delegateTarget_parentElement=_e_delegateTarget.parentElement)||null==(_e_delegateTarget_parentElement_getAttribute=_e_delegateTarget_parentElement.getAttribute)?void 0:_e_delegateTarget_parentElement_getAttribute.call(_e_delegateTarget_parentElement,"data-time"),moveX=Math.abs(this._moveStartX-e.clientX),moveY=Math.abs(this._moveStartY-e.clientY);this._picker&&time&&!(moveX>=1||moveY>=1)&&(this._renderPickerContent(time),this._picker.open=true);},_proto._setImageScr=function(src){if(src){var query="x=200&"+(this.options.coverQuery||"");return src+(src.includes("?")?"&":"?")+query}return ""},_proto._offsetYToTime=function(offsetY){var _this__dragScroll,y=offsetY;offsetY<60&&(y=60,null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.scrollToY(y));var second=86400-Math.floor((y-60)*this._scaleWidth);return [second,utilsTools.DateTime.fillZero(Math.floor(second/3600))+":"+utilsTools.DateTime.fillZero(Math.floor(second%3600/60))+":"+utilsTools.DateTime.fillZero(second%60)]},_create_class$1(MobileTimeLine,[{key:"_scaleWidth",get:function(){return (MOBILE_TIME_WIDTH[this.timeWidth]||MOBILE_TIME_WIDTH[0])[0]}}]),MobileTimeLine}(BaseTimeLine);function isOverlap(a_start,a_end,b_start,b_end){return Math.max(a_start,b_start)<=Math.min(a_end,b_end)}function _create_class(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends(){return _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends.apply(this,arguments)}function _set_prototype_of(o,p){return _set_prototype_of=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of(o,p)}var _$TIMELINE_DEFAULT_OPTIONS$_={height:36,dpr:window.devicePixelRatio||2,scaleOffsetTop:4,showYearMonthDay:true},TimeLine=function(BaseTimeLine){function TimeLine(container,options){var _this;return (_this=BaseTimeLine.call(this,container,deepmerge(_$TIMELINE_DEFAULT_OPTIONS$_,options,{clone:true}))||this)._$canvas=null,_this._ctx=null,_this._timeWidthArray=TIME_WIDTH[0],_this._centerPositionX=0,_this._isMouseDown=false,_this._mousePosition=0,_this._oldTime=null,_this._isOver=false,_this._moved=false,_this._isCtrlKeyDown=false,_this._lastTouchDist=0,_this.$container=container,_this._mousemoveFun=_this._mousemoveFun.bind(_this),_this._mouseoverFun=_this._mouseoverFun.bind(_this),_this._mouseleaveFun=_this._mouseleaveFun.bind(_this),_this._mousedownFun=_this._mousedownFun.bind(_this),_this._mouseUpFun=_this._mouseUpFun.bind(_this),_this._mousewheelFun=_this._mousewheelFun.bind(_this),_this._touchstartFun=_this._touchstartFun.bind(_this),_this._touchmoveFun=_this._touchmoveFun.bind(_this),_this._touchendFun=_this._touchendFun.bind(_this),_this._ctrlKeyDownFun=_this._ctrlKeyDownFun.bind(_this),_this._ctrlKeyUpFun=_this._ctrlKeyUpFun.bind(_this),_this._init(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of(subClass,superClass);}(TimeLine,BaseTimeLine);var _proto=TimeLine.prototype;return _proto._init=function(){this._$canvas=document.createElement("canvas"),this._ctx=this._$canvas.getContext("2d"),this.readOnly||(this._$canvas.style.cssText+="cursor: pointer;"),this.$container.appendChild(this._$canvas),this.resize(this.width,this.height),this._update({current:this.current,timeWidth:this.timeWidth,timeSections:this.timeSections}),this._addEventListener();},_proto.resize=function(width,height){BaseTimeLine.prototype.resize.call(this,width,height),this._$canvas&&width&&(this._$canvas.width=this.width*this.options.dpr,this._$canvas.style.cssText+="width: "+this.width+"px;"),this._$canvas&&height&&(this._$canvas.height=this.height*this.options.dpr,this._$canvas.style.cssText+="height: "+this.height+"px;"),this._draw();},_proto.setTimeWidth=function(timeWidth){this._update({timeWidth:timeWidth});},_proto.updateTimeSections=function(timeSections){this._update({timeSections:timeSections});},_proto.update=function(time){time&&!this._isMouseDown&&this._update({current:utilsTools.DateTime.toDate(time)});},_proto._update=function(options){var left,right,_this__$canvas;(void 0===options&&(options={}),(null==options?void 0:options.current)&&(left=options.current,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)&&(this.current=options.current),(null==options?void 0:options.timeSections)&&BaseTimeLine.prototype.updateTimeSections.call(this,this._mergeTimeSections(options.timeSections)),"number"==typeof(null==options?void 0:options.timeWidth)&&(null==options?void 0:options.timeWidth)<TIME_WIDTH.length&&(BaseTimeLine.prototype.setTimeWidth.call(this,options.timeWidth),this._timeWidthArray=TIME_WIDTH[Math.floor(this.timeWidth)]),"number"==typeof(null==options?void 0:options.timeWidth)&&this._timeWidthArray)&&(this._timeWidthArray[3]&&(null==(_this__$canvas=this._$canvas)||_this__$canvas.setAttribute("data-title",this._timeWidthArray[3])));this._draw();},_proto.setReadOnly=function(readOnly){BaseTimeLine.prototype.setReadOnly.call(this,readOnly),this._$canvas&&(this._$canvas.style.cssText+="cursor: "+(readOnly?"not-allowed":"pointer"));},_proto.destroy=function(){if(this._removeEventListener(),this._$canvas)try{this.$container.removeChild(this._$canvas),this._$canvas=null;}catch(e){}BaseTimeLine.prototype.destroy.call(this);},_proto._draw=function(){this._ctx&&(this._ctx.fillStyle=this.options.timeAxisBgColor,this._ctx.fillRect(0,0,this.width*this.options.dpr,this.height*this.options.dpr)),this._drawSections(),this._drawScale();},_proto._drawScale=function(){var lineWidth=1*this.options.dpr;this._centerPositionX=parseInt(this.width*this.options.dpr/2+"");for(var centerPosition={x:this.width*this.options.dpr/2,y:this.height*this.options.dpr},curScaleTime=Math.floor(this.current.getTime()/1e3),offsetSecond=(curScaleTime-Math.floor(utilsTools.DateTime.toDate(utilsTools.DateTime.format(new Date(1e3*curScaleTime),"YYYY-MM-DD")).getTime()/1e3))%this._timeWidthArray[0],padding=this.height*this.options.dpr/20,spacing=this._curScaleSpacing*this.options.dpr,rightLastScaleTimeX=Math.floor(this._centerPositionX+(this._timeWidthArray[0]-offsetSecond)/this._timeWidthArray[0]*spacing),leftLastScaleTime=curScaleTime-offsetSecond,rightLastScaleTime=leftLastScaleTime+this._timeWidthArray[0],x=rightLastScaleTimeX-spacing;x>0;x-=spacing){0===(leftLastScaleTime-Math.floor(utilsTools.DateTime.toDate(utilsTools.DateTime.format(new Date(1e3*leftLastScaleTime),"YYYY-MM-DD")).getTime()/1e3))%(this._timeWidthArray[0]*this._timeWidthArray[2])?(this._drawSolidLine(x,padding,x,padding+(this.options.scaleOffsetTop+4)*this.options.dpr,lineWidth),this._drawTextString(utilsTools.DateTime.format(new Date(1e3*leftLastScaleTime),"YYYY-MM-DD HH:mm:ss"),x,padding+(this.options.scaleOffsetTop+4+4)*this.options.dpr,"center")):this._drawSolidLine(x,padding,x,padding+this.options.scaleOffsetTop*this.options.dpr,lineWidth),leftLastScaleTime-=this._timeWidthArray[0];}for(var x1=rightLastScaleTimeX;x1<=this.width*this.options.dpr;x1+=spacing){0===(rightLastScaleTime-Math.floor(utilsTools.DateTime.toDate(utilsTools.DateTime.format(new Date(1e3*rightLastScaleTime),"YYYY-MM-DD")).getTime()/1e3))%(this._timeWidthArray[0]*this._timeWidthArray[2])?(this._drawSolidLine(x1,padding,x1,padding+(this.options.scaleOffsetTop+4)*this.options.dpr,lineWidth),this._drawTextString(utilsTools.DateTime.format(new Date(1e3*rightLastScaleTime),"YYYY-MM-DD HH:mm:ss"),x1,padding+(this.options.scaleOffsetTop+4+4)*this.options.dpr,"center")):this._drawSolidLine(x1,padding,x1,padding+this.options.scaleOffsetTop*this.options.dpr,lineWidth),rightLastScaleTime+=this._timeWidthArray[0];}this._drawSolidLine(centerPosition.x,0,centerPosition.x,centerPosition.y,lineWidth,this.options.timePointColor);},_proto._drawSolidLine=function(startX,startY,endX,endY,lineWidth,color){this._ctx&&(this._ctx.save(),this._ctx.strokeStyle=null!=color?color:this.options.timeScaleColor,this._ctx.lineWidth=lineWidth,this._ctx.beginPath(),this._ctx.moveTo(startX,startY),this._ctx.lineTo(endX,endY),this._ctx.stroke(),this._ctx.restore());},_proto._drawTextString=function(text,x,y,align){if(this._ctx){var timeTexts=text.split(" ");this._ctx.font=12*this.options.dpr*1+"px serif",this._ctx.fillStyle=this.options.timeTextColor,this._ctx.textAlign=align||"left",this._timeWidthArray[0]%60==0&&(timeTexts[1]=timeTexts[1].replace(/:00$/,"")),this._ctx.fillText(timeTexts[1],x,y+8*this.options.dpr),!this.options.showYearMonthDay||"00:00:00"!==timeTexts[1]&&"00:00"!==timeTexts[1]&&this._timeWidthArray[0]*this._timeWidthArray[2]!==86400||(this._ctx.textAlign=align||"left",this._ctx.fillText(timeTexts[0],x,y+18*this.options.dpr));}},_proto._drawSections=function(){for(var timeArr=this.timeSections||[],i=0;i<timeArr.length;i++){var position=this._findPosition(timeArr[i]);this._ctx&&isOverlap(0,this.width*this.options.dpr,position.x1,position.x2)&&(this._ctx.fillStyle=this.options.timeSectionColor,this._ctx.fillRect(position.x1,0,position.x2-position.x1,this.height*this.options.dpr));}},_proto._findPosition=function(item){var x1=(parseInt((item.startTime-this.current.getTime())/1e3+"",10)/this._timeWidthArray[0]*this._curScaleSpacing+this.width/2)*this.options.dpr;return {x1:x1,x2:x1+parseInt((item.endTime-item.startTime)/1e3+"",10)/this._timeWidthArray[0]*this._curScaleSpacing*this.options.dpr}},_proto._mergeTimeSections=function(timeSections){if(0===timeSections.length)return timeSections;for(var merged=[(timeSections=timeSections.map(function(item){return 10===(item.startTime+"").length&&(item.startTime=1e3*item.startTime),10===(item.endTime+"").length&&(item.endTime=1e3*item.endTime),_extends({},item,{startTime:item.startTime,endTime:item.endTime})}))[0]],i=1;i<timeSections.length;i++){var prev=merged[merged.length-1],curr=timeSections[i];prev.endTime>=curr.startTime?prev.endTime=Math.max(prev.endTime,curr.endTime):merged.push(curr);}return merged},_proto._addEventListener=function(){this._$canvas&&(this._$canvas.addEventListener("mousemove",this._mousemoveFun),this._$canvas.addEventListener("mouseover",this._mouseoverFun),this._$canvas.addEventListener("mouseleave",this._mouseleaveFun),this._$canvas.addEventListener("mousedown",this._mousedownFun),this._$canvas.addEventListener("mouseup",this._mouseUpFun),this._$canvas.addEventListener("wheel",this._mousewheelFun),this.$container.addEventListener("wheel",function(e){e.preventDefault();},{passive:false}),this._$canvas.addEventListener("keydown",this._ctrlKeyDownFun),this._$canvas.addEventListener("keyup",this._ctrlKeyUpFun),document.addEventListener("keydown",this._ctrlKeyDownFun,false),document.addEventListener("keyup",this._ctrlKeyUpFun,false),this._$canvas.addEventListener("touchstart",this._touchstartFun,{passive:false}),this._$canvas.addEventListener("touchmove",this._touchmoveFun,{passive:false}),this._$canvas.addEventListener("touchend",this._touchendFun,{passive:false}));},_proto._removeEventListener=function(){this._$canvas&&(this._$canvas.removeEventListener("mousemove",this._mousemoveFun),this._$canvas.removeEventListener("mouseover",this._mouseoverFun),this._$canvas.removeEventListener("mouseleave",this._mouseleaveFun),this._$canvas.removeEventListener("mousedown",this._mousedownFun),this._$canvas.removeEventListener("mouseup",this._mouseUpFun),this._$canvas.removeEventListener("wheel",this._mousewheelFun),this._$canvas.removeEventListener("keydown",this._ctrlKeyDownFun),this._$canvas.removeEventListener("keyup",this._ctrlKeyUpFun),document.removeEventListener("keydown",this._ctrlKeyDownFun),document.removeEventListener("keyup",this._ctrlKeyUpFun),this._$canvas.removeEventListener("touchstart",this._touchstartFun),this._$canvas.removeEventListener("touchmove",this._touchmoveFun),this._$canvas.removeEventListener("touchend",this._touchendFun));},_proto._mousedownFun=function(e){this.readOnly||(this._isMouseDown=true,this._mousePosition=e.pageX,this._oldTime=this.current,null==this.options.onDragStart||this.options.onDragStart.call(this.options,this.current));},_proto._mouseoverFun=function(){this.readOnly||(this._isOver=true);},_proto._mouseleaveFun=function(e){this.readOnly||(this._isOver=false,this._moveEndOrTouchEndFun(e));},_proto._mouseUpFun=function(e){this._moveEndOrTouchEndFun(e);},_proto._mousemoveFun=function(e){if(!this.readOnly)if(this._isMouseDown&&this._isOver)this._moveUpdateFun(e.pageX);else {var left=parseInt(this.$container.offsetLeft+"",10);this._mousePosition=e.pageX-left,this._update();}},_proto._mousewheelFun=function(e){e.preventDefault(),this.readOnly;},_proto._ctrlKeyDownFun=function(e){(e.ctrlKey||"Control"===e.key)&&(this._isCtrlKeyDown=true);},_proto._ctrlKeyUpFun=function(e){(e.ctrlKey||"Control"===e.key)&&(this._isCtrlKeyDown=false);},_proto._getTouchDistance=function(touches){var touch1=touches[0],touch2=touches[1],dx=touch2.clientX-touch1.clientX,dy=touch2.clientY-touch1.clientY;return Math.sqrt(dx*dx+dy*dy)},_proto._touchstartFun=function(e){if(!this.readOnly)if(this._oldTime=this.current,this._isOver=true,1===e.touches.length){var touch=e.touches[0];this._isMouseDown=true,this._mousePosition=touch.clientX;}else 2===e.touches.length&&(this._lastTouchDist=this._getTouchDistance(e.touches));},_proto._touchmoveFun=function(e){if(e.preventDefault(),e.stopPropagation(),!this.readOnly)if(1===e.touches.length){var touch=e.touches[0];this._moveUpdateFun(touch.clientX);}else if(2===e.touches.length){this._getTouchDistance(e.touches);this._lastTouchDist;}},_proto._touchendFun=function(e){this.readOnly||this._moveEndOrTouchEndFun(e);},_proto._moveEndOrTouchEndFun=function(e){e.preventDefault(),this.readOnly||this._isMouseDown&&(this._isMouseDown=false,this._moved&&(this._moved=false,this._update({current:this.current}),this._oldTime=this.current,null==this.options.onDragEnd||this.options.onDragEnd.call(this.options,this.current,this._isOver)),this._isOver&&Math.abs(this._mousePosition-(e.pageX||0))>5&&(null==this.options.onChange||this.options.onChange.call(this.options,this.current)),this._mousePosition=0,this._lastTouchDist=0);},_proto._moveUpdateFun=function(x){var mouseOffset=this._mousePosition-x;if(0!==mouseOffset){if(this._oldTime){var currentTime=this._oldTime.getTime()+1e3*parseInt(mouseOffset/this._curScaleSpacing*this._timeWidthArray[0]+"",10);this._update({current:new Date(currentTime)}),null==this.options.onDragging||this.options.onDragging.call(this.options,new Date(currentTime));}this._moved=true;}},_create_class(TimeLine,[{key:"_curScaleSpacing",get:function(){var _this__timeWidthArray,_this__timeWidthArray1;return Math.floor((null==(_this__timeWidthArray=this._timeWidthArray)?void 0:_this__timeWidthArray[1])-(null==(_this__timeWidthArray1=this._timeWidthArray)?void 0:_this__timeWidthArray1[1])*+(this.timeWidth%1/2).toFixed(2))}}]),TimeLine}(BaseTimeLine);TimeLine.TIME_WIDTH=TIME_WIDTH,dist$1.BaseTimeLine=BaseTimeLine,dist$1.MobileTimeLine=MobileTimeLine,dist$1.TimeLine=TimeLine;
+>>>>>>> main
 		return dist$1;
 	}
 
@@ -11146,6 +11755,8 @@
 	    ptz: Ptz,
 	    record: Record,
 	    talk: Talk,
+	    broadcast: Broadcast,
+	    aiChat: AIChat,
 	    zoom: Zoom$1,
 	    definition: Definition,
 	    fullscreen: Fullscreen,
@@ -12253,7 +12864,7 @@
 	    _inherits(Theme, EventEmitter);
 	    function Theme(options) {
 	        var _this;
-	        var _this_options_volumeOptions, _this_options_volumeOptions1, _this_options_speedOptions, _this_options, _this_options1;
+	        var _this_options_volumeOptions, _this_options_volumeOptions1, _this_options_speedOptions, _this_options, _this_options1, _this_options2, _this_options3;
 	        _this = EventEmitter.call(this) || this, /** 播放器配置项 */ _this.options = THEME_DEFAULT_OPTIONS, _this.staticPath = '', /** 所有控件列表, 所有控件名称规则（`${iconId}Control`）， 如音量控件 this.controls["volumeControl"]  @since 0.0.1 */ _this.controls = {}, /**
 	   * @since 0.0.1
 	   * @private
@@ -12304,12 +12915,15 @@
 	            _this.playing = true;
 	        }
 	        _this._initClassName();
-	        // 画布需要渲染在 this.contentControl.$container 内
+	        // 画布需要渲染在 this.contentControl.$content 内
 	        _this.contentControl = new Content({
 	            getContainer: function() {
 	                return _this.$container;
 	            },
 	            scaleMode: _this.scaleMode
+	        });
+	        _this.contentControl.on(EVENTS.control.contentRerender, function(info) {
+	            _this.emit(EVENTS.control.contentRerender, info);
 	        });
 	        //  zoom utils
 	        __zoom(_this, _this.contentControl.$content, _extends({}, _this.options.zoomOptions || {}, {
@@ -12336,7 +12950,8 @@
 	            'flv',
 	            'hls',
 	            'mp4'
-	        ].includes(options.type) ? LiveTemplate : (_ref3 = (_this_options_template = (_this_options = _this.options) == null ? void 0 : _this_options.template) != null ? _this_options_template : (_this_options1 = _this.options) == null ? void 0 : _this_options1.themeData) != null ? _ref3 : null);
+	        ].includes(options.type) ? ((_this_options = _this.options) == null ? void 0 : _this_options.themeData) !== undefined ? (_this_options1 = _this.options) == null ? void 0 : _this_options1.themeData : LiveTemplate // 标准流仅支持  null 和 LiveTemplate (支持自定义 2026-01-19)
+	         : (_ref3 = (_this_options_template = (_this_options2 = _this.options) == null ? void 0 : _this_options2.template) != null ? _this_options_template : (_this_options3 = _this.options) == null ? void 0 : _this_options3.themeData) != null ? _ref3 : null);
 	        _this._addEventListener();
 	        _themeEventemitter(_this);
 	        return _this;
@@ -12861,138 +13476,153 @@
 	   * 尺寸变化结束时 进行判断，为了节省开销
 	   * @WARN：这里会闪一下， 原因：需要控件渲染后才知是否需要放置到 More 中，
 	   */ _proto._footerMoreControlShow = function _footerMoreControlShow() {
+	        this._displayMore();
+	    };
+	    _proto._displayMore = function _displayMore() {
 	        var _this = this;
-	        var displayMore = function() {
-	            if (_this._footer) {
-	                var _this__footer_$left, _this__footer_$right;
-	                // 判断 footer 的控件是否能放置的下， 否则隐藏暂时 more 按钮
-	                var leftWidth = ((_this__footer_$left = _this._footer.$left) == null ? void 0 : _this__footer_$left.clientWidth) || 0;
-	                var rightWidth = ((_this__footer_$right = _this._footer.$right) == null ? void 0 : _this__footer_$right.clientWidth) || 0;
-	                // 当footer 中 left 和 right 宽度之和大于 footer 宽度，则 footer more 显示
-	                var collapseControl = leftWidth + rightWidth + 26 > _this._width; // 收拢控件到 More 中
-	                if (collapseControl) {
-	                    var _this__footer, _this__themeData_footer, _this__themeData, _this__footerMoreControl_list, _this__footerMoreControl, _this__footerMoreControl_list1, _this__footerMoreControl1;
-	                    if (!_this._footerMoreControl && ((_this__footer = _this._footer) == null ? void 0 : _this__footer.$right)) {
-	                        _this._footerMoreControl = new More({
-	                            language: _this.options.language,
-	                            locales: _this.i18n.translations,
-	                            rootContainer: _this.$container,
-	                            getPopupContainer: function() {
-	                                var _this__footer;
-	                                return (_this__footer = _this._footer) == null ? void 0 : _this__footer.$right;
-	                            },
-	                            placement: 'tr',
-	                            controls: _this.controls,
-	                            open: false,
-	                            offset: [
-	                                0,
-	                                -8
-	                            ],
-	                            wrapClassName: "" + PREFIX_CLASS + "-footer-more",
-	                            onOpenChange: function(open) {
-	                                _this.emit(EVENTS.control.footerMorePanelOpenChange, open);
-	                            }
-	                        });
-	                    }
-	                    //
-	                    var list = (((_this__themeData = _this._themeData) == null ? void 0 : (_this__themeData_footer = _this__themeData.footer) == null ? void 0 : _this__themeData_footer.btnList) || []).filter(function(item) {
-	                        var _this__footerMoreControl;
-	                        var index = (((_this__footerMoreControl = _this._footerMoreControl) == null ? void 0 : _this__footerMoreControl.list) || []).findIndex(function(item1) {
-	                            var _this_controls;
-	                            return item1.control === ((_this_controls = _this.controls) == null ? void 0 : _this_controls["" + item.iconId + "Control"]);
-	                        });
-	                        return index === -1;
+	        if (this._footer) {
+	            var _this__footer_$left, _this__footer_$right;
+	            // 判断 footer 的控件是否能放置的下， 否则隐藏暂时 more 按钮
+	            var leftWidth = ((_this__footer_$left = this._footer.$left) == null ? void 0 : _this__footer_$left.clientWidth) || 0;
+	            var rightWidth = ((_this__footer_$right = this._footer.$right) == null ? void 0 : _this__footer_$right.clientWidth) || 0;
+	            // 当footer 中 left 和 right 宽度之和大于 footer 宽度，则 footer more 显示
+	            var collapseControl = this._width - leftWidth - rightWidth < 16; // 收拢控件到 More 中
+	            if (collapseControl) {
+	                var _this__footer, _this__themeData_footer, _this__themeData, _this__footerMoreControl_list, _this__footerMoreControl, _this__footerMoreControl_list1, _this__footerMoreControl1;
+	                if (!this._footerMoreControl && ((_this__footer = this._footer) == null ? void 0 : _this__footer.$right)) {
+	                    this._footerMoreControl = new More({
+	                        language: this.options.language,
+	                        locales: this.i18n.translations,
+	                        rootContainer: this.$container,
+	                        getPopupContainer: function() {
+	                            var _this__footer;
+	                            return (_this__footer = _this._footer) == null ? void 0 : _this__footer.$right;
+	                        },
+	                        placement: 'tr',
+	                        controls: this.controls,
+	                        open: false,
+	                        offset: [
+	                            0,
+	                            -8
+	                        ],
+	                        wrapClassName: "" + PREFIX_CLASS + "-footer-more",
+	                        onOpenChange: function(open) {
+	                            _this.emit(EVENTS.control.footerMorePanelOpenChange, open);
+	                        }
 	                    });
-	                    if (list.length <= 0) {
+	                }
+	                //
+	                var list = (((_this__themeData = this._themeData) == null ? void 0 : (_this__themeData_footer = _this__themeData.footer) == null ? void 0 : _this__themeData_footer.btnList) || []).filter(function(item) {
+	                    var _this__footerMoreControl;
+	                    var index = (((_this__footerMoreControl = _this._footerMoreControl) == null ? void 0 : _this__footerMoreControl.list) || []).findIndex(function(item1) {
+	                        var _this_controls;
+	                        return item1.control === ((_this_controls = _this.controls) == null ? void 0 : _this_controls["" + item.iconId + "Control"]);
+	                    });
+	                    return index === -1;
+	                });
+	                if (list.length <= 0) return;
+	                if (((_this__footerMoreControl = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list = _this__footerMoreControl.list) == null ? void 0 : _this__footerMoreControl_list.length) === 0) {
+	                    // 为什么是两个， 因为More 也占用一个位置
+	                    var popList = [
+	                        list.pop(),
+	                        list.pop()
+	                    ];
+	                    for(var _iterator = _create_for_of_iterator_helper_loose(popList), _step; !(_step = _iterator()).done;){
+	                        var item = _step.value;
+	                        if (item) {
+	                            var _this_controls_key_$container, _this_controls_key, _this_controls, _this_controls_key_$container1, _this_controls_key1, _this_controls1, _this_controls_key_resetPopupContainer, _this_controls_key2, _this_controls2, _this_controls3, _this__footerMoreControl2;
+	                            var key = "" + item.iconId + "Control";
+	                            var width = ((_this_controls = this.controls) == null ? void 0 : (_this_controls_key = _this_controls[key]) == null ? void 0 : (_this_controls_key_$container = _this_controls_key.$container) == null ? void 0 : _this_controls_key_$container.clientWidth) || 0;
+	                            var height = ((_this_controls1 = this.controls) == null ? void 0 : (_this_controls_key1 = _this_controls1[key]) == null ? void 0 : (_this_controls_key_$container1 = _this_controls_key1.$container) == null ? void 0 : _this_controls_key_$container1.clientHeight) || 0;
+	                            (_this_controls2 = this.controls) == null ? void 0 : (_this_controls_key2 = _this_controls2[key]) == null ? void 0 : (_this_controls_key_resetPopupContainer = _this_controls_key2.resetPopupContainer) == null ? void 0 : _this_controls_key_resetPopupContainer.call(_this_controls_key2, this._footerMoreControl.$panel, 'prepend');
+	                            (_this__footerMoreControl2 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl2.add(key, item.part, (_this_controls3 = this.controls) == null ? void 0 : _this_controls3[key], {
+	                                width: width,
+	                                height: height
+	                            });
+	                        }
+	                    }
+	                } else if (this._footerMoreControl) {
+	                    var item1 = list.pop();
+	                    if (item1) {
+	                        var _this_controls_key_$container2, _this_controls_key3, _this_controls4, _this_controls_key_$container3, _this_controls_key4, _this_controls5, _this_controls_key_resetPopupContainer1, _this_controls_key5, _this_controls6, _this_controls7, _this__footerMoreControl3;
+	                        var key1 = "" + item1.iconId + "Control";
+	                        var width1 = ((_this_controls4 = this.controls) == null ? void 0 : (_this_controls_key3 = _this_controls4[key1]) == null ? void 0 : (_this_controls_key_$container2 = _this_controls_key3.$container) == null ? void 0 : _this_controls_key_$container2.clientWidth) || 0;
+	                        var height1 = ((_this_controls5 = this.controls) == null ? void 0 : (_this_controls_key4 = _this_controls5[key1]) == null ? void 0 : (_this_controls_key_$container3 = _this_controls_key4.$container) == null ? void 0 : _this_controls_key_$container3.clientHeight) || 0;
+	                        (_this_controls6 = this.controls) == null ? void 0 : (_this_controls_key5 = _this_controls6[key1]) == null ? void 0 : (_this_controls_key_resetPopupContainer1 = _this_controls_key5.resetPopupContainer) == null ? void 0 : _this_controls_key_resetPopupContainer1.call(_this_controls_key5, this._footerMoreControl.$panel, 'prepend');
+	                        (_this__footerMoreControl3 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl3.add(key1, item1.part, (_this_controls7 = this.controls) == null ? void 0 : _this_controls7[key1], {
+	                            width: width1,
+	                            height: height1
+	                        });
+	                    } else {
 	                        return;
 	                    }
-	                    if (((_this__footerMoreControl = _this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list = _this__footerMoreControl.list) == null ? void 0 : _this__footerMoreControl_list.length) === 0) {
-	                        // 为什么是两个， 因为More 也占用一个位置
-	                        var popList = [
-	                            list.pop(),
-	                            list.pop()
-	                        ];
-	                        for(var _iterator = _create_for_of_iterator_helper_loose(popList), _step; !(_step = _iterator()).done;){
-	                            var item = _step.value;
-	                            if (item) {
-	                                var _this_controls_key_resetPopupContainer, _this_controls_key, _this_controls, _this_controls1, _this__footerMoreControl2;
-	                                var key = "" + item.iconId + "Control";
-	                                (_this_controls = _this.controls) == null ? void 0 : (_this_controls_key = _this_controls[key]) == null ? void 0 : (_this_controls_key_resetPopupContainer = _this_controls_key.resetPopupContainer) == null ? void 0 : _this_controls_key_resetPopupContainer.call(_this_controls_key, _this._footerMoreControl.$panel, 'prepend');
-	                                (_this__footerMoreControl2 = _this._footerMoreControl) == null ? void 0 : _this__footerMoreControl2.add(key, item.part, (_this_controls1 = _this.controls) == null ? void 0 : _this_controls1[key]);
-	                            }
-	                        }
-	                    } else if (_this._footerMoreControl) {
-	                        var item1 = list.pop();
-	                        if (item1) {
-	                            var _this_controls_key_resetPopupContainer1, _this_controls_key1, _this_controls2, _this_controls3, _this__footerMoreControl3;
-	                            var key1 = "" + item1.iconId + "Control";
-	                            (_this_controls2 = _this.controls) == null ? void 0 : (_this_controls_key1 = _this_controls2[key1]) == null ? void 0 : (_this_controls_key_resetPopupContainer1 = _this_controls_key1.resetPopupContainer) == null ? void 0 : _this_controls_key_resetPopupContainer1.call(_this_controls_key1, _this._footerMoreControl.$panel, 'prepend');
-	                            (_this__footerMoreControl3 = _this._footerMoreControl) == null ? void 0 : _this__footerMoreControl3.add(key1, item1.part, (_this_controls3 = _this.controls) == null ? void 0 : _this_controls3[key1]);
-	                        } else {
-	                            return;
-	                        }
-	                    }
-	                    // prettier-ignore
-	                    _this.emit(Theme.EVENTS.control.footerMoreShowControlsChange, !!_this._footerMoreControl, (_this__footerMoreControl1 = _this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list1 = _this__footerMoreControl1.list) == null ? void 0 : _this__footerMoreControl_list1.map(function(item) {
-	                        return item.key;
-	                    }));
-	                    if (_this._footerMoreControl) {
-	                        // 防止 More 不存在导致死循环
-	                        displayMore();
-	                    }
-	                } else if (_this._width - leftWidth - rightWidth > 110) {
-	                    var _this__footerMoreControl_list2, _this__footerMoreControl4;
+	                }
+	                // prettier-ignore
+	                this.emit(Theme.EVENTS.control.footerMoreShowControlsChange, !!this._footerMoreControl, (_this__footerMoreControl1 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list1 = _this__footerMoreControl1.list) == null ? void 0 : _this__footerMoreControl_list1.map(function(item) {
+	                    return item.key;
+	                }));
+	                if (this._footerMoreControl) {
+	                    // 防止 More 不存在导致死循环
+	                    this._displayMore();
+	                }
+	            } else {
+	                var _this__footerMoreControl_list2, _this__footerMoreControl5, _this__footerMoreControl_list3, _this__footerMoreControl6;
+	                var offset = 50;
+	                // if (this._footerMoreControl?.list?.length && this._footerMoreControl?.list?.length > 2) {
+	                //   offset = 16;
+	                // }
+	                if ((_this__footerMoreControl5 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list2 = _this__footerMoreControl5.list) == null ? void 0 : _this__footerMoreControl_list2.length) {
+	                    offset = offset + this._footerMoreControl.list[0].width || 0;
+	                }
+	                if (((_this__footerMoreControl6 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list3 = _this__footerMoreControl6.list) == null ? void 0 : _this__footerMoreControl_list3.length) && this._width - leftWidth - rightWidth > offset) {
+	                    var _this__footerMoreControl7, _this__footerMoreControl_list4, _this__footerMoreControl8, _this__footerMoreControl_list5, _this__footerMoreControl9;
 	                    // 110 是为了保住个别控件的宽度超出已知的值， 如英文下 按钮的宽度
 	                    // 从 More 中一次移除一个控件到 header/footer 中
-	                    if ((_this__footerMoreControl4 = _this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list2 = _this__footerMoreControl4.list) == null ? void 0 : _this__footerMoreControl_list2.length) {
-	                        var _this__footerMoreControl5, _this__footerMoreControl_list3, _this__footerMoreControl6, _this__footerMoreControl_list4, _this__footerMoreControl7;
-	                        //
-	                        var item2 = (_this__footerMoreControl5 = _this._footerMoreControl) == null ? void 0 : _this__footerMoreControl5.list.shift();
-	                        if (item2) {
-	                            var _this__footerMoreControl8;
-	                            if (item2.part === 'left') {
-	                                var _item_control_resetPopupContainer, _item_control;
-	                                (_item_control = item2.control) == null ? void 0 : (_item_control_resetPopupContainer = _item_control.resetPopupContainer) == null ? void 0 : _item_control_resetPopupContainer.call(_item_control, _this._footer.$left, 'append');
-	                            } else if (item2.part === 'right') {
-	                                var _this__footerMoreControl_list5, _this__footerMoreControl9;
-	                                if (((_this__footerMoreControl9 = _this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list5 = _this__footerMoreControl9.list) == null ? void 0 : _this__footerMoreControl_list5.length) === 0) {
-	                                    var _item_control_resetPopupContainer1, _item_control1;
-	                                    (_item_control1 = item2.control) == null ? void 0 : (_item_control_resetPopupContainer1 = _item_control1.resetPopupContainer) == null ? void 0 : _item_control_resetPopupContainer1.call(_item_control1, _this._footer.$right, 'append');
-	                                } else {
-	                                    var _item_control_resetPopupContainer2, _item_control2;
-	                                    (_item_control2 = item2.control) == null ? void 0 : (_item_control_resetPopupContainer2 = _item_control2.resetPopupContainer) == null ? void 0 : _item_control_resetPopupContainer2.call(_item_control2, _this._footer.$right, 'before', _this._footerMoreControl.$container);
-	                                }
+	                    //
+	                    var item2 = (_this__footerMoreControl7 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl7.list.shift();
+	                    if (item2) {
+	                        var _this__footerMoreControl10;
+	                        if (item2.part === 'left') {
+	                            var _item_control_resetPopupContainer, _item_control;
+	                            (_item_control = item2.control) == null ? void 0 : (_item_control_resetPopupContainer = _item_control.resetPopupContainer) == null ? void 0 : _item_control_resetPopupContainer.call(_item_control, this._footer.$left, 'append');
+	                        } else if (item2.part === 'right') {
+	                            var _this__footerMoreControl_list6, _this__footerMoreControl11;
+	                            if (((_this__footerMoreControl11 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list6 = _this__footerMoreControl11.list) == null ? void 0 : _this__footerMoreControl_list6.length) === 0) {
+	                                var _item_control_resetPopupContainer1, _item_control1;
+	                                (_item_control1 = item2.control) == null ? void 0 : (_item_control_resetPopupContainer1 = _item_control1.resetPopupContainer) == null ? void 0 : _item_control_resetPopupContainer1.call(_item_control1, this._footer.$right, 'append');
+	                            } else {
+	                                var _item_control_resetPopupContainer2, _item_control2;
+	                                (_item_control2 = item2.control) == null ? void 0 : (_item_control_resetPopupContainer2 = _item_control2.resetPopupContainer) == null ? void 0 : _item_control_resetPopupContainer2.call(_item_control2, this._footer.$right, 'before', this._footerMoreControl.$container);
 	                            }
-	                            (_this__footerMoreControl8 = _this._footerMoreControl) == null ? void 0 : _this__footerMoreControl8.remove(item2.control);
 	                        }
-	                        if (((_this__footerMoreControl6 = _this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list3 = _this__footerMoreControl6.list) == null ? void 0 : _this__footerMoreControl_list3.length) === 1) {
-	                            var _this__footerMoreControl10, _this__footerMoreControl_destroy, _this__footerMoreControl11;
-	                            // 最后一个， 移除 More
-	                            var item11 = (_this__footerMoreControl10 = _this._footerMoreControl) == null ? void 0 : _this__footerMoreControl10.list.shift();
-	                            if (item11) {
-	                                var _this__footerMoreControl12;
-	                                if (item11.part === 'left') {
-	                                    var _item1_control_resetPopupContainer, _item1_control;
-	                                    (_item1_control = item11.control) == null ? void 0 : (_item1_control_resetPopupContainer = _item1_control.resetPopupContainer) == null ? void 0 : _item1_control_resetPopupContainer.call(_item1_control, _this._footer.$left, 'append');
-	                                } else if (item11.part === 'right') {
-	                                    var _item1_control_resetPopupContainer1, _item1_control1;
-	                                    (_item1_control1 = item11.control) == null ? void 0 : (_item1_control_resetPopupContainer1 = _item1_control1.resetPopupContainer) == null ? void 0 : _item1_control_resetPopupContainer1.call(_item1_control1, _this._footer.$right, 'append');
-	                                }
-	                                (_this__footerMoreControl12 = _this._footerMoreControl) == null ? void 0 : _this__footerMoreControl12.remove(item11.control);
-	                            }
-	                            (_this__footerMoreControl11 = _this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_destroy = _this__footerMoreControl11.destroy) == null ? void 0 : _this__footerMoreControl_destroy.call(_this__footerMoreControl11);
-	                            _this._footerMoreControl = null;
-	                        }
-	                        // prettier-ignore
-	                        _this.emit(Theme.EVENTS.control.footerMoreShowControlsChange, !!_this._footerMoreControl, (_this__footerMoreControl7 = _this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list4 = _this__footerMoreControl7.list) == null ? void 0 : _this__footerMoreControl_list4.map(function(item) {
-	                            return item.key;
-	                        }));
-	                        displayMore();
+	                        (_this__footerMoreControl10 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl10.remove(item2.control);
 	                    }
+	                    if (((_this__footerMoreControl8 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list4 = _this__footerMoreControl8.list) == null ? void 0 : _this__footerMoreControl_list4.length) === 1) {
+	                        var _this__footerMoreControl12, _this__footerMoreControl_destroy, _this__footerMoreControl13;
+	                        // 最后一个， 移除 More
+	                        var item11 = (_this__footerMoreControl12 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl12.list.shift();
+	                        if (item11) {
+	                            var _this__footerMoreControl14;
+	                            if (item11.part === 'left') {
+	                                var _item1_control_resetPopupContainer, _item1_control;
+	                                (_item1_control = item11.control) == null ? void 0 : (_item1_control_resetPopupContainer = _item1_control.resetPopupContainer) == null ? void 0 : _item1_control_resetPopupContainer.call(_item1_control, this._footer.$left, 'append');
+	                            } else if (item11.part === 'right') {
+	                                var _item1_control_resetPopupContainer1, _item1_control1;
+	                                (_item1_control1 = item11.control) == null ? void 0 : (_item1_control_resetPopupContainer1 = _item1_control1.resetPopupContainer) == null ? void 0 : _item1_control_resetPopupContainer1.call(_item1_control1, this._footer.$right, 'append');
+	                            }
+	                            (_this__footerMoreControl14 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl14.remove(item11.control);
+	                        }
+	                        (_this__footerMoreControl13 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_destroy = _this__footerMoreControl13.destroy) == null ? void 0 : _this__footerMoreControl_destroy.call(_this__footerMoreControl13);
+	                        this._footerMoreControl = null;
+	                    }
+	                    // prettier-ignore
+	                    this.emit(Theme.EVENTS.control.footerMoreShowControlsChange, !!this._footerMoreControl, (_this__footerMoreControl9 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list5 = _this__footerMoreControl9.list) == null ? void 0 : _this__footerMoreControl_list5.map(function(item) {
+	                        return item.key;
+	                    }));
+	                    this._displayMore();
 	                }
 	            }
-	        };
-	        displayMore();
+	        }
 	    };
 	    /**
 	   * 移除事件
@@ -13070,6 +13700,7 @@
 	        [
 	            'ptz',
 	            'talk',
+	            'broadcast',
 	            'record',
 	            'speed'
 	        ].forEach(function(key) {
@@ -13147,6 +13778,7 @@
 	                        [
 	                            'ptz',
 	                            'talk',
+	                            'broadcast',
 	                            'record'
 	                        ].forEach(function(key) {
 	                            var _this_controls;
@@ -13507,7 +14139,11 @@
 	    zh: zh,
 	    en: en
 	};
+<<<<<<< HEAD
 	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.0-beta.4';
+=======
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.1-beta.1';
+>>>>>>> main
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
