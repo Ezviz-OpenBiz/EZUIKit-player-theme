@@ -1,6 +1,6 @@
 {
   "name": "@ezuikit/player-theme",
-  "version": "2.1.2-beta.2",
+  "version": "2.1.2-beta.3",
   "description": "player theme",
   "title": "theme",
   "main": "dist/index.js",
@@ -36,15 +36,6 @@
     "deepmerge": "^4.3.1",
     "eventemitter3": "^5.0.1",
     "screenfull": "5.2.0"
-  },
-  "devDependencies": {
-    "@common/rollup": "workspace:*",
-    "@ezuikit/control-ptz": "workspace:*",
-    "@ezuikit/control-zoom": "workspace:*"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
