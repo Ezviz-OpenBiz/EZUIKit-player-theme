@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.1.1-beta.1
-* Copyright (c) 2026-02-05 Ezviz-OpenBiz
+* @ezuikit/player-theme v2.1.2-beta.2
+* Copyright (c) 2026-03-10 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -10161,13 +10161,15 @@
 	            classNameSuffix: 'aichat'
 	        })) || this;
 	        _this._options = options;
-	        _this._render();
-	        _this.on(EVENTS.aichatChange, function(active) {
-	            if (_this.active !== active) {
-	                _this.active = active;
-	                _this._render();
-	            }
-	        });
+	        if (options.urlInfo.search === "" && options.urlInfo.recType === "cloud") {
+	            _this._render();
+	            _this.on(EVENTS.aichatChange, function(active) {
+	                if (_this.active !== active) {
+	                    _this.active = active;
+	                    _this._render();
+	                }
+	            });
+	        }
 	        return _this;
 	    }
 	    var _proto = AIChat.prototype;
@@ -12250,7 +12252,8 @@
 	}
 	// 需要权限的控件
 	var AUTH_KEY = [
-	    'ptz'
+	    'ptz',
+	    'aiChat'
 	];
 	/**
 	 * 渲染控件
@@ -12313,7 +12316,8 @@
 	                        accessToken: theme.options.accessToken,
 	                        token: theme.options.token,
 	                        deviceSerial: theme.urlInfo.deviceSerial,
-	                        channelNo: theme.urlInfo.channelNo
+	                        channelNo: theme.urlInfo.channelNo,
+	                        urlInfo: theme.urlInfo
 	                    } : {}, {
 	                        PLAY_TYPE: theme.options.type
 	                    }, ((_theme_options1 = theme.options) == null ? void 0 : _theme_options1["" + item.iconId + "Options"]) || {}, {
@@ -14100,7 +14104,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.1-beta.1';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.2-beta.2';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
