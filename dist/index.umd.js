@@ -1,5 +1,5 @@
 /*
-* @ezuikit/player-theme v2.1.2-beta.4
+* @ezuikit/player-theme v2.1.2-beta.5
 * Copyright (c) 2026-03-12 Ezviz-OpenBiz
 * Released under the MIT License.
 */
@@ -10161,15 +10161,13 @@
 	            classNameSuffix: 'aichat'
 	        })) || this;
 	        _this._options = options;
-	        if (options.urlInfo.searchParams.busType !== '7' && options.urlInfo.recType === "cloud") {
-	            _this._render();
-	            _this.on(EVENTS.aichatChange, function(active) {
-	                if (_this.active !== active) {
-	                    _this.active = active;
-	                    _this._render();
-	                }
-	            });
-	        }
+	        _this._render();
+	        _this.on(EVENTS.aichatChange, function(active) {
+	            if (_this.active !== active) {
+	                _this.active = active;
+	                _this._render();
+	            }
+	        });
 	        return _this;
 	    }
 	    var _proto = AIChat.prototype;
@@ -10178,6 +10176,9 @@
 	        this.$container.innerHTML = IconComponents.aiChat({
 	            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_AICHAT
 	        });
+	        if (this._options.urlInfo.searchParams.busType !== '7' && this._options.urlInfo.recType === "cloud") ; else {
+	            this.$container.style.display = 'none';
+	        }
 	    };
 	    _proto.reset = function reset(hide) {
 	        if (this.active) {
@@ -14104,7 +14105,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.2-beta.4';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.2-beta.5';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 

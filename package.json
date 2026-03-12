@@ -1,6 +1,6 @@
 {
   "name": "@ezuikit/player-theme",
-  "version": "2.1.2-beta.4",
+  "version": "2.1.2-beta.5",
   "description": "player theme",
   "title": "theme",
   "main": "dist/index.js",
