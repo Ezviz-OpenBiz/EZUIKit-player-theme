@@ -10197,9 +10197,7 @@
 	        Control.prototype.destroy.call(this);
 	    };
 	    _proto.updateOptions = function updateOptions(options) {
-	        this._options = deepmerge(this._options, options, {
-	            clone: false
-	        });
+	        this._options = _extends$9({}, this._options, options);
 	    };
 	    /**
 	     * 点击 Control 会触发
