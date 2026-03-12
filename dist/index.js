@@ -1,5 +1,5 @@
 /*
-* @ezuikit/player-theme v2.1.2-beta.5
+* @ezuikit/player-theme v2.1.2-beta.6
 * Copyright (c) 2026-03-12 Ezviz-OpenBiz
 * Released under the MIT License.
 */
@@ -8554,6 +8554,11 @@ function _ts_generator$2(thisArg, body) {
         }
         Control.prototype.destroy.call(this);
     };
+    _proto.updateOptions = function updateOptions(options) {
+        this._options = deepmerge(this._options, options, {
+            clone: false
+        });
+    };
     /**
      * 点击 Control 会触发
      */ _proto._onControlClick = function _onControlClick(e) {
@@ -11953,7 +11958,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.2-beta.5';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.2-beta.6';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;
