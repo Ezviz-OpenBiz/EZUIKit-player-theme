@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.1.2-beta.3
-* Copyright (c) 2026-03-10 Ezviz-OpenBiz
+* @ezuikit/player-theme v2.1.2-beta.4
+* Copyright (c) 2026-03-12 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 /**
