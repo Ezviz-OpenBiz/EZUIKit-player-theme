@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.1.2-beta.8
-* Copyright (c) 2026-03-12 Ezviz-OpenBiz
+* @ezuikit/player-theme v2.1.4-beta.1
+* Copyright (c) 2026-03-30 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -1762,7 +1762,7 @@ var VOLUME_DEFAULT_OPTIONS = {
         _this._lastVolume = _this._volume;
         _this._muted = !!((_this__options_props3 = _this._options.props) == null ? void 0 : _this__options_props3.muted) || false;
         // 轻应用私有暂时不支持调节音量
-        if (!(Utils.isMobile || _this._options.PLAY_TYPE === 'ezopen')) {
+        if (!(Utils.isMobile || _this._options.PLAY_TYPE === 'ezopen' || _this._options.PLAY_TYPE === 'hls')) {
             var _this__options_props4, _this__options_props5;
             _this.picker = new Picker(_this.$container, {
                 getPopupContainer: function() {
@@ -3215,6 +3215,47 @@ var en = {
             {
                 // flv 录制 2.1.0 新增
                 iconId: 'record',
+                part: 'left',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
+                iconId: 'fullscreen',
+                part: 'right',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
+                iconId: 'globalFullscreen',
+                part: 'right',
+                defaultActive: 0,
+                isrender: 1
+            }
+        ]
+    }
+};
+
+/**
+ * flv 预览
+ */ var hlsLiveTemplate = {
+    autoFocus: 3,
+    // poster:
+    //   "https://img2.baidu.com/it/u=3209353042,356122753&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
+    footer: {
+        btnList: [
+            {
+                iconId: 'play',
+                part: 'left',
+                isrender: 1
+            },
+            {
+                iconId: 'capturePicture',
+                part: 'left',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
+                iconId: 'volume',
                 part: 'left',
                 defaultActive: 0,
                 isrender: 1
@@ -4745,7 +4786,7 @@ function getDefaultExportFromCjs (x) {
 
 /*
 * @ezuikit/control-zoom v0.0.2
-* Copyright (c) 2025-11-12 Ezviz-OpenBiz
+* Copyright (c) 2026-03-18 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 
@@ -5846,14 +5887,14 @@ function _ts_generator$5(thisArg, body) {
             deviceControls.push(item);
             return false;
         }
-        if (item.isrender === 1 && REC_GROUP.includes(item.iconId)) {
+        if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
             recControls.push(recControls[0] ? _extends$i({}, item, {
                 part: recControls[0].part
             }) : item);
             return false;
         }
-        return item.isrender === 1;
+        return item.isrender !== 0;
     }).map(function(item) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         if (replaceKey[item.iconId]) {
@@ -5865,18 +5906,18 @@ function _ts_generator$5(thisArg, body) {
     var footerBtnList = ((themeData == null ? void 0 : (_themeData_footer = themeData.footer) == null ? void 0 : _themeData_footer.btnList) || []).filter(function(item) {
         // TODO: 因为 'deviceID', 'deviceName'， 'rec', 'cloudRec', 'cloudRecord' 是两个组， 并且要在头部（移动端特殊处理）
         // prettier-ignore
-        if (item.isrender === 1 && DEVICE_INFO_GROUP.includes(item.iconId)) {
+        if (item.isrender !== 0 && DEVICE_INFO_GROUP.includes(item.iconId)) {
             deviceControls.push(item);
             return false;
         }
-        if (item.isrender === 1 && REC_GROUP.includes(item.iconId)) {
+        if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
             recControls.push(recControls[0] ? _extends$i({}, item, {
                 part: recControls[0].part
             }) : item);
             return false;
         }
-        return item.isrender === 1;
+        return item.isrender !== 0;
     }).map(function(item) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         if (replaceKey[item.iconId]) {
@@ -5943,12 +5984,10 @@ function _filterLeftRightControls(btnList) {
                         3,
                         1
                     ];
-                    if (data === 'simple') {
-                        return [
-                            2,
-                            null
-                        ];
-                    }
+                    if (data === 'simple') return [
+                        2,
+                        null
+                    ];
                     // 渲染主题模板
                     themeData = TEMPLATES[data];
                     if (!data) {
@@ -5978,23 +6017,21 @@ function _filterLeftRightControls(btnList) {
                     ];
                 case 3:
                     template = _state.sent();
-                    if (template) {
-                        return [
-                            2,
-                            template
-                        ];
-                    }
+                    if (template) return [
+                        2,
+                        template
+                    ];
                     theme.emit(EVENTS.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
                     return [
-                        3,
-                        5
+                        2,
+                        null
                     ];
                 case 4:
                     _state.sent();
                     theme.emit(EVENTS.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
                     return [
-                        3,
-                        5
+                        2,
+                        null
                     ];
                 case 5:
                     return [
@@ -6545,7 +6582,7 @@ var dist = {};
 
 /*
 * @ezuikit/control-ptz v0.0.1
-* Copyright (c) 2025-11-12 Ezviz-OpenBiz
+* Copyright (c) 2026-03-18 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 
@@ -8301,6 +8338,11 @@ function _ts_generator$3(thisArg, body) {
                 _this._render();
             }
         });
+        if (options.sdkType === "base") {
+            _this.$container.style.removeProperty("display");
+        } else {
+            _this.$container.style.display = "none";
+        }
         return _this;
     }
     var _proto = Broadcast.prototype;
@@ -8526,6 +8568,11 @@ function _ts_generator$2(thisArg, body) {
                 _this._render();
             }
         });
+        if (options.urlInfo.search === "" && options.urlInfo.recType === "cloud" && options.sdkType === "base") {
+            _this.$container.style.removeProperty("display");
+        } else {
+            _this.$container.style.display = "none";
+        }
         return _this;
     }
     var _proto = AIChat.prototype;
@@ -8534,9 +8581,6 @@ function _ts_generator$2(thisArg, body) {
         this.$container.innerHTML = IconComponents.aiChat({
             title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_AICHAT
         });
-        if (this._options.urlInfo.searchParams.busType !== '7' && this._options.urlInfo.recType === "cloud") ; else {
-            this.$container.style.display = 'none';
-        }
     };
     _proto.reset = function reset(hide) {
         if (this.active) {
@@ -8553,9 +8597,6 @@ function _ts_generator$2(thisArg, body) {
             this.reset();
         }
         Control.prototype.destroy.call(this);
-    };
-    _proto.updateOptions = function updateOptions(options) {
-        this._options = _extends$9({}, this._options, options);
     };
     /**
      * 点击 Control 会触发
@@ -10171,7 +10212,8 @@ function _renderControls(theme, $container, btnList, props) {
                         channelNo: theme.urlInfo.channelNo,
                         urlInfo: theme.urlInfo
                     } : {}, {
-                        PLAY_TYPE: theme.options.type
+                        PLAY_TYPE: theme.options.type,
+                        sdkType: theme.options.sdkType
                     }, ((_theme_options1 = theme.options) == null ? void 0 : _theme_options1["" + item.iconId + "Options"]) || {}, {
                         props: props
                     }));
@@ -10763,9 +10805,11 @@ var THEME_DEFAULT_OPTIONS = {
         _this.destroyed = false;
         var _this_options_template, _ref3;
         // 标准流暂时仅支持 TEMPLATES 中的配置， 多余的的展示不生效（如电子放大是不支持的等等）， 待版本更新才能支持
-        _this._renderTheme([
+        // prettier-ignore
+        _this._renderTheme(// hls 不支持自定义
+        options.type === 'hls' ? hlsLiveTemplate : // flv mp4 支持自定义 themeData
+        [
             'flv',
-            'hls',
             'mp4'
         ].includes(options.type) ? ((_this_options = _this.options) == null ? void 0 : _this_options.themeData) !== undefined ? (_this_options1 = _this.options) == null ? void 0 : _this_options1.themeData : LiveTemplate // 标准流仅支持  null 和 LiveTemplate (支持自定义 2026-01-19)
          : (_ref3 = (_this_options_template = (_this_options2 = _this.options) == null ? void 0 : _this_options2.template) != null ? _this_options_template : (_this_options3 = _this.options) == null ? void 0 : _this_options3.themeData) != null ? _ref3 : null);
@@ -11489,7 +11533,11 @@ var THEME_DEFAULT_OPTIONS = {
             this.fullscreen();
         }
     };
-    _proto._getRecType = function _getRecType(url) {
+    /**
+   * 获取录像类型， 仅 ezopen 支持
+   * @param url 录像 url
+   * @returns {"rec" | "cloudRecord" | "cloudRec" | ""} 录像类型， rec: 录像， cloudRec: 云录像， cloudRecord: 云录制
+   */ _proto._getRecType = function _getRecType(url) {
         if (this.options.type === 'ezopen' && /^ezopen:\/\//.test(url)) {
             var urlInfo = require$$1.parseEzopenUrl(url);
             if (urlInfo.type === 'rec') {
@@ -11956,7 +12004,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.2-beta.8';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.4-beta.1';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;
