@@ -1433,10 +1433,7 @@ declare class Theme extends EventEmitter {
         readonly changeTheme: "changeTheme";
         readonly recTypeChange: "recTypeChange";
         readonly definitionChange: "definitionChange";
-        readonly speedChange: "speedChange"; /**
-         * @since 0.0.1
-         * @private
-         */
+        readonly speedChange: "speedChange";
         readonly recordingChange: "recordingChange";
         readonly talkingChange: "talkingChange";
         readonly talkVolumeChange: "talkVolumeChange";
@@ -1458,24 +1455,20 @@ declare class Theme extends EventEmitter {
             readonly capturePictureDestroy: "Control.capturePictureDestroy";
             readonly volumechange: "Control.volumechange";
             readonly volumePanelOpenChange: "Control.volumePanelOpenChange";
-            /**  resizeObserver 监听销毁 */
             readonly volumeDestroy: "Control.volumeDestroy";
             readonly controlsBarOpenChange: "Control.controlsBarOpenChange";
-            readonly headerMoreShowControlsChange: "Control.headerMoreShowControlsChange";
+            readonly headerMoreShowControlsChange: "Control.headerMoreShowControlsChange"; /** 加载中 */
             readonly headerMorePanelOpenChange: "Control.headerMorePanelOpenChange";
             readonly footerMoreShowControlsChange: "Control.footerMoreShowControlsChange";
             readonly footerMorePanelOpenChange: "Control.footerMorePanelOpenChange";
             readonly deviceDestroy: "Control.deviceDestroy";
             readonly recTypeChange: "Control.recTypeChange";
             readonly recDestroy: "Control.recDestroy";
-            readonly definitionChange: "Control.definitionChange"; /** 窗口尺寸变化时，设置窗口超出隐藏，防止出现滚动条 */
+            readonly definitionChange: "Control.definitionChange";
             readonly definitionList: "Control.definitionList";
             readonly definitionPanelOpenChange: "Control.definitionPanelOpenChange";
             readonly definitionDestroy: "Control.definitionDestroy";
             readonly speedChange: "Control.speedChange";
-            /**
-             * 录像回放的月份列表 @private
-             */
             readonly speedPanelOpenChange: "Control.speedPanelOpenChange";
             readonly speedDestroy: "Control.speedDestroy";
             readonly ptzPanelOpenChange: "Control.ptzPanelOpenChange";

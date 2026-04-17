@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.1.4-beta.1
-* Copyright (c) 2026-03-30 Ezviz-OpenBiz
+* @ezuikit/player-theme v2.1.4-beta.3
+* Copyright (c) 2026-04-17 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -56,11 +56,18 @@ var THEME_PROPS = [
  * |          rec          |  cloudRec    |    cloudRecord  |
  * |:---------------------:|:------------:|:---------------:|
  * | 本地回放（SDK存储回放）   |    云存储回放 |     云录制回放    |
- */ var REC_GROUP = [
-    'rec',
-    'cloudRec',
-    'cloudRecord'
-];
+ */ // export const REC_GROUP: string[] = ['rec', 'cloudRec', 'cloudRecord'] as const;
+var REC_GROUP = function(sdkType) {
+    if (sdkType === void 0) sdkType = 'base';
+    return sdkType === 'base' ? [
+        'rec',
+        'cloudRec',
+        'cloudRecord'
+    ] : [
+        'rec',
+        'cloudRec'
+    ];
+};
 /**
  * 设备信息
  *
@@ -4786,7 +4793,7 @@ function getDefaultExportFromCjs (x) {
 
 /*
 * @ezuikit/control-zoom v0.0.2
-* Copyright (c) 2026-03-18 Ezviz-OpenBiz
+* Copyright (c) 2026-04-02 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 
@@ -5887,7 +5894,7 @@ function _ts_generator$5(thisArg, body) {
             deviceControls.push(item);
             return false;
         }
-        if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
+        if (item.isrender !== 0 && REC_GROUP().includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
             recControls.push(recControls[0] ? _extends$i({}, item, {
                 part: recControls[0].part
@@ -5910,7 +5917,7 @@ function _ts_generator$5(thisArg, body) {
             deviceControls.push(item);
             return false;
         }
-        if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
+        if (item.isrender !== 0 && REC_GROUP().includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
             recControls.push(recControls[0] ? _extends$i({}, item, {
                 part: recControls[0].part
@@ -6582,7 +6589,7 @@ var dist = {};
 
 /*
 * @ezuikit/control-ptz v0.0.1
-* Copyright (c) 2026-03-18 Ezviz-OpenBiz
+* Copyright (c) 2026-04-02 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 
@@ -8331,14 +8338,14 @@ function _ts_generator$3(thisArg, body) {
             classNameSuffix: 'broadcast'
         })) || this;
         _this._options = options;
-        _this._render();
-        _this.on(EVENTS.broadcastChange, function(active) {
-            if (_this.active !== active) {
-                _this.active = active;
-                _this._render();
-            }
-        });
         if (options.sdkType === "base") {
+            _this._render();
+            _this.on(EVENTS.broadcastChange, function(active) {
+                if (_this.active !== active) {
+                    _this.active = active;
+                    _this._render();
+                }
+            });
             _this.$container.style.removeProperty("display");
         } else {
             _this.$container.style.display = "none";
@@ -8561,14 +8568,14 @@ function _ts_generator$2(thisArg, body) {
             classNameSuffix: 'aichat'
         })) || this;
         _this._options = options;
-        _this._render();
-        _this.on(EVENTS.aichatChange, function(active) {
-            if (_this.active !== active) {
-                _this.active = active;
-                _this._render();
-            }
-        });
         if (options.urlInfo.search === "" && options.urlInfo.recType === "cloud" && options.sdkType === "base") {
+            _this._render();
+            _this.on(EVENTS.aichatChange, function(active) {
+                if (_this.active !== active) {
+                    _this.active = active;
+                    _this._render();
+                }
+            });
             _this.$container.style.removeProperty("display");
         } else {
             _this.$container.style.display = "none";
@@ -10159,12 +10166,12 @@ function _renderControls(theme, $container, btnList, props) {
         for(var _iterator = _create_for_of_iterator_helper_loose$1(btnList), _step; !(_step = _iterator()).done;){
             var item = _step.value;
             var _theme_options_mobileExtendOptions, // 在移动端支持扩展和窗口区域渲染
-            _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions1;
-            if (((((_theme_options_mobileExtendOptions = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions.controls) || []).includes(item.iconId) && item.iconId !== "ptz" || ((_theme_options_mobileExtendOptions1 = theme.options.mobileExtendOptions) == null ? void 0 : (_theme_options_mobileExtendOptions_controls = _theme_options_mobileExtendOptions1.controls) == null ? void 0 : _theme_options_mobileExtendOptions_controls.includes('rec')) && REC_GROUP.includes(item.iconId) // 移动端模式下，不渲染在header 中控件， 需要移动到mobileExtend中
+            _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions1, _theme_options, _theme_options1;
+            if (((((_theme_options_mobileExtendOptions = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions.controls) || []).includes(item.iconId) && item.iconId !== "ptz" || ((_theme_options_mobileExtendOptions1 = theme.options.mobileExtendOptions) == null ? void 0 : (_theme_options_mobileExtendOptions_controls = _theme_options_mobileExtendOptions1.controls) == null ? void 0 : _theme_options_mobileExtendOptions_controls.includes('rec')) && REC_GROUP((_theme_options = theme.options) == null ? void 0 : _theme_options.sdkType).includes(item.iconId) // 移动端模式下，不渲染在header 中控件， 需要移动到mobileExtend中
             ) && Utils.isMobile) {
                 continue;
             }
-            if (REC_GROUP.includes(item.iconId) && theme._header) {
+            if (REC_GROUP((_theme_options1 = theme.options) == null ? void 0 : _theme_options1.sdkType).includes(item.iconId) && theme._header) {
                 _renderRecType(theme, theme._header.$right, item.iconId, props);
                 continue;
             }
@@ -10172,7 +10179,7 @@ function _renderControls(theme, $container, btnList, props) {
                 if (theme.options.deviceOptions !== null) {
                     var _theme_controls;
                     if (!((_theme_controls = theme.controls) == null ? void 0 : _theme_controls["deviceControl"])) {
-                        var _theme_options;
+                        var _theme_options2;
                         // eslint-disable-next-line @typescript-eslint/dot-notation, new-cap, @typescript-eslint/no-unsafe-argument
                         theme.controls["deviceControl"] = new Controls["device"](_extends$1({
                             rootContainer: theme.$container,
@@ -10185,7 +10192,7 @@ function _renderControls(theme, $container, btnList, props) {
                             type: theme.options.type,
                             deviceSerial: theme.urlInfo.deviceSerial,
                             channelNo: theme.urlInfo.channelNo
-                        }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["deviceOptions"]) || {}, {
+                        }, ((_theme_options2 = theme.options) == null ? void 0 : _theme_options2["deviceOptions"]) || {}, {
                             props: props
                         }));
                     }
@@ -10195,7 +10202,7 @@ function _renderControls(theme, $container, btnList, props) {
             // footer
             if (Controls[item.iconId]) {
                 if (theme.options["" + item.iconId + "Options"] !== null) {
-                    var _theme_options1;
+                    var _theme_options3;
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                     theme.controls["" + item.iconId + "Control"] = new Controls[item.iconId](_extends$1({
                         rootContainer: theme.$container,
@@ -10214,7 +10221,7 @@ function _renderControls(theme, $container, btnList, props) {
                     } : {}, {
                         PLAY_TYPE: theme.options.type,
                         sdkType: theme.options.sdkType
-                    }, ((_theme_options1 = theme.options) == null ? void 0 : _theme_options1["" + item.iconId + "Options"]) || {}, {
+                    }, ((_theme_options3 = theme.options) == null ? void 0 : _theme_options3["" + item.iconId + "Options"]) || {}, {
                         props: props
                     }));
                 }
@@ -10367,7 +10374,8 @@ function _renderTheme(theme, data) {
                     list = [].concat(((_filterThemeData_header = filterThemeData.header) == null ? void 0 : _filterThemeData_header.btnList) || [], (_filterThemeData_footer_btnList = (_filterThemeData_footer = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer.btnList) != null ? _filterThemeData_footer_btnList : []);
                     // FIXME: 这个逻辑实际上是有问题的
                     _needTimeLine = list.some(function(item) {
-                        return REC_GROUP.includes(item.iconId);
+                        var _theme_options;
+                        return REC_GROUP((_theme_options = theme.options) == null ? void 0 : _theme_options.sdkType).includes(item.iconId);
                     });
                     // PC 单独渲染timeLine
                     if (!Utils.isMobile && !(theme.options.timeLineOptions === null || theme.options.disabledTimeLine) && _needTimeLine) {
@@ -10395,8 +10403,8 @@ function _renderTheme(theme, data) {
                             }
                             if (theme.options.recOptions !== null && ((_theme_options_mobileExtendOptions2 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions2.controls.includes('rec')) && _needTimeLine) {
                                 [].concat(((_filterThemeData_header1 = filterThemeData.header) == null ? void 0 : _filterThemeData_header1.btnList) || [], (_filterThemeData_footer_btnList1 = (_filterThemeData_footer1 = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer1.btnList) != null ? _filterThemeData_footer_btnList1 : []).forEach(function(item) {
-                                    var _theme__mobileExtend;
-                                    if (REC_GROUP.includes(item.iconId)) _renderRecType(theme, (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight, item.iconId, props);
+                                    var _theme_options, _theme__mobileExtend;
+                                    if (REC_GROUP((_theme_options = theme.options) == null ? void 0 : _theme_options.sdkType).includes(item.iconId)) _renderRecType(theme, (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight, item.iconId, props);
                                 });
                             }
                             if ((theme.options.timeLineOptions !== null || !theme.options.disabledTimeLine) && ((_theme_options_mobileExtendOptions3 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions3.controls.includes('timeLine')) && _needTimeLine) {
@@ -12004,7 +12012,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.4-beta.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.4-beta.3';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;
