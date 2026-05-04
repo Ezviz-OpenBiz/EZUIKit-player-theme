@@ -4,7 +4,7 @@
   "description": "Vue 2.5 demo for Node 10/12",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js"
+    "build": "cross-env NODE_ENV=production node build.js"
   },
   "dependencies": {
     "vue": "2.5.17",

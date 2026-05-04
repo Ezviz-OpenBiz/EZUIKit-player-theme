@@ -8,7 +8,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
-    filename: "build.js"
+    filename: "index.js"
   },
   module: {
     rules: [
@@ -36,6 +36,21 @@ module.exports = {
           overlay: true
         }
       }),
+  plugins: isProduction
+    ? [
+        new webpack.DefinePlugin({
+          "process.env": {
+            NODE_ENV: '"production"'
+          }
+        })
+      ]
+    : [
+        new webpack.DefinePlugin({
+          "process.env": {
+            NODE_ENV: '"development"'
+          }
+        })
+      ],
   resolve: {
     alias: {
       vue$: "vue/dist/vue.esm.js"
