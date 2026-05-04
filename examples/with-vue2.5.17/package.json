@@ -1,0 +1,24 @@
+{
+  "name": "vue25-node12-demo",
+  "version": "1.0.0",
+  "description": "Vue 2.5 demo for Node 10/12",
+  "scripts": {
+    "dev": "webpack-dev-server --inline --progress --config webpack.config.js",
+    "build": "webpack --progress --hide-modules"
+  },
+  "dependencies": {
+    "vue": "2.5.17",
+    "@ezuikit/control-time-line": "2.0.0-beta.2",
+    "@ezuikit/player-theme": "3.0.0-beta.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "css-loader": "^0.28.7",
+    "vue-loader": "^13.0.5",
+    "vue-template-compiler": "2.5.17",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.9.1"
+  }
+}
