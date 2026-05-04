@@ -1,10 +1,24 @@
 {
   "name": "@ezuikit/player-theme",
-  "version": "2.1.4-beta.3",
+  "version": "3.0.0-beta.1",
   "description": "player theme",
   "title": "theme",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
   "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    },
+    "./dist/style.js": "./dist/style/style.js",
+    "./dist/style": "./dist/style/style.js",
+    "./dist/style.css": "./dist/style.css",
+    "./dist/constant.js": "./dist/constant.js",
+    "./dist/constant": "./dist/constant.js"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development rollup --config rollup.config.mjs --watch",
     "build": "npm run clean && cross-env NODE_ENV=production rollup --config rollup.config.mjs",

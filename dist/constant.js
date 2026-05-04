@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.1.4-beta.3
-* Copyright (c) 2026-04-17 Ezviz-OpenBiz
+* @ezuikit/player-theme v2.2.0-beta.1
+* Copyright (c) 2026-05-04 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 /**
@@ -43,18 +43,11 @@ var THEME_PROPS = [
  * |          rec          |  cloudRec    |    cloudRecord  |
  * |:---------------------:|:------------:|:---------------:|
  * | 本地回放（SDK存储回放）   |    云存储回放 |     云录制回放    |
- */ // export const REC_GROUP: string[] = ['rec', 'cloudRec', 'cloudRecord'] as const;
-var REC_GROUP = function(sdkType) {
-    if (sdkType === void 0) sdkType = 'base';
-    return sdkType === 'base' ? [
-        'rec',
-        'cloudRec',
-        'cloudRecord'
-    ] : [
-        'rec',
-        'cloudRec'
-    ];
-};
+ */ var REC_GROUP = [
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
 /**
  * 设备信息
  *
