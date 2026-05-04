@@ -6,20 +6,26 @@ settings:
 
 dependencies:
   '@ezuikit/control-date-picker':
-    specifier: 1.0.5
-    version: 1.0.5
+    specifier: 2.0.0-beta.2
+    version: 2.0.0-beta.2
+  '@ezuikit/control-ptz':
+    specifier: 1.0.0-beta.3
+    version: 1.0.0-beta.3
   '@ezuikit/control-time-line':
-    specifier: 1.0.7
-    version: 1.0.7
+    specifier: 2.0.0-beta.2
+    version: 2.0.0-beta.2
+  '@ezuikit/control-zoom':
+    specifier: 1.0.0-beta.1
+    version: 1.0.0-beta.1
   '@ezuikit/utils-i18n':
-    specifier: 2.0.0
-    version: 2.0.0
+    specifier: 2.0.1
+    version: 2.0.1
   '@ezuikit/utils-logger':
-    specifier: 2.0.0
-    version: 2.0.0
+    specifier: 2.0.1
+    version: 2.0.1
   '@ezuikit/utils-tools':
-    specifier: 2.0.2
-    version: 2.0.2
+    specifier: 2.0.3
+    version: 2.0.3
   '@juggle/resize-observer':
     specifier: ^3.4.0
     version: 3.4.0
@@ -27,8 +33,8 @@ dependencies:
     specifier: 4.0.2
     version: 4.0.2
   '@skax/picker':
-    specifier: 1.1.7
-    version: 1.1.7
+    specifier: 1.1.8
+    version: 1.1.8
   deepmerge:
     specifier: ^4.3.1
     version: 4.3.1
@@ -41,25 +47,36 @@ dependencies:
 
 packages:
 
-  /@ezuikit/control-date-picker@1.0.5:
-    resolution: {integrity: sha512-609826EN5AsKtiKc0OeZSWgoKaf9xaoSGOeCgrU+qSvzz4WHB2OaYgTmnacnTFvaOvnLbq5rzmsEfWp+L6z1mA==}
+  /@ezuikit/control-date-picker@2.0.0-beta.2:
+    resolution: {integrity: sha512-ezyV6ev6+Igs91c+aArZkow8BhuJslJutTRVI6NuWVtpQZdzLsUCszSkD8jjlJwI3js8NPbNbMjKzrMkeykV5Q==}
     dependencies:
       '@ezuikit/utils-i18n': 2.0.0
-      '@ezuikit/utils-tools': 2.0.2
+      '@ezuikit/utils-tools': 2.0.3
       '@skax/delegate': 4.0.2
-      '@skax/picker': 1.1.7
+      '@skax/picker': 1.1.8
       deepmerge: 4.3.1
     dev: false
 
-  /@ezuikit/control-time-line@1.0.7:
-    resolution: {integrity: sha512-kORx3vtI62UWMNYKVgeCmrwsMvIRqU6A/owDpt0lJ2IYMXqxVJvXaQYj6Pm+hKsqHaklVHjZwENghLmK78b2rQ==}
+  /@ezuikit/control-ptz@1.0.0-beta.3:
+    resolution: {integrity: sha512-E8qhpWerc3nWd8bCmQRpUYlUOwPK09GQCmI42GV0Z9PsUi4seiLl2j0isWkCQmNXHXY1lhXoqGfQSTZEGepTzw==}
+    dependencies:
+      '@ezuikit/utils-tools': 2.0.3
+      deepmerge: 4.3.1
+    dev: false
+
+  /@ezuikit/control-time-line@2.0.0-beta.2:
+    resolution: {integrity: sha512-QXlrrUV7bz+nuBKjloJ1UQoUw91G1hL9+6OOWO+emH7dSpORiXC24wGSZKTW8Te8ZxffVe/b9bY8q4pt5bF5Qg==}
     dependencies:
       '@ezuikit/utils-i18n': 2.0.0
-      '@ezuikit/utils-tools': 2.0.2
+      '@ezuikit/utils-tools': 2.0.3
       '@skax/delegate': 4.0.2
       '@skax/drag-scroll': 1.1.2
-      '@skax/picker': 1.1.7
+      '@skax/picker': 1.1.8
       deepmerge: 4.3.1
+    dev: false
+
+  /@ezuikit/control-zoom@1.0.0-beta.1:
+    resolution: {integrity: sha512-yOp9WxL76zEuKSheEG/lFtuIEmgEN2+i68FNhp09tG+Il4t84BohiJfnIM3BOWYzVH+yYFA8+t3zTnJzWtIKtg==}
     dev: false
 
   /@ezuikit/utils-i18n@2.0.0:
@@ -68,12 +85,18 @@ packages:
       deepmerge: 4.3.1
     dev: false
 
-  /@ezuikit/utils-logger@2.0.0:
-    resolution: {integrity: sha512-xtq7Vwle75pfA1UfmcsO2cAdqu9n04fxXDu32fpta7A99ENgyk8saK1NRxeiLnqQHdibaIAmrIbfehgLAH6ecQ==}
+  /@ezuikit/utils-i18n@2.0.1:
+    resolution: {integrity: sha512-846z2bDpCxioTBO3KG8Uw8QUFa6hzquSzmZKWPO6fjT3P4v6zNnXRz+Z3JCPlXnc4eesi03A+JmMAU6m5KI4gg==}
+    dependencies:
+      deepmerge: 4.3.1
     dev: false
 
-  /@ezuikit/utils-tools@2.0.2:
-    resolution: {integrity: sha512-Iay08gfn7URRJ0L16TkEYo8QcBENPN7LLs0O3Cv8Dxfm13rQMN4h03TbzARv/dDGAkKa910CIQ2bKG2QKIZ3nw==}
+  /@ezuikit/utils-logger@2.0.1:
+    resolution: {integrity: sha512-AeLLR9ZQJkSJFfCicpkVBcnOE4zyQMp4W4997sTEGyF3k3I8Upkfn4Cye2A44MIphdw6eytKlaJp6H4joSafQw==}
+    dev: false
+
+  /@ezuikit/utils-tools@2.0.3:
+    resolution: {integrity: sha512-YvUGDU1ikjSc5YjQLh6kQWGBOpqkOczb3HiocWm7FOk9grW6IAGd3RbRu0e+XyWT20nefcEpbIhRwOYsTejjnA==}
     dev: false
 
   /@juggle/resize-observer@3.4.0:
@@ -88,8 +111,8 @@ packages:
     resolution: {integrity: sha512-dRYjWY6+ix7FCdDLkkEgitO5EcawaHJt1Fu6BXUwKjpikkGnVeMRzrIwfH3jr6FbrhZvZr4StsYG7x5xMHZ3CQ==}
     dev: false
 
-  /@skax/picker@1.1.7:
-    resolution: {integrity: sha512-OXUyLW329DCKINmgtn7A7AMu6hScp/+/K1OgFFUP9hMFizPy1U/E66mVWi2PzZmYjhk7XRFtGbWu2H4nKpwhpA==}
+  /@skax/picker@1.1.8:
+    resolution: {integrity: sha512-PY8eefUG2KYheTV4VsToL66JDyFWbNrUQcz4sdEUfdFs5A2JWBYL4tNVEIMUq92m03yXaPtkNXh2RcgKO2Czzg==}
     dev: false
 
   /deepmerge@4.3.1:
