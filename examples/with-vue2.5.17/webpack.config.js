@@ -1,42 +1,48 @@
-const path = require('path')
-const webpack = require('webpack')
+const path = require("path");
+const webpack = require("webpack");
+
+const isProduction = process.env.NODE_ENV === "production";
 
 module.exports = {
-  entry: './src/main.js',
+  entry: "./src/main.js",
   output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
-    filename: 'build.js'
+    path: path.resolve(__dirname, "./dist"),
+    publicPath: "/dist/",
+    filename: "build.js"
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        loader: "vue-loader"
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
         exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        use: ['vue-style-loader', 'css-loader']
+        use: ["vue-style-loader", "css-loader"]
       }
     ]
   },
-  devServer: {
-    historyApiFallback: true,
-    noInfo: true,
-    overlay: true
-  },
+  ...(isProduction
+    ? {}
+    : {
+        devServer: {
+          historyApiFallback: true,
+          noInfo: true,
+          overlay: true
+        }
+      }),
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      vue$: "vue/dist/vue.esm.js"
     }
   },
-  performance: {
-    hints: false
-  },
-  devtool: '#eval-source-map'
-}
+  // performance: {
+  //   hints: false
+  // },
+  devtool: isProduction ? false : "#eval-source-map"
+};

@@ -4,12 +4,12 @@
   "description": "Vue 2.5 demo for Node 10/12",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config webpack.config.js",
-    "build": "webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js"
   },
   "dependencies": {
     "vue": "2.5.17",
-    "@ezuikit/control-time-line": "2.0.0-beta.2",
-    "@ezuikit/player-theme": "3.0.0-beta.1"
+    "@ezuikit/control-time-line": "2.0.0-beta.4",
+    "@ezuikit/player-theme": "3.0.0-beta.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -19,6 +19,7 @@
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "2.5.17",
     "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.9.1"
+    "webpack-dev-server": "^2.9.1",
+    "cross-env": "^7"
   }
 }

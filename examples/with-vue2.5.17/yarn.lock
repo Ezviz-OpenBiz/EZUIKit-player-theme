@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ezuikit/control-date-picker@2.0.0-beta.2":
-  version "2.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-date-picker/-/control-date-picker-2.0.0-beta.2.tgz#f674ec745d5cefcd166467b1c2fbea8d8e70056c"
-  integrity sha512-ezyV6ev6+Igs91c+aArZkow8BhuJslJutTRVI6NuWVtpQZdzLsUCszSkD8jjlJwI3js8NPbNbMjKzrMkeykV5Q==
+"@ezuikit/control-date-picker@^2.0.0-beta.4":
+  version "2.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-date-picker/-/control-date-picker-2.0.0-beta.4.tgz#e56d149943a46c056403c29a4f2ca129f9e23a15"
+  integrity sha512-0+uN3s8W78uSZSvWXbmFUY5kmK8I/94uWqBm9cSRlG7OtSvLCrySVXj/fbYXMrDWpXx6okHfxPZRqke6GbpK9Q==
   dependencies:
     "@ezuikit/utils-i18n" "2.0.0"
     "@ezuikit/utils-tools" "2.0.3"
@@ -13,18 +13,18 @@
     "@skax/picker" "1.1.8"
     deepmerge "^4.3.1"
 
-"@ezuikit/control-ptz@1.0.0-beta.3":
-  version "1.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-ptz/-/control-ptz-1.0.0-beta.3.tgz#142be024b17d1c5a957194f281495055137b4784"
-  integrity sha512-E8qhpWerc3nWd8bCmQRpUYlUOwPK09GQCmI42GV0Z9PsUi4seiLl2j0isWkCQmNXHXY1lhXoqGfQSTZEGepTzw==
+"@ezuikit/control-ptz@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-ptz/-/control-ptz-1.0.0-beta.5.tgz#7f478d7e7e172641cbafa84a38bc79de535ef030"
+  integrity sha512-tiV/7EqkaYDtVXx+9kS6VTfI9+jzTwlIOKh1gLbAETv0Y5J/u4C5ItLss9XSxgp/EF6OnHCu2zpuN/FLxnwfrQ==
   dependencies:
     "@ezuikit/utils-tools" "2.0.3"
     deepmerge "^4.3.1"
 
-"@ezuikit/control-time-line@2.0.0-beta.2":
-  version "2.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-time-line/-/control-time-line-2.0.0-beta.2.tgz#b3d993734965744ba96d468b6d95990a0fec4079"
-  integrity sha512-QXlrrUV7bz+nuBKjloJ1UQoUw91G1hL9+6OOWO+emH7dSpORiXC24wGSZKTW8Te8ZxffVe/b9bY8q4pt5bF5Qg==
+"@ezuikit/control-time-line@2.0.0-beta.4", "@ezuikit/control-time-line@^2.0.0-beta.4":
+  version "2.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-time-line/-/control-time-line-2.0.0-beta.4.tgz#bb0efb5145e2e2148add782614a5e2db76cc3c44"
+  integrity sha512-BwNQo8Kq/qQ3xtEnM6ya0JXstixUORNcUrXS+QTxPyU6+PxTs/YlurgE4uLb0kYuH6ny6ErxaumHVn3sqFq8zw==
   dependencies:
     "@ezuikit/utils-i18n" "2.0.0"
     "@ezuikit/utils-tools" "2.0.3"
@@ -33,20 +33,20 @@
     "@skax/picker" "1.1.8"
     deepmerge "^4.3.1"
 
-"@ezuikit/control-zoom@1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-zoom/-/control-zoom-1.0.0-beta.1.tgz#4a94f0ecc4f333bb1b511c57acec7d260d1b3d18"
-  integrity sha512-yOp9WxL76zEuKSheEG/lFtuIEmgEN2+i68FNhp09tG+Il4t84BohiJfnIM3BOWYzVH+yYFA8+t3zTnJzWtIKtg==
+"@ezuikit/control-zoom@^1.0.0-beta.3":
+  version "1.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-zoom/-/control-zoom-1.0.0-beta.3.tgz#0340344db01d95b5957df4f175a463b3199bc516"
+  integrity sha512-FzTgPYAzGUjw6kRdzBWzjk0SpGnFJbXtF5nTLq18dvH3KYoN/xH8SpI67O9cENR5VFzZZQzb3hU8j81oMtPXug==
 
-"@ezuikit/player-theme@3.0.0-beta.1":
-  version "3.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@ezuikit/player-theme/-/player-theme-3.0.0-beta.1.tgz#f0c7d9d78be2e9f2bf88ab0f7dd1b313fd339b3d"
-  integrity sha512-yI8r8DppPShev8B8cHz6ieX/jkJtYjzXZ4hycZDya8EfhoRcnKtXCB8uv5D4bF93IumNL5Z4vCDx9DVFTMA3OQ==
+"@ezuikit/player-theme@3.0.0-beta.3":
+  version "3.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@ezuikit/player-theme/-/player-theme-3.0.0-beta.3.tgz#63ae5bd81008138eb47e78f0702eab57069dc31d"
+  integrity sha512-906BK3FpQhpxeKr1VfzdUQA9uZKe8Jk+p830TxaoRNUK46U6mhlvNhci3qry8YguDEAOoHRt0xYVi8+fZ1GYEw==
   dependencies:
-    "@ezuikit/control-date-picker" "2.0.0-beta.2"
-    "@ezuikit/control-ptz" "1.0.0-beta.3"
-    "@ezuikit/control-time-line" "2.0.0-beta.2"
-    "@ezuikit/control-zoom" "1.0.0-beta.1"
+    "@ezuikit/control-date-picker" "^2.0.0-beta.4"
+    "@ezuikit/control-ptz" "^1.0.0-beta.5"
+    "@ezuikit/control-time-line" "^2.0.0-beta.4"
+    "@ezuikit/control-zoom" "^1.0.0-beta.3"
     "@ezuikit/utils-i18n" "2.0.1"
     "@ezuikit/utils-logger" "2.0.1"
     "@ezuikit/utils-tools" "2.0.3"
@@ -1533,6 +1533,13 @@ create-hmac@^1.1.7:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+cross-env@^7:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-7.0.3.tgz#865264b29677dc015ba8418918965dd232fc54cf"
+  integrity sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==
+  dependencies:
+    cross-spawn "^7.0.1"
+
 cross-spawn@^5.0.1:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -1541,6 +1548,15 @@ cross-spawn@^5.0.1:
     lru-cache "^4.0.1"
     shebang-command "^1.2.0"
     which "^1.2.9"
+
+cross-spawn@^7.0.1:
+  version "7.0.6"
+  resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.6.tgz#8a58fe78f00dcd70c370451759dfbfaf03e8ee9f"
+  integrity sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==
+  dependencies:
+    path-key "^3.1.0"
+    shebang-command "^2.0.0"
+    which "^2.0.1"
 
 crypto-browserify@^3.11.0:
   version "3.12.1"
@@ -4068,6 +4084,11 @@ path-key@^2.0.0:
   resolved "https://registry.yarnpkg.com/path-key/-/path-key-2.0.1.tgz#411cadb574c5a140d3a4b1910d40d80cc9f40b40"
   integrity sha512-fEHGKCSmUSDPv4uoj8AlD+joPlq3peND+HRYyxFz4KPw4z926S/b8rIuFs2FYJg3BwsxJf6A9/3eIdLaYC+9Dw==
 
+path-key@^3.1.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/path-key/-/path-key-3.1.1.tgz#581f6ade658cbba65a0d3380de7753295054f375"
+  integrity sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==
+
 path-parse@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
@@ -5052,10 +5073,22 @@ shebang-command@^1.2.0:
   dependencies:
     shebang-regex "^1.0.0"
 
+shebang-command@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/shebang-command/-/shebang-command-2.0.0.tgz#ccd0af4f8835fbdc265b82461aaf0c36663f34ea"
+  integrity sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==
+  dependencies:
+    shebang-regex "^3.0.0"
+
 shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
   integrity sha512-wpoSFAxys6b2a2wHZ1XpDSgD7N9iVjg29Ph9uV/uaP9Ex/KXlkTZTeddxDPSYQpgvzKLGJke2UU0AzoGCjNIvQ==
+
+shebang-regex@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
+  integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
 
 side-channel-list@^1.0.0:
   version "1.0.1"
@@ -6007,6 +6040,13 @@ which@^1.2.9:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/which/-/which-1.3.1.tgz#a45043d54f5805316da8d62f9f50918d3da70b0a"
   integrity sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ==
+  dependencies:
+    isexe "^2.0.0"
+
+which@^2.0.1:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/which/-/which-2.0.2.tgz#7c6a8dd0a636a0327e10b59c9286eee93f3f51b1"
+  integrity sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==
   dependencies:
     isexe "^2.0.0"
 
