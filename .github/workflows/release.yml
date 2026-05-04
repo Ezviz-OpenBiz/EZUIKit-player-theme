@@ -7,7 +7,7 @@ on:
       - "v*"
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write # Required for OIDC
   contents: read
 # 任务，定义个changelog 的任务
 jobs:
@@ -20,7 +20,7 @@ jobs:
 
       - name: Check file versions
         run: |
-          files="dist/index.js dist/index.umd.js dist/index.mjs package.json"
+          files="dist/index.cjs dist/index.umd.js dist/index.esm.js package.json"
 
           version=""
           inconsistent=false
