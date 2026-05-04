@@ -9,7 +9,7 @@
   "dependencies": {
     "vue": "2.5.17",
     "@ezuikit/control-time-line": "2.0.0-beta.4",
-    "@ezuikit/player-theme": "3.0.0-beta.3"
+    "@ezuikit/player-theme": "3.0.0-beta.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
