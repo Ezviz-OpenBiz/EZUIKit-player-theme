@@ -2529,7 +2529,7 @@ declare class Theme extends EventEmitter {
      * @param url 录像 url
      * @returns {"rec" | "cloudRecord" | "cloudRec" | ""} 录像类型， rec: 录像， cloudRec: 云录像， cloudRecord: 云录制
      */
-    protected _getRecType(url: string): "" | "rec" | "cloudRec" | "cloudRecord";
+    protected _getRecType(url: string): "" | "cloudRec" | "cloudRecord" | "rec";
     private resetControl;
     /**
      * 窗口全屏后旋转 90度判断， 然后设置控件已经旋转 90度， 为了解决控件交互问题
