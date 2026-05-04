@@ -1,5 +1,5 @@
 /*
-* @ezuikit/player-theme v3.0.0-beta.3
+* @ezuikit/player-theme v3.0.0-beta.4
 * Copyright (c) 2026-05-04 Ezviz-OpenBiz
 * Released under the MIT License.
 */
@@ -10332,6 +10332,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.0-beta.3';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.0-beta.4';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };

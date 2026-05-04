@@ -1,6 +1,6 @@
 {
   "name": "@ezuikit/player-theme",
-  "version": "3.0.0-beta.3",
+  "version": "3.0.0-beta.4",
   "description": "player theme",
   "title": "theme",
   "main": "dist/index.cjs",
@@ -13,8 +13,8 @@
       "require": "./dist/index.cjs",
       "default": "./dist/index.cjs"
     },
-    "./dist/style.js": "./dist/style/style.js",
-    "./dist/style": "./dist/style/style.js",
+    "./dist/style.js": "./dist/style.js",
+    "./dist/style": "./dist/style.js",
     "./dist/style.css": "./dist/style.css",
     "./dist/constant.js": "./dist/constant.js",
     "./dist/constant": "./dist/constant.js"
