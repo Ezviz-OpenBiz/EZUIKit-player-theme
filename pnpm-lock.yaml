@@ -6,17 +6,17 @@ settings:
 
 dependencies:
   '@ezuikit/control-date-picker':
-    specifier: 2.0.0-beta.2
-    version: 2.0.0-beta.2
+    specifier: ^2.0.0-beta.4
+    version: 2.0.0-beta.4
   '@ezuikit/control-ptz':
-    specifier: 1.0.0-beta.3
-    version: 1.0.0-beta.3
+    specifier: ^1.0.0-beta.5
+    version: 1.0.0-beta.5
   '@ezuikit/control-time-line':
-    specifier: 2.0.0-beta.2
-    version: 2.0.0-beta.2
+    specifier: ^2.0.0-beta.4
+    version: 2.0.0-beta.4
   '@ezuikit/control-zoom':
-    specifier: 1.0.0-beta.1
-    version: 1.0.0-beta.1
+    specifier: ^1.0.0-beta.3
+    version: 1.0.0-beta.3
   '@ezuikit/utils-i18n':
     specifier: 2.0.1
     version: 2.0.1
@@ -47,8 +47,8 @@ dependencies:
 
 packages:
 
-  /@ezuikit/control-date-picker@2.0.0-beta.2:
-    resolution: {integrity: sha512-ezyV6ev6+Igs91c+aArZkow8BhuJslJutTRVI6NuWVtpQZdzLsUCszSkD8jjlJwI3js8NPbNbMjKzrMkeykV5Q==}
+  /@ezuikit/control-date-picker@2.0.0-beta.4:
+    resolution: {integrity: sha512-0+uN3s8W78uSZSvWXbmFUY5kmK8I/94uWqBm9cSRlG7OtSvLCrySVXj/fbYXMrDWpXx6okHfxPZRqke6GbpK9Q==}
     dependencies:
       '@ezuikit/utils-i18n': 2.0.0
       '@ezuikit/utils-tools': 2.0.3
@@ -57,15 +57,15 @@ packages:
       deepmerge: 4.3.1
     dev: false
 
-  /@ezuikit/control-ptz@1.0.0-beta.3:
-    resolution: {integrity: sha512-E8qhpWerc3nWd8bCmQRpUYlUOwPK09GQCmI42GV0Z9PsUi4seiLl2j0isWkCQmNXHXY1lhXoqGfQSTZEGepTzw==}
+  /@ezuikit/control-ptz@1.0.0-beta.5:
+    resolution: {integrity: sha512-tiV/7EqkaYDtVXx+9kS6VTfI9+jzTwlIOKh1gLbAETv0Y5J/u4C5ItLss9XSxgp/EF6OnHCu2zpuN/FLxnwfrQ==}
     dependencies:
       '@ezuikit/utils-tools': 2.0.3
       deepmerge: 4.3.1
     dev: false
 
-  /@ezuikit/control-time-line@2.0.0-beta.2:
-    resolution: {integrity: sha512-QXlrrUV7bz+nuBKjloJ1UQoUw91G1hL9+6OOWO+emH7dSpORiXC24wGSZKTW8Te8ZxffVe/b9bY8q4pt5bF5Qg==}
+  /@ezuikit/control-time-line@2.0.0-beta.4:
+    resolution: {integrity: sha512-BwNQo8Kq/qQ3xtEnM6ya0JXstixUORNcUrXS+QTxPyU6+PxTs/YlurgE4uLb0kYuH6ny6ErxaumHVn3sqFq8zw==}
     dependencies:
       '@ezuikit/utils-i18n': 2.0.0
       '@ezuikit/utils-tools': 2.0.3
@@ -75,8 +75,8 @@ packages:
       deepmerge: 4.3.1
     dev: false
 
-  /@ezuikit/control-zoom@1.0.0-beta.1:
-    resolution: {integrity: sha512-yOp9WxL76zEuKSheEG/lFtuIEmgEN2+i68FNhp09tG+Il4t84BohiJfnIM3BOWYzVH+yYFA8+t3zTnJzWtIKtg==}
+  /@ezuikit/control-zoom@1.0.0-beta.3:
+    resolution: {integrity: sha512-FzTgPYAzGUjw6kRdzBWzjk0SpGnFJbXtF5nTLq18dvH3KYoN/xH8SpI67O9cENR5VFzZZQzb3hU8j81oMtPXug==}
     dev: false
 
   /@ezuikit/utils-i18n@2.0.0:

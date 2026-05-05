@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ezuikit/control-date-picker@2.0.0-beta.2":
-  version "2.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-date-picker/-/control-date-picker-2.0.0-beta.2.tgz#f674ec745d5cefcd166467b1c2fbea8d8e70056c"
-  integrity sha512-ezyV6ev6+Igs91c+aArZkow8BhuJslJutTRVI6NuWVtpQZdzLsUCszSkD8jjlJwI3js8NPbNbMjKzrMkeykV5Q==
+"@ezuikit/control-date-picker@^2.0.0-beta.4":
+  version "2.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-date-picker/-/control-date-picker-2.0.0-beta.4.tgz#e56d149943a46c056403c29a4f2ca129f9e23a15"
+  integrity sha512-0+uN3s8W78uSZSvWXbmFUY5kmK8I/94uWqBm9cSRlG7OtSvLCrySVXj/fbYXMrDWpXx6okHfxPZRqke6GbpK9Q==
   dependencies:
     "@ezuikit/utils-i18n" "2.0.0"
     "@ezuikit/utils-tools" "2.0.3"
@@ -13,18 +13,18 @@
     "@skax/picker" "1.1.8"
     deepmerge "^4.3.1"
 
-"@ezuikit/control-ptz@1.0.0-beta.3":
-  version "1.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-ptz/-/control-ptz-1.0.0-beta.3.tgz#142be024b17d1c5a957194f281495055137b4784"
-  integrity sha512-E8qhpWerc3nWd8bCmQRpUYlUOwPK09GQCmI42GV0Z9PsUi4seiLl2j0isWkCQmNXHXY1lhXoqGfQSTZEGepTzw==
+"@ezuikit/control-ptz@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-ptz/-/control-ptz-1.0.0-beta.5.tgz#7f478d7e7e172641cbafa84a38bc79de535ef030"
+  integrity sha512-tiV/7EqkaYDtVXx+9kS6VTfI9+jzTwlIOKh1gLbAETv0Y5J/u4C5ItLss9XSxgp/EF6OnHCu2zpuN/FLxnwfrQ==
   dependencies:
     "@ezuikit/utils-tools" "2.0.3"
     deepmerge "^4.3.1"
 
-"@ezuikit/control-time-line@2.0.0-beta.2":
-  version "2.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-time-line/-/control-time-line-2.0.0-beta.2.tgz#b3d993734965744ba96d468b6d95990a0fec4079"
-  integrity sha512-QXlrrUV7bz+nuBKjloJ1UQoUw91G1hL9+6OOWO+emH7dSpORiXC24wGSZKTW8Te8ZxffVe/b9bY8q4pt5bF5Qg==
+"@ezuikit/control-time-line@^2.0.0-beta.4":
+  version "2.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-time-line/-/control-time-line-2.0.0-beta.4.tgz#bb0efb5145e2e2148add782614a5e2db76cc3c44"
+  integrity sha512-BwNQo8Kq/qQ3xtEnM6ya0JXstixUORNcUrXS+QTxPyU6+PxTs/YlurgE4uLb0kYuH6ny6ErxaumHVn3sqFq8zw==
   dependencies:
     "@ezuikit/utils-i18n" "2.0.0"
     "@ezuikit/utils-tools" "2.0.3"
@@ -33,10 +33,10 @@
     "@skax/picker" "1.1.8"
     deepmerge "^4.3.1"
 
-"@ezuikit/control-zoom@1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-zoom/-/control-zoom-1.0.0-beta.1.tgz#4a94f0ecc4f333bb1b511c57acec7d260d1b3d18"
-  integrity sha512-yOp9WxL76zEuKSheEG/lFtuIEmgEN2+i68FNhp09tG+Il4t84BohiJfnIM3BOWYzVH+yYFA8+t3zTnJzWtIKtg==
+"@ezuikit/control-zoom@^1.0.0-beta.3":
+  version "1.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-zoom/-/control-zoom-1.0.0-beta.3.tgz#0340344db01d95b5957df4f175a463b3199bc516"
+  integrity sha512-FzTgPYAzGUjw6kRdzBWzjk0SpGnFJbXtF5nTLq18dvH3KYoN/xH8SpI67O9cENR5VFzZZQzb3hU8j81oMtPXug==
 
 "@ezuikit/utils-i18n@2.0.0":
   version "2.0.0"

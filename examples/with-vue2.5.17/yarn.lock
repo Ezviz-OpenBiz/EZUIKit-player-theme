@@ -38,10 +38,10 @@
   resolved "https://registry.yarnpkg.com/@ezuikit/control-zoom/-/control-zoom-1.0.0-beta.3.tgz#0340344db01d95b5957df4f175a463b3199bc516"
   integrity sha512-FzTgPYAzGUjw6kRdzBWzjk0SpGnFJbXtF5nTLq18dvH3KYoN/xH8SpI67O9cENR5VFzZZQzb3hU8j81oMtPXug==
 
-"@ezuikit/player-theme@3.0.0-beta.3":
-  version "3.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@ezuikit/player-theme/-/player-theme-3.0.0-beta.3.tgz#63ae5bd81008138eb47e78f0702eab57069dc31d"
-  integrity sha512-906BK3FpQhpxeKr1VfzdUQA9uZKe8Jk+p830TxaoRNUK46U6mhlvNhci3qry8YguDEAOoHRt0xYVi8+fZ1GYEw==
+"@ezuikit/player-theme@3.0.0-beta.4":
+  version "3.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@ezuikit/player-theme/-/player-theme-3.0.0-beta.4.tgz#3368adb1b240563305ad1dc1cd5e927dda072127"
+  integrity sha512-IG9d3o2cK7+V3IcHuwms1GWTT8seg7FEHjxh8rGQZdTbRAmkU9PKMRoDwhk7LwYAralCF75UG1cw0GBPrxQJLQ==
   dependencies:
     "@ezuikit/control-date-picker" "^2.0.0-beta.4"
     "@ezuikit/control-ptz" "^1.0.0-beta.5"
