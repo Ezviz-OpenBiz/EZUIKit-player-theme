@@ -1927,16 +1927,23 @@ declare class Theme extends EventEmitter {
             LOADING: string;
             TIMEFORMAT_ERROR: string;
             USE_MULTITHREADING_WARING: string;
-            OPEN_INSTRUCTIONS: string;
-            INIT_FINSHED: string; /**
-             * 当前播放状态
+            /**
+             * 容器的高(单位 px)
              * ```ts
-             * theme.playing // boolean
+             * theme.height // number
              * ```
              */
+            OPEN_INSTRUCTIONS: string;
+            INIT_FINSHED: string;
             INIT_SUCCESS: string;
             GET_PLAYURL_FAILED: string;
-            VIDEO_LOADING: string;
+            VIDEO_LOADING: string; /**
+             * 播放状态
+             * ```ts
+             * // 事件监听
+             * theme.on(Theme.EVENTS.play, (playing: boolean) => {})
+             * ```
+             */
             DISCONNECT: string;
             DEVICE_ENCRYPTED: string;
             NO_RECORD: string;
@@ -1962,13 +1969,6 @@ declare class Theme extends EventEmitter {
             RESUME: string;
             RESUME_FAILED: string;
             CALL_END: string;
-            /**
-             * 加载状态
-             * ```ts
-             * // 事件监听
-             * theme.on(Theme.EVENTS.loading, (loading: boolean) => {})
-             * ```
-             */
             USER_DO_NOT_OWN_DEVICE: string;
             NO_CLOUD_RECORD: string;
             CHANGE_VIDEO_LEVEL: string;
@@ -2015,11 +2015,11 @@ declare class Theme extends EventEmitter {
             CAPTURE_SUCCESS: string;
             CAPTURE_FAILED: string;
             START_RECORD_SUCCESS: string;
-            START_RECORD_FAILED: string; /**
+            START_RECORD_FAILED: string;
+            STOP_RECORD_SUCCESS: string;
+            STOP_RECORD_FAILED: string; /**
              * 是否在缩放中
              */
-            STOP_RECORD_SUCCESS: string;
-            STOP_RECORD_FAILED: string;
             RECORD_TIPS: string;
             RECORDS: string;
             OPEN_SOUND: string;
@@ -2031,7 +2031,16 @@ declare class Theme extends EventEmitter {
             ZOOM_ADD: string;
             ZOOM_SUB: string;
             ZOOM_ADD_MAX: string;
-            ZOOM_SUB_MIN: string;
+            ZOOM_SUB_MIN: string; /**
+             * 电子放大倍数， 仅 ezopen 支持
+             * @since 0.0.1
+             * @example
+             * ```ts
+             * theme.zoom // 放大倍数
+             * // 事件监听
+             * theme.on(Theme.EVENTS.zoom, (zoom: number) => {})
+             * ```
+             */
             ZOOM_LIMIT_MAX: string;
             ZOOM_LIMIT_MIN: string;
             ZOOM_NOT_ENABLED: string;
@@ -2592,12 +2601,12 @@ interface ThemeOptions {
     /**
      * 播放器类型
      *
-     * | ezopen |  flv       |    hls   |  mp4    |
-     * |:------:|:----------:|:--------:|:-------:|
-     * | 私有流  | flv 标准流  | hls标准流 |   mp4   |
+     * | ezopen |  flv       |    hls   |  mp4    |  ezhls  |
+     * |:------:|:----------:|:--------:|:-------:|:-------:|
+     * | 私有流  | flv 标准流  | hls标准流 |   mp4   | ezopen hls 标准流 |
      * @since 0.0.1
      */
-    type: 'ezopen' | 'flv' | 'hls' | 'mp4';
+    type: 'ezopen' | 'flv' | 'hls' | 'mp4' | 'ezhls';
     /** 播放器容器宽度，默认容器宽度，不要设置为 0 @since 0.0.1 */
     width?: number | string;
     /** 播放器容器高度，默认容器宽度， 不要设置为 0 @since 0.0.1 */

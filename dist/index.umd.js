@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.0.0-beta.4
-* Copyright (c) 2026-05-04 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.0.0-beta.5
+* Copyright (c) 2026-05-06 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -1239,7 +1239,7 @@
 	        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$s({}, options, {
 	            tagName: 'div',
 	            controlType: 'block'
-	        }))) || this;
+	        }))) || this, _this._$toast = null;
 	        _this.options = Object.assign({}, MESSAGE_DEFAULT_OPTIONS, options);
 	        _this.$container.classList.add("" + PREFIX_CLASS + "-message", "" + PREFIX_CLASS + "-hide"); // 默认隐藏   `${PREFIX_CLASS}-hide`
 	        return _this;
@@ -3013,7 +3013,7 @@
 	        _this._lastVolume = _this._volume;
 	        _this._muted = !!((_this__options_props3 = _this._options.props) == null ? void 0 : _this__options_props3.muted) || false;
 	        // 轻应用私有暂时不支持调节音量
-	        if (!(Utils.isMobile || _this._options.PLAY_TYPE === 'ezopen' || _this._options.PLAY_TYPE === 'hls')) {
+	        if (!(Utils.isMobile || _this._options.PLAY_TYPE === 'ezopen' || _this._options.PLAY_TYPE === 'ezhls')) {
 	            var _this__options_props4, _this__options_props5;
 	            _this.picker = new Picker(_this.$container, {
 	                getPopupContainer: function() {
@@ -3054,8 +3054,9 @@
 	        }
 	        _this._updateUI();
 	        _this._addEventListener();
-	        _this.on(EVENTS.audioCodecUnsupported, function() {
-	            _this.disabled = true;
+	        _this.on(EVENTS.audioCodecUnsupported, function(flag) {
+	            flag = flag != null ? flag : true;
+	            _this.disabled = flag;
 	        });
 	        _this.on(EVENTS.volumechange, function(volume, muted) {
 	            // 接收
@@ -5577,10 +5578,10 @@
 	 * @param theme - Theme
 	 */ function _themeEventemitter(theme) {
 	    // prettier-ignore
-	    theme == null ? void 0 : theme.on(EVENTS.audioCodecUnsupported, function() {
+	    theme == null ? void 0 : theme.on(EVENTS.audioCodecUnsupported, function(flag) {
 	        var _theme_controls;
 	        if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.volumeControl) {
-	            theme.controls.volumeControl.emit(EVENTS.audioCodecUnsupported);
+	            theme.controls.volumeControl.emit(EVENTS.audioCodecUnsupported, flag);
 	        }
 	    });
 	    // 处理信息提示 duration 单位秒
@@ -11196,7 +11197,7 @@
 	        // 标准流暂时仅支持 TEMPLATES 中的配置， 多余的的展示不生效（如电子放大是不支持的等等）， 待版本更新才能支持
 	        // prettier-ignore
 	        _this._renderTheme(// hls 不支持自定义
-	        options.type === 'hls' ? hlsLiveTemplate : // flv mp4 支持自定义 themeData
+	        options.type === 'hls' || options.type === 'ezhls' ? hlsLiveTemplate : // flv mp4 支持自定义 themeData
 	        [
 	            'flv',
 	            'mp4'
@@ -12393,7 +12394,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.0-beta.4';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.0-beta.5';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
