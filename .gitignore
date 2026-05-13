@@ -9,7 +9,6 @@ compiled
 .awcache
 .rpt2_cache
 docs
-src/
 stats.html
 .DS_Store
 .idea
@@ -24,4 +23,5 @@ demos/with-electron/release
 demos/with-electron/dist
 demos/vue-demo/public/ezuikit_static
 demos/vue3-demo/public/ezuikit_static
-           
+
+examples/*/dist
