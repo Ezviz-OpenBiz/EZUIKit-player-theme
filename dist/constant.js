@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v2.1.4-beta.3
-* Copyright (c) 2026-04-17 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.0.1-beta.1
+* Copyright (c) 2026-05-13 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 /**
@@ -43,18 +43,11 @@ var THEME_PROPS = [
  * |          rec          |  cloudRec    |    cloudRecord  |
  * |:---------------------:|:------------:|:---------------:|
  * | 本地回放（SDK存储回放）   |    云存储回放 |     云录制回放    |
- */ // export const REC_GROUP: string[] = ['rec', 'cloudRec', 'cloudRecord'] as const;
-var REC_GROUP = function(sdkType) {
-    if (sdkType === void 0) sdkType = 'base';
-    return sdkType === 'base' ? [
-        'rec',
-        'cloudRec',
-        'cloudRecord'
-    ] : [
-        'rec',
-        'cloudRec'
-    ];
-};
+ */ var REC_GROUP = [
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
 /**
  * 设备信息
  *
@@ -167,6 +160,9 @@ var EVENTS = {
     /** 麦克风音量变化 */ talkVolumeChange: 'talkVolumeChange',
     /** 语音广播状态变化 */ broadcastChange: 'broadcastChange',
     /** AI对话框状态变化 */ aichatChange: 'aichatChange',
+    /** 直播模式切换 */ liveChange: 'liveChange',
+    /** 回放下拉选择变化 */ recDropdownChange: 'recDropdownChange',
+    /** 告警消息面板状态变化 */ alarmMessageChange: 'alarmMessageChange',
     /** 动态切换日志配置 */ setLoggerOptions: 'setLoggerOptions',
     records: 'records',
     ptzSpeedChange: 'ptzSpeedChange',
@@ -214,6 +210,12 @@ var EVENTS = {
         /** 语音广播控件销毁 */ broadcastDestroy: 'Control.broadcastDestroy',
         /** AI对话框状态变化 */ aichatChange: 'Control.aichatChange',
         /** AI对话框控件销毁 */ aichatDestroy: 'Control.aichatDestroy',
+        /** 直播按钮点击 */ liveChange: 'Control.liveChange',
+        /** 直播控件销毁 */ liveDestroy: 'Control.liveDestroy',
+        /** 回放下拉选择变化 */ recDropdownChange: 'Control.recDropdownChange',
+        /** 回放下拉控件销毁 */ recDropdownDestroy: 'Control.recDropdownDestroy',
+        /** 告警消息面板开关 */ alarmMessageChange: 'Control.alarmMessageChange',
+        /** 告警消息面板销毁 */ alarmMessageDestroy: 'Control.alarmMessageDestroy',
         /** 缩放比例改变 */ zoomChange: 'Control.zoomChange',
         /** 音量调节面板 展示隐藏变换 */ zoomPanelOpenChange: 'Control.zoomPanelOpenChange',
         /** 缩放控件销毁 */ zoomDestroy: 'Control.zoomDestroy',
