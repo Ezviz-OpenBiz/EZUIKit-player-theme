@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.0.0-beta.5
-* Copyright (c) 2026-05-06 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.0.1-beta.3
+* Copyright (c) 2026-05-13 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -143,6 +143,9 @@ var EVENTS = {
     /** 麦克风音量变化 */ talkVolumeChange: 'talkVolumeChange',
     /** 语音广播状态变化 */ broadcastChange: 'broadcastChange',
     /** AI对话框状态变化 */ aichatChange: 'aichatChange',
+    /** 直播模式切换 */ liveChange: 'liveChange',
+    /** 回放下拉选择变化 */ recDropdownChange: 'recDropdownChange',
+    /** 告警消息面板状态变化 */ alarmMessageChange: 'alarmMessageChange',
     /** 动态切换日志配置 */ setLoggerOptions: 'setLoggerOptions',
     records: 'records',
     ptzSpeedChange: 'ptzSpeedChange',
@@ -190,6 +193,12 @@ var EVENTS = {
         /** 语音广播控件销毁 */ broadcastDestroy: 'Control.broadcastDestroy',
         /** AI对话框状态变化 */ aichatChange: 'Control.aichatChange',
         /** AI对话框控件销毁 */ aichatDestroy: 'Control.aichatDestroy',
+        /** 直播按钮点击 */ liveChange: 'Control.liveChange',
+        /** 直播控件销毁 */ liveDestroy: 'Control.liveDestroy',
+        /** 回放下拉选择变化 */ recDropdownChange: 'Control.recDropdownChange',
+        /** 回放下拉控件销毁 */ recDropdownDestroy: 'Control.recDropdownDestroy',
+        /** 告警消息面板开关 */ alarmMessageChange: 'Control.alarmMessageChange',
+        /** 告警消息面板销毁 */ alarmMessageDestroy: 'Control.alarmMessageDestroy',
         /** 缩放比例改变 */ zoomChange: 'Control.zoomChange',
         /** 音量调节面板 展示隐藏变换 */ zoomPanelOpenChange: 'Control.zoomPanelOpenChange',
         /** 缩放控件销毁 */ zoomDestroy: 'Control.zoomDestroy',
@@ -241,7 +250,7 @@ function _create_class$9(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$9(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _inherits$t(subClass, superClass) {
+function _inherits$w(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -252,14 +261,14 @@ function _inherits$t(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$t(subClass, superClass);
+    if (superClass) _set_prototype_of$w(subClass, superClass);
 }
-function _set_prototype_of$t(o, p) {
-    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$w(o, p) {
+    _set_prototype_of$w = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$t(o, p);
+    return _set_prototype_of$w(o, p);
 }
 /**
  * 控件基类
@@ -273,7 +282,7 @@ function _set_prototype_of$t(o, p) {
  * const myControl = new MyControl({})
  * ```
  */ var Control = /*#__PURE__*/ function(EventEmitter) {
-    _inherits$t(Control, EventEmitter);
+    _inherits$w(Control, EventEmitter);
     function Control(options) {
         var _this;
         var _this___options;
@@ -448,8 +457,8 @@ function _set_prototype_of$t(o, p) {
     return Control;
 }(EventEmitter);
 
-function _extends$s() {
-    _extends$s = Object.assign || function(target) {
+function _extends$v() {
+    _extends$v = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -460,9 +469,9 @@ function _extends$s() {
         }
         return target;
     };
-    return _extends$s.apply(this, arguments);
+    return _extends$v.apply(this, arguments);
 }
-function _inherits$s(subClass, superClass) {
+function _inherits$v(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -473,25 +482,25 @@ function _inherits$s(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$s(subClass, superClass);
+    if (superClass) _set_prototype_of$v(subClass, superClass);
 }
-function _set_prototype_of$s(o, p) {
-    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$v(o, p) {
+    _set_prototype_of$v = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$s(o, p);
+    return _set_prototype_of$v(o, p);
 }
 var LOADING_DEFAULT_OPTIONS = {};
 /**
  * 加载动画控件
  * @category Control
  */ var Loading = /*#__PURE__*/ function(Control) {
-    _inherits$s(Loading, Control);
+    _inherits$v(Loading, Control);
     function Loading(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$s({}, options, {
+        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$v({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'loading'
@@ -529,8 +538,8 @@ var LOADING_DEFAULT_OPTIONS = {};
     return Loading;
 }(Control);
 
-function _extends$r() {
-    _extends$r = Object.assign || function(target) {
+function _extends$u() {
+    _extends$u = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -541,9 +550,9 @@ function _extends$r() {
         }
         return target;
     };
-    return _extends$r.apply(this, arguments);
+    return _extends$u.apply(this, arguments);
 }
-function _inherits$r(subClass, superClass) {
+function _inherits$u(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -554,14 +563,14 @@ function _inherits$r(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$r(subClass, superClass);
+    if (superClass) _set_prototype_of$u(subClass, superClass);
 }
-function _set_prototype_of$r(o, p) {
-    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$u(o, p) {
+    _set_prototype_of$u = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$r(o, p);
+    return _set_prototype_of$u(o, p);
 }
 // 不放在服务器上 是因为有可能http加载失败
 // prettier-ignore
@@ -573,11 +582,11 @@ var POSTER_OPTIONS = {
  * 封面控件
  * @category Control
  */ var Poster = /*#__PURE__*/ function(Control) {
-    _inherits$r(Poster, Control);
+    _inherits$u(Poster, Control);
     function Poster(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$r({}, options, {
+        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$u({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'poster'
@@ -683,7 +692,10 @@ var Icons = {
     warnCircleOutLined: '<svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" focusable="false" aria-hidden="true" data-icon="info-circle">\n  <path d="M8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1ZM8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2ZM7.5 8.875C7.5 8.94375 7.55625 9 7.625 9L8.375 9C8.44375 9 8.5 8.94375 8.5 8.875L8.5 4.625C8.5 4.55625 8.44375 4.5 8.375 4.5L7.625 4.5C7.55625 4.5 7.5 4.55625 7.5 4.625L7.5 8.875ZM7.25 10.75C7.25 11.1642 7.58579 11.5 8 11.5C8.41421 11.5 8.75 11.1642 8.75 10.75C8.75 10.3358 8.41421 10 8 10C7.58579 10 7.25 10.3358 7.25 10.75Z" fill-rule="evenodd" />\n          </svg>',
     date: '<svg width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" focusable="false" aria-hidden="true" data-icon="date">\n    <g>\n    <path d="m13.35,5.9c-0.3,0 -0.5,-0.2 -0.5,-0.5l0,-3.3c0,-0.3 0.2,-0.5 0.5,-0.5s0.5,0.2 0.5,0.5l0,3.3c0,0.3 -0.3,0.5 -0.5,0.5z" />\n    <path d="m6.65,5.9c-0.3,0 -0.5,-0.2 -0.5,-0.5l0,-3.3c0,-0.3 0.2,-0.5 0.5,-0.5s0.5,0.2 0.5,0.5l0,3.3c0,0.3 -0.2,0.5 -0.5,0.5z" />\n    <path d="m17.45,8.4l-15,0c-0.3,0 -0.5,-0.2 -0.5,-0.5s0.2,-0.5 0.5,-0.5l15,0c0.3,0 0.5,0.2 0.5,0.5s-0.2,0.5 -0.5,0.5z" />\n    <path d="m15.85,18.4l-11.7,0c-1.2,0 -2.2,-1 -2.2,-2.2l0,-10.8c0,-1.2 1,-2.2 2.2,-2.2l11.7,0c1.2,0 2.2,1 2.2,2.2l0,10.8c-0.1,1.3 -1,2.2 -2.2,2.2zm-11.7,-14.1c-0.6,0 -1.2,0.5 -1.2,1.2l0,10.8c0,0.6 0.5,1.2 1.2,1.2l11.7,0c0.6,0 1.2,-0.5 1.2,-1.2l0,-10.9c0,-0.6 -0.5,-1.2 -1.2,-1.2l-11.7,0l0,0.1z" />\n    <path d="m9.95,12c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5s0.3,-0.2 0.5,-0.2l0,0l0,0c0.4,0 0.7,0.3 0.7,0.7s-0.3,0.7 -0.7,0.7z" />\n    <path d="m14.15,12c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5c0.1,-0.1 0.3,-0.2 0.5,-0.2c0.4,0 0.7,0.3 0.7,0.7s-0.3,0.7 -0.7,0.7zm0,-1c-0.2,0 -0.3,0.1 -0.3,0.3c0,0.2 0.3,0.4 0.5,0.2c0.1,-0.1 0.1,-0.1 0.1,-0.2c0,-0.2 -0.1,-0.3 -0.3,-0.3z" />\n    <path d="m5.85,15.3c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5c0.1,-0.1 0.3,-0.2 0.5,-0.2l0,0l0,0c0.4,0 0.7,0.3 0.7,0.7c0,0.4 -0.3,0.7 -0.7,0.7z" />\n    <path d="m9.95,15.3c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5c0.1,-0.1 0.3,-0.2 0.5,-0.2l0,0l0,0c0.4,0 0.7,0.3 0.7,0.7c0.1,0.4 -0.3,0.7 -0.7,0.7z" />\n    </g>\n  </svg>',
     add: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="add">\n  <path d="M10.5859 2.96875L9.41406 2.96875C9.3099 2.96875 9.25781 3.02083 9.25781 3.125L9.25781 9.25781L3.4375 9.25781C3.38542 9.25781 3.34635 9.27083 3.32031 9.29688C3.29427 9.32292 3.28125 9.36198 3.28125 9.41406L3.28125 10.5859C3.28125 10.6901 3.33333 10.7422 3.4375 10.7422L9.25781 10.7422L9.25781 16.875C9.25781 16.9792 9.3099 17.0312 9.41406 17.0312L10.5859 17.0312C10.6901 17.0312 10.7422 16.9792 10.7422 16.875L10.7422 10.7422L16.5625 10.7422C16.6667 10.7422 16.7188 10.6901 16.7188 10.5859L16.7188 9.41406C16.7188 9.3099 16.6667 9.25781 16.5625 9.25781L10.7422 9.25781L10.7422 3.125C10.7422 3.07292 10.7292 3.03385 10.7031 3.00781C10.6771 2.98177 10.638 2.96875 10.5859 2.96875Z" fill-rule="evenodd" /></svg>',
-    reduce: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="reduce">\n   	<path  d="M3.4375 9.25781L16.5625 9.25781C16.6667 9.25781 16.7188 9.3099 16.7188 9.41406L16.7188 10.5859C16.7188 10.6901 16.6667 10.7422 16.5625 10.7422L3.4375 10.7422C3.33333 10.7422 3.28125 10.6901 3.28125 10.5859L3.28125 9.41406C3.28125 9.3099 3.33333 9.25781 3.4375 9.25781Z" fill-rule="evenodd" />\n  </svg>'
+    reduce: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="reduce">\n   	<path  d="M3.4375 9.25781L16.5625 9.25781C16.6667 9.25781 16.7188 9.3099 16.7188 9.41406L16.7188 10.5859C16.7188 10.6901 16.6667 10.7422 16.5625 10.7422L3.4375 10.7422C3.33333 10.7422 3.28125 10.6901 3.28125 10.5859L3.28125 9.41406C3.28125 9.3099 3.33333 9.25781 3.4375 9.25781Z" fill-rule="evenodd" />\n  </svg>',
+    /** 直播 */ live: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="live">\n    <rect width="18" height="13" x="3" y="7" rx="1.6" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M8.26636 4.8L10.466 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M15.996 4.8L13.796 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M9.8 17L15.4 13.354L9.8 10L9.8 17Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
+    /** 回放 */ recDropdown: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="rec-dropdown">\n    <path d="M9.168 2.556C9.168 2.556 12.51 4.445 12 4.445C7.306 4.445 3.5 8.251 3.5 12.945C3.5 17.64 7.306 21.445 12 21.445C16.695 21.445 20.5 17.64 20.5 12.945C20.5 10.622 19.568 8.517 18.058 6.982" stroke-linecap="round" stroke-width="1.5"/>\n    <path d="M11.61 9.829L11.61 13.731L16.064 13.731" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
+    /** 消息/告警 */ alarmMessage: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="alarm-message">\n    <path d="M9.708 18.344L9.708 18.709C9.708 19.974 10.734 21 12 21C13.266 21 14.292 19.974 14.292 18.709L14.292 18.343" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M13.833 5.751L13.833 4.833C13.833 3.821 13.013 3 12 3C10.987 3 10.167 3.821 10.167 4.833L10.167 5.751" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M6.563 10.189C6.563 7.686 8.592 5.657 11.094 5.657L12.907 5.657C15.41 5.657 17.438 7.686 17.438 10.189L17.438 12.986C17.438 13.516 17.649 14.025 18.024 14.4L18.665 15.04C19.04 15.416 19.251 15.925 19.251 16.455C19.251 17.499 18.405 18.345 17.361 18.345L6.64 18.345C5.596 18.345 4.75 17.499 4.75 16.455C4.75 15.925 4.961 15.416 5.336 15.04L5.977 14.4C6.352 14.025 6.563 13.516 6.563 12.986L6.563 10.189Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>'
 };
 
 /**
@@ -841,11 +853,23 @@ var IconComponents = {
     reduce: function(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.reduce, 'reduce', attr);
+    },
+    /** 直播 */ live: function(attr) {
+        if (attr === void 0) attr = {};
+        return createIcon(Icons.live, 'live', attr);
+    },
+    /** 回放 */ recDropdown: function(attr) {
+        if (attr === void 0) attr = {};
+        return createIcon(Icons.recDropdown, 'rec-dropdown', attr);
+    },
+    /** 消息 */ alarmMessage: function(attr) {
+        if (attr === void 0) attr = {};
+        return createIcon(Icons.alarmMessage, 'alarm-message', attr);
     }
 };
 
-function _extends$q() {
-    _extends$q = Object.assign || function(target) {
+function _extends$t() {
+    _extends$t = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -856,9 +880,9 @@ function _extends$q() {
         }
         return target;
     };
-    return _extends$q.apply(this, arguments);
+    return _extends$t.apply(this, arguments);
 }
-function _inherits$q(subClass, superClass) {
+function _inherits$t(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -869,25 +893,25 @@ function _inherits$q(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$q(subClass, superClass);
+    if (superClass) _set_prototype_of$t(subClass, superClass);
 }
-function _set_prototype_of$q(o, p) {
-    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$t(o, p) {
+    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$q(o, p);
+    return _set_prototype_of$t(o, p);
 }
 var MESSAGE_DEFAULT_OPTIONS = {};
 /**
  * 消息控件
  * @category Control
  */ var Message = /*#__PURE__*/ function(Control) {
-    _inherits$q(Message, Control);
+    _inherits$t(Message, Control);
     function Message(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$q({}, options, {
+        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$t({}, options, {
             tagName: 'div',
             controlType: 'block'
         }))) || this, _this._$toast = null;
@@ -1040,8 +1064,8 @@ function _create_class$8(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$8(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$p() {
-    _extends$p = Object.assign || function(target) {
+function _extends$s() {
+    _extends$s = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -1052,9 +1076,9 @@ function _extends$p() {
         }
         return target;
     };
-    return _extends$p.apply(this, arguments);
+    return _extends$s.apply(this, arguments);
 }
-function _inherits$p(subClass, superClass) {
+function _inherits$s(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -1065,23 +1089,23 @@ function _inherits$p(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$p(subClass, superClass);
+    if (superClass) _set_prototype_of$s(subClass, superClass);
 }
-function _set_prototype_of$p(o, p) {
-    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$s(o, p) {
+    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$p(o, p);
+    return _set_prototype_of$s(o, p);
 }
 /**
  * 播放/暂停控件
  * @category Control
  */ var Play = /*#__PURE__*/ function(Control) {
-    _inherits$p(Play, Control);
+    _inherits$s(Play, Control);
     function Play(options) {
         var _this;
-        _this = Control.call(this, _extends$p({}, options, {
+        _this = Control.call(this, _extends$s({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'play'
@@ -1697,8 +1721,8 @@ function _create_class$6(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$6(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$o() {
-    _extends$o = Object.assign || function(target) {
+function _extends$r() {
+    _extends$r = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -1709,9 +1733,9 @@ function _extends$o() {
         }
         return target;
     };
-    return _extends$o.apply(this, arguments);
+    return _extends$r.apply(this, arguments);
 }
-function _inherits$o(subClass, superClass) {
+function _inherits$r(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -1722,14 +1746,14 @@ function _inherits$o(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$o(subClass, superClass);
+    if (superClass) _set_prototype_of$r(subClass, superClass);
 }
-function _set_prototype_of$o(o, p) {
-    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$r(o, p) {
+    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$o(o, p);
+    return _set_prototype_of$r(o, p);
 }
 var VOLUME_DEFAULT_OPTIONS = {
     volume: 0.8,
@@ -1743,12 +1767,12 @@ var VOLUME_DEFAULT_OPTIONS = {
  * 音量调节控件
  * @category Control
  */ var Volume = /*#__PURE__*/ function(Control) {
-    _inherits$o(Volume, Control);
+    _inherits$r(Volume, Control);
     function Volume(options) {
         if (options === void 0) options = {};
         var _this;
         var _this__options_props, _this__options_props1, _this__options_props2, _this__options_props3;
-        _this = Control.call(this, _extends$o({}, options, {
+        _this = Control.call(this, _extends$r({}, options, {
             tagName: 'span',
             classNameSuffix: 'volume',
             controlType: 'button'
@@ -2408,8 +2432,8 @@ var __fullscreenProvider__ = Provider.getInstance();
     return Fullscreen;
 }();
 
-function _extends$n() {
-    _extends$n = Object.assign || function(target) {
+function _extends$q() {
+    _extends$q = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -2420,9 +2444,9 @@ function _extends$n() {
         }
         return target;
     };
-    return _extends$n.apply(this, arguments);
+    return _extends$q.apply(this, arguments);
 }
-function _inherits$n(subClass, superClass) {
+function _inherits$q(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -2433,24 +2457,24 @@ function _inherits$n(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$n(subClass, superClass);
+    if (superClass) _set_prototype_of$q(subClass, superClass);
 }
-function _set_prototype_of$n(o, p) {
-    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$q(o, p) {
+    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$n(o, p);
+    return _set_prototype_of$q(o, p);
 }
 /**
  * 全屏控件
  * @category Control
  */ var Fullscreen = /*#__PURE__*/ function(Control) {
-    _inherits$n(Fullscreen, Control);
+    _inherits$q(Fullscreen, Control);
     function Fullscreen(options) {
         var _this;
         var _options_props, _this_options;
-        _this = Control.call(this, _extends$n({
+        _this = Control.call(this, _extends$q({
             tagName: 'span',
             classNameSuffix: 'fullscreen',
             controlType: 'button'
@@ -2515,8 +2539,8 @@ function _set_prototype_of$n(o, p) {
     return Fullscreen;
 }(Control);
 
-function _extends$m() {
-    _extends$m = Object.assign || function(target) {
+function _extends$p() {
+    _extends$p = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -2527,9 +2551,9 @@ function _extends$m() {
         }
         return target;
     };
-    return _extends$m.apply(this, arguments);
+    return _extends$p.apply(this, arguments);
 }
-function _inherits$m(subClass, superClass) {
+function _inherits$p(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -2540,24 +2564,24 @@ function _inherits$m(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$m(subClass, superClass);
+    if (superClass) _set_prototype_of$p(subClass, superClass);
 }
-function _set_prototype_of$m(o, p) {
-    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$p(o, p) {
+    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$m(o, p);
+    return _set_prototype_of$p(o, p);
 }
 /**
  * 回放类型切换（本地回放(sdk 卡)， 云存储回放， 云录制回放）控件
  * @category Control
  */ var Rec = /*#__PURE__*/ function(Control) {
-    _inherits$m(Rec, Control);
+    _inherits$p(Rec, Control);
     function Rec(options) {
         var _this;
         var _options_props;
-        _this = Control.call(this, _extends$m({}, options, {
+        _this = Control.call(this, _extends$p({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'rec'
@@ -2834,6 +2858,12 @@ var zh = {
     BTN_TALK: '对讲',
     BTN_BROADCAST: '语音广播',
     BTN_AICHAT: 'AI对话',
+    BTN_LIVE: '直播',
+    BTN_REC_DROPDOWN: '回放',
+    BTN_ALARM_MESSAGE: '消息',
+    REC_DROPDOWN_CLOUD_REC: '云存储',
+    REC_DROPDOWN_CLOUD_RECORD: '云录制',
+    REC_DROPDOWN_LOCAL_REC: '本地回放',
     BTN_ZOOM: '电子放大',
     BTN_3D_ZOOM: '3D定位',
     BTN_PTZ: '云台控制',
@@ -3106,6 +3136,12 @@ var en = {
     BTN_TALK: 'Intercom',
     BTN_BROADCAST: 'Voice broadcast',
     BTN_AICHAT: 'AI Chat',
+    BTN_LIVE: 'Live',
+    BTN_REC_DROPDOWN: 'Playback',
+    BTN_ALARM_MESSAGE: 'Messages',
+    REC_DROPDOWN_CLOUD_REC: 'Cloud Storage',
+    REC_DROPDOWN_CLOUD_RECORD: 'Cloud Recording',
+    REC_DROPDOWN_LOCAL_REC: 'Local Playback',
     BTN_ZOOM: 'Electronic zoom',
     BTN_3D_ZOOM: '3D positioning',
     BTN_PTZ: 'PTZ control',
@@ -3295,6 +3331,21 @@ var en = {
                 iconId: 'deviceName',
                 part: 'left',
                 isrender: 1
+            },
+            {
+                iconId: 'live',
+                part: 'right',
+                isrender: 1
+            },
+            {
+                iconId: 'recDropdown',
+                part: 'right',
+                isrender: 1
+            },
+            {
+                iconId: 'alarmMessage',
+                part: 'right',
+                isrender: 1
             }
         ]
     },
@@ -3382,19 +3433,19 @@ var en = {
                 isrender: 1
             },
             {
-                iconId: 'cloudRec',
+                iconId: 'live',
                 part: 'right',
                 defaultActive: 0,
                 isrender: 1
             },
             {
-                iconId: 'cloudRecord',
+                iconId: 'recDropdown',
                 part: 'right',
                 defaultActive: 0,
                 isrender: 1
             },
             {
-                iconId: 'rec',
+                iconId: 'alarmMessage',
                 part: 'right',
                 defaultActive: 0,
                 isrender: 1
@@ -3797,7 +3848,7 @@ var en = {
     voice: voice
 };
 
-function _inherits$l(subClass, superClass) {
+function _inherits$o(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -3808,20 +3859,20 @@ function _inherits$l(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$l(subClass, superClass);
+    if (superClass) _set_prototype_of$o(subClass, superClass);
 }
-function _set_prototype_of$l(o, p) {
-    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$o(o, p) {
+    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$l(o, p);
+    return _set_prototype_of$o(o, p);
 }
 /**
  * 截图控件
  * @category Content
  */ var Content = /*#__PURE__*/ function(EventEmitter) {
-    _inherits$l(Content, EventEmitter);
+    _inherits$o(Content, EventEmitter);
     function Content(options) {
         var _this;
         _this = EventEmitter.call(this) || this, _this._scaleMode = 0, _this._cleanUpResizeObserver = null, _this._originWidth = 0, _this._originHeight = 0, _this._width = 0, _this._height = 0;
@@ -3936,8 +3987,8 @@ function _set_prototype_of$l(o, p) {
     return Content;
 }(EventEmitter);
 
-function _extends$l() {
-    _extends$l = Object.assign || function(target) {
+function _extends$o() {
+    _extends$o = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -3948,9 +3999,9 @@ function _extends$l() {
         }
         return target;
     };
-    return _extends$l.apply(this, arguments);
+    return _extends$o.apply(this, arguments);
 }
-function _inherits$k(subClass, superClass) {
+function _inherits$n(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -3961,23 +4012,23 @@ function _inherits$k(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$k(subClass, superClass);
+    if (superClass) _set_prototype_of$n(subClass, superClass);
 }
-function _set_prototype_of$k(o, p) {
-    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$n(o, p) {
+    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$k(o, p);
+    return _set_prototype_of$n(o, p);
 }
 /**
  * 更多控件
  * @category Control
  */ var More = /*#__PURE__*/ function(Control) {
-    _inherits$k(More, Control);
+    _inherits$n(More, Control);
     function More(options) {
         var _this;
-        _this = Control.call(this, _extends$l({}, options, {
+        _this = Control.call(this, _extends$o({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'more'
@@ -4193,6 +4244,15 @@ function debounce(func, wait) {
         }
     });
     // =======================================================
+    // 告警消息
+    // =======================================================
+    theme.on(EVENTS.alarmMessageChange, function(active) {
+        var _theme_controls;
+        if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.alarmMessageControl) {
+            theme.controls.alarmMessageControl._panelOpen = active;
+        }
+    });
+    // =======================================================
     // 录制
     // =======================================================
     theme.on(EVENTS.recordingChange, function(recording) {
@@ -4288,7 +4348,7 @@ function debounce(func, wait) {
  *
  * @param theme - Theme
  */ function _controlEventemitter(theme) {
-    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16;
+    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16, _theme_controls17, _theme_controls18, _theme_controls19, _theme_controls20, _theme_controls21;
     // Controls
     if (theme._recFooter) {
         theme._recFooter.on(EVENTS.theme.recFooterDestroy, function() {
@@ -4399,8 +4459,50 @@ function debounce(func, wait) {
             theme.emit(EVENTS.control.aichatDestroy);
         });
     }
+    // 直播按钮
+    if ((_theme_controls7 = theme.controls) == null ? void 0 : _theme_controls7.liveControl) {
+        theme.controls.liveControl.on(EVENTS.control.liveChange, function() {
+            var _theme_controls;
+            // 直接设置回放下拉控件为非激活状态
+            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.recDropdownControl) {
+                theme.controls.recDropdownControl.active = false;
+            }
+            theme.emit(EVENTS.control.liveChange);
+        });
+    }
+    // 回放下拉
+    if ((_theme_controls8 = theme.controls) == null ? void 0 : _theme_controls8.recDropdownControl) {
+        theme.controls.recDropdownControl.on(EVENTS.control.recDropdownChange, function(type) {
+            var _theme_controls;
+            // 直接设置直播控件为非激活状态
+            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.liveControl) {
+                theme.controls.liveControl.active = false;
+            }
+            theme.emit(EVENTS.control.recDropdownChange, type);
+        });
+    }
+    // 告警消息
+    if ((_theme_controls9 = theme.controls) == null ? void 0 : _theme_controls9.alarmMessageControl) {
+        theme.controls.alarmMessageControl.on(EVENTS.control.alarmMessageChange, function(active) {
+            theme.emit(EVENTS.control.alarmMessageChange, active);
+        });
+    }
+    // 播放地址切换后同步 Live/RecDropdown 激活状态
+    // changePlayUrl 后 urlInfo 已更新，firstFrameDisplay 表示新地址播放成功
+    if (((_theme_controls10 = theme.controls) == null ? void 0 : _theme_controls10.liveControl) || ((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.recDropdownControl)) {
+        theme.on(EVENTS.firstFrameDisplay, function() {
+            var _theme_controls, _theme_controls1;
+            var urlInfo = theme.urlInfo;
+            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.liveControl) {
+                theme.controls.liveControl._syncActiveByUrlInfo(urlInfo);
+            }
+            if ((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1.recDropdownControl) {
+                theme.controls.recDropdownControl._syncActiveByUrlInfo(urlInfo);
+            }
+        });
+    }
     // 缩放控件
-    if ((_theme_controls7 = theme.controls) == null ? void 0 : _theme_controls7.zoomControl) {
+    if ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.zoomControl) {
         theme.controls.zoomControl.on(EVENTS.control.zoomChange, function(value, _percent, _range) {
             if (theme.zoom !== value) {
                 theme.zoom = value;
@@ -4422,7 +4524,7 @@ function debounce(func, wait) {
         });
     }
     // 清晰度控件
-    if ((_theme_controls8 = theme.controls) == null ? void 0 : _theme_controls8.definitionControl) {
+    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.definitionControl) {
         theme.controls.definitionControl.on(EVENTS.control.definitionPanelOpenChange, function(open, definition, item) {
             theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, definition);
             theme.emit(EVENTS.control.definitionPanelOpenChange, open, definition, item);
@@ -4435,7 +4537,7 @@ function debounce(func, wait) {
         });
     }
     // 倍速控件
-    if ((_theme_controls9 = theme.controls) == null ? void 0 : _theme_controls9.speedControl) {
+    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.speedControl) {
         theme.controls.speedControl.on(EVENTS.control.speedPanelOpenChange, function(open, speed, item) {
             theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, speed);
             theme.emit(EVENTS.control.speedPanelOpenChange, open, speed, item);
@@ -4448,7 +4550,7 @@ function debounce(func, wait) {
         });
     }
     // 截图控件
-    if ((_theme_controls10 = theme.controls) == null ? void 0 : _theme_controls10.capturePictureControl) {
+    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.capturePictureControl) {
         theme.controls.capturePictureControl.on(EVENTS.control.capturePicture, function(options) {
             theme.emit(EVENTS.control.capturePicture, options);
         });
@@ -4457,25 +4559,25 @@ function debounce(func, wait) {
         });
     }
     // 全屏控件
-    if ((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.fullscreenControl) {
+    if ((_theme_controls16 = theme.controls) == null ? void 0 : _theme_controls16.fullscreenControl) {
         theme.controls.fullscreenControl.on(EVENTS.control.fullscreenDestroy, function() {
             theme.emit(EVENTS.control.fullscreenDestroy);
         });
     }
     // 全局全屏控件
-    if ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.globalFullscreenControl) {
+    if ((_theme_controls17 = theme.controls) == null ? void 0 : _theme_controls17.globalFullscreenControl) {
         theme.controls.globalFullscreenControl.on(EVENTS.control.globalFullscreenDestroy, function() {
             theme.emit(EVENTS.control.globalFullscreenDestroy);
         });
     }
     // 设备信息控件
-    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.deviceControl) {
+    if ((_theme_controls18 = theme.controls) == null ? void 0 : _theme_controls18.deviceControl) {
         theme.controls.deviceControl.on(EVENTS.control.deviceDestroy, function() {
             theme.emit(EVENTS.control.deviceDestroy);
         });
     }
     // 回放类型切换控件
-    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.recControl) {
+    if ((_theme_controls19 = theme.controls) == null ? void 0 : _theme_controls19.recControl) {
         // prettier-ignore
         theme.controls.recControl.on(EVENTS.control.recTypeChange, function(type) {
             if (theme.recType !== type) {
@@ -4496,7 +4598,7 @@ function debounce(func, wait) {
         });
     }
     // 时间轴控件
-    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.timeLineControl) {
+    if ((_theme_controls20 = theme.controls) == null ? void 0 : _theme_controls20.timeLineControl) {
         theme.controls.timeLineControl.on(EVENTS.control.timeLineChange, function(date) {
             theme.emit(EVENTS.control.timeLineChange, date);
         });
@@ -4513,7 +4615,7 @@ function debounce(func, wait) {
         });
     }
     // 日历控件
-    if ((_theme_controls16 = theme.controls) == null ? void 0 : _theme_controls16.dateControl) {
+    if ((_theme_controls21 = theme.controls) == null ? void 0 : _theme_controls21.dateControl) {
         theme.controls.dateControl.on(EVENTS.control.datePanelOpenChange, function(open, date) {
             theme.emit(EVENTS.control.datePanelOpenChange, open, date);
         });
@@ -4608,8 +4710,8 @@ function _create_class$5(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$5(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$k() {
-    _extends$k = Object.assign || function(target) {
+function _extends$n() {
+    _extends$n = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -4620,9 +4722,9 @@ function _extends$k() {
         }
         return target;
     };
-    return _extends$k.apply(this, arguments);
+    return _extends$n.apply(this, arguments);
 }
-function _inherits$j(subClass, superClass) {
+function _inherits$m(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -4633,14 +4735,14 @@ function _inherits$j(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$j(subClass, superClass);
+    if (superClass) _set_prototype_of$m(subClass, superClass);
 }
-function _set_prototype_of$j(o, p) {
-    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$m(o, p) {
+    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$j(o, p);
+    return _set_prototype_of$m(o, p);
 }
 var ZOOM_DEFAULT_OPTIONS = {
     open: false,
@@ -4650,10 +4752,10 @@ var ZOOM_DEFAULT_OPTIONS = {
  * 电子放大控件
  * @category Control
  */ var Zoom = /*#__PURE__*/ function(Control) {
-    _inherits$j(Zoom, Control);
+    _inherits$m(Zoom, Control);
     function Zoom(options) {
         var _this;
-        _this = Control.call(this, _extends$k({}, options, {
+        _this = Control.call(this, _extends$n({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'zoom'
@@ -4781,8 +4883,8 @@ var ZOOM_DEFAULT_OPTIONS = {
     return Zoom;
 }(Control);
 
-function _extends$j() {
-    _extends$j = Object.assign || function(target) {
+function _extends$m() {
+    _extends$m = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -4793,10 +4895,10 @@ function _extends$j() {
         }
         return target;
     };
-    return _extends$j.apply(this, arguments);
+    return _extends$m.apply(this, arguments);
 }
 function __zoom(theme, container, options) {
-    theme.zoomUtil = new Zoom$1(container, _extends$j({}, options || {}, {
+    theme.zoomUtil = new Zoom$1(container, _extends$m({}, options || {}, {
         min: 1,
         onChange: function(zoom, reset) {
             if (zoom !== theme._zoom) {
@@ -5021,8 +5123,8 @@ function _async_to_generator$5(fn) {
         });
     };
 }
-function _extends$i() {
-    _extends$i = Object.assign || function(target) {
+function _extends$l() {
+    _extends$l = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -5033,7 +5135,7 @@ function _extends$i() {
         }
         return target;
     };
-    return _extends$i.apply(this, arguments);
+    return _extends$l.apply(this, arguments);
 }
 function _ts_generator$5(thisArg, body) {
     var f, y, t, _ = {
@@ -5161,7 +5263,7 @@ function _ts_generator$5(thisArg, body) {
         }
         if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
-            recControls.push(recControls[0] ? _extends$i({}, item, {
+            recControls.push(recControls[0] ? _extends$l({}, item, {
                 part: recControls[0].part
             }) : item);
             return false;
@@ -5184,7 +5286,7 @@ function _ts_generator$5(thisArg, body) {
         }
         if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
-            recControls.push(recControls[0] ? _extends$i({}, item, {
+            recControls.push(recControls[0] ? _extends$l({}, item, {
                 part: recControls[0].part
             }) : item);
             return false;
@@ -5435,8 +5537,8 @@ function rgbOrHexToRgbaWithOpacity(color, opacity) {
     return Component;
 }();
 
-function _extends$h() {
-    _extends$h = Object.assign || function(target) {
+function _extends$k() {
+    _extends$k = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -5447,9 +5549,9 @@ function _extends$h() {
         }
         return target;
     };
-    return _extends$h.apply(this, arguments);
+    return _extends$k.apply(this, arguments);
 }
-function _inherits$i(subClass, superClass) {
+function _inherits$l(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -5460,28 +5562,28 @@ function _inherits$i(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$i(subClass, superClass);
+    if (superClass) _set_prototype_of$l(subClass, superClass);
 }
-function _set_prototype_of$i(o, p) {
-    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$l(o, p) {
+    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$i(o, p);
+    return _set_prototype_of$l(o, p);
 }
 var Footer = /*#__PURE__*/ function(Component) {
-    _inherits$i(Footer, Component);
+    _inherits$l(Footer, Component);
     function Footer(options) {
         if (options === void 0) options = {};
-        return Component.call(this, _extends$h({}, options, {
+        return Component.call(this, _extends$k({}, options, {
             cType: 'footer'
         })) || this;
     }
     return Footer;
 }(Component);
 
-function _extends$g() {
-    _extends$g = Object.assign || function(target) {
+function _extends$j() {
+    _extends$j = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -5492,9 +5594,9 @@ function _extends$g() {
         }
         return target;
     };
-    return _extends$g.apply(this, arguments);
+    return _extends$j.apply(this, arguments);
 }
-function _inherits$h(subClass, superClass) {
+function _inherits$k(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -5505,20 +5607,20 @@ function _inherits$h(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$h(subClass, superClass);
+    if (superClass) _set_prototype_of$k(subClass, superClass);
 }
-function _set_prototype_of$h(o, p) {
-    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$k(o, p) {
+    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$h(o, p);
+    return _set_prototype_of$k(o, p);
 }
 var Header = /*#__PURE__*/ function(Component) {
-    _inherits$h(Header, Component);
+    _inherits$k(Header, Component);
     function Header(options) {
         if (options === void 0) options = {};
-        return Component.call(this, _extends$g({}, options, {
+        return Component.call(this, _extends$j({}, options, {
             cType: 'header'
         })) || this;
     }
@@ -5684,8 +5786,8 @@ function interactiveHF($container, second, callback) {
     };
 }
 
-function _extends$f() {
-    _extends$f = Object.assign || function(target) {
+function _extends$i() {
+    _extends$i = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -5696,9 +5798,9 @@ function _extends$f() {
         }
         return target;
     };
-    return _extends$f.apply(this, arguments);
+    return _extends$i.apply(this, arguments);
 }
-function _inherits$g(subClass, superClass) {
+function _inherits$j(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -5709,23 +5811,23 @@ function _inherits$g(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$g(subClass, superClass);
+    if (superClass) _set_prototype_of$j(subClass, superClass);
 }
-function _set_prototype_of$g(o, p) {
-    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$j(o, p) {
+    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$g(o, p);
+    return _set_prototype_of$j(o, p);
 }
 /**
  * 全局全屏
  * 主题和播放器不提供全局全屏的api， 如果开发者想要可以参考这个组件自己实现
  * @category Control
  */ var GlobalFullscreen = /*#__PURE__*/ function(Fullscreen) {
-    _inherits$g(GlobalFullscreen, Fullscreen);
+    _inherits$j(GlobalFullscreen, Fullscreen);
     function GlobalFullscreen(options) {
-        return Fullscreen.call(this, _extends$f({}, options, {
+        return Fullscreen.call(this, _extends$i({}, options, {
             controlType: 'button',
             classNameSuffix: 'global-fullscreen'
         })) || this;
@@ -5756,8 +5858,8 @@ function _set_prototype_of$g(o, p) {
     return GlobalFullscreen;
 }(Fullscreen);
 
-function _extends$e() {
-    _extends$e = Object.assign || function(target) {
+function _extends$h() {
+    _extends$h = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -5768,9 +5870,9 @@ function _extends$e() {
         }
         return target;
     };
-    return _extends$e.apply(this, arguments);
+    return _extends$h.apply(this, arguments);
 }
-function _inherits$f(subClass, superClass) {
+function _inherits$i(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -5781,23 +5883,23 @@ function _inherits$f(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$f(subClass, superClass);
+    if (superClass) _set_prototype_of$i(subClass, superClass);
 }
-function _set_prototype_of$f(o, p) {
-    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$i(o, p) {
+    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$f(o, p);
+    return _set_prototype_of$i(o, p);
 }
 /**
  * 截图控件，点击后会触发截图事件， 截图数据会通过 onCapture 回调函数返回
  * @category Control
  */ var CapturePicture = /*#__PURE__*/ function(Control) {
-    _inherits$f(CapturePicture, Control);
+    _inherits$i(CapturePicture, Control);
     function CapturePicture(options) {
         var _this;
-        _this = Control.call(this, _extends$e({}, options, {
+        _this = Control.call(this, _extends$h({}, options, {
             tagName: 'span',
             classNameSuffix: 'capture-picture'
         })) || this, _this._timer = null;
@@ -5863,8 +5965,8 @@ function _create_class$4(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$4(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$d() {
-    _extends$d = Object.assign || function(target) {
+function _extends$g() {
+    _extends$g = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -5875,9 +5977,9 @@ function _extends$d() {
         }
         return target;
     };
-    return _extends$d.apply(this, arguments);
+    return _extends$g.apply(this, arguments);
 }
-function _inherits$e(subClass, superClass) {
+function _inherits$h(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -5888,23 +5990,23 @@ function _inherits$e(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$e(subClass, superClass);
+    if (superClass) _set_prototype_of$h(subClass, superClass);
 }
-function _set_prototype_of$e(o, p) {
-    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$h(o, p) {
+    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$e(o, p);
+    return _set_prototype_of$h(o, p);
 }
 /**
  * 云台控件
  * @category Control
  */ var Ptz = /*#__PURE__*/ function(Control) {
-    _inherits$e(Ptz, Control);
+    _inherits$h(Ptz, Control);
     function Ptz(options) {
         var _this;
-        _this = Control.call(this, _extends$d({}, options, {
+        _this = Control.call(this, _extends$g({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'ptz'
@@ -5947,7 +6049,7 @@ function _set_prototype_of$e(o, p) {
             this.$turntable.classList.add("" + PREFIX_CLASS + "-ptz-turntable");
             this.$panel.appendChild(this.$turntable);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            this._ptzControl = new Ptz$1(this.$turntable, _extends$d({}, this._options, {
+            this._ptzControl = new Ptz$1(this.$turntable, _extends$g({}, this._options, {
                 onSpeedChange: this._onSpeedChange.bind(this),
                 onDirection: this._onDirection.bind(this)
             }));
@@ -5956,7 +6058,7 @@ function _set_prototype_of$e(o, p) {
     };
     _proto.renderMobileExtend = function renderMobileExtend($container) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        if (!this._ptzControl1) this._ptzControl1 = new MobilePtz($container, _extends$d({}, this._options, {
+        if (!this._ptzControl1) this._ptzControl1 = new MobilePtz($container, _extends$g({}, this._options, {
             onSpeedChange: this._onSpeedChange.bind(this),
             onDirection: this._onDirection.bind(this)
         }));
@@ -6059,8 +6161,8 @@ function _create_class$3(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$3(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$c() {
-    _extends$c = Object.assign || function(target) {
+function _extends$f() {
+    _extends$f = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -6071,9 +6173,9 @@ function _extends$c() {
         }
         return target;
     };
-    return _extends$c.apply(this, arguments);
+    return _extends$f.apply(this, arguments);
 }
-function _inherits$d(subClass, superClass) {
+function _inherits$g(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6084,14 +6186,14 @@ function _inherits$d(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$d(subClass, superClass);
+    if (superClass) _set_prototype_of$g(subClass, superClass);
 }
-function _set_prototype_of$d(o, p) {
-    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$g(o, p) {
+    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$d(o, p);
+    return _set_prototype_of$g(o, p);
 }
 var RECORD_DEFAULT_OPTIONS = {
     maxDuration: 3600
@@ -6105,10 +6207,10 @@ var RECORD_DEFAULT_OPTIONS = {
  *  2. 录制时间很短可能会因为浏览器的限制或没有I帧而无法生成有效的视频文件
  * @category Control
  */ var Record = /*#__PURE__*/ function(Control) {
-    _inherits$d(Record, Control);
+    _inherits$g(Record, Control);
     function Record(options) {
         var _this;
-        _this = Control.call(this, _extends$c({}, options, {
+        _this = Control.call(this, _extends$f({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'record'
@@ -6249,8 +6351,8 @@ function _create_class$2(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$b() {
-    _extends$b = Object.assign || function(target) {
+function _extends$e() {
+    _extends$e = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -6261,9 +6363,9 @@ function _extends$b() {
         }
         return target;
     };
-    return _extends$b.apply(this, arguments);
+    return _extends$e.apply(this, arguments);
 }
-function _inherits$c(subClass, superClass) {
+function _inherits$f(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6274,14 +6376,14 @@ function _inherits$c(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$c(subClass, superClass);
+    if (superClass) _set_prototype_of$f(subClass, superClass);
 }
-function _set_prototype_of$c(o, p) {
-    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$f(o, p) {
+    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$c(o, p);
+    return _set_prototype_of$f(o, p);
 }
 function _ts_generator$4(thisArg, body) {
     var f, y, t, _ = {
@@ -6383,10 +6485,10 @@ function _ts_generator$4(thisArg, body) {
  *
  * @category Control
  */ var Talk = /*#__PURE__*/ function(Control) {
-    _inherits$c(Talk, Control);
+    _inherits$f(Talk, Control);
     function Talk(options) {
         var _this;
-        _this = Control.call(this, _extends$b({}, options, {
+        _this = Control.call(this, _extends$e({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'talk'
@@ -6519,8 +6621,8 @@ function _async_to_generator$3(fn) {
         });
     };
 }
-function _extends$a() {
-    _extends$a = Object.assign || function(target) {
+function _extends$d() {
+    _extends$d = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -6531,9 +6633,9 @@ function _extends$a() {
         }
         return target;
     };
-    return _extends$a.apply(this, arguments);
+    return _extends$d.apply(this, arguments);
 }
-function _inherits$b(subClass, superClass) {
+function _inherits$e(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6544,14 +6646,14 @@ function _inherits$b(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$b(subClass, superClass);
+    if (superClass) _set_prototype_of$e(subClass, superClass);
 }
-function _set_prototype_of$b(o, p) {
-    _set_prototype_of$b = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$e(o, p) {
+    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$b(o, p);
+    return _set_prototype_of$e(o, p);
 }
 function _ts_generator$3(thisArg, body) {
     var f, y, t, _ = {
@@ -6651,10 +6753,10 @@ function _ts_generator$3(thisArg, body) {
  *
  * @category Control
  */ var Broadcast = /*#__PURE__*/ function(Control) {
-    _inherits$b(Broadcast, Control);
+    _inherits$e(Broadcast, Control);
     function Broadcast(options) {
         var _this;
-        _this = Control.call(this, _extends$a({}, options, {
+        _this = Control.call(this, _extends$d({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'broadcast'
@@ -6749,8 +6851,8 @@ function _async_to_generator$2(fn) {
         });
     };
 }
-function _extends$9() {
-    _extends$9 = Object.assign || function(target) {
+function _extends$c() {
+    _extends$c = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -6761,9 +6863,9 @@ function _extends$9() {
         }
         return target;
     };
-    return _extends$9.apply(this, arguments);
+    return _extends$c.apply(this, arguments);
 }
-function _inherits$a(subClass, superClass) {
+function _inherits$d(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6774,14 +6876,14 @@ function _inherits$a(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$a(subClass, superClass);
+    if (superClass) _set_prototype_of$d(subClass, superClass);
 }
-function _set_prototype_of$a(o, p) {
-    _set_prototype_of$a = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$d(o, p) {
+    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$a(o, p);
+    return _set_prototype_of$d(o, p);
 }
 function _ts_generator$2(thisArg, body) {
     var f, y, t, _ = {
@@ -6881,10 +6983,10 @@ function _ts_generator$2(thisArg, body) {
  *
  * @category Control
  */ var AIChat = /*#__PURE__*/ function(Control) {
-    _inherits$a(AIChat, Control);
+    _inherits$d(AIChat, Control);
     function AIChat(options) {
         var _this;
-        _this = Control.call(this, _extends$9({}, options, {
+        _this = Control.call(this, _extends$c({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'aichat'
@@ -6948,6 +7050,340 @@ function _ts_generator$2(thisArg, body) {
         }).call(this);
     };
     return AIChat;
+}(Control);
+
+function _extends$b() {
+    _extends$b = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source){
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    };
+    return _extends$b.apply(this, arguments);
+}
+function _inherits$c(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$c(subClass, superClass);
+}
+function _set_prototype_of$c(o, p) {
+    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$c(o, p);
+}
+/**
+ * 直播按钮控件
+ *
+ * 点击切换到直播模式
+ *
+ * @category Control
+ */ var Live = /*#__PURE__*/ function(Control) {
+    _inherits$c(Live, Control);
+    function Live(options) {
+        var _this;
+        var _this___options_props1;
+        _this = Control.call(this, _extends$b({}, options, {
+            tagName: 'span',
+            controlType: 'button',
+            classNameSuffix: 'live'
+        })) || this;
+        _this._options = options;
+        _this._render();
+        // 初始化时根据当前播放模式确定激活状态
+        _this._syncActiveByUrlInfo((_this___options_props1 = _this.__options.props) == null ? void 0 : _this___options_props1.urlInfo);
+        return _this;
+    }
+    var _proto = Live.prototype;
+    /**
+   * 根据 urlInfo 同步激活状态
+   * 在初始化和播放地址切换后调用
+   */ _proto._syncActiveByUrlInfo = function _syncActiveByUrlInfo(urlInfo) {
+        var shouldBeActive = !!(urlInfo && urlInfo.type === 'live');
+        this.active = shouldBeActive;
+    };
+    _proto._render = function _render() {
+        var _this_locale;
+        this.$container.innerHTML = IconComponents.live({
+            title: ((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_LIVE) || '直播'
+        });
+    };
+    /**
+   * 销毁
+   */ _proto.destroy = function destroy() {
+        Control.prototype.destroy.call(this);
+    };
+    /**
+   * 点击 Control 会触发
+   */ _proto._onControlClick = function _onControlClick(e) {
+        var _this__options_onChange, _this__options;
+        Control.prototype._onControlClick.call(this, e);
+        // 已经是直播模式则不触发
+        if (this.active) {
+            return;
+        }
+        this.active = true;
+        this.emit(EVENTS.control.liveChange);
+        (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options);
+    };
+    return Live;
+}(Control);
+
+function _extends$a() {
+    _extends$a = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source){
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    };
+    return _extends$a.apply(this, arguments);
+}
+function _inherits$b(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$b(subClass, superClass);
+}
+function _set_prototype_of$b(o, p) {
+    _set_prototype_of$b = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$b(o, p);
+}
+/**
+ * 回放下拉控件
+ *
+ * 鼠标移入弹出气泡，展示云存储、云录制、本地回放三个选项
+ *
+ * @category Control
+ */ var RecDropdown = /*#__PURE__*/ function(Control) {
+    _inherits$b(RecDropdown, Control);
+    function RecDropdown(options) {
+        var _this;
+        var _options_props, _this___options_props1;
+        _this = Control.call(this, _extends$a({}, options, {
+            tagName: 'span',
+            controlType: 'button',
+            classNameSuffix: 'rec-dropdown'
+        })) || this;
+        _this._options = options;
+        // 初始化时根据 urlInfo 确定当前回放类型和激活状态
+        _this._recType = options.recType || ((_options_props = options.props) == null ? void 0 : _options_props.recType) || 'cloudRec';
+        _this._syncActiveByUrlInfo((_this___options_props1 = _this.__options.props) == null ? void 0 : _this___options_props1.urlInfo);
+        _this._render();
+        _this._initPicker();
+        return _this;
+    }
+    var _proto = RecDropdown.prototype;
+    /**
+   * 根据 urlInfo 同步激活状态和回放类型
+   * 在初始化和播放地址切换后调用
+   */ _proto._syncActiveByUrlInfo = function _syncActiveByUrlInfo(urlInfo) {
+        if (urlInfo && urlInfo.type === 'rec') {
+            var _urlInfo_searchParams1;
+            this.active = true;
+            if (urlInfo.recType === 'cloud' && ((_urlInfo_searchParams1 = urlInfo.searchParams) == null ? void 0 : _urlInfo_searchParams1.busType) === '7') {
+                this._recType = 'cloudRecord';
+            } else if (urlInfo.recType === 'cloud') {
+                this._recType = 'cloudRec';
+            } else {
+                this._recType = 'rec';
+            }
+            this._activeOption(this._recType);
+        } else {
+            this.active = false;
+        }
+    };
+    _proto._render = function _render() {
+        var _this_locale;
+        this.$container.innerHTML = IconComponents.recDropdown({
+            title: ((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_REC_DROPDOWN) || '回放'
+        });
+    };
+    _proto._initPicker = function _initPicker() {
+        var _this = this;
+        this._picker = new Picker(this.$container, {
+            getPopupContainer: function() {
+                return Utils.isMobile ? _this.__options.rootContainer : _this.$container;
+            },
+            trigger: Utils.isMobile ? 'click' : 'hover',
+            isMobile: Utils.isMobile,
+            wrapClassName: "" + PREFIX_CLASS + "-rec-dropdown-picker",
+            placement: 'bottom',
+            offset: [
+                0,
+                4
+            ]
+        });
+        this._picker.innerHTML(this._getPanelHTML());
+        this._activeOption(this._recType);
+        this._bindPanelEvents();
+    };
+    _proto._getPanelHTML = function _getPanelHTML() {
+        var _this_locale, _this_locale1, _this_locale2;
+        var cloudRecLabel = ((_this_locale = this.locale) == null ? void 0 : _this_locale.REC_DROPDOWN_CLOUD_REC) || '云存储';
+        var cloudRecordLabel = ((_this_locale1 = this.locale) == null ? void 0 : _this_locale1.REC_DROPDOWN_CLOUD_RECORD) || '云录制';
+        var localRecLabel = ((_this_locale2 = this.locale) == null ? void 0 : _this_locale2.REC_DROPDOWN_LOCAL_REC) || '本地回放';
+        return '<div class="' + PREFIX_CLASS + '-rec-dropdown-panel">\n      <ul class="' + PREFIX_CLASS + '-rec-dropdown-list">\n        <li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="cloudRec">\n          <span>' + cloudRecLabel + '</span>\n        </li>\n        <li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="cloudRecord">\n          <span>' + cloudRecordLabel + '</span>\n        </li>\n        <li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="rec">\n          <span>' + localRecLabel + "</span>\n        </li>\n      </ul>\n    </div>";
+    };
+    _proto._bindPanelEvents = function _bindPanelEvents() {
+        var _this = this;
+        this._delegation = delegate(this._picker.$body, "." + PREFIX_CLASS + "-rec-dropdown-item", 'click', function(e) {
+            e.stopPropagation();
+            var type = e.delegateTarget.getAttribute('data-type');
+            if (type) {
+                var _this__options_onChange, _this__options;
+                _this._recType = type;
+                _this._activeOption(type);
+                // 设置自身为激活状态
+                _this.active = true;
+                _this.emit(EVENTS.control.recDropdownChange, type);
+                (_this__options = _this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, type);
+                _this._picker.open = false;
+            }
+        });
+    };
+    _proto._activeOption = function _activeOption(type) {
+        var _this__picker;
+        if ((_this__picker = this._picker) == null ? void 0 : _this__picker.$body) {
+            var items = this._picker.$body.querySelectorAll("." + PREFIX_CLASS + "-rec-dropdown-item");
+            items.forEach(function(item) {
+                item.classList.remove("" + PREFIX_CLASS + "-active");
+            });
+            var target = this._picker.$body.querySelector("." + PREFIX_CLASS + '-rec-dropdown-item[data-type="' + type + '"]');
+            target == null ? void 0 : target.classList.add("" + PREFIX_CLASS + "-active");
+        }
+    };
+    /**
+   * 销毁
+   */ _proto.destroy = function destroy() {
+        var _this__delegation_destroy, _this__delegation;
+        (_this__delegation = this._delegation) == null ? void 0 : (_this__delegation_destroy = _this__delegation.destroy) == null ? void 0 : _this__delegation_destroy.call(_this__delegation);
+        this._delegation = null;
+        if (this._picker) {
+            this._picker.destroy();
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            this._picker = null;
+        }
+        Control.prototype.destroy.call(this);
+    };
+    /**
+   * 点击 Control 会触发（移动端 click 触发 picker）
+   */ // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _proto._onControlClick = function _onControlClick(_e) {
+    // picker 自行处理 click/hover，这里不额外处理
+    };
+    return RecDropdown;
+}(Control);
+
+function _extends$9() {
+    _extends$9 = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source){
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    };
+    return _extends$9.apply(this, arguments);
+}
+function _inherits$a(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$a(subClass, superClass);
+}
+function _set_prototype_of$a(o, p) {
+    _set_prototype_of$a = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$a(o, p);
+}
+/**
+ * 告警消息按钮控件
+ *
+ * 点击弹出告警消息列表弹窗（纯触发按钮，无激活状态）
+ *
+ * @category Control
+ */ var AlarmMessage = /*#__PURE__*/ function(Control) {
+    _inherits$a(AlarmMessage, Control);
+    function AlarmMessage(options) {
+        var _this;
+        _this = Control.call(this, _extends$9({}, options, {
+            tagName: 'span',
+            controlType: 'button',
+            classNameSuffix: 'alarm-message'
+        })) || this, _this._panelOpen = false;
+        _this._options = options;
+        _this._render();
+        _this.on(EVENTS.alarmMessageChange, function(open) {
+            _this._panelOpen = open;
+        });
+        return _this;
+    }
+    var _proto = AlarmMessage.prototype;
+    _proto._render = function _render() {
+        var _this_locale;
+        this.$container.innerHTML = IconComponents.alarmMessage({
+            title: ((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_ALARM_MESSAGE) || '消息'
+        });
+    };
+    /**
+   * 销毁
+   */ _proto.destroy = function destroy() {
+        if (this._panelOpen) {
+            this.emit(EVENTS.control.alarmMessageChange, false);
+        }
+        Control.prototype.destroy.call(this);
+    };
+    /**
+   * 点击 Control 会触发
+   */ _proto._onControlClick = function _onControlClick(e) {
+        var _this__options_onChange, _this__options;
+        Control.prototype._onControlClick.call(this, e);
+        this._panelOpen = !this._panelOpen;
+        this.emit(EVENTS.control.alarmMessageChange, this._panelOpen);
+        (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, this._panelOpen);
+    };
+    return AlarmMessage;
 }(Control);
 
 function _defineProperties$1(target, props) {
@@ -7942,6 +8378,9 @@ var Controls = {
     talk: Talk,
     broadcast: Broadcast,
     aiChat: AIChat,
+    live: Live,
+    recDropdown: RecDropdown,
+    alarmMessage: AlarmMessage,
     zoom: Zoom,
     definition: Definition,
     fullscreen: Fullscreen,
@@ -8475,7 +8914,10 @@ function _ts_generator$1(thisArg, body) {
 // 需要权限的控件
 var AUTH_KEY = [
     'ptz',
-    'aiChat'
+    'aiChat',
+    'live',
+    'recDropdown',
+    'alarmMessage'
 ];
 /**
  * 渲染控件
@@ -8555,7 +8997,7 @@ function _renderControls(theme, $container, btnList, props) {
 }
 function _renderTheme(theme, data) {
     return _async_to_generator$1(function() {
-        var _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, _filterThemeData_footer_btnList, list, _needTimeLine, hasPtz, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_options_mobileExtendOptions3, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions4, _filterThemeData_header1, _filterThemeData_footer1, _filterThemeData_footer_btnList1;
+        var _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_urlInfo, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, _filterThemeData_footer_btnList, list, _needTimeLine, hasPtz, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_controls2, _theme_options_mobileExtendOptions3, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions4, _filterThemeData_header1, _filterThemeData_footer1, _filterThemeData_footer_btnList1, _theme_options;
         return _ts_generator$1(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -8696,8 +9138,8 @@ function _renderTheme(theme, data) {
                     list = [].concat(((_filterThemeData_header = filterThemeData.header) == null ? void 0 : _filterThemeData_header.btnList) || [], (_filterThemeData_footer_btnList = (_filterThemeData_footer = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer.btnList) != null ? _filterThemeData_footer_btnList : []);
                     // FIXME: 这个逻辑实际上是有问题的
                     _needTimeLine = list.some(function(item) {
-                        return REC_GROUP.includes(item.iconId);
-                    });
+                        return REC_GROUP.includes(item.iconId) || item.iconId === 'recDropdown';
+                    }) && ((_theme_urlInfo = theme.urlInfo) == null ? void 0 : _theme_urlInfo.type) === 'rec';
                     // PC 单独渲染timeLine
                     if (!Utils.isMobile && !(theme.options.timeLineOptions === null || theme.options.disabledTimeLine) && _needTimeLine) {
                         theme._recFooter = new RecFooter(theme.$container, {
@@ -8728,6 +9170,23 @@ function _renderTheme(theme, data) {
                                     if (REC_GROUP.includes(item.iconId)) _renderRecType(theme, (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight, item.iconId, props);
                                 });
                             }
+                            // 移动端：在 rec 控件旁渲染 alarmMessage 按钮
+                            if (theme.options.alarmMessageOptions !== null && !((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2['alarmMessageControl'])) {
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                                theme.controls['alarmMessageControl'] = new Controls['alarmMessage'](_extends$1({
+                                    rootContainer: theme.$container,
+                                    getPopupContainer: function() {
+                                        var _theme__mobileExtend;
+                                        return (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight;
+                                    },
+                                    language: theme.options.language || 'zh',
+                                    locales: theme.i18n.translations,
+                                    sdkType: theme.options.sdkType,
+                                    urlInfo: theme.urlInfo
+                                }, ((_theme_options = theme.options) == null ? void 0 : _theme_options.alarmMessageOptions) || {}, {
+                                    props: props
+                                }));
+                            }
                             if ((theme.options.timeLineOptions !== null || !theme.options.disabledTimeLine) && ((_theme_options_mobileExtendOptions3 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions3.controls.includes('timeLine')) && _needTimeLine) {
                                 _renderTimeLine(theme, theme._mobileExtend.$content, props);
                             }
@@ -8738,6 +9197,10 @@ function _renderTheme(theme, data) {
                     }
                     theme.emit(EVENTS.control.mountedControls);
                     if (!theme.playing) theme._disabled(true);
+                    // 同步 loading 状态（修复：_loadingControl 创建前设置的 loading=true 不生效的问题）
+                    if (theme._loading && theme._loadingControl) {
+                        theme._loadingControl.show();
+                    }
                     _controlEventemitter(theme);
                     return [
                         2
@@ -10333,6 +10796,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.0-beta.5';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.1-beta.3';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
