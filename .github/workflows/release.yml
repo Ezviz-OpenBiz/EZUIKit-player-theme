@@ -7,7 +7,7 @@ on:
       - "v*"
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write # Required for OIDC
   contents: read
 # 任务，定义个changelog 的任务
 jobs:
@@ -16,11 +16,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Check file versions
         run: |
-          files="dist/index.js dist/index.umd.js dist/index.mjs package.json"
+          files="dist/index.cjs dist/index.umd.js dist/index.esm.js package.json"
 
           version=""
           inconsistent=false
@@ -61,7 +61,7 @@ jobs:
       #     version: 8
       # 设置 Node
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org

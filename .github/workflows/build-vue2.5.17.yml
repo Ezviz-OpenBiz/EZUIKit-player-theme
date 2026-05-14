@@ -1,0 +1,28 @@
+name: build-vue2.5.17
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x, 16.x, 18.x, 20.x, 21.x, 22.x] # not support node >= 23.x and node<=10.x
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build with-vue2.5.17
+        working-directory: ./examples/with-vue2.5.17
+        run: |
+          yarn install --frozen-lockfile
+          yarn run build

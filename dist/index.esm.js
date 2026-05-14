@@ -1,20 +1,20 @@
 /*
-* @ezuikit/player-theme v2.1.3-beta.2
-* Copyright (c) 2026-03-25 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.0.2-beta.1
+* Copyright (c) 2026-05-15 Ezviz-OpenBiz
 * Released under the MIT License.
 */
-'use strict';
-
-var EventEmitter = require('eventemitter3');
-var Picker = require('@skax/picker');
-var delegate = require('@skax/delegate');
-var deepmerge = require('deepmerge');
-var require$$1 = require('@ezuikit/utils-tools');
-var screenfull = require('screenfull');
-var I18n = require('@ezuikit/utils-i18n');
-var Logger = require('@ezuikit/utils-logger');
-var controlDatePicker = require('@ezuikit/control-date-picker');
-var controlTimeLine = require('@ezuikit/control-time-line');
+import EventEmitter from 'eventemitter3';
+import Picker from '@skax/picker';
+import delegate from '@skax/delegate';
+import deepmerge from 'deepmerge';
+import { isMobile, DateTime, parseEzopenUrl } from '@ezuikit/utils-tools';
+import screenfull from 'screenfull';
+import I18n from '@ezuikit/utils-i18n';
+import Logger from '@ezuikit/utils-logger';
+import Zoom$1 from '@ezuikit/control-zoom';
+import { Ptz as Ptz$1, MobilePtz } from '@ezuikit/control-ptz';
+import { DatePicker } from '@ezuikit/control-date-picker';
+import { MobileTimeLine, TimeLine } from '@ezuikit/control-time-line';
 
 /**
  * 播放器的类名前缀
@@ -890,7 +890,7 @@ var MESSAGE_DEFAULT_OPTIONS = {};
         _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$q({}, options, {
             tagName: 'div',
             controlType: 'block'
-        }))) || this;
+        }))) || this, _this._$toast = null;
         _this.options = Object.assign({}, MESSAGE_DEFAULT_OPTIONS, options);
         _this.$container.classList.add("" + PREFIX_CLASS + "-message", "" + PREFIX_CLASS + "-hide"); // 默认隐藏   `${PREFIX_CLASS}-hide`
         return _this;
@@ -1358,7 +1358,7 @@ function _create_for_of_iterator_helper_loose$2(o, allowArrayLike) {
    * ```ts
    * Utils.isMobile  // true | false
    * ```
-   */ Utils.isMobile = require$$1.isMobile();
+   */ Utils.isMobile = isMobile();
 
 function _defineProperties$7(target, props) {
     for(var i = 0; i < props.length; i++){
@@ -1762,7 +1762,7 @@ var VOLUME_DEFAULT_OPTIONS = {
         _this._lastVolume = _this._volume;
         _this._muted = !!((_this__options_props3 = _this._options.props) == null ? void 0 : _this__options_props3.muted) || false;
         // 轻应用私有暂时不支持调节音量
-        if (!(Utils.isMobile || _this._options.PLAY_TYPE === 'ezopen' || _this._options.PLAY_TYPE === 'hls')) {
+        if (!(Utils.isMobile || _this._options.PLAY_TYPE === 'ezopen' || _this._options.PLAY_TYPE === 'ezhls')) {
             var _this__options_props4, _this__options_props5;
             _this.picker = new Picker(_this.$container, {
                 getPopupContainer: function() {
@@ -1803,8 +1803,9 @@ var VOLUME_DEFAULT_OPTIONS = {
         }
         _this._updateUI();
         _this._addEventListener();
-        _this.on(EVENTS.audioCodecUnsupported, function() {
-            _this.disabled = true;
+        _this.on(EVENTS.audioCodecUnsupported, function(flag) {
+            flag = flag != null ? flag : true;
+            _this.disabled = flag;
         });
         _this.on(EVENTS.volumechange, function(volume, muted) {
             // 接收
@@ -3261,6 +3262,12 @@ var en = {
                 isrender: 1
             },
             {
+                iconId: 'zoom',
+                part: 'left',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
                 iconId: 'fullscreen',
                 part: 'right',
                 defaultActive: 0,
@@ -4086,10 +4093,10 @@ function debounce(func, wait) {
  * @param theme - Theme
  */ function _themeEventemitter(theme) {
     // prettier-ignore
-    theme == null ? void 0 : theme.on(EVENTS.audioCodecUnsupported, function() {
+    theme == null ? void 0 : theme.on(EVENTS.audioCodecUnsupported, function(flag) {
         var _theme_controls;
         if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.volumeControl) {
-            theme.controls.volumeControl.emit(EVENTS.audioCodecUnsupported);
+            theme.controls.volumeControl.emit(EVENTS.audioCodecUnsupported, flag);
         }
     });
     // 处理信息提示 duration 单位秒
@@ -4648,7 +4655,7 @@ var ZOOM_DEFAULT_OPTIONS = {
 /**
  * 电子放大控件
  * @category Control
- */ var Zoom$1 = /*#__PURE__*/ function(Control) {
+ */ var Zoom = /*#__PURE__*/ function(Control) {
     _inherits$j(Zoom, Control);
     function Zoom(options) {
         var _this;
@@ -4780,735 +4787,6 @@ var ZOOM_DEFAULT_OPTIONS = {
     return Zoom;
 }(Control);
 
-function getDefaultExportFromCjs (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
-}
-
-/*
-* @ezuikit/control-zoom v0.0.2
-* Copyright (c) 2026-03-18 Ezviz-OpenBiz
-* Released under the MIT License.
-*/
-
-var dist$1;
-var hasRequiredDist$1;
-
-function requireDist$1 () {
-	if (hasRequiredDist$1) return dist$1;
-	hasRequiredDist$1 = 1;
-
-	/**
-	 * Zoom position
-	 *
-	 */ function _defineProperties(target, props) {
-	    for(var i = 0; i < props.length; i++){
-	        var descriptor = props[i];
-	        descriptor.enumerable = descriptor.enumerable || false;
-	        descriptor.configurable = true;
-	        if ("value" in descriptor) descriptor.writable = true;
-	        Object.defineProperty(target, descriptor.key, descriptor);
-	    }
-	}
-	function _create_class(Constructor, protoProps, staticProps) {
-	    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-	    return Constructor;
-	}
-	var ZOOM_DEFAULT_POSITION = [
-	    0,
-	    0
-	];
-	/**
-	 * 默认值
-	 */ var DefaultOptions = {
-	    initialZoom: 1,
-	    defaultCursor: 'pointer',
-	    scrollVelocity: 0.1,
-	    animDuration: 0.25,
-	    allowZoom: true,
-	    allowPan: true,
-	    onChange: function() {},
-	    onTranslateChange: function() {},
-	    onTap: function() {},
-	    max: 8,
-	    min: 1,
-	    zoomStep: 0.1,
-	    allowTouchEvents: false,
-	    allowWheel: true,
-	    ignoredMouseButtons: [],
-	    doubleTouchMaxDelay: 300,
-	    decelerationDuration: 750
-	};
-	/**
-	 * dom 节点放大和拖动
-	 *
-	 */ var Zoom = /*#__PURE__*/ function() {
-	    function Zoom(container, options) {
-	        var _this = this;
-	        this._dragging = false;
-	        /**
-	   * 销毁
-	   * destroy
-	   */ this.destroy = function() {
-	            _this.setAllowZoom(false);
-	            _this.reset();
-	            _this.removeEventListeners();
-	        };
-	        /**
-	   * 设置是否旋转
-	   * @param trans - 是否transform
-	   */ this.setTransform = function(trans) {
-	            _this.transform = trans;
-	        };
-	        /**
-	   * 获取是否旋转
-	   * @returns
-	   */ this.getTransform = function() {
-	            return _this.transform;
-	        };
-	        /**
-	   * 更新x轴和Y轴平移值
-	   */ this.updateTranslate = function() {
-	            var translateX = 0;
-	            var translateY = 0;
-	            if (_this.percentPos[0] < 0) {
-	                translateX = _this.percentPos[0] < -(0.5 * (_this.zoom - 1)) ? -(0.5 * (_this.zoom - 1)) : _this.percentPos[0];
-	            } else {
-	                translateX = _this.percentPos[0] > 0.5 * (_this.zoom - 1) ? 0.5 * (_this.zoom - 1) : _this.percentPos[0];
-	            }
-	            if (_this.percentPos[1] < 0) {
-	                translateY = _this.percentPos[1] < -(0.5 * (_this.zoom - 1)) ? -(0.5 * (_this.zoom - 1)) : _this.percentPos[1];
-	            } else {
-	                translateY = _this.percentPos[1] > 0.5 * (_this.zoom - 1) ? 0.5 * (_this.zoom - 1) : _this.percentPos[1];
-	            }
-	            _this.percentPos = [
-	                translateX,
-	                translateY
-	            ];
-	        };
-	        /**
-	   * 更新容器样式
-	   */ this.update = function() {
-	            if (!_this.container) return;
-	            _this.updateTranslate();
-	            _this.container.style.transition = "transform ease-out " + _this.transition + "s";
-	            _this.container.style.transform = "translate3d(" + _this.percentPos[0] * 100 + "%, " + _this.percentPos[1] * 100 + "%, 0) scale(" + _this.zoom + ")";
-	        };
-	        /**
-	   * 设置支持缩放
-	   * @param allow
-	   */ this.setAllowZoom = function(allow) {
-	            _this.options.allowZoom = allow;
-	        };
-	        /**
-	   * 设置缩放值
-	   * @param zoom - 缩放值
-	   * @param reset - 是否重置
-	   */ this.setZoom = function(zoom, reset) {
-	            zoom = parseFloat(zoom.toFixed(_this.getPrecision(_this.options.zoomStep)));
-	            if (_this.zoom !== zoom) {
-	                _this.zoom = zoom;
-	                _this.update();
-	                _this.options.onChange == null ? void 0 : _this.options.onChange.call(_this.options, +_this.zoom.toFixed(_this.getPrecision(_this.options.zoomStep)), reset);
-	            }
-	        };
-	        /**
-	   * 获取缩放值
-	   * @returns
-	   */ this.getZoom = function() {
-	            return _this.zoom;
-	        };
-	        /**
-	   * 设置位置
-	   * @param pos - 位置 [X轴坐标转换， Y轴坐标转换]
-	   */ this.setPos = function(pos) {
-	            var _this_container, _this_container1;
-	            var containerWidth = (_this_container = _this.container) == null ? void 0 : _this_container.clientWidth;
-	            var containerHeight = (_this_container1 = _this.container) == null ? void 0 : _this_container1.clientHeight;
-	            if (+_this.pos[0] !== pos[0] || +_this.pos[1] !== pos[1]) {
-	                _this.percentPos = [
-	                    pos[0] / containerWidth,
-	                    pos[1] / containerHeight
-	                ];
-	                _this.update();
-	                _this.options.onTranslateChange == null ? void 0 : _this.options.onTranslateChange.call(_this.options, {
-	                    posX: pos[0],
-	                    posY: pos[1]
-	                });
-	            }
-	        };
-	        /**
-	   * 设置过渡时间
-	   * @param duration - 过渡时间, 单位秒
-	   */ this.setTransitionDuration = function(duration) {
-	            _this.transition = duration;
-	            _this.update();
-	        };
-	        /**
-	   * 设置鼠标样式
-	   * @param cursor
-	   * @returns
-	   */ this.setCursor = function(cursor) {
-	            if (!_this.container) return;
-	            _this.container.style.cssText += "cursor:" + cursor + ";";
-	            _this.cursor = cursor;
-	        };
-	        this.zoomIn = function(value) {
-	            var newPosX = _this.pos[0];
-	            var newPosY = _this.pos[1];
-	            var prevZoom = _this.zoom;
-	            var _this_options_max, _this_options_max1;
-	            var newZoom = prevZoom + value < ((_this_options_max = _this.options.max) != null ? _this_options_max : 8) ? prevZoom + value : (_this_options_max1 = _this.options.max) != null ? _this_options_max1 : 8;
-	            if (newZoom !== prevZoom) {
-	                newPosX = newPosX * (newZoom - 1) / (prevZoom > 1 ? prevZoom - 1 : prevZoom);
-	                newPosY = newPosY * (newZoom - 1) / (prevZoom > 1 ? prevZoom - 1 : prevZoom);
-	            }
-	            _this.setZoom(newZoom);
-	            _this.setPos([
-	                newPosX,
-	                newPosY
-	            ]);
-	            _this.setTransitionDuration(_this.options.animDuration);
-	        };
-	        this.zoomOut = function(value) {
-	            var newPosX = _this.pos[0];
-	            var newPosY = _this.pos[1];
-	            var prevZoom = _this.zoom;
-	            var _this_options_min, _this_options_min1;
-	            var newZoom = prevZoom - value > ((_this_options_min = _this.options.min) != null ? _this_options_min : 1) ? prevZoom - value : (_this_options_min1 = _this.options.min) != null ? _this_options_min1 : 1;
-	            if (newZoom !== prevZoom) {
-	                newPosX = newPosX * (newZoom - 1) / (prevZoom - 1);
-	                newPosY = newPosY * (newZoom - 1) / (prevZoom - 1);
-	            }
-	            _this.setZoom(newZoom);
-	            _this.setPos([
-	                newPosX,
-	                newPosY
-	            ]);
-	            _this.setTransitionDuration(_this.options.animDuration);
-	        };
-	        this.zoomToZone = function(relX, relY, relWidth, relHeight) {
-	            var _this_container;
-	            if (!_this.container) return;
-	            var newPosX = _this.pos[0];
-	            var newPosY = _this.pos[1];
-	            var parentRect = ((_this_container = _this.container) == null ? void 0 : _this_container.parentNode).getBoundingClientRect();
-	            var prevZoom = _this.zoom;
-	            // Calculate zoom factor to scale the zone
-	            var optimalZoomX = parentRect.width / relWidth;
-	            var optimalZoomY = parentRect.height / relHeight;
-	            var _this_options_max;
-	            var newZoom = Math.min(optimalZoomX, optimalZoomY, (_this_options_max = _this.options.max) != null ? _this_options_max : 8);
-	            // Calculate new position to center the zone
-	            var rect = _this.container.getBoundingClientRect();
-	            var _ref = [
-	                rect.width / prevZoom / 2,
-	                rect.height / prevZoom / 2
-	            ], centerX = _ref[0], centerY = _ref[1];
-	            var _ref1 = [
-	                relX + relWidth / 2,
-	                relY + relHeight / 2
-	            ], zoneCenterX = _ref1[0], zoneCenterY = _ref1[1];
-	            newPosX = (centerX - zoneCenterX) * newZoom;
-	            newPosY = (centerY - zoneCenterY) * newZoom;
-	            _this.setZoom(newZoom);
-	            _this.setPos([
-	                newPosX,
-	                newPosY
-	            ]);
-	            _this.setTransitionDuration(_this.options.animDuration);
-	        };
-	        this.getNewPosition = function(x, y, newZoom) {
-	            var _ref = [
-	                _this.zoom,
-	                _this.pos[0],
-	                _this.pos[1]
-	            ], prevZoom = _ref[0];
-	            if (newZoom === 1 || !_this) return ZOOM_DEFAULT_POSITION;
-	            var _ref1 = [
-	                _this.container.clientWidth,
-	                _this.container.clientHeight
-	            ], clientWidth = _ref1[0], clientHeight = _ref1[1];
-	            if (newZoom > prevZoom) {
-	                return [
-	                    0,
-	                    0
-	                ];
-	            } else {
-	                // 放到最大
-	                var w = -((x - clientWidth / 2) / (clientWidth / 2)) * newZoom / 2;
-	                var h = -((y - clientHeight / 2) / (clientHeight / 2)) * newZoom / 2;
-	                if (w > newZoom / 2 - 0.5) {
-	                    w = 3.5;
-	                }
-	                if (h > newZoom / 2 - 0.5) {
-	                    h = 3.5;
-	                }
-	                return [
-	                    clientWidth * w,
-	                    clientHeight * h
-	                ];
-	            }
-	        };
-	        /**
-	   * 缩放到最大
-	   * @param x - 点击点X坐标
-	   * @param y - 点击点Y坐标
-	   */ this.fullZoomInOnPosition = function(x, y) {
-	            var _this_options_max;
-	            var zoom = (_this_options_max = _this.options.max) != null ? _this_options_max : DefaultOptions.max;
-	            _this.setZoom(zoom != null ? zoom : DefaultOptions.max);
-	            _this.setPos(_this.getNewPosition(x, y, zoom));
-	            _this.setTransitionDuration(_this.options.animDuration);
-	        };
-	        this.getLimitedShift = function(shift, minLimit, maxLimit, minElement, maxElement) {
-	            if (shift > 0) {
-	                if (minElement > minLimit) {
-	                    return 0;
-	                } else if (minElement + shift > minLimit) {
-	                    return minLimit - minElement;
-	                }
-	            } else if (shift < 0) {
-	                if (maxElement < maxLimit) {
-	                    return 0;
-	                } else if (maxElement + shift < maxLimit) {
-	                    return maxLimit - maxElement;
-	                }
-	            }
-	            return shift;
-	        };
-	        this.getCursor = function(canMoveOnX, canMoveOnY) {
-	            if (canMoveOnX && canMoveOnY) {
-	                return 'move';
-	            } else if (canMoveOnX) {
-	                return 'ew-resize';
-	            } else if (canMoveOnY) {
-	                return 'ns-resize';
-	            } else {
-	                return 'auto';
-	            }
-	        };
-	        this.move = function(shiftX, shiftY, transitionDuration) {
-	            if (transitionDuration === void 0) transitionDuration = 0;
-	            if (!_this.container) return;
-	            var newPosX = _this.pos[0];
-	            var newPosY = _this.pos[1];
-	            // let canMoveOnX: boolean, canMoveOnY: boolean;
-	            var rect = _this.container.getBoundingClientRect();
-	            var parentRect = _this.container.parentNode.getBoundingClientRect();
-	            // 根据是否进行了伪横屏旋转，决定是使用 shiftX 还是 shiftY 来对画面进行移动
-	            var shiftHorizontal = _this.transform ? shiftY : shiftX;
-	            var shiftVertical = _this.transform ? shiftX : shiftY;
-	            var _ref = _this.transform ? [
-	                rect.height > parentRect.bottom - parentRect.top,
-	                shiftVertical > 0 && rect.top - parentRect.top < 0,
-	                shiftVertical < 0 && rect.bottom - parentRect.bottom > 0
-	            ] : [
-	                rect.width > parentRect.right - parentRect.left,
-	                shiftHorizontal > 0 && rect.left - parentRect.left < 0,
-	                shiftHorizontal < 0 && rect.right - parentRect.right > 0
-	            ], isLargerHor = _ref[0], isOutLeftBoundary = _ref[1], isOutRightBoundary = _ref[2];
-	            var canMoveOnX = isLargerHor || isOutLeftBoundary || isOutRightBoundary;
-	            if (canMoveOnX) {
-	                if (_this.transform) {
-	                    newPosX += _this.getLimitedShift(shiftVertical, parentRect.top, parentRect.bottom, rect.top, rect.bottom);
-	                } else {
-	                    newPosX += _this.getLimitedShift(shiftHorizontal, parentRect.left, parentRect.right, rect.left, rect.right);
-	                }
-	            }
-	            var _ref1 = _this.transform ? [
-	                rect.width > parentRect.right - parentRect.left,
-	                shiftHorizontal > 0 && rect.right - parentRect.right < 0,
-	                shiftHorizontal < 0 && rect.left - parentRect.left > 0
-	            ] : [
-	                rect.height > parentRect.bottom - parentRect.top,
-	                shiftVertical > 0 && rect.top - parentRect.top < 0,
-	                shiftVertical < 0 && rect.bottom - parentRect.bottom > 0
-	            ], isLargerVer = _ref1[0], isOutTopBoundary = _ref1[1], isOutBottomBoundary = _ref1[2];
-	            var canMoveOnY = isLargerVer || isOutTopBoundary || isOutBottomBoundary;
-	            if (canMoveOnY) {
-	                if (_this.transform) {
-	                    var transformGetLimitedShift = function(shift, minLimit, maxLimit, minElement, maxElement) {
-	                        // css伪横屏边界判断特殊处理
-	                        if (shift > 0) {
-	                            if (maxElement < maxLimit + 1) {
-	                                return 0;
-	                            } else if (maxElement + shift < maxLimit + 1) {
-	                                return maxLimit - maxElement;
-	                            }
-	                        } else if (shift < 0) {
-	                            if (minElement + 1 > minLimit) {
-	                                return 0;
-	                            } else if (minElement + 1 + shift > minLimit) {
-	                                return minLimit - minElement;
-	                            }
-	                        }
-	                        return shift;
-	                    };
-	                    newPosY += transformGetLimitedShift(shiftHorizontal, parentRect.left, parentRect.right, rect.left, rect.right);
-	                } else {
-	                    newPosY += _this.getLimitedShift(shiftVertical, parentRect.top, parentRect.bottom, rect.top, rect.bottom);
-	                }
-	            }
-	            var cursor = _this.getCursor(canMoveOnX, canMoveOnY);
-	            _this.setPos([
-	                newPosX,
-	                newPosY
-	            ]);
-	            _this.setCursor(cursor);
-	            _this.setTransitionDuration(transitionDuration);
-	        };
-	        /**
-	   * 移动端双击
-	   * @returns
-	   */ this.isDoubleTapping = function() {
-	            var touchTime = new Date().getTime();
-	            var _this_lastTouchTime, _this_options_doubleTouchMaxDelay, _this_lastDoubleTapTime, _this_options_doubleTouchMaxDelay1;
-	            var isDoubleTap = touchTime - ((_this_lastTouchTime = _this.lastTouchTime) != null ? _this_lastTouchTime : 0) < ((_this_options_doubleTouchMaxDelay = _this.options.doubleTouchMaxDelay) != null ? _this_options_doubleTouchMaxDelay : 300) && touchTime - ((_this_lastDoubleTapTime = _this.lastDoubleTapTime) != null ? _this_lastDoubleTapTime : 0) > ((_this_options_doubleTouchMaxDelay1 = _this.options.doubleTouchMaxDelay) != null ? _this_options_doubleTouchMaxDelay1 : 750);
-	            if (isDoubleTap) {
-	                _this.lastDoubleTapTime = touchTime;
-	                return true;
-	            }
-	            _this.lastTouchTime = touchTime;
-	            return false;
-	        };
-	        this.startDeceleration = function(lastShiftOnX, lastShiftOnY) {
-	            var startTimestamp = null;
-	            var startDecelerationMove = function(timestamp) {
-	                if (startTimestamp === null) startTimestamp = timestamp;
-	                var progress = timestamp - startTimestamp;
-	                var _this_options_decelerationDuration, _this_options_decelerationDuration1;
-	                var ratio = (((_this_options_decelerationDuration = _this.options.decelerationDuration) != null ? _this_options_decelerationDuration : 750) - progress) / ((_this_options_decelerationDuration1 = _this.options.decelerationDuration) != null ? _this_options_decelerationDuration1 : 750);
-	                var _ref = [
-	                    lastShiftOnX * ratio,
-	                    lastShiftOnY * ratio
-	                ], shiftX = _ref[0], shiftY = _ref[1];
-	                var _this_options_decelerationDuration2;
-	                if (progress < ((_this_options_decelerationDuration2 = _this.options.decelerationDuration) != null ? _this_options_decelerationDuration2 : 750) && Math.max(Math.abs(shiftX), Math.abs(shiftY)) > 1) {
-	                    _this.move(shiftX, shiftY, 0);
-	                    _this.lastRequestAnimationId = requestAnimationFrame(startDecelerationMove);
-	                } else {
-	                    _this.lastRequestAnimationId = null;
-	                }
-	            };
-	            _this.lastRequestAnimationId = requestAnimationFrame(startDecelerationMove);
-	        };
-	        this.reset = function() {
-	            _this.setZoom(_this.options.initialZoom, true);
-	            _this.cursor = _this.options.defaultCursor;
-	            _this.setTransitionDuration(_this.options.animDuration);
-	            _this.setPos(ZOOM_DEFAULT_POSITION);
-	        };
-	        // api向前兼容
-	        this.addScale = function(scale) {
-	            if (scale === void 0) scale = 1;
-	            _this.handleZoomAdd(scale);
-	        };
-	        this.handleZoomAdd = function(scale) {
-	            if (scale === void 0) scale = 1;
-	            if (!_this.options.allowZoom || !_this.options.allowWheel) return;
-	            var newZoom = parseFloat((_this.zoom + scale).toFixed(_this.getPrecision(_this.options.zoomStep)));
-	            var _this_options_max;
-	            if (newZoom > ((_this_options_max = _this.options.max) != null ? _this_options_max : 8)) {
-	                newZoom = 8;
-	            }
-	            _this.setZoom(newZoom);
-	            _this.setPos(_this.pos);
-	            _this.setTransitionDuration(0.05);
-	        };
-	        // api向前兼容
-	        this.subScale = function(scale) {
-	            if (scale === void 0) scale = 1;
-	            _this.handleZoomSub(scale);
-	        };
-	        this.handleZoomSub = function(scale) {
-	            if (scale === void 0) scale = 1;
-	            if (!_this.options.allowZoom || !_this.options.allowWheel) return;
-	            var newZoom = parseFloat((_this.zoom - scale).toFixed(_this.getPrecision(_this.options.zoomStep)));
-	            if (newZoom < 1) {
-	                newZoom = 1;
-	            }
-	            _this.setZoom(newZoom);
-	            _this.setPos(_this.pos);
-	            _this.setTransitionDuration(0.05);
-	        };
-	        this.handleMouseWheel = function(event) {
-	            event.preventDefault();
-	            if (!_this.options.allowZoom || !_this.options.allowWheel) return;
-	            var velocity = event.deltaY < 0 ? _this.options.scrollVelocity : 0 - _this.options.scrollVelocity;
-	            var _this_options_max, _this_options_min;
-	            var newZoom = parseFloat(Math.max(Math.min(_this.zoom + velocity, (_this_options_max = _this.options.max) != null ? _this_options_max : 8), (_this_options_min = _this.options.min) != null ? _this_options_min : 1).toFixed(_this.getPrecision(_this.options.zoomStep)));
-	            _this.setZoom(newZoom);
-	            // this.setPos(this.getNewPosition(posX, posY, newZoom));
-	            _this.setTransitionDuration(0.05);
-	        };
-	        this.handleMouseStart = function(event) {
-	            var _this_options_ignoredMouseButtons;
-	            event.preventDefault();
-	            if (!_this.options.allowPan || ((_this_options_ignoredMouseButtons = _this.options.ignoredMouseButtons) == null ? void 0 : _this_options_ignoredMouseButtons.includes(event.button))) return;
-	            _this._dragging = true;
-	            if (_this.lastRequestAnimationId) cancelAnimationFrame(_this.lastRequestAnimationId);
-	            _this.lastCursor = _this.getCoordinates(event);
-	        };
-	        this.handleMouseMove = function(event) {
-	            event.preventDefault();
-	            if (!_this.options.allowPan || !_this.lastCursor || !_this._dragging) return;
-	            _this._touchOrMouseDrag(event);
-	        };
-	        this.handleMouseStop = function(event) {
-	            event.preventDefault();
-	            if (_this.lastShift) {
-	                _this.startDeceleration(_this.lastShift[0], _this.lastShift[1]);
-	                _this.lastShift = null;
-	            }
-	            _this.lastCursor = null;
-	            _this.setCursor('auto');
-	            _this._dragging = false;
-	        };
-	        this.handleTouchStart = function(event) {
-	            var isThisDoubleTapping = _this.isDoubleTapping();
-	            _this.isMultiTouch = event.touches.length;
-	            if (!_this.options.allowTouchEvents) event.preventDefault();
-	            if (_this.lastRequestAnimationId) cancelAnimationFrame(_this.lastRequestAnimationId);
-	            var _this_getCoordinates = _this.getCoordinates(event.touches[0]), posX = _this_getCoordinates[0], posY = _this_getCoordinates[1];
-	            if (_this.isMultiTouch > 1) {
-	                _this.lastCursor = [
-	                    posX,
-	                    posY
-	                ];
-	                return;
-	            }
-	            if (isThisDoubleTapping && _this.options.allowZoom) {
-	                if (_this.zoom === 1) {
-	                    var _this_container_getBoundingClientRect = _this.container.getBoundingClientRect(); _this_container_getBoundingClientRect.top; _this_container_getBoundingClientRect.left; var x = _this_container_getBoundingClientRect.x, y = _this_container_getBoundingClientRect.y;
-	                    var ref;
-	                    ref = _this.transform ? [
-	                        y,
-	                        x
-	                    ] : [
-	                        x,
-	                        y
-	                    ], x = ref[0], y = ref[1];
-	                    var ref1;
-	                    ref1 = [
-	                        posX - x,
-	                        posY - y
-	                    ], posX = ref1[0], posY = ref1[1];
-	                    // 双击放大到最大
-	                    _this.fullZoomInOnPosition(posX, posY);
-	                } else {
-	                    _this.reset();
-	                }
-	                return;
-	            }
-	            _this._tapStartTime = new Date().getTime();
-	            if (_this.options.allowPan) _this.lastCursor = [
-	                posX,
-	                posY
-	            ];
-	        };
-	        this.handleTouchMove = function(event) {
-	            if (!_this.options.allowTouchEvents) event.preventDefault();
-	            if (!_this.lastCursor) return;
-	            if (_this.isMultiTouch === 1) {
-	                _this._touchOrMouseDrag(event.touches[0]);
-	                _this.lastTouchDistance = null;
-	            } else if (_this.isMultiTouch > 1) {
-	                var newZoom = _this.zoom;
-	                // If we detect two points, we shall zoom up or down
-	                var _this_getCoordinates = _this.getCoordinates(event.touches[0]), pos1X = _this_getCoordinates[0], pos1Y = _this_getCoordinates[1];
-	                var _this_getCoordinates1 = _this.getCoordinates(event.touches[1]), pos2X = _this_getCoordinates1[0], pos2Y = _this_getCoordinates1[1];
-	                var distance = Math.sqrt(Math.pow(pos2X - pos1X, 2) + Math.pow(pos2Y - pos1Y, 2));
-	                if (_this.lastTouchDistance && distance && distance !== _this.lastTouchDistance) {
-	                    if (_this.options.allowZoom) {
-	                        newZoom += (distance - _this.lastTouchDistance) / 100;
-	                        var _this_options_max, _this_options_min;
-	                        if (newZoom > ((_this_options_max = _this.options.max) != null ? _this_options_max : 8)) {
-	                            var _this_options_max1;
-	                            newZoom = (_this_options_max1 = _this.options.max) != null ? _this_options_max1 : 8;
-	                        } else if (newZoom < ((_this_options_min = _this.options.min) != null ? _this_options_min : 1)) {
-	                            var _this_options_min1;
-	                            newZoom = (_this_options_min1 = _this.options.min) != null ? _this_options_min1 : 1;
-	                        }
-	                    }
-	                    // 不要做移动，因为会有冲突
-	                    _this.setZoom(newZoom);
-	                    _this.setTransitionDuration(0);
-	                }
-	                // Save data for the next move
-	                _this.lastCursor = [
-	                    pos1X,
-	                    pos1Y
-	                ];
-	                _this.lastTouchDistance = distance;
-	            }
-	        };
-	        this.handleTouchStop = function() {
-	            if (_this.lastShift) {
-	                // Use the last shift to make a decelerating movement effect
-	                _this.startDeceleration(_this.lastShift[0], _this.lastShift[1]);
-	                _this.lastShift = null;
-	            }
-	            if (_this._tapStartTime && new Date().getTime() - _this._tapStartTime < 200) {
-	                _this.options.onTap == null ? void 0 : _this.options.onTap.call(_this.options);
-	            }
-	            _this._tapStartTime = undefined;
-	            _this.lastCursor = null;
-	            _this.lastTouchDistance = null;
-	            _this.isMultiTouch = 0;
-	        };
-	        this.container = container;
-	        this.options = Object.assign({}, DefaultOptions, options || {});
-	        this.percentPos = ZOOM_DEFAULT_POSITION;
-	        this.transition = this.options.animDuration;
-	        this.zoom = 1;
-	        this.cursor = 'auto';
-	        this.lastCursor = [
-	            0,
-	            0
-	        ];
-	        this.lastShift = null;
-	        this.lastTouchDistance = null;
-	        this.lastRequestAnimationId = null;
-	        this.lastTouchTime = new Date().getTime();
-	        this.lastDoubleTapTime = new Date().getTime();
-	        this.transform = false; // 是否为横屏模式
-	        this.isMultiTouch = 1;
-	        this.handleMouseMove = this.handleMouseMove.bind(this);
-	        this.handleMouseStart = this.handleMouseStart.bind(this);
-	        this.handleMouseStop = this.handleMouseStop.bind(this);
-	        this.handleMouseWheel = this.handleMouseWheel.bind(this);
-	        this.handleTouchStart = this.handleTouchStart.bind(this);
-	        this.handleTouchMove = this.handleTouchMove.bind(this);
-	        this.handleTouchStop = this.handleTouchStop.bind(this);
-	        this.getZoom = this.getZoom.bind(this);
-	        this.setZoom = this.setZoom.bind(this);
-	    }
-	    var _proto = Zoom.prototype;
-	    // 设置事件侦听器
-	    _proto.setUpEventListeners = function setUpEventListeners() {
-	        var refCurrentValue = this.container;
-	        var hasMouseDevice = window.matchMedia('(pointer: fine)').matches;
-	        if (hasMouseDevice) {
-	            if (this.options.allowWheel) {
-	                refCurrentValue == null ? void 0 : refCurrentValue.addEventListener('wheel', this.handleMouseWheel, {
-	                    passive: false
-	                });
-	            }
-	            // Apply mouse events only to devices which include an accurate pointing device
-	            refCurrentValue == null ? void 0 : refCurrentValue.addEventListener('mousedown', this.handleMouseStart, {
-	                passive: false
-	            });
-	            refCurrentValue == null ? void 0 : refCurrentValue.addEventListener('mousemove', this.handleMouseMove, {
-	                passive: false
-	            });
-	            refCurrentValue == null ? void 0 : refCurrentValue.addEventListener('mouseup', this.handleMouseStop, {
-	                passive: false
-	            });
-	            refCurrentValue == null ? void 0 : refCurrentValue.addEventListener('mouseleave', this.handleMouseStop, {
-	                passive: false
-	            });
-	        } else {
-	            // Apply touch events to all other devices
-	            refCurrentValue == null ? void 0 : refCurrentValue.addEventListener('touchstart', this.handleTouchStart, {
-	                passive: false
-	            });
-	            refCurrentValue == null ? void 0 : refCurrentValue.addEventListener('touchmove', this.handleTouchMove, {
-	                passive: false
-	            });
-	            refCurrentValue == null ? void 0 : refCurrentValue.addEventListener('touchend', this.handleTouchStop, {
-	                passive: false
-	            });
-	            refCurrentValue == null ? void 0 : refCurrentValue.addEventListener('touchcancel', this.handleTouchStop, {
-	                passive: false
-	            });
-	        }
-	    };
-	    // 移除事件侦听器
-	    _proto.removeEventListeners = function removeEventListeners() {
-	        var refCurrentValue = this.container;
-	        var hasMouseDevice = window.matchMedia('(pointer: fine)').matches;
-	        if (hasMouseDevice) {
-	            if (this.options.allowWheel) {
-	                refCurrentValue == null ? void 0 : refCurrentValue.removeEventListener('wheel', this.handleMouseWheel);
-	            }
-	            refCurrentValue == null ? void 0 : refCurrentValue.removeEventListener('mousedown', this.handleMouseStart);
-	            refCurrentValue == null ? void 0 : refCurrentValue.removeEventListener('mousemove', this.handleMouseMove);
-	            refCurrentValue == null ? void 0 : refCurrentValue.removeEventListener('mouseup', this.handleMouseStop);
-	            refCurrentValue == null ? void 0 : refCurrentValue.removeEventListener('mouseleave', this.handleMouseStop);
-	        } else {
-	            refCurrentValue == null ? void 0 : refCurrentValue.removeEventListener('touchstart', this.handleTouchStart);
-	            refCurrentValue == null ? void 0 : refCurrentValue.removeEventListener('touchmove', this.handleTouchMove);
-	            refCurrentValue == null ? void 0 : refCurrentValue.removeEventListener('touchend', this.handleTouchStop);
-	            refCurrentValue == null ? void 0 : refCurrentValue.removeEventListener('touchcancel', this.handleTouchStop);
-	        }
-	    };
-	    _proto.getPrecision = function getPrecision(value) {
-	        if (value === void 0) value = 1;
-	        var valueStr = value.toString();
-	        if (valueStr.includes('.')) {
-	            return valueStr.split('.')[1].length;
-	        } else {
-	            return 1;
-	        }
-	    };
-	    /**
-	   * 获取坐标 (伪横屏X、Y轴坐标转换, 相对值)
-	   * @param event
-	   * @returns
-	   */ _proto.getCoordinates = function getCoordinates(event) {
-	        var clientHeight = this.container.clientHeight;
-	        var clientTop = this.container.clientTop;
-	        var clientLeft = this.container.clientLeft;
-	        var _ref = this.transform ? [
-	            event.clientY,
-	            clientHeight - event.clientX
-	        ] : [
-	            event.clientX - clientTop,
-	            event.clientY - clientLeft
-	        ], x1 = _ref[0], y1 = _ref[1];
-	        return [
-	            x1,
-	            y1
-	        ];
-	    };
-	    _proto._touchOrMouseDrag = function _touchOrMouseDrag(event) {
-	        if (this.lastCursor) {
-	            var _this_getCoordinates = this.getCoordinates(event), posX = _this_getCoordinates[0], posY = _this_getCoordinates[1];
-	            var shiftX = posX - this.lastCursor[0];
-	            var shiftY = posY - this.lastCursor[1];
-	            this.move(shiftX, shiftY, 0);
-	            this.lastCursor = [
-	                posX,
-	                posY
-	            ];
-	            this.lastShift = [
-	                shiftX,
-	                shiftY
-	            ];
-	        }
-	    };
-	    _create_class(Zoom, [
-	        {
-	            key: "pos",
-	            get: function get() {
-	                return [
-	                    this.container.clientWidth * this.percentPos[0],
-	                    this.container.clientHeight * this.percentPos[1]
-	                ];
-	            }
-	        }
-	    ]);
-	    return Zoom;
-	}();
-	Zoom.VERSION = '0.0.2';
-
-	dist$1 = Zoom;
-	return dist$1;
-}
-
-var distExports$1 = requireDist$1();
-var Zoom = /*@__PURE__*/getDefaultExportFromCjs(distExports$1);
-
 function _extends$j() {
     _extends$j = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
@@ -5524,7 +4802,7 @@ function _extends$j() {
     return _extends$j.apply(this, arguments);
 }
 function __zoom(theme, container, options) {
-    theme.zoomUtil = new Zoom(container, _extends$j({}, options || {}, {
+    theme.zoomUtil = new Zoom$1(container, _extends$j({}, options || {}, {
         min: 1,
         onChange: function(zoom, reset) {
             if (zoom !== theme._zoom) {
@@ -6578,949 +5856,6 @@ function _set_prototype_of$f(o, p) {
     return CapturePicture;
 }(Control);
 
-var dist = {};
-
-/*
-* @ezuikit/control-ptz v0.0.1
-* Copyright (c) 2026-03-18 Ezviz-OpenBiz
-* Released under the MIT License.
-*/
-
-var hasRequiredDist;
-
-function requireDist () {
-	if (hasRequiredDist) return dist;
-	hasRequiredDist = 1;
-
-	var deepmerge$1 = deepmerge;
-	var utilsTools = require$$1;
-
-	var en_US = {
-	    GET_PTZ_STATUS: 'Get current PTZ status',
-	    GET_PTZ_STATUS_FAILED: 'Theme module is not loaded, PTZ status cannot be obtained',
-	    MOBILE_HIDE_PTZ: 'Mobile terminal, PTZ is not displayed in non-full screen state',
-	    OPTION_PTZ_FAILED: 'Theme module is not loaded, PTZ cannot be operated',
-	    MOBILE_PTZ_TIPS: 'Adjust camera angle by manipulating gimbal',
-	    PTZ_FAST: 'F',
-	    PTZ_MID: 'M',
-	    PTZ_SLOW: 'S',
-	    PTZ_SPEED: 'Adjust the PTZ rotation speed',
-	    DEVICE_ZOOM: 'Control the device to zoom in/out of the screen',
-	    DEVICE_FOCUS: "Adjusting the device's focal length"
-	};
-
-	var zh_CN = {
-	    GET_PTZ_STATUS: '获取当前云台状态',
-	    GET_PTZ_STATUS_FAILED: '未加载Theme模块，无法获取云台状态',
-	    MOBILE_HIDE_PTZ: '移动端，非全屏状态不展示云台',
-	    OPTION_PTZ_FAILED: '未加载Theme模块，无法操作云台',
-	    MOBILE_PTZ_TIPS: '请通过操控云台来调整摄像机视角',
-	    PTZ_FAST: '快',
-	    PTZ_MID: '中',
-	    PTZ_SLOW: '慢',
-	    PTZ_SPEED: '调整云台转动速度',
-	    DEVICE_ZOOM: '控制设备放大/缩小画面',
-	    DEVICE_FOCUS: '调整设备焦距'
-	};
-
-	var PTZ_DEFAULT_OPTIONS = {
-	    language: 'zh',
-	    env: {
-	        domain: 'https://open.ys7.com'
-	    },
-	    accessToken: '',
-	    speed: 2,
-	    locales: {
-	        zh: zh_CN,
-	        en: en_US
-	    }
-	};
-	var PTZ_SPEED = {
-	    1: 1,
-	    2: 3,
-	    3: 7,
-	    slow: 1,
-	    mid: 3,
-	    fast: 7
-	};
-	var PTZ_PREFIX = 'ez-ptz';
-	var PTZ_MOBILE_PREFIX = 'ez-mobile-ptz';
-	var PTZ_SPEED_ACTIVE_PREFIX = PTZ_PREFIX + '-speed-active';
-	var PTZ_DIRECTION_PREFIX = PTZ_PREFIX + '-direction';
-
-	var BasePtz = /*#__PURE__*/ function() {
-	    function BasePtz(container, options) {
-	        if (options === void 0) options = {};
-	        var _this_options_locales;
-	        if (!container) throw new Error('Ptz container is required');
-	        this.options = deepmerge$1(PTZ_DEFAULT_OPTIONS, options, {
-	            clone: false
-	        });
-	        if ((_this_options_locales = this.options.locales) == null ? void 0 : _this_options_locales[this.options.language]) {
-	            var _this_options_locales1;
-	            this.locale = (_this_options_locales1 = this.options.locales) == null ? void 0 : _this_options_locales1[this.options.language];
-	        } else {
-	            var _this_options_locales2;
-	            this.locale = (_this_options_locales2 = this.options.locales) == null ? void 0 : _this_options_locales2['zh'];
-	        }
-	        this.$container = container;
-	        this.speed = PTZ_SPEED[this.options.speed || 2];
-	    }
-	    var _proto = BasePtz.prototype;
-	    _proto.updateOptions = function updateOptions(options) {
-	        this.options = deepmerge$1(this.options, options, {
-	            clone: false
-	        });
-	    };
-	    _proto.destroy = function destroy() {};
-	    return BasePtz;
-	}();
-
-	function _inherits$1(subClass, superClass) {
-	    if (typeof superClass !== "function" && superClass !== null) {
-	        throw new TypeError("Super expression must either be null or a function");
-	    }
-	    subClass.prototype = Object.create(superClass && superClass.prototype, {
-	        constructor: {
-	            value: subClass,
-	            writable: true,
-	            configurable: true
-	        }
-	    });
-	    if (superClass) _set_prototype_of$1(subClass, superClass);
-	}
-	function _set_prototype_of$1(o, p) {
-	    _set_prototype_of$1 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
-	        o.__proto__ = p;
-	        return o;
-	    };
-	    return _set_prototype_of$1(o, p);
-	}
-	var MobilePtz = /*#__PURE__*/ function(BasePtz) {
-	    _inherits$1(MobilePtz, BasePtz);
-	    function MobilePtz(container, options) {
-	        var _this;
-	        _this = BasePtz.call(this, container, options) || this;
-	        _this._touchstart = _this._touchstart.bind(_this);
-	        _this._touchend = _this._touchend.bind(_this);
-	        _this._render();
-	        return _this;
-	    }
-	    var _proto = MobilePtz.prototype;
-	    _proto.destroy = function destroy() {
-	        this._removeEventListener();
-	        if (this.$content) {
-	            this.$content.remove();
-	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	            this.$content = null;
-	        }
-	        BasePtz.prototype.destroy.call(this);
-	    };
-	    _proto._render = function _render() {
-	        this.$content = document.createElement('div');
-	        this.$content.classList.add(PTZ_MOBILE_PREFIX + '-content');
-	        this.$content.innerHTML = '\n      <div class="' + PTZ_MOBILE_PREFIX + '-wrap">\n        <div class="' + PTZ_MOBILE_PREFIX + '-container">\n          <div class="' + PTZ_MOBILE_PREFIX + "-center " + PTZ_MOBILE_PREFIX + '-center"></div>\n          <div class="' + PTZ_MOBILE_PREFIX + "-icon " + PTZ_MOBILE_PREFIX + "-top " + PTZ_MOBILE_PREFIX + '-default"></div>\n          <div class="' + PTZ_MOBILE_PREFIX + "-icon " + PTZ_MOBILE_PREFIX + "-left " + PTZ_MOBILE_PREFIX + '-default"></div>\n          <div class="' + PTZ_MOBILE_PREFIX + "-icon " + PTZ_MOBILE_PREFIX + "-bottom " + PTZ_MOBILE_PREFIX + '-default"></div>\n          <div class="' + PTZ_MOBILE_PREFIX + "-icon " + PTZ_MOBILE_PREFIX + "-right " + PTZ_MOBILE_PREFIX + '-default"></div>\n        </div>\n      </div>\n    ';
-	        this.$container.appendChild(this.$content);
-	        this._addEventListener();
-	    };
-	    _proto._addEventListener = function _addEventListener() {
-	        // 云台控制事件绑定
-	        var $warp = this.$content.querySelector("." + PTZ_MOBILE_PREFIX + "-wrap");
-	        var touchstart = 'PointerEvent' in window ? 'pointerdown' : 'touchstart';
-	        var touchend = 'PointerEvent' in window ? 'pointerup' : 'touchend';
-	        if ($warp) {
-	            $warp.addEventListener(touchstart, this._touchstart);
-	            $warp.addEventListener(touchend, this._touchend);
-	        }
-	    };
-	    _proto._touchstart = function _touchstart(e) {
-	        e.preventDefault();
-	        this._handlePtzTouch(e, 'start');
-	    };
-	    _proto._touchend = function _touchend(e) {
-	        e.preventDefault();
-	        this._handlePtzTouch(e, 'stop');
-	    };
-	    _proto._removeEventListener = function _removeEventListener() {
-	        var $warp = this.$content.querySelector("." + PTZ_MOBILE_PREFIX + "-wrap");
-	        var touchstart = 'PointerEvent' in window ? 'pointerdown' : 'touchstart';
-	        var touchend = 'PointerEvent' in window ? 'pointerup' : 'touchend';
-	        if ($warp) {
-	            $warp.removeEventListener(touchstart, this._touchstart);
-	            $warp.removeEventListener(touchend, this._touchend);
-	        }
-	    };
-	    _proto._handlePtzTouch = function _handlePtzTouch(e, type) {
-	        var _this_options_token_deviceToken, _this_options_token, _e_changedTouches_, _e_changedTouches_1, _this_options_env, _this_options_token_deviceToken1, _this_options_token1;
-	        if (!(this.options.accessToken || ((_this_options_token = this.options.token) == null ? void 0 : (_this_options_token_deviceToken = _this_options_token.deviceToken) == null ? void 0 : _this_options_token_deviceToken.video))) throw new Error('Ptz accessToken or token.deviceToken.video is required');
-	        var $warp = this.$content.querySelector("." + PTZ_MOBILE_PREFIX + "-wrap");
-	        var rect = $warp.getBoundingClientRect();
-	        var containerCenterX = rect.left + 130;
-	        var containerCenterY = rect.top + 130;
-	        var eventX = e.x || ((_e_changedTouches_ = e.changedTouches[0]) == null ? void 0 : _e_changedTouches_.clientX);
-	        var eventY = e.y || ((_e_changedTouches_1 = e.changedTouches[0]) == null ? void 0 : _e_changedTouches_1.clientY);
-	        var left = eventX - containerCenterX;
-	        var top = eventY - containerCenterY;
-	        var direction = 0; // 操作命令：0-上，1-下，2-左，3右，4-左上，5-左下，6-右上，7-右下，8-放大，9-缩小，10-近焦距，11-远焦距
-	        var url = ((_this_options_env = this.options.env) == null ? void 0 : _this_options_env.domain) + '/api/lapp/device/ptz/start';
-	        var token = this.options.accessToken || ((_this_options_token1 = this.options.token) == null ? void 0 : (_this_options_token_deviceToken1 = _this_options_token1.deviceToken) == null ? void 0 : _this_options_token_deviceToken1.video);
-	        var $icons = $warp.querySelectorAll("." + PTZ_MOBILE_PREFIX + "-icon");
-	        // 判读方位
-	        if (Math.abs(left) > Math.abs(top)) {
-	            if (left > 0) {
-	                direction = 3;
-	                $icons[3].className = $icons[3].className.replace("" + PTZ_MOBILE_PREFIX + "-default", "" + PTZ_MOBILE_PREFIX + "-active");
-	            } else {
-	                direction = 2;
-	                $icons[1].className = $icons[1].className.replace("" + PTZ_MOBILE_PREFIX + "-default", "" + PTZ_MOBILE_PREFIX + "-active");
-	            }
-	        } else {
-	            if (top > 0) {
-	                direction = 1;
-	                $icons[2].className = $icons[2].className.replace("" + PTZ_MOBILE_PREFIX + "-default", "" + PTZ_MOBILE_PREFIX + "-active");
-	            } else {
-	                direction = 0;
-	                $icons[0].className = $icons[0].className.replace("" + PTZ_MOBILE_PREFIX + "-default", "" + PTZ_MOBILE_PREFIX + "-active");
-	            }
-	        }
-	        $warp.style.cssText = "background-image:linear-gradient(" + (direction === 0 ? 180 : direction === 1 ? 0 : direction === 2 ? 90 : 270) + "deg, #c0ddf1 0%, rgba(100,143,252,0.00) 50%)";
-	        if (type === 'stop') {
-	            var _this_options_env1;
-	            url = ((_this_options_env1 = this.options.env) == null ? void 0 : _this_options_env1.domain) + '/api/lapp/device/ptz/stop';
-	            $warp.style.cssText = '';
-	            $icons[3].className = $icons[3].className.replace("" + PTZ_MOBILE_PREFIX + "-active", "" + PTZ_MOBILE_PREFIX + "-default");
-	            $icons[1].className = $icons[1].className.replace("" + PTZ_MOBILE_PREFIX + "-active", "" + PTZ_MOBILE_PREFIX + "-default");
-	            $icons[2].className = $icons[2].className.replace("" + PTZ_MOBILE_PREFIX + "-active", "" + PTZ_MOBILE_PREFIX + "-default");
-	            $icons[0].className = $icons[0].className.replace("" + PTZ_MOBILE_PREFIX + "-active", "" + PTZ_MOBILE_PREFIX + "-default");
-	        }
-	        // 这个控件暂时没有 ptzSpeed 和areaId 和backDeg 的值
-	        // this.jSPlugin?.eventEmitter?.emit(EVENTS.ptz.ptzDirection, {
-	        //   type,
-	        //   direction,
-	        //   isRotate: false,
-	        //   ptzSpeed: 1,
-	        // });
-	        var operationResultCb = this.options.onDirection == null ? void 0 : this.options.onDirection.call(this.options, {
-	            direction: direction,
-	            speed: this.speed,
-	            type: type
-	        });
-	        var data = new FormData();
-	        data.append('deviceSerial', this.options.deviceSerial + '');
-	        data.append('channelNo', this.options.channelNo + '');
-	        data.append('speed', '1');
-	        data.append('direction', direction + '');
-	        data.append('accessToken', token);
-	        // prettier-ignore
-	        // eslint-disable-next-line @typescript-eslint/promise-function-async
-	        fetch(url, {
-	            method: 'POST',
-	            body: data
-	        }).then(function(response) {
-	            return response.json();
-	        }).then(function(rt) {
-	            if (rt.code === 200) ; else {
-	                // this.jSPlugin?.logger?.error('[errors]', this.jSPlugin.i18n.t('38' + rt.code) + `(${rt.code})`);
-	                // const msg = this.jSPlugin.i18n.t('38' + rt.code) || rt.msg;
-	                // this.pluginStatus.loadingSetText({
-	                //   text: msg,
-	                //   color: 'red',
-	                //   delayClear: 2000,
-	                // });
-	                if ([
-	                    60005,
-	                    60002,
-	                    60003,
-	                    60004
-	                ].includes(+rt.code)) {
-	                    $warp.style.cssText = "background-image:linear-gradient(" + (direction === 0 ? 180 : direction === 1 ? 0 : direction === 2 ? 90 : 270) + "deg, #f45656 0%, rgba(100,143,252,0.00) 50%)";
-	                }
-	            }
-	            operationResultCb == null ? void 0 : operationResultCb(rt);
-	        }).catch(function(err) {
-	        }).finally(function() {
-	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	            operationResultCb = null;
-	        });
-	    };
-	    return MobilePtz;
-	}(BasePtz);
-
-	function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-	    try {
-	        var info = gen[key](arg);
-	        var value = info.value;
-	    } catch (error) {
-	        reject(error);
-	        return;
-	    }
-	    if (info.done) {
-	        resolve(value);
-	    } else {
-	        Promise.resolve(value).then(_next, _throw);
-	    }
-	}
-	function _async_to_generator(fn) {
-	    return function() {
-	        var self = this, args = arguments;
-	        return new Promise(function(resolve, reject) {
-	            var gen = fn.apply(self, args);
-	            function _next(value) {
-	                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-	            }
-	            function _throw(err) {
-	                asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-	            }
-	            _next(undefined);
-	        });
-	    };
-	}
-	function _defineProperties(target, props) {
-	    for(var i = 0; i < props.length; i++){
-	        var descriptor = props[i];
-	        descriptor.enumerable = descriptor.enumerable || false;
-	        descriptor.configurable = true;
-	        if ("value" in descriptor) descriptor.writable = true;
-	        Object.defineProperty(target, descriptor.key, descriptor);
-	    }
-	}
-	function _create_class(Constructor, protoProps, staticProps) {
-	    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-	    return Constructor;
-	}
-	function _inherits(subClass, superClass) {
-	    if (typeof superClass !== "function" && superClass !== null) {
-	        throw new TypeError("Super expression must either be null or a function");
-	    }
-	    subClass.prototype = Object.create(superClass && superClass.prototype, {
-	        constructor: {
-	            value: subClass,
-	            writable: true,
-	            configurable: true
-	        }
-	    });
-	    if (superClass) _set_prototype_of(subClass, superClass);
-	}
-	function _set_prototype_of(o, p) {
-	    _set_prototype_of = Object.setPrototypeOf || function setPrototypeOf(o, p) {
-	        o.__proto__ = p;
-	        return o;
-	    };
-	    return _set_prototype_of(o, p);
-	}
-	function _ts_generator(thisArg, body) {
-	    var f, y, t, _ = {
-	        label: 0,
-	        sent: function() {
-	            if (t[0] & 1) throw t[1];
-	            return t[1];
-	        },
-	        trys: [],
-	        ops: []
-	    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-	    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-	        return this;
-	    }), g;
-	    function verb(n) {
-	        return function(v) {
-	            return step([
-	                n,
-	                v
-	            ]);
-	        };
-	    }
-	    function step(op) {
-	        if (f) throw new TypeError("Generator is already executing.");
-	        while(g && (g = 0, op[0] && (_ = 0)), _)try {
-	            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-	            if (y = 0, t) op = [
-	                op[0] & 2,
-	                t.value
-	            ];
-	            switch(op[0]){
-	                case 0:
-	                case 1:
-	                    t = op;
-	                    break;
-	                case 4:
-	                    _.label++;
-	                    return {
-	                        value: op[1],
-	                        done: false
-	                    };
-	                case 5:
-	                    _.label++;
-	                    y = op[1];
-	                    op = [
-	                        0
-	                    ];
-	                    continue;
-	                case 7:
-	                    op = _.ops.pop();
-	                    _.trys.pop();
-	                    continue;
-	                default:
-	                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-	                        _ = 0;
-	                        continue;
-	                    }
-	                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-	                        _.label = op[1];
-	                        break;
-	                    }
-	                    if (op[0] === 6 && _.label < t[1]) {
-	                        _.label = t[1];
-	                        t = op;
-	                        break;
-	                    }
-	                    if (t && _.label < t[2]) {
-	                        _.label = t[2];
-	                        _.ops.push(op);
-	                        break;
-	                    }
-	                    if (t[2]) _.ops.pop();
-	                    _.trys.pop();
-	                    continue;
-	            }
-	            op = body.call(thisArg, _);
-	        } catch (e) {
-	            op = [
-	                6,
-	                e
-	            ];
-	            y = 0;
-	        } finally{
-	            f = t = 0;
-	        }
-	        if (op[0] & 5) throw op[1];
-	        return {
-	            value: op[0] ? op[1] : void 0,
-	            done: true
-	        };
-	    }
-	}
-	/**
-	 * @class Ptz
-	 * @classdesc 云台控制
-	 *
-	 * @example
-	 * // 初始化云台控制
-	 * // 显示云台控制
-	 * ptz.show()
-	 * // 隐藏云台控制
-	 * ptz.hide()
-	 */ var Ptz = /*#__PURE__*/ function(BasePtz) {
-	    _inherits(Ptz, BasePtz);
-	    function Ptz(container, options) {
-	        if (options === void 0) options = {};
-	        var _this;
-	        _this = BasePtz.call(this, container, options) || this, _this._isMobile = utilsTools.isMobile(), _this._isRotate = false, _this._clearTimer = null;
-	        _this._$wrapper = document.createElement('div');
-	        _this._$wrapper.className = PTZ_PREFIX + '-container-wrap';
-	        _this._$directionCircleContainer = document.createElement('div');
-	        _this._$directionCircleContainer.classList.add(PTZ_PREFIX + '-container');
-	        _this._$directionCircleContainer.innerHTML = '\n        <div class="' + PTZ_PREFIX + "-main " + PTZ_DIRECTION_PREFIX + '-center"></div>\n        <div class="' + PTZ_PREFIX + "-icon " + PTZ_DIRECTION_PREFIX + '-top" data-direction="0"></div>\n        <div class="' + PTZ_PREFIX + "-icon " + PTZ_DIRECTION_PREFIX + '-top-left" data-direction="4"></div>\n        <div class="' + PTZ_PREFIX + "-icon " + PTZ_DIRECTION_PREFIX + '-left" data-direction="2"></div>\n        <div class="' + PTZ_PREFIX + "-icon " + PTZ_DIRECTION_PREFIX + '-left-bottom" data-direction="5"></div>\n        <div class="' + PTZ_PREFIX + "-icon " + PTZ_DIRECTION_PREFIX + '-bottom" data-direction="1"></div>\n        <div class="' + PTZ_PREFIX + "-icon " + PTZ_DIRECTION_PREFIX + '-bottom-right" data-direction="7"></div>\n        <div class="' + PTZ_PREFIX + "-icon " + PTZ_DIRECTION_PREFIX + '-right" data-direction="3"></div>\n        <div class="' + PTZ_PREFIX + "-icon " + PTZ_DIRECTION_PREFIX + '-right-top" data-direction="6"></div>\n    ';
-	        _this._$wrapper.appendChild(_this._$directionCircleContainer);
-	        _this._$speedContainer = document.createElement('div');
-	        _this._$speedContainer.classList.add(PTZ_PREFIX + '-speed-container');
-	        _this._$speedContainer.innerHTML = '\n        <div class="' + PTZ_PREFIX + '-speed-progress" title="' + _this.locale['PTZ_SPEED'] + '">\n          <div class="' + PTZ_PREFIX + '-speed-progress-line">\n            <div class="' + PTZ_PREFIX + "-speed-progress-line-dot " + (_this.speed === 1 ? PTZ_SPEED_ACTIVE_PREFIX : '') + '" data-id="slow" data-index="1" data-value="1"></div>\n            <div class="' + PTZ_PREFIX + "-speed-progress-line-dot " + (_this.speed === 3 ? PTZ_SPEED_ACTIVE_PREFIX : '') + '" data-id="mid" data-index="2" data-value="3"></div>\n            <div class="' + PTZ_PREFIX + "-speed-progress-line-dot " + (_this.speed === 7 ? PTZ_SPEED_ACTIVE_PREFIX : '') + '" data-id="fast" data-index="3" data-value="7"></div>\n          </div>\n          <div class="' + PTZ_PREFIX + '-speed-progress-points">\n            <div class="' + PTZ_PREFIX + '-speed-progress-points-slow">\n            ' + _this.locale['PTZ_SLOW'] + '\n            </div>\n            <div class="' + PTZ_PREFIX + '-speed-progress-points-mid">\n            ' + _this.locale['PTZ_MID'] + '\n            </div>\n            <div class="' + PTZ_PREFIX + '-speed-progress-points-fast">\n              ' + _this.locale['PTZ_FAST'] + "\n            </div>\n          </div>\n        </div>\n    ";
-	        _this._$wrapper.appendChild(_this._$speedContainer);
-	        _this._$btnContainer = document.createElement('div');
-	        _this._$btnContainer.classList.add(PTZ_PREFIX + '-btn-container');
-	        _this._$btnContainer.innerHTML = '\n        <div class="' + PTZ_PREFIX + '-btn-zoom" title="' + _this.locale['DEVICE_ZOOM'] + '" style="user-select: none;">\n          <div class="' + PTZ_PREFIX + '-btn-zoom-add" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M563.2 198.4c179.2 0 326.4 147.2 326.4 326.4s-147.2 326.4-326.4 326.4S230.4 704 230.4 524.8s147.2-326.4 332.8-326.4z m0 64c-147.2 0-262.4 115.2-262.4 262.4s115.2 262.4 262.4 262.4 262.4-115.2 262.4-262.4S704 262.4 563.2 262.4z" fill="#ffffff"></path>\n              <path d="M691.2 556.8H428.8c-19.2 0-32-12.8-32-32s12.8-32 32-32h262.4c19.2 0 32 12.8 32 32s-12.8 32-32 32z" fill="#ffffff">\n              </path>\n              <path d="M556.8 691.2c-19.2 0-32-12.8-32-32V396.8c0-19.2 12.8-32 32-32s32 12.8 32 32v262.4c0 19.2-12.8 32-32 32z" fill="#ffffff"></path>\n            </svg>\n          </div>\n          <div class="' + PTZ_PREFIX + '-btn-zoom-sub" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M569.6 838.4c-172.8 0-307.2-140.8-307.2-307.2s140.8-307.2 307.2-307.2 307.2 140.8 307.2 307.2-140.8 307.2-307.2 307.2z m0-64c134.4 0 249.6-108.8 249.6-249.6S704 281.6 569.6 281.6 320 396.8 320 531.2s108.8 243.2 249.6 243.2z" fill="#ffffff"></path>\n              <path d="M691.2 563.2H448c-19.2 0-32-12.8-32-32s12.8-38.4 32-38.4h249.6c19.2 0 32 12.8 32 32s-19.2 38.4-38.4 38.4z" fill="#ffffff"></path>\n            </svg>\n          </div>\n        </div>\n        <div class="' + PTZ_PREFIX + '-btn-focal" title="' + _this.locale['DEVICE_FOCUS'] + '" style="user-select: none;">\n          <div class="' + PTZ_PREFIX + '-btn-focal-add" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M646.4 825.6H320c-44.8 0-83.2-38.4-83.2-83.2V409.6c0-44.8 38.4-83.2 83.2-83.2h326.4c44.8 0 83.2 38.4 83.2 83.2v326.4c0 51.2-38.4 89.6-83.2 89.6zM320 390.4c-12.8 0-19.2 6.4-19.2 19.2v326.4c0 12.8 6.4 19.2 19.2 19.2h326.4c12.8 0 19.2-6.4 19.2-19.2V409.6c0-12.8-6.4-19.2-19.2-19.2H320z" fill="#ffffff"></path>\n              <path d="M396.8 358.4V281.6c0-25.6 25.6-51.2 51.2-51.2h326.4c25.6 0 51.2 25.6 51.2 51.2v326.4c0 25.6-25.6 51.2-51.2 51.2H704l-6.4-268.8" fill="#ffffff"></path>\n            </svg>\n          </div>\n          <div class="' + PTZ_PREFIX + '-btn-focal-sub" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M320 358.4h326.4c25.6 0 51.2 25.6 51.2 51.2v326.4c0 25.6-25.6 51.2-51.2 51.2H320c-25.6 0-51.2-25.6-51.2-51.2V409.6c0-25.6 25.6-51.2 51.2-51.2z" fill="#ffffff"></path>\n              <path d="M774.4 697.6H704c-19.2 0-32-12.8-32-32s12.8-32 32-32h70.4c12.8 0 19.2-6.4 19.2-19.2V281.6c0-12.8-6.4-19.2-19.2-19.2H448c-12.8 0-19.2 6.4-19.2 19.2v70.4c0 19.2-12.8 32-32 32s-32-12.8-32-25.6V281.6c0-44.8 38.4-83.2 83.2-83.2h326.4c44.8 0 83.2 38.4 83.2 83.2v326.4c0 51.2-38.4 89.6-83.2 89.6z" fill="#ffffff"></path>\n            </svg>\n          </div>\n        </div>\n      ';
-	        _this._$wrapper.appendChild(_this._$btnContainer);
-	        container.appendChild(_this._$wrapper);
-	        // 云台控制事件绑定
-	        // 云台控制
-	        _this._$directionCircleContainer.onmousedown = function(e) {
-	            e.preventDefault();
-	            e.stopPropagation();
-	            _this._handlePtzTouch(e, 'start');
-	        };
-	        _this._$directionCircleContainer.onmouseup = function(e) {
-	            e.preventDefault();
-	            e.stopPropagation();
-	            _this._handlePtzTouch(e, 'stop');
-	        };
-	        _this._$directionCircleContainer.ontouchstart = function(e) {
-	            e.preventDefault();
-	            e.stopPropagation();
-	            _this._handlePtzTouch(e, 'start');
-	        };
-	        _this._$directionCircleContainer.ontouchend = function(e) {
-	            e.preventDefault();
-	            e.stopPropagation();
-	            _this._handlePtzTouch(e, 'stop');
-	        };
-	        _this._onSwitchSpeed = function(e) {
-	            var list = Array.from(_this._$speedContainer.querySelectorAll("." + PTZ_PREFIX + "-speed-progress-line-dot"));
-	            if (list.includes(e.target) && !e.target.classList.contains(PTZ_SPEED_ACTIVE_PREFIX)) {
-	                list.forEach(function(item) {
-	                    if (item === e.target) {
-	                        item.classList.add(PTZ_SPEED_ACTIVE_PREFIX);
-	                    } else {
-	                        item.classList.remove(PTZ_SPEED_ACTIVE_PREFIX);
-	                    }
-	                });
-	                var value = e.target.getAttribute('data-value');
-	                var index = e.target.getAttribute('data-index');
-	                _this.speed = +value;
-	                _this.options.onSpeedChange == null ? void 0 : _this.options.onSpeedChange.call(_this.options, +index);
-	            }
-	        };
-	        // mouse 事件绑定
-	        // 云台速度变化事件绑定
-	        _this._$speedContainer.onmouseup = _this._onSwitchSpeed;
-	        if (_this._isMobile) {
-	            _this._$speedContainer.ontouchend = _this._onSwitchSpeed;
-	        }
-	        if (_this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-add")) {
-	            // 物理缩放、变焦按钮事件监听
-	            _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-add").onmousedown = function(e) {
-	                e.preventDefault();
-	                e.stopPropagation();
-	                _this._handleBtnTouch('zoom', 'add', 'start');
-	            };
-	            _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-add").onmouseup = function(e) {
-	                e.preventDefault();
-	                e.stopPropagation();
-	                _this._handleBtnTouch('zoom', 'add', 'stop');
-	            };
-	        }
-	        if (_this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-sub")) {
-	            _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-sub").onmousedown = function(e) {
-	                e.preventDefault();
-	                e.stopPropagation();
-	                _this._handleBtnTouch('zoom', 'sub', 'start');
-	            };
-	            _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-sub").onmouseup = function(e) {
-	                e.preventDefault();
-	                e.stopPropagation();
-	                _this._handleBtnTouch('zoom', 'sub', 'stop');
-	            };
-	        }
-	        if (_this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-add")) {
-	            _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-add").onmousedown = function(e) {
-	                e.preventDefault();
-	                e.stopPropagation();
-	                _this._handleBtnTouch('focal', 'add', 'start');
-	            };
-	            _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-add").onmouseup = function(e) {
-	                e.preventDefault();
-	                e.stopPropagation();
-	                _this._handleBtnTouch('focal', 'add', 'stop');
-	            };
-	        }
-	        if (_this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-sub")) {
-	            _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-sub").onmousedown = function(e) {
-	                e.preventDefault();
-	                e.stopPropagation();
-	                _this._handleBtnTouch('focal', 'sub', 'start');
-	            };
-	            _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-sub").onmouseup = function(e) {
-	                e.preventDefault();
-	                e.stopPropagation();
-	                _this._handleBtnTouch('focal', 'sub', 'stop');
-	            };
-	        }
-	        // mobile touch 事件监听
-	        if (_this._isMobile) {
-	            if (_this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-add")) {
-	                _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-add").ontouchstart = function(e) {
-	                    e.preventDefault();
-	                    e.stopPropagation();
-	                    _this._handleBtnTouch('zoom', 'add', 'start');
-	                };
-	                _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-add").ontouchend = function(e) {
-	                    e.preventDefault();
-	                    e.stopPropagation();
-	                    _this._handleBtnTouch('zoom', 'add', 'stop');
-	                };
-	            }
-	            if (_this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-sub")) {
-	                _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-sub").ontouchstart = function(e) {
-	                    e.preventDefault();
-	                    e.stopPropagation();
-	                    _this._handleBtnTouch('zoom', 'sub', 'start');
-	                };
-	                _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-zoom-sub").ontouchend = function(e) {
-	                    e.preventDefault();
-	                    e.stopPropagation();
-	                    _this._handleBtnTouch('zoom', 'sub', 'stop');
-	                };
-	            }
-	            if (_this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-add")) {
-	                _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-add").ontouchstart = function(e) {
-	                    e.preventDefault();
-	                    e.stopPropagation();
-	                    _this._handleBtnTouch('focal', 'add', 'start');
-	                };
-	                _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-add").ontouchend = function(e) {
-	                    e.preventDefault();
-	                    e.stopPropagation();
-	                    _this._handleBtnTouch('focal', 'add', 'stop');
-	                };
-	            }
-	            if (_this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-sub")) {
-	                _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-sub").ontouchstart = function(e) {
-	                    e.preventDefault();
-	                    e.stopPropagation();
-	                    _this._handleBtnTouch('focal', 'sub', 'start');
-	                };
-	                _this._$btnContainer.querySelector("." + PTZ_PREFIX + "-btn-focal-sub").ontouchend = function(e) {
-	                    e.preventDefault();
-	                    e.stopPropagation();
-	                    _this._handleBtnTouch('focal', 'sub', 'stop');
-	                };
-	            }
-	        }
-	        return _this;
-	    }
-	    var _proto = Ptz.prototype;
-	    _proto.destroy = function destroy() {
-	        if (this._clearTimer) {
-	            clearTimeout(this._clearTimer);
-	            this._clearTimer = null;
-	        }
-	        if (this._$directionCircleContainer) {
-	            this._$directionCircleContainer.remove();
-	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	            this._$directionCircleContainer = null;
-	        }
-	        if (this._$speedContainer) {
-	            this._onSwitchSpeed = null;
-	            this._$speedContainer.remove();
-	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	            this._$speedContainer = null;
-	        }
-	        if (this._$btnContainer) {
-	            this._$btnContainer.remove();
-	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	            this._$btnContainer = null;
-	        }
-	        if (this._$wrapper) {
-	            this._$wrapper.remove();
-	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	            this._$wrapper = null;
-	        }
-	        BasePtz.prototype.destroy.call(this);
-	    };
-	    _proto._handlePtzTouch = function _handlePtzTouch(e, type) {
-	        var _this = this;
-	        var _this_options_token_deviceToken, _this_options_token, _this_options_env, _this_options_token_deviceToken1, _this_options_token1;
-	        if (!(this.options.accessToken || ((_this_options_token = this.options.token) == null ? void 0 : (_this_options_token_deviceToken = _this_options_token.deviceToken) == null ? void 0 : _this_options_token_deviceToken.video))) throw new Error('Ptz accessToken or token.deviceToken.video is required');
-	        // 初始化或获取当前PTZ操作队列
-	        if (!this._ptzQueue) {
-	            this._ptzQueue = Promise.resolve();
-	        }
-	        var container = this._$directionCircleContainer.getBoundingClientRect();
-	        var containerCenterX = container.left + (this._$directionCircleContainer.clientWidth + 2) / 2;
-	        var containerCenterY = container.top + (this._$directionCircleContainer.clientHeight + 2) / 2;
-	        var eventX = e.x || e.changedTouches[0].clientX;
-	        var eventY = e.y || e.changedTouches[0].clientY;
-	        var direction = 0;
-	        var url = ((_this_options_env = this.options.env) == null ? void 0 : _this_options_env.domain) + '/api/lapp/device/ptz/start';
-	        var token = this.options.accessToken || ((_this_options_token1 = this.options.token) == null ? void 0 : (_this_options_token_deviceToken1 = _this_options_token1.deviceToken) == null ? void 0 : _this_options_token_deviceToken1.video);
-	        var backDeg = 0;
-	        function getAreaId(x, y) {
-	            // 获取当前点击位置相对于圆心的角度
-	            var rad = Math.atan2(y, x);
-	            if (rad < 0) rad += 2 * Math.PI;
-	            var deg = rad * (180 / Math.PI) - 225 - 12.5;
-	            if (deg < 0) deg += 360;
-	            return Math.floor(deg / 45) + 1;
-	        }
-	        // 兼容画面旋转90度
-	        // const isRotate = false; // /^rotate\(90/.test(document.getElementById(`${this.jSPlugin.id}-wrap`).style.transform);
-	        var left = eventX - containerCenterX;
-	        var top = eventY - containerCenterY;
-	        if (this.isRotate) {
-	            switch(getAreaId(left, top)){
-	                case 1:
-	                    direction = 2;
-	                    backDeg = 90;
-	                    break;
-	                case 2:
-	                    direction = 4;
-	                    backDeg = 135;
-	                    break;
-	                case 3:
-	                    direction = 0;
-	                    backDeg = 180;
-	                    break;
-	                case 4:
-	                    direction = 6;
-	                    backDeg = 225;
-	                    break;
-	                case 5:
-	                    direction = 3;
-	                    backDeg = 270;
-	                    break;
-	                case 6:
-	                    direction = 7;
-	                    backDeg = 315;
-	                    break;
-	                case 7:
-	                    direction = 1;
-	                    backDeg = 0;
-	                    break;
-	                case 8:
-	                    direction = 5;
-	                    backDeg = 45;
-	                    break;
-	            }
-	        } else {
-	            switch(getAreaId(left, top)){
-	                case 1:
-	                    direction = 0;
-	                    backDeg = 180;
-	                    break;
-	                case 2:
-	                    direction = 6;
-	                    backDeg = 225;
-	                    break;
-	                case 3:
-	                    direction = 3;
-	                    backDeg = 270;
-	                    break;
-	                case 4:
-	                    direction = 7;
-	                    backDeg = 315;
-	                    break;
-	                case 5:
-	                    direction = 1;
-	                    backDeg = 0;
-	                    break;
-	                case 6:
-	                    direction = 5;
-	                    backDeg = 45;
-	                    break;
-	                case 7:
-	                    direction = 2;
-	                    backDeg = 90;
-	                    break;
-	                case 8:
-	                    direction = 4;
-	                    backDeg = 135;
-	                    break;
-	            }
-	        }
-	        if (this._clearTimer) {
-	            clearTimeout(this._clearTimer);
-	            this._clearTimer = null;
-	        }
-	        if (type === 'start') {
-	            this._$directionCircleContainer.style.cssText = "background-image:linear-gradient(" + backDeg + "deg, #4277FF 0%, rgba(100,143,252,0.00) 30%)";
-	        } else {
-	            this._$directionCircleContainer.style.cssText = '';
-	        }
-	        if (type === 'stop') {
-	            var _this_options_env1;
-	            url = ((_this_options_env1 = this.options.env) == null ? void 0 : _this_options_env1.domain) + '/api/lapp/device/ptz/stop';
-	        }
-	        var operationResultCb = this.options.onDirection == null ? void 0 : this.options.onDirection.call(this.options, {
-	            areaId: getAreaId(left, top),
-	            direction: direction,
-	            backDeg: backDeg,
-	            isRotate: this.isRotate,
-	            speed: this.speed,
-	            type: type
-	        });
-	        var data = new FormData();
-	        data.append('deviceSerial', this.options.deviceSerial + '');
-	        data.append('channelNo', this.options.channelNo + '');
-	        data.append('speed', this.speed + '');
-	        data.append('direction', direction + '');
-	        data.append('accessToken', token);
-	        // 将操作加入队列
-	        this._ptzQueue = this._ptzQueue.then(function() {
-	            return _async_to_generator(function() {
-	                var _this;
-	                return _ts_generator(this, function(_state) {
-	                    switch(_state.label){
-	                        case 0:
-	                            _this = this;
-	                            return [
-	                                4,
-	                                fetch(url, {
-	                                    method: 'POST',
-	                                    body: data
-	                                }).then(function(response) {
-	                                    return _async_to_generator(function() {
-	                                        return _ts_generator(this, function(_state) {
-	                                            switch(_state.label){
-	                                                case 0:
-	                                                    return [
-	                                                        4,
-	                                                        response.json()
-	                                                    ];
-	                                                case 1:
-	                                                    return [
-	                                                        2,
-	                                                        _state.sent()
-	                                                    ];
-	                                            }
-	                                        });
-	                                    })();
-	                                }).then(function(rt) {
-	                                    var _rt_result;
-	                                    operationResultCb == null ? void 0 : operationResultCb(rt);
-	                                    var code = rt.code || (rt == null ? void 0 : (_rt_result = rt.result) == null ? void 0 : _rt_result.code);
-	                                    if ([
-	                                        60000,
-	                                        60001,
-	                                        60002,
-	                                        60003,
-	                                        60004,
-	                                        60005,
-	                                        60006,
-	                                        10002
-	                                    ].includes(+code)) {
-	                                        _this._$directionCircleContainer.style.cssText = "background-image:linear-gradient(" + backDeg + "deg, #f45656 0%, rgba(100,143,252,0.00) 30%)";
-	                                    }
-	                                    return rt;
-	                                }).catch(function(err) {
-	                                }).finally(function() {
-	                                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	                                    operationResultCb = null;
-	                                    if (type === 'stop') {
-	                                        _this._clearTimer = setTimeout(function() {
-	                                            _this._$directionCircleContainer.style.cssText = '';
-	                                        }, 1000);
-	                                    }
-	                                })
-	                            ];
-	                        case 1:
-	                            // prettier-ignore
-	                            return [
-	                                2,
-	                                _state.sent()
-	                            ];
-	                    }
-	                });
-	            }).call(_this);
-	        });
-	        if (type === 'stop') {
-	            this._ptzQueue = this._ptzQueue.finally(function() {});
-	        }
-	    // this.jSPlugin?.eventEmitter?.emit(EVENTS.ptzDirection, {
-	    //   areaId: getAreaId(left, top),
-	    //   direction,
-	    //   backDeg,
-	    //   isRotate,
-	    //   ptzSpeed: this.jSPlugin.ptzSpeed,
-	    //   type,
-	    // });
-	    };
-	    _proto._handleBtnTouch = function _handleBtnTouch(btn, option, type) {
-	        var _this = this;
-	        var _this_options_token, _this_options_env, _this_options_token_deviceToken, _this_options_token1;
-	        if (!(this.options.accessToken || ((_this_options_token = this.options.token) == null ? void 0 : _this_options_token.deviceToken.video))) throw new Error('Ptz accessToken or token.deviceToken.video is required');
-	        // 使用Promise来跟踪当前操作状态
-	        if (!this._ptzOperation) {
-	            this._ptzOperation = Promise.resolve();
-	        }
-	        var direction = 8;
-	        if (btn === 'zoom') {
-	            direction = option === 'add' ? 8 : 9;
-	        } else {
-	            direction = option === 'add' ? 10 : 11;
-	        }
-	        var url = ((_this_options_env = this.options.env) == null ? void 0 : _this_options_env.domain) + '/api/lapp/device/ptz/start';
-	        var token = this.options.accessToken || ((_this_options_token1 = this.options.token) == null ? void 0 : (_this_options_token_deviceToken = _this_options_token1.deviceToken) == null ? void 0 : _this_options_token_deviceToken.video);
-	        if (type === 'stop') {
-	            var _this_options_env1;
-	            url = ((_this_options_env1 = this.options.env) == null ? void 0 : _this_options_env1.domain) + '/api/lapp/device/ptz/stop';
-	        }
-	        var operationResultCb = this.options.onDirection == null ? void 0 : this.options.onDirection.call(this.options, {
-	            btn: btn,
-	            option: option,
-	            type: type
-	        });
-	        var data = new FormData();
-	        data.append('deviceSerial', this.options.deviceSerial + '');
-	        data.append('channelNo', this.options.channelNo + '');
-	        data.append('speed', this.speed + '');
-	        data.append('direction', direction + '');
-	        data.append('accessToken', token);
-	        // 将当前操作加入Promise链
-	        this._ptzOperation = this._ptzOperation.then(function() {
-	            return _async_to_generator(function() {
-	                return _ts_generator(this, function(_state) {
-	                    switch(_state.label){
-	                        case 0:
-	                            return [
-	                                4,
-	                                fetch(url, {
-	                                    method: 'POST',
-	                                    body: data
-	                                }).then(function(response) {
-	                                    return _async_to_generator(function() {
-	                                        return _ts_generator(this, function(_state) {
-	                                            switch(_state.label){
-	                                                case 0:
-	                                                    return [
-	                                                        4,
-	                                                        response.json()
-	                                                    ];
-	                                                case 1:
-	                                                    return [
-	                                                        2,
-	                                                        _state.sent()
-	                                                    ];
-	                                            }
-	                                        });
-	                                    })();
-	                                }).then(function(rt) {
-	                                    operationResultCb == null ? void 0 : operationResultCb(rt);
-	                                    return rt;
-	                                }).catch(function(err) {
-	                                }).finally(function() {
-	                                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	                                    operationResultCb = null;
-	                                })
-	                            ];
-	                        case 1:
-	                            // prettier-ignore
-	                            return [
-	                                2,
-	                                _state.sent()
-	                            ];
-	                    }
-	                });
-	            })();
-	        });
-	        // 如果是stop操作，添加一个清理操作
-	        if (type === 'stop') {
-	            this._ptzOperation = this._ptzOperation.finally(function() {
-	                _this._ptzOperation = null; // 重置操作链
-	            });
-	        }
-	    };
-	    _create_class(Ptz, [
-	        {
-	            key: "isRotate",
-	            get: function get() {
-	                return this._isRotate;
-	            },
-	            set: /**
-	   * 是否旋转了
-	   */ function set(isRotate) {
-	                this._isRotate = isRotate;
-	            }
-	        }
-	    ]);
-	    return Ptz;
-	}(BasePtz);
-
-	dist.BasePtz = BasePtz;
-	dist.MobilePtz = MobilePtz;
-	dist.Ptz = Ptz;
-	return dist;
-}
-
-var distExports = requireDist();
-
 function _defineProperties$4(target, props) {
     for(var i = 0; i < props.length; i++){
         var descriptor = props[i];
@@ -7618,7 +5953,7 @@ function _set_prototype_of$e(o, p) {
             this.$turntable.classList.add("" + PREFIX_CLASS + "-ptz-turntable");
             this.$panel.appendChild(this.$turntable);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            this._ptzControl = new distExports.Ptz(this.$turntable, _extends$d({}, this._options, {
+            this._ptzControl = new Ptz$1(this.$turntable, _extends$d({}, this._options, {
                 onSpeedChange: this._onSpeedChange.bind(this),
                 onDirection: this._onDirection.bind(this)
             }));
@@ -7627,7 +5962,7 @@ function _set_prototype_of$e(o, p) {
     };
     _proto.renderMobileExtend = function renderMobileExtend($container) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        if (!this._ptzControl1) this._ptzControl1 = new distExports.MobilePtz($container, _extends$d({}, this._options, {
+        if (!this._ptzControl1) this._ptzControl1 = new MobilePtz($container, _extends$d({}, this._options, {
             onSpeedChange: this._onSpeedChange.bind(this),
             onDirection: this._onDirection.bind(this)
         }));
@@ -8338,6 +6673,11 @@ function _ts_generator$3(thisArg, body) {
                 _this._render();
             }
         });
+        if (options.sdkType === 'base') {
+            _this.$container.style.removeProperty('display');
+        } else {
+            _this.$container.style.display = 'none';
+        }
         return _this;
     }
     var _proto = Broadcast.prototype;
@@ -8356,16 +6696,16 @@ function _ts_generator$3(thisArg, body) {
         }
     };
     /**
-     * 销毁语音广播控件
-     */ _proto.destroy = function destroy() {
+   * 销毁语音广播控件
+   */ _proto.destroy = function destroy() {
         if (this.active) {
             this.reset();
         }
         Control.prototype.destroy.call(this);
     };
     /**
-     * 点击 Control 会触发
-     */ _proto._onControlClick = function _onControlClick(e) {
+   * 点击 Control 会触发
+   */ _proto._onControlClick = function _onControlClick(e) {
         var _this = this, _superprop_get__onControlClick = function() {
             return Control.prototype._onControlClick;
         };
@@ -8556,14 +6896,17 @@ function _ts_generator$2(thisArg, body) {
             classNameSuffix: 'aichat'
         })) || this;
         _this._options = options;
-        if (options.urlInfo.search === "" && options.urlInfo.recType === "cloud") {
-            _this._render();
-            _this.on(EVENTS.aichatChange, function(active) {
-                if (_this.active !== active) {
-                    _this.active = active;
-                    _this._render();
-                }
-            });
+        _this._render();
+        _this.on(EVENTS.aichatChange, function(active) {
+            if (_this.active !== active) {
+                _this.active = active;
+                _this._render();
+            }
+        });
+        if (options.urlInfo.searchParams.busType !== '7' && options.urlInfo.recType === 'cloud' && options.sdkType === 'base') {
+            _this.$container.style.removeProperty('display');
+        } else {
+            _this.$container.style.display = 'none';
         }
         return _this;
     }
@@ -8583,16 +6926,16 @@ function _ts_generator$2(thisArg, body) {
         }
     };
     /**
-     * 销毁AI对话框控件
-     */ _proto.destroy = function destroy() {
+   * 销毁AI对话框控件
+   */ _proto.destroy = function destroy() {
         if (this.active) {
             this.reset();
         }
         Control.prototype.destroy.call(this);
     };
     /**
-     * 点击 Control 会触发
-     */ _proto._onControlClick = function _onControlClick(e) {
+   * 点击 Control 会触发
+   */ _proto._onControlClick = function _onControlClick(e) {
         var _this = this, _superprop_get__onControlClick = function() {
             return Control.prototype._onControlClick;
         };
@@ -9257,7 +7600,7 @@ function _set_prototype_of$6(o, p) {
             classNameSuffix: 'date'
         })) || this;
         _this.options = options;
-        _this._value = require$$1.DateTime.format(((_this_options_props = _this.options.props) == null ? void 0 : (_this_options_props_urlInfo = _this_options_props.urlInfo) == null ? void 0 : (_this_options_props_urlInfo_searchParams = _this_options_props_urlInfo.searchParams) == null ? void 0 : _this_options_props_urlInfo_searchParams.begin) || new Date(), 'YYYY-MM-DD');
+        _this._value = DateTime.format(((_this_options_props = _this.options.props) == null ? void 0 : (_this_options_props_urlInfo = _this_options_props.urlInfo) == null ? void 0 : (_this_options_props_urlInfo_searchParams = _this_options_props_urlInfo.searchParams) == null ? void 0 : _this_options_props_urlInfo_searchParams.begin) || new Date(), 'YYYY-MM-DD');
         _this._render();
         // 日期上的点
         _this.on(EVENTS.control.dateMonthChange, function(dates) {
@@ -9270,7 +7613,7 @@ function _set_prototype_of$6(o, p) {
     _proto._render = function _render() {
         var _this = this;
         var _this_options_props;
-        var isMobile1 = require$$1.isMobile();
+        var isMobile1 = isMobile();
         if (isMobile1) {
             var _this_locale;
             this.$container.innerHTML = '\n        <span class="' + PREFIX_CLASS + '-mobile-date-filter" title="' + (((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_CALENDAR) || '') + '">\n          <span class="' + PREFIX_CLASS + '-mobile-date-filter-value">' + this._getDateStr() + "</span>\n          " + IconComponents.filter() + "\n        <span>";
@@ -9280,7 +7623,7 @@ function _set_prototype_of$6(o, p) {
                 title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_CALENDAR
             });
         }
-        this.datePicker = new controlDatePicker.DatePicker(this.$container, {
+        this.datePicker = new DatePicker(this.$container, {
             isMobile: isMobile1,
             getPopupContainer: function() {
                 return _this.$container;
@@ -9292,7 +7635,7 @@ function _set_prototype_of$6(o, p) {
             ],
             badges: ((_this_options_props = this.options.props) == null ? void 0 : _this_options_props.recMonth) || [],
             language: this.options.language === 'zh' ? 'zh' : 'en',
-            current: require$$1.DateTime.toDate(this._value),
+            current: DateTime.toDate(this._value),
             placement: 'tr',
             triggerClose: true,
             disabledDate: function(date) {
@@ -9300,8 +7643,8 @@ function _set_prototype_of$6(o, p) {
             },
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             onOk: function(date, _mode) {
-                if (date && _this._value !== require$$1.DateTime.format(date, 'YYYY-MM-DD') && isMobile1) {
-                    _this._value = require$$1.DateTime.format(date, 'YYYY-MM-DD');
+                if (date && _this._value !== DateTime.format(date, 'YYYY-MM-DD') && isMobile1) {
+                    _this._value = DateTime.format(date, 'YYYY-MM-DD');
                     _this.options.onOk == null ? void 0 : _this.options.onOk.call(_this.options, date);
                     _this.emit(EVENTS.control.dateChange, date);
                     if (date && _this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value")) {
@@ -9310,8 +7653,8 @@ function _set_prototype_of$6(o, p) {
                 }
             },
             onChange: function(date, mode) {
-                if (date && _this._value !== require$$1.DateTime.format(date, 'YYYY-MM-DD') && !isMobile1 && mode === 'date') {
-                    _this._value = require$$1.DateTime.format(date, 'YYYY-MM-DD');
+                if (date && _this._value !== DateTime.format(date, 'YYYY-MM-DD') && !isMobile1 && mode === 'date') {
+                    _this._value = DateTime.format(date, 'YYYY-MM-DD');
                     _this.options.onChange == null ? void 0 : _this.options.onChange.call(_this.options, date);
                     _this.emit(EVENTS.control.dateChange, date);
                 }
@@ -9330,8 +7673,8 @@ function _set_prototype_of$6(o, p) {
         if (change === void 0) change = true;
         var _this_datePicker;
         (_this_datePicker = this.datePicker) == null ? void 0 : _this_datePicker.setCurrent(date, change);
-        if (date && !change && this._value !== require$$1.DateTime.format(date, 'YYYY-MM-DD')) {
-            this._value = require$$1.DateTime.format(date, 'YYYY-MM-DD');
+        if (date && !change && this._value !== DateTime.format(date, 'YYYY-MM-DD')) {
+            this._value = DateTime.format(date, 'YYYY-MM-DD');
             if (date && this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value")) {
                 this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value").innerHTML = this._getDateStr();
             }
@@ -9464,17 +7807,17 @@ function _set_prototype_of$5(o, p) {
                 }
             }
         };
-        if (require$$1.isMobile()) {
-            this.timeLineUtil = new controlTimeLine.MobileTimeLine(this.$container, _timeLineOptions);
+        if (isMobile()) {
+            this.timeLineUtil = new MobileTimeLine(this.$container, _timeLineOptions);
         } else {
-            this.timeLineUtil = new controlTimeLine.TimeLine(this.$container, _timeLineOptions);
+            this.timeLineUtil = new TimeLine(this.$container, _timeLineOptions);
             this._renderAddReduce();
         }
         (_this_timeLineUtil = this.timeLineUtil) == null ? void 0 : (_this_timeLineUtil_updateTimeSections = _this_timeLineUtil.updateTimeSections) == null ? void 0 : _this_timeLineUtil_updateTimeSections.call(_this_timeLineUtil, this.records);
         this.timeLineUtil.update(new Date());
     };
     _proto.setWidth = function setWidth(width) {
-        if (!require$$1.isMobile()) this.timeLineUtil.resize(width);
+        if (!isMobile()) this.timeLineUtil.resize(width);
     };
     _proto._renderAddReduce = function _renderAddReduce() {
         var _this = this;
@@ -9605,7 +7948,7 @@ var Controls = {
     talk: Talk,
     broadcast: Broadcast,
     aiChat: AIChat,
-    zoom: Zoom$1,
+    zoom: Zoom,
     definition: Definition,
     fullscreen: Fullscreen,
     globalFullscreen: GlobalFullscreen,
@@ -10204,7 +8547,8 @@ function _renderControls(theme, $container, btnList, props) {
                         channelNo: theme.urlInfo.channelNo,
                         urlInfo: theme.urlInfo
                     } : {}, {
-                        PLAY_TYPE: theme.options.type
+                        PLAY_TYPE: theme.options.type,
+                        sdkType: theme.options.sdkType
                     }, ((_theme_options1 = theme.options) == null ? void 0 : _theme_options1["" + item.iconId + "Options"]) || {}, {
                         props: props
                     }));
@@ -10360,6 +8704,7 @@ function _renderTheme(theme, data) {
                     _needTimeLine = list.some(function(item) {
                         return REC_GROUP.includes(item.iconId);
                     });
+                    theme.$container.classList.remove("" + PREFIX_CLASS + "-has-time-line");
                     // PC 单独渲染timeLine
                     if (!Utils.isMobile && !(theme.options.timeLineOptions === null || theme.options.disabledTimeLine) && _needTimeLine) {
                         theme._recFooter = new RecFooter(theme.$container, {
@@ -10369,6 +8714,7 @@ function _renderTheme(theme, data) {
                         _renderTimeLine(theme, theme._recFooter.$timeLineContainer, props);
                         if (theme._footer) {
                             theme._footer.$container.style.cssText += "bottom: 36px;";
+                            theme.$container.classList.add("" + PREFIX_CLASS + "-has-time-line");
                         }
                         if (theme.options.dateOptions !== null) {
                             _renderDatePicker(theme, theme._recFooter.$datePickerContainer, props);
@@ -10749,13 +9095,13 @@ var THEME_DEFAULT_OPTIONS = {
         _this._initOptions(options);
         if (_this.options.type === 'ezopen') {
             var _this_urlInfo_searchParams, _this_urlInfo;
-            _this.urlInfo = require$$1.parseEzopenUrl(_this.options.url);
+            _this.urlInfo = parseEzopenUrl(_this.options.url);
             if ((_this_urlInfo = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.spaceId) {
                 _this.options.spaceId = _this.urlInfo.searchParams.spaceId;
             }
             if (_this.urlInfo.type === 'rec') {
                 var _this_urlInfo_searchParams1, _this_urlInfo1, _this_urlInfo_searchParams2, _this_urlInfo2;
-                _this._seekDate = ((_this_urlInfo1 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams1 = _this_urlInfo1.searchParams) == null ? void 0 : _this_urlInfo_searchParams1.begin) ? require$$1.DateTime.toDate((_this_urlInfo2 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams2 = _this_urlInfo2.searchParams) == null ? void 0 : _this_urlInfo_searchParams2.begin) : require$$1.DateTime.toDate(require$$1.DateTime.format(new Date(), 'YYYY/MM/DD') + ' 00:00:00');
+                _this._seekDate = ((_this_urlInfo1 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams1 = _this_urlInfo1.searchParams) == null ? void 0 : _this_urlInfo_searchParams1.begin) ? DateTime.toDate((_this_urlInfo2 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams2 = _this_urlInfo2.searchParams) == null ? void 0 : _this_urlInfo_searchParams2.begin) : DateTime.toDate(DateTime.format(new Date(), 'YYYY/MM/DD') + ' 00:00:00');
             }
         }
         _this._getRecType(_this.options.url);
@@ -10798,7 +9144,7 @@ var THEME_DEFAULT_OPTIONS = {
         // 标准流暂时仅支持 TEMPLATES 中的配置， 多余的的展示不生效（如电子放大是不支持的等等）， 待版本更新才能支持
         // prettier-ignore
         _this._renderTheme(// hls 不支持自定义
-        options.type === 'hls' ? hlsLiveTemplate : // flv mp4 支持自定义 themeData
+        options.type === 'hls' || options.type === 'ezhls' ? hlsLiveTemplate : // flv mp4 支持自定义 themeData
         [
             'flv',
             'mp4'
@@ -11206,8 +9552,13 @@ var THEME_DEFAULT_OPTIONS = {
             // 这里不要使用 $containerWarp.getBoundingClientRect() 获取宽和高  因为会出现小数导致两次(设置后的值和设置后再次获取的值)的宽高不一致 (因为缩放后取整设置，再次获取还有可能是带小数的然后取整 对比两次不一致，一般在屏幕缩放百分比变化和浏览器页面缩放时出现)，致使一直触发 resize 事件
             var width = Math.floor(_this.$container.clientWidth);
             var height = Math.floor(_this.$container.clientHeight);
-            if (width > 200 && width <= 375) {
+            if (width > 280 && width <= 375) {
                 _this.$container.classList.add("" + PREFIX_CLASS + "-medium-width");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-width");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
+            } else if (width > 200 && width <= 280) {
+                _this.$container.classList.add("" + PREFIX_CLASS + "-small-width");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-width");
                 _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
             } else {
                 if (width <= 200) {
@@ -11215,10 +9566,16 @@ var THEME_DEFAULT_OPTIONS = {
                 } else {
                     _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
                 }
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-width");
                 _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-width");
             }
-            if (height > 200 && height <= 375) {
+            if (height > 280 && height <= 375) {
                 _this.$container.classList.add("" + PREFIX_CLASS + "-medium-height");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-height");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
+            } else if (height > 200 && height <= 280) {
+                _this.$container.classList.add("" + PREFIX_CLASS + "-small-height");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-height");
                 _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
             } else {
                 if (height <= 200) {
@@ -11226,6 +9583,7 @@ var THEME_DEFAULT_OPTIONS = {
                 } else {
                     _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
                 }
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-height");
                 _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-height");
             }
             //
@@ -11530,7 +9888,7 @@ var THEME_DEFAULT_OPTIONS = {
    * @returns {"rec" | "cloudRecord" | "cloudRec" | ""} 录像类型， rec: 录像， cloudRec: 云录像， cloudRecord: 云录制
    */ _proto._getRecType = function _getRecType(url) {
         if (this.options.type === 'ezopen' && /^ezopen:\/\//.test(url)) {
-            var urlInfo = require$$1.parseEzopenUrl(url);
+            var urlInfo = parseEzopenUrl(url);
             if (urlInfo.type === 'rec') {
                 var _urlInfo_searchParams;
                 if (urlInfo.recType === 'cloud' && (urlInfo == null ? void 0 : (_urlInfo_searchParams = urlInfo.searchParams) == null ? void 0 : _urlInfo_searchParams.busType) === '7') {
@@ -11995,16 +10353,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '2.1.3-beta.2';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.2-beta.1';
 
-exports.Control = Control;
-exports.EVENTS = EVENTS;
-exports.Fullscreen = Fullscreen;
-exports.Loading = Loading;
-exports.Message = Message;
-exports.Play = Play;
-exports.Poster = Poster;
-exports.Rec = Rec;
-exports.Theme = Theme;
-exports.Utils = Utils;
-exports.Volume = Volume;
+export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };

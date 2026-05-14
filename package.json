@@ -1,10 +1,31 @@
 {
   "name": "@ezuikit/player-theme",
-  "version": "2.1.3-beta.2",
+  "version": "3.0.2-beta.1",
   "description": "player theme",
   "title": "theme",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    },
+    "./dist/style.js": "./dist/style.js",
+    "./dist/style": "./dist/style.js",
+    "./dist/style.css": "./dist/style.css",
+    "./dist/constant.js": "./dist/constant.js",
+    "./dist/constant": "./dist/constant.js"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development rollup --config rollup.config.mjs --watch",
+    "build": "npm run clean && cross-env NODE_ENV=production rollup --config rollup.config.mjs",
+    "clean": "rimraf docs dist coverage",
+    "types": "tsc src/index.ts --emitDeclarationOnly --declaration --declarationDir dist/types --esModuleInterop",
+    "docs": "typedoc --tsconfig typedoc.config.js"
+  },
   "files": [
     "dist"
   ],
@@ -18,14 +39,16 @@
   "author": "Ezviz-OpenBiz",
   "license": "MIT",
   "dependencies": {
-    "@ezuikit/utils-i18n": "2.0.0",
-    "@ezuikit/utils-logger": "2.0.0",
+    "@ezuikit/utils-i18n": "2.0.1",
+    "@ezuikit/utils-logger": "2.0.1",
     "@ezuikit/utils-tools": "2.0.3",
-    "@ezuikit/control-date-picker": "1.0.5",
-    "@ezuikit/control-time-line": "1.0.7",
+    "@ezuikit/control-date-picker": "^2.0.0-beta.4",
+    "@ezuikit/control-time-line": "^2.0.0-beta.4",
+    "@ezuikit/control-ptz": "^1.0.0-beta.5",
+    "@ezuikit/control-zoom": "^1.0.0-beta.3",
     "@juggle/resize-observer": "^3.4.0",
     "@skax/delegate": "4.0.2",
-    "@skax/picker": "1.1.7",
+    "@skax/picker": "1.1.8",
     "deepmerge": "^4.3.1",
     "eventemitter3": "^5.0.1",
     "screenfull": "5.2.0"
