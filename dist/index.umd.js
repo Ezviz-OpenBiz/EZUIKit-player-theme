@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.0.2-beta.1
-* Copyright (c) 2026-05-15 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.0.1-beta.4
+* Copyright (c) 2026-05-18 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -492,6 +492,9 @@
 	    /** 麦克风音量变化 */ talkVolumeChange: 'talkVolumeChange',
 	    /** 语音广播状态变化 */ broadcastChange: 'broadcastChange',
 	    /** AI对话框状态变化 */ aichatChange: 'aichatChange',
+	    /** 直播模式切换 */ liveChange: 'liveChange',
+	    /** 回放下拉选择变化 */ recDropdownChange: 'recDropdownChange',
+	    /** 告警消息面板状态变化 */ alarmMessageChange: 'alarmMessageChange',
 	    /** 动态切换日志配置 */ setLoggerOptions: 'setLoggerOptions',
 	    records: 'records',
 	    ptzSpeedChange: 'ptzSpeedChange',
@@ -539,6 +542,12 @@
 	        /** 语音广播控件销毁 */ broadcastDestroy: 'Control.broadcastDestroy',
 	        /** AI对话框状态变化 */ aichatChange: 'Control.aichatChange',
 	        /** AI对话框控件销毁 */ aichatDestroy: 'Control.aichatDestroy',
+	        /** 直播按钮点击 */ liveChange: 'Control.liveChange',
+	        /** 直播控件销毁 */ liveDestroy: 'Control.liveDestroy',
+	        /** 回放下拉选择变化 */ recDropdownChange: 'Control.recDropdownChange',
+	        /** 回放下拉控件销毁 */ recDropdownDestroy: 'Control.recDropdownDestroy',
+	        /** 告警消息面板开关 */ alarmMessageChange: 'Control.alarmMessageChange',
+	        /** 告警消息面板销毁 */ alarmMessageDestroy: 'Control.alarmMessageDestroy',
 	        /** 缩放比例改变 */ zoomChange: 'Control.zoomChange',
 	        /** 音量调节面板 展示隐藏变换 */ zoomPanelOpenChange: 'Control.zoomPanelOpenChange',
 	        /** 缩放控件销毁 */ zoomDestroy: 'Control.zoomDestroy',
@@ -590,7 +599,7 @@
 	    if (protoProps) _defineProperties$9(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _inherits$t(subClass, superClass) {
+	function _inherits$w(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -601,14 +610,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$w(subClass, superClass);
+	    if (superClass) _set_prototype_of$z(subClass, superClass);
 	}
-	function _set_prototype_of$w(o, p) {
-	    _set_prototype_of$w = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$z(o, p) {
+	    _set_prototype_of$z = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$w(o, p);
+	    return _set_prototype_of$z(o, p);
 	}
 	/**
 	 * 控件基类
@@ -622,7 +631,7 @@
 	 * const myControl = new MyControl({})
 	 * ```
 	 */ var Control = /*#__PURE__*/ function(EventEmitter) {
-	    _inherits$t(Control, EventEmitter);
+	    _inherits$w(Control, EventEmitter);
 	    function Control(options) {
 	        var _this;
 	        var _this___options;
@@ -797,8 +806,8 @@
 	    return Control;
 	}(EventEmitter);
 
-	function _extends$u() {
-	    _extends$u = Object.assign || function(target) {
+	function _extends$x() {
+	    _extends$x = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -809,9 +818,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$u.apply(this, arguments);
+	    return _extends$x.apply(this, arguments);
 	}
-	function _inherits$s(subClass, superClass) {
+	function _inherits$v(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -822,25 +831,25 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$v(subClass, superClass);
+	    if (superClass) _set_prototype_of$y(subClass, superClass);
 	}
-	function _set_prototype_of$v(o, p) {
-	    _set_prototype_of$v = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$y(o, p) {
+	    _set_prototype_of$y = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$v(o, p);
+	    return _set_prototype_of$y(o, p);
 	}
 	var LOADING_DEFAULT_OPTIONS = {};
 	/**
 	 * 加载动画控件
 	 * @category Control
 	 */ var Loading = /*#__PURE__*/ function(Control) {
-	    _inherits$s(Loading, Control);
+	    _inherits$v(Loading, Control);
 	    function Loading(options) {
 	        if (options === void 0) options = {};
 	        var _this;
-	        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$u({}, options, {
+	        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$x({}, options, {
 	            tagName: 'div',
 	            controlType: 'block',
 	            classNameSuffix: 'loading'
@@ -878,8 +887,8 @@
 	    return Loading;
 	}(Control);
 
-	function _extends$t() {
-	    _extends$t = Object.assign || function(target) {
+	function _extends$w() {
+	    _extends$w = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -890,9 +899,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$t.apply(this, arguments);
+	    return _extends$w.apply(this, arguments);
 	}
-	function _inherits$r(subClass, superClass) {
+	function _inherits$u(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -903,14 +912,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$u(subClass, superClass);
+	    if (superClass) _set_prototype_of$x(subClass, superClass);
 	}
-	function _set_prototype_of$u(o, p) {
-	    _set_prototype_of$u = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$x(o, p) {
+	    _set_prototype_of$x = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$u(o, p);
+	    return _set_prototype_of$x(o, p);
 	}
 	// 不放在服务器上 是因为有可能http加载失败
 	// prettier-ignore
@@ -922,11 +931,11 @@
 	 * 封面控件
 	 * @category Control
 	 */ var Poster = /*#__PURE__*/ function(Control) {
-	    _inherits$r(Poster, Control);
+	    _inherits$u(Poster, Control);
 	    function Poster(options) {
 	        if (options === void 0) options = {};
 	        var _this;
-	        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$t({}, options, {
+	        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$w({}, options, {
 	            tagName: 'div',
 	            controlType: 'block',
 	            classNameSuffix: 'poster'
@@ -1032,7 +1041,10 @@
 	    warnCircleOutLined: '<svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" focusable="false" aria-hidden="true" data-icon="info-circle">\n  <path d="M8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1ZM8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2ZM7.5 8.875C7.5 8.94375 7.55625 9 7.625 9L8.375 9C8.44375 9 8.5 8.94375 8.5 8.875L8.5 4.625C8.5 4.55625 8.44375 4.5 8.375 4.5L7.625 4.5C7.55625 4.5 7.5 4.55625 7.5 4.625L7.5 8.875ZM7.25 10.75C7.25 11.1642 7.58579 11.5 8 11.5C8.41421 11.5 8.75 11.1642 8.75 10.75C8.75 10.3358 8.41421 10 8 10C7.58579 10 7.25 10.3358 7.25 10.75Z" fill-rule="evenodd" />\n          </svg>',
 	    date: '<svg width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" focusable="false" aria-hidden="true" data-icon="date">\n    <g>\n    <path d="m13.35,5.9c-0.3,0 -0.5,-0.2 -0.5,-0.5l0,-3.3c0,-0.3 0.2,-0.5 0.5,-0.5s0.5,0.2 0.5,0.5l0,3.3c0,0.3 -0.3,0.5 -0.5,0.5z" />\n    <path d="m6.65,5.9c-0.3,0 -0.5,-0.2 -0.5,-0.5l0,-3.3c0,-0.3 0.2,-0.5 0.5,-0.5s0.5,0.2 0.5,0.5l0,3.3c0,0.3 -0.2,0.5 -0.5,0.5z" />\n    <path d="m17.45,8.4l-15,0c-0.3,0 -0.5,-0.2 -0.5,-0.5s0.2,-0.5 0.5,-0.5l15,0c0.3,0 0.5,0.2 0.5,0.5s-0.2,0.5 -0.5,0.5z" />\n    <path d="m15.85,18.4l-11.7,0c-1.2,0 -2.2,-1 -2.2,-2.2l0,-10.8c0,-1.2 1,-2.2 2.2,-2.2l11.7,0c1.2,0 2.2,1 2.2,2.2l0,10.8c-0.1,1.3 -1,2.2 -2.2,2.2zm-11.7,-14.1c-0.6,0 -1.2,0.5 -1.2,1.2l0,10.8c0,0.6 0.5,1.2 1.2,1.2l11.7,0c0.6,0 1.2,-0.5 1.2,-1.2l0,-10.9c0,-0.6 -0.5,-1.2 -1.2,-1.2l-11.7,0l0,0.1z" />\n    <path d="m9.95,12c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5s0.3,-0.2 0.5,-0.2l0,0l0,0c0.4,0 0.7,0.3 0.7,0.7s-0.3,0.7 -0.7,0.7z" />\n    <path d="m14.15,12c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5c0.1,-0.1 0.3,-0.2 0.5,-0.2c0.4,0 0.7,0.3 0.7,0.7s-0.3,0.7 -0.7,0.7zm0,-1c-0.2,0 -0.3,0.1 -0.3,0.3c0,0.2 0.3,0.4 0.5,0.2c0.1,-0.1 0.1,-0.1 0.1,-0.2c0,-0.2 -0.1,-0.3 -0.3,-0.3z" />\n    <path d="m5.85,15.3c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5c0.1,-0.1 0.3,-0.2 0.5,-0.2l0,0l0,0c0.4,0 0.7,0.3 0.7,0.7c0,0.4 -0.3,0.7 -0.7,0.7z" />\n    <path d="m9.95,15.3c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5c0.1,-0.1 0.3,-0.2 0.5,-0.2l0,0l0,0c0.4,0 0.7,0.3 0.7,0.7c0.1,0.4 -0.3,0.7 -0.7,0.7z" />\n    </g>\n  </svg>',
 	    add: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="add">\n  <path d="M10.5859 2.96875L9.41406 2.96875C9.3099 2.96875 9.25781 3.02083 9.25781 3.125L9.25781 9.25781L3.4375 9.25781C3.38542 9.25781 3.34635 9.27083 3.32031 9.29688C3.29427 9.32292 3.28125 9.36198 3.28125 9.41406L3.28125 10.5859C3.28125 10.6901 3.33333 10.7422 3.4375 10.7422L9.25781 10.7422L9.25781 16.875C9.25781 16.9792 9.3099 17.0312 9.41406 17.0312L10.5859 17.0312C10.6901 17.0312 10.7422 16.9792 10.7422 16.875L10.7422 10.7422L16.5625 10.7422C16.6667 10.7422 16.7188 10.6901 16.7188 10.5859L16.7188 9.41406C16.7188 9.3099 16.6667 9.25781 16.5625 9.25781L10.7422 9.25781L10.7422 3.125C10.7422 3.07292 10.7292 3.03385 10.7031 3.00781C10.6771 2.98177 10.638 2.96875 10.5859 2.96875Z" fill-rule="evenodd" /></svg>',
-	    reduce: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="reduce">\n   	<path  d="M3.4375 9.25781L16.5625 9.25781C16.6667 9.25781 16.7188 9.3099 16.7188 9.41406L16.7188 10.5859C16.7188 10.6901 16.6667 10.7422 16.5625 10.7422L3.4375 10.7422C3.33333 10.7422 3.28125 10.6901 3.28125 10.5859L3.28125 9.41406C3.28125 9.3099 3.33333 9.25781 3.4375 9.25781Z" fill-rule="evenodd" />\n  </svg>'
+	    reduce: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="reduce">\n   	<path  d="M3.4375 9.25781L16.5625 9.25781C16.6667 9.25781 16.7188 9.3099 16.7188 9.41406L16.7188 10.5859C16.7188 10.6901 16.6667 10.7422 16.5625 10.7422L3.4375 10.7422C3.33333 10.7422 3.28125 10.6901 3.28125 10.5859L3.28125 9.41406C3.28125 9.3099 3.33333 9.25781 3.4375 9.25781Z" fill-rule="evenodd" />\n  </svg>',
+	    /** 直播 */ live: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="live">\n    <rect width="18" height="13" x="3" y="7" rx="1.6" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M8.26636 4.8L10.466 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M15.996 4.8L13.796 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M9.8 17L15.4 13.354L9.8 10L9.8 17Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
+	    /** 回放 */ recDropdown: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="rec-dropdown">\n    <path d="M9.168 2.556C9.168 2.556 12.51 4.445 12 4.445C7.306 4.445 3.5 8.251 3.5 12.945C3.5 17.64 7.306 21.445 12 21.445C16.695 21.445 20.5 17.64 20.5 12.945C20.5 10.622 19.568 8.517 18.058 6.982" stroke-linecap="round" stroke-width="1.5"/>\n    <path d="M11.61 9.829L11.61 13.731L16.064 13.731" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
+	    /** 消息/告警 */ alarmMessage: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="alarm-message">\n    <path d="M9.708 18.344L9.708 18.709C9.708 19.974 10.734 21 12 21C13.266 21 14.292 19.974 14.292 18.709L14.292 18.343" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M13.833 5.751L13.833 4.833C13.833 3.821 13.013 3 12 3C10.987 3 10.167 3.821 10.167 4.833L10.167 5.751" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M6.563 10.189C6.563 7.686 8.592 5.657 11.094 5.657L12.907 5.657C15.41 5.657 17.438 7.686 17.438 10.189L17.438 12.986C17.438 13.516 17.649 14.025 18.024 14.4L18.665 15.04C19.04 15.416 19.251 15.925 19.251 16.455C19.251 17.499 18.405 18.345 17.361 18.345L6.64 18.345C5.596 18.345 4.75 17.499 4.75 16.455C4.75 15.925 4.961 15.416 5.336 15.04L5.977 14.4C6.352 14.025 6.563 13.516 6.563 12.986L6.563 10.189Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>'
 	};
 
 	/**
@@ -1190,11 +1202,23 @@
 	    reduce: function(attr) {
 	        if (attr === void 0) attr = {};
 	        return createIcon(Icons.reduce, 'reduce', attr);
+	    },
+	    /** 直播 */ live: function(attr) {
+	        if (attr === void 0) attr = {};
+	        return createIcon(Icons.live, 'live', attr);
+	    },
+	    /** 回放 */ recDropdown: function(attr) {
+	        if (attr === void 0) attr = {};
+	        return createIcon(Icons.recDropdown, 'rec-dropdown', attr);
+	    },
+	    /** 消息 */ alarmMessage: function(attr) {
+	        if (attr === void 0) attr = {};
+	        return createIcon(Icons.alarmMessage, 'alarm-message', attr);
 	    }
 	};
 
-	function _extends$s() {
-	    _extends$s = Object.assign || function(target) {
+	function _extends$v() {
+	    _extends$v = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -1205,9 +1229,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$s.apply(this, arguments);
+	    return _extends$v.apply(this, arguments);
 	}
-	function _inherits$q(subClass, superClass) {
+	function _inherits$t(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -1218,25 +1242,25 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$t(subClass, superClass);
+	    if (superClass) _set_prototype_of$w(subClass, superClass);
 	}
-	function _set_prototype_of$t(o, p) {
-	    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$w(o, p) {
+	    _set_prototype_of$w = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$t(o, p);
+	    return _set_prototype_of$w(o, p);
 	}
 	var MESSAGE_DEFAULT_OPTIONS = {};
 	/**
 	 * 消息控件
 	 * @category Control
 	 */ var Message = /*#__PURE__*/ function(Control) {
-	    _inherits$q(Message, Control);
+	    _inherits$t(Message, Control);
 	    function Message(options) {
 	        if (options === void 0) options = {};
 	        var _this;
-	        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$s({}, options, {
+	        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$v({}, options, {
 	            tagName: 'div',
 	            controlType: 'block'
 	        }))) || this, _this._$toast = null;
@@ -1389,8 +1413,8 @@
 	    if (protoProps) _defineProperties$8(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$r() {
-	    _extends$r = Object.assign || function(target) {
+	function _extends$u() {
+	    _extends$u = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -1401,9 +1425,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$r.apply(this, arguments);
+	    return _extends$u.apply(this, arguments);
 	}
-	function _inherits$p(subClass, superClass) {
+	function _inherits$s(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -1414,23 +1438,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$s(subClass, superClass);
+	    if (superClass) _set_prototype_of$v(subClass, superClass);
 	}
-	function _set_prototype_of$s(o, p) {
-	    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$v(o, p) {
+	    _set_prototype_of$v = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$s(o, p);
+	    return _set_prototype_of$v(o, p);
 	}
 	/**
 	 * 播放/暂停控件
 	 * @category Control
 	 */ var Play = /*#__PURE__*/ function(Control) {
-	    _inherits$p(Play, Control);
+	    _inherits$s(Play, Control);
 	    function Play(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$r({}, options, {
+	        _this = Control.call(this, _extends$u({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'play'
@@ -2948,8 +2972,8 @@
 	    if (protoProps) _defineProperties$6(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$q() {
-	    _extends$q = Object.assign || function(target) {
+	function _extends$t() {
+	    _extends$t = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -2960,9 +2984,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$q.apply(this, arguments);
+	    return _extends$t.apply(this, arguments);
 	}
-	function _inherits$o(subClass, superClass) {
+	function _inherits$r(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -2973,14 +2997,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$r(subClass, superClass);
+	    if (superClass) _set_prototype_of$u(subClass, superClass);
 	}
-	function _set_prototype_of$r(o, p) {
-	    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$u(o, p) {
+	    _set_prototype_of$u = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$r(o, p);
+	    return _set_prototype_of$u(o, p);
 	}
 	var VOLUME_DEFAULT_OPTIONS = {
 	    volume: 0.8,
@@ -2994,12 +3018,12 @@
 	 * 音量调节控件
 	 * @category Control
 	 */ var Volume = /*#__PURE__*/ function(Control) {
-	    _inherits$o(Volume, Control);
+	    _inherits$r(Volume, Control);
 	    function Volume(options) {
 	        if (options === void 0) options = {};
 	        var _this;
 	        var _this__options_props, _this__options_props1, _this__options_props2, _this__options_props3;
-	        _this = Control.call(this, _extends$q({}, options, {
+	        _this = Control.call(this, _extends$t({}, options, {
 	            tagName: 'span',
 	            classNameSuffix: 'volume',
 	            controlType: 'button'
@@ -3858,8 +3882,8 @@
 	    return Fullscreen;
 	}();
 
-	function _extends$p() {
-	    _extends$p = Object.assign || function(target) {
+	function _extends$s() {
+	    _extends$s = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -3870,9 +3894,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$p.apply(this, arguments);
+	    return _extends$s.apply(this, arguments);
 	}
-	function _inherits$n(subClass, superClass) {
+	function _inherits$q(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -3883,24 +3907,24 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$q(subClass, superClass);
+	    if (superClass) _set_prototype_of$t(subClass, superClass);
 	}
-	function _set_prototype_of$q(o, p) {
-	    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$t(o, p) {
+	    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$q(o, p);
+	    return _set_prototype_of$t(o, p);
 	}
 	/**
 	 * 全屏控件
 	 * @category Control
 	 */ var Fullscreen = /*#__PURE__*/ function(Control) {
-	    _inherits$n(Fullscreen, Control);
+	    _inherits$q(Fullscreen, Control);
 	    function Fullscreen(options) {
 	        var _this;
 	        var _options_props, _this_options;
-	        _this = Control.call(this, _extends$p({
+	        _this = Control.call(this, _extends$s({
 	            tagName: 'span',
 	            classNameSuffix: 'fullscreen',
 	            controlType: 'button'
@@ -3965,8 +3989,8 @@
 	    return Fullscreen;
 	}(Control);
 
-	function _extends$o() {
-	    _extends$o = Object.assign || function(target) {
+	function _extends$r() {
+	    _extends$r = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -3977,9 +4001,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$o.apply(this, arguments);
+	    return _extends$r.apply(this, arguments);
 	}
-	function _inherits$m(subClass, superClass) {
+	function _inherits$p(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -3990,24 +4014,24 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$p(subClass, superClass);
+	    if (superClass) _set_prototype_of$s(subClass, superClass);
 	}
-	function _set_prototype_of$p(o, p) {
-	    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$s(o, p) {
+	    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$p(o, p);
+	    return _set_prototype_of$s(o, p);
 	}
 	/**
 	 * 回放类型切换（本地回放(sdk 卡)， 云存储回放， 云录制回放）控件
 	 * @category Control
 	 */ var Rec = /*#__PURE__*/ function(Control) {
-	    _inherits$m(Rec, Control);
+	    _inherits$p(Rec, Control);
 	    function Rec(options) {
 	        var _this;
 	        var _options_props;
-	        _this = Control.call(this, _extends$o({}, options, {
+	        _this = Control.call(this, _extends$r({}, options, {
 	            tagName: 'div',
 	            controlType: 'block',
 	            classNameSuffix: 'rec'
@@ -4325,6 +4349,12 @@
 	    BTN_TALK: '对讲',
 	    BTN_BROADCAST: '语音广播',
 	    BTN_AICHAT: 'AI对话',
+	    BTN_LIVE: '直播',
+	    BTN_REC_DROPDOWN: '回放',
+	    BTN_ALARM_MESSAGE: '消息',
+	    REC_DROPDOWN_CLOUD_REC: '云存储',
+	    REC_DROPDOWN_CLOUD_RECORD: '云录制',
+	    REC_DROPDOWN_LOCAL_REC: '本地回放',
 	    BTN_ZOOM: '电子放大',
 	    BTN_3D_ZOOM: '3D定位',
 	    BTN_PTZ: '云台控制',
@@ -4597,6 +4627,12 @@
 	    BTN_TALK: 'Intercom',
 	    BTN_BROADCAST: 'Voice broadcast',
 	    BTN_AICHAT: 'AI Chat',
+	    BTN_LIVE: 'Live',
+	    BTN_REC_DROPDOWN: 'Playback',
+	    BTN_ALARM_MESSAGE: 'Messages',
+	    REC_DROPDOWN_CLOUD_REC: 'Cloud Storage',
+	    REC_DROPDOWN_CLOUD_RECORD: 'Cloud Recording',
+	    REC_DROPDOWN_LOCAL_REC: 'Local Playback',
 	    BTN_ZOOM: 'Electronic zoom',
 	    BTN_3D_ZOOM: '3D positioning',
 	    BTN_PTZ: 'PTZ control',
@@ -4753,12 +4789,6 @@
 	                isrender: 1
 	            },
 	            {
-	                iconId: 'zoom',
-	                part: 'left',
-	                defaultActive: 0,
-	                isrender: 1
-	            },
-	            {
 	                iconId: 'fullscreen',
 	                part: 'right',
 	                defaultActive: 0,
@@ -4791,6 +4821,21 @@
 	            {
 	                iconId: 'deviceName',
 	                part: 'left',
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'live',
+	                part: 'right',
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'recDropdown',
+	                part: 'right',
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'alarmMessage',
+	                part: 'right',
 	                isrender: 1
 	            }
 	        ]
@@ -4879,19 +4924,19 @@
 	                isrender: 1
 	            },
 	            {
-	                iconId: 'cloudRec',
+	                iconId: 'live',
 	                part: 'right',
 	                defaultActive: 0,
 	                isrender: 1
 	            },
 	            {
-	                iconId: 'cloudRecord',
+	                iconId: 'recDropdown',
 	                part: 'right',
 	                defaultActive: 0,
 	                isrender: 1
 	            },
 	            {
-	                iconId: 'rec',
+	                iconId: 'alarmMessage',
 	                part: 'right',
 	                defaultActive: 0,
 	                isrender: 1
@@ -5294,7 +5339,7 @@
 	    voice: voice
 	};
 
-	function _inherits$l(subClass, superClass) {
+	function _inherits$o(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -5305,20 +5350,20 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$o(subClass, superClass);
+	    if (superClass) _set_prototype_of$r(subClass, superClass);
 	}
-	function _set_prototype_of$o(o, p) {
-	    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$r(o, p) {
+	    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$o(o, p);
+	    return _set_prototype_of$r(o, p);
 	}
 	/**
 	 * 截图控件
 	 * @category Content
 	 */ var Content = /*#__PURE__*/ function(EventEmitter) {
-	    _inherits$l(Content, EventEmitter);
+	    _inherits$o(Content, EventEmitter);
 	    function Content(options) {
 	        var _this;
 	        _this = EventEmitter.call(this) || this, _this._scaleMode = 0, _this._cleanUpResizeObserver = null, _this._originWidth = 0, _this._originHeight = 0, _this._width = 0, _this._height = 0;
@@ -5433,8 +5478,8 @@
 	    return Content;
 	}(EventEmitter);
 
-	function _extends$n() {
-	    _extends$n = Object.assign || function(target) {
+	function _extends$q() {
+	    _extends$q = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -5445,9 +5490,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$n.apply(this, arguments);
+	    return _extends$q.apply(this, arguments);
 	}
-	function _inherits$k(subClass, superClass) {
+	function _inherits$n(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -5458,23 +5503,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$n(subClass, superClass);
+	    if (superClass) _set_prototype_of$q(subClass, superClass);
 	}
-	function _set_prototype_of$n(o, p) {
-	    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$q(o, p) {
+	    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$n(o, p);
+	    return _set_prototype_of$q(o, p);
 	}
 	/**
 	 * 更多控件
 	 * @category Control
 	 */ var More = /*#__PURE__*/ function(Control) {
-	    _inherits$k(More, Control);
+	    _inherits$n(More, Control);
 	    function More(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$n({}, options, {
+	        _this = Control.call(this, _extends$q({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'more'
@@ -5690,6 +5735,15 @@
 	        }
 	    });
 	    // =======================================================
+	    // 告警消息
+	    // =======================================================
+	    theme.on(EVENTS.alarmMessageChange, function(active) {
+	        var _theme_controls;
+	        if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.alarmMessageControl) {
+	            theme.controls.alarmMessageControl._panelOpen = active;
+	        }
+	    });
+	    // =======================================================
 	    // 录制
 	    // =======================================================
 	    theme.on(EVENTS.recordingChange, function(recording) {
@@ -5785,7 +5839,7 @@
 	 *
 	 * @param theme - Theme
 	 */ function _controlEventemitter(theme) {
-	    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16;
+	    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16, _theme_controls17, _theme_controls18, _theme_controls19, _theme_controls20, _theme_controls21;
 	    // Controls
 	    if (theme._recFooter) {
 	        theme._recFooter.on(EVENTS.theme.recFooterDestroy, function() {
@@ -5896,8 +5950,50 @@
 	            theme.emit(EVENTS.control.aichatDestroy);
 	        });
 	    }
+	    // 直播按钮
+	    if ((_theme_controls7 = theme.controls) == null ? void 0 : _theme_controls7.liveControl) {
+	        theme.controls.liveControl.on(EVENTS.control.liveChange, function() {
+	            var _theme_controls;
+	            // 直接设置回放下拉控件为非激活状态
+	            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.recDropdownControl) {
+	                theme.controls.recDropdownControl.active = false;
+	            }
+	            theme.emit(EVENTS.control.liveChange);
+	        });
+	    }
+	    // 回放下拉
+	    if ((_theme_controls8 = theme.controls) == null ? void 0 : _theme_controls8.recDropdownControl) {
+	        theme.controls.recDropdownControl.on(EVENTS.control.recDropdownChange, function(type) {
+	            var _theme_controls;
+	            // 直接设置直播控件为非激活状态
+	            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.liveControl) {
+	                theme.controls.liveControl.active = false;
+	            }
+	            theme.emit(EVENTS.control.recDropdownChange, type);
+	        });
+	    }
+	    // 告警消息
+	    if ((_theme_controls9 = theme.controls) == null ? void 0 : _theme_controls9.alarmMessageControl) {
+	        theme.controls.alarmMessageControl.on(EVENTS.control.alarmMessageChange, function(active) {
+	            theme.emit(EVENTS.control.alarmMessageChange, active);
+	        });
+	    }
+	    // 播放地址切换后同步 Live/RecDropdown 激活状态
+	    // changePlayUrl 后 urlInfo 已更新，firstFrameDisplay 表示新地址播放成功
+	    if (((_theme_controls10 = theme.controls) == null ? void 0 : _theme_controls10.liveControl) || ((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.recDropdownControl)) {
+	        theme.on(EVENTS.firstFrameDisplay, function() {
+	            var _theme_controls, _theme_controls1;
+	            var urlInfo = theme.urlInfo;
+	            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.liveControl) {
+	                theme.controls.liveControl._syncActiveByUrlInfo(urlInfo);
+	            }
+	            if ((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1.recDropdownControl) {
+	                theme.controls.recDropdownControl._syncActiveByUrlInfo(urlInfo);
+	            }
+	        });
+	    }
 	    // 缩放控件
-	    if ((_theme_controls7 = theme.controls) == null ? void 0 : _theme_controls7.zoomControl) {
+	    if ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.zoomControl) {
 	        theme.controls.zoomControl.on(EVENTS.control.zoomChange, function(value, _percent, _range) {
 	            if (theme.zoom !== value) {
 	                theme.zoom = value;
@@ -5919,7 +6015,7 @@
 	        });
 	    }
 	    // 清晰度控件
-	    if ((_theme_controls8 = theme.controls) == null ? void 0 : _theme_controls8.definitionControl) {
+	    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.definitionControl) {
 	        theme.controls.definitionControl.on(EVENTS.control.definitionPanelOpenChange, function(open, definition, item) {
 	            theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, definition);
 	            theme.emit(EVENTS.control.definitionPanelOpenChange, open, definition, item);
@@ -5932,7 +6028,7 @@
 	        });
 	    }
 	    // 倍速控件
-	    if ((_theme_controls9 = theme.controls) == null ? void 0 : _theme_controls9.speedControl) {
+	    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.speedControl) {
 	        theme.controls.speedControl.on(EVENTS.control.speedPanelOpenChange, function(open, speed, item) {
 	            theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, speed);
 	            theme.emit(EVENTS.control.speedPanelOpenChange, open, speed, item);
@@ -5945,7 +6041,7 @@
 	        });
 	    }
 	    // 截图控件
-	    if ((_theme_controls10 = theme.controls) == null ? void 0 : _theme_controls10.capturePictureControl) {
+	    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.capturePictureControl) {
 	        theme.controls.capturePictureControl.on(EVENTS.control.capturePicture, function(options) {
 	            theme.emit(EVENTS.control.capturePicture, options);
 	        });
@@ -5954,25 +6050,25 @@
 	        });
 	    }
 	    // 全屏控件
-	    if ((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.fullscreenControl) {
+	    if ((_theme_controls16 = theme.controls) == null ? void 0 : _theme_controls16.fullscreenControl) {
 	        theme.controls.fullscreenControl.on(EVENTS.control.fullscreenDestroy, function() {
 	            theme.emit(EVENTS.control.fullscreenDestroy);
 	        });
 	    }
 	    // 全局全屏控件
-	    if ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.globalFullscreenControl) {
+	    if ((_theme_controls17 = theme.controls) == null ? void 0 : _theme_controls17.globalFullscreenControl) {
 	        theme.controls.globalFullscreenControl.on(EVENTS.control.globalFullscreenDestroy, function() {
 	            theme.emit(EVENTS.control.globalFullscreenDestroy);
 	        });
 	    }
 	    // 设备信息控件
-	    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.deviceControl) {
+	    if ((_theme_controls18 = theme.controls) == null ? void 0 : _theme_controls18.deviceControl) {
 	        theme.controls.deviceControl.on(EVENTS.control.deviceDestroy, function() {
 	            theme.emit(EVENTS.control.deviceDestroy);
 	        });
 	    }
 	    // 回放类型切换控件
-	    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.recControl) {
+	    if ((_theme_controls19 = theme.controls) == null ? void 0 : _theme_controls19.recControl) {
 	        // prettier-ignore
 	        theme.controls.recControl.on(EVENTS.control.recTypeChange, function(type) {
 	            if (theme.recType !== type) {
@@ -5993,7 +6089,7 @@
 	        });
 	    }
 	    // 时间轴控件
-	    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.timeLineControl) {
+	    if ((_theme_controls20 = theme.controls) == null ? void 0 : _theme_controls20.timeLineControl) {
 	        theme.controls.timeLineControl.on(EVENTS.control.timeLineChange, function(date) {
 	            theme.emit(EVENTS.control.timeLineChange, date);
 	        });
@@ -6010,7 +6106,7 @@
 	        });
 	    }
 	    // 日历控件
-	    if ((_theme_controls16 = theme.controls) == null ? void 0 : _theme_controls16.dateControl) {
+	    if ((_theme_controls21 = theme.controls) == null ? void 0 : _theme_controls21.dateControl) {
 	        theme.controls.dateControl.on(EVENTS.control.datePanelOpenChange, function(open, date) {
 	            theme.emit(EVENTS.control.datePanelOpenChange, open, date);
 	        });
@@ -6105,8 +6201,8 @@
 	    if (protoProps) _defineProperties$5(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$m() {
-	    _extends$m = Object.assign || function(target) {
+	function _extends$p() {
+	    _extends$p = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -6117,9 +6213,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$m.apply(this, arguments);
+	    return _extends$p.apply(this, arguments);
 	}
-	function _inherits$j(subClass, superClass) {
+	function _inherits$m(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -6130,14 +6226,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$m(subClass, superClass);
+	    if (superClass) _set_prototype_of$p(subClass, superClass);
 	}
-	function _set_prototype_of$m(o, p) {
-	    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$p(o, p) {
+	    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$m(o, p);
+	    return _set_prototype_of$p(o, p);
 	}
 	var ZOOM_DEFAULT_OPTIONS = {
 	    open: false,
@@ -6147,10 +6243,10 @@
 	 * 电子放大控件
 	 * @category Control
 	 */ var Zoom$1 = /*#__PURE__*/ function(Control) {
-	    _inherits$j(Zoom, Control);
+	    _inherits$m(Zoom, Control);
 	    function Zoom(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$m({}, options, {
+	        _this = Control.call(this, _extends$p({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'zoom'
@@ -6285,8 +6381,8 @@
 	*/
 	function _create_class$a(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}var ZOOM_DEFAULT_POSITION=[0,0],DefaultOptions={initialZoom:1,defaultCursor:"pointer",scrollVelocity:.1,animDuration:.25,allowZoom:true,allowPan:true,onChange:function(){},onTranslateChange:function(){},onTap:function(){},max:8,min:1,zoomStep:.1,allowTouchEvents:false,allowWheel:true,ignoredMouseButtons:[],doubleTouchMaxDelay:300,decelerationDuration:750},Zoom=function(){function Zoom(container,options){var _this=this;this._dragging=false,this.destroy=function(){_this.setAllowZoom(false),_this.reset(),_this.removeEventListeners();},this.setTransform=function(trans){_this.transform=trans;},this.getTransform=function(){return _this.transform},this.updateTranslate=function(){var translateX=0,translateY=0;translateX=_this.percentPos[0]<0?_this.percentPos[0]<-0.5*(_this.zoom-1)?-0.5*(_this.zoom-1):_this.percentPos[0]:_this.percentPos[0]>.5*(_this.zoom-1)?.5*(_this.zoom-1):_this.percentPos[0],translateY=_this.percentPos[1]<0?_this.percentPos[1]<-0.5*(_this.zoom-1)?-0.5*(_this.zoom-1):_this.percentPos[1]:_this.percentPos[1]>.5*(_this.zoom-1)?.5*(_this.zoom-1):_this.percentPos[1],_this.percentPos=[translateX,translateY];},this.update=function(){_this.container&&(_this.updateTranslate(),_this.container.style.transition="transform ease-out "+_this.transition+"s",_this.container.style.transform="translate3d("+100*_this.percentPos[0]+"%, "+100*_this.percentPos[1]+"%, 0) scale("+_this.zoom+")");},this.setAllowZoom=function(allow){_this.options.allowZoom=allow;},this.setZoom=function(zoom,reset){zoom=parseFloat(zoom.toFixed(_this.getPrecision(_this.options.zoomStep))),_this.zoom!==zoom&&(_this.zoom=zoom,_this.update(),null==_this.options.onChange||_this.options.onChange.call(_this.options,+_this.zoom.toFixed(_this.getPrecision(_this.options.zoomStep)),reset));},this.getZoom=function(){return _this.zoom},this.setPos=function(pos){var _this_container,_this_container1,containerWidth=null==(_this_container=_this.container)?void 0:_this_container.clientWidth,containerHeight=null==(_this_container1=_this.container)?void 0:_this_container1.clientHeight;+_this.pos[0]===pos[0]&&+_this.pos[1]===pos[1]||(_this.percentPos=[pos[0]/containerWidth,pos[1]/containerHeight],_this.update(),null==_this.options.onTranslateChange||_this.options.onTranslateChange.call(_this.options,{posX:pos[0],posY:pos[1]}));},this.setTransitionDuration=function(duration){_this.transition=duration,_this.update();},this.setCursor=function(cursor){_this.container&&(_this.container.style.cssText+="cursor:"+cursor+";",_this.cursor=cursor);},this.zoomIn=function(value){var _this_options_max,_this_options_max1,newPosX=_this.pos[0],newPosY=_this.pos[1],prevZoom=_this.zoom,newZoom=prevZoom+value<(null!=(_this_options_max=_this.options.max)?_this_options_max:8)?prevZoom+value:null!=(_this_options_max1=_this.options.max)?_this_options_max1:8;newZoom!==prevZoom&&(newPosX=newPosX*(newZoom-1)/(prevZoom>1?prevZoom-1:prevZoom),newPosY=newPosY*(newZoom-1)/(prevZoom>1?prevZoom-1:prevZoom)),_this.setZoom(newZoom),_this.setPos([newPosX,newPosY]),_this.setTransitionDuration(_this.options.animDuration);},this.zoomOut=function(value){var _this_options_min,_this_options_min1,newPosX=_this.pos[0],newPosY=_this.pos[1],prevZoom=_this.zoom,newZoom=prevZoom-value>(null!=(_this_options_min=_this.options.min)?_this_options_min:1)?prevZoom-value:null!=(_this_options_min1=_this.options.min)?_this_options_min1:1;newZoom!==prevZoom&&(newPosX=newPosX*(newZoom-1)/(prevZoom-1),newPosY=newPosY*(newZoom-1)/(prevZoom-1)),_this.setZoom(newZoom),_this.setPos([newPosX,newPosY]),_this.setTransitionDuration(_this.options.animDuration);},this.zoomToZone=function(relX,relY,relWidth,relHeight){var _this_container;if(_this.container){var _this_options_max,newPosX=_this.pos[0],newPosY=_this.pos[1],parentRect=(null==(_this_container=_this.container)?void 0:_this_container.parentNode).getBoundingClientRect(),prevZoom=_this.zoom,optimalZoomX=parentRect.width/relWidth,optimalZoomY=parentRect.height/relHeight,newZoom=Math.min(optimalZoomX,optimalZoomY,null!=(_this_options_max=_this.options.max)?_this_options_max:8),rect=_this.container.getBoundingClientRect(),_ref=[rect.width/prevZoom/2,rect.height/prevZoom/2],_ref1=[relX+relWidth/2,relY+relHeight/2];newPosX=(_ref[0]-_ref1[0])*newZoom,newPosY=(_ref[1]-_ref1[1])*newZoom,_this.setZoom(newZoom),_this.setPos([newPosX,newPosY]),_this.setTransitionDuration(_this.options.animDuration);}},this.getNewPosition=function(x,y,newZoom){var prevZoom=[_this.zoom,_this.pos[0],_this.pos[1]][0];if(1===newZoom||!_this)return ZOOM_DEFAULT_POSITION;var _ref1=[_this.container.clientWidth,_this.container.clientHeight],clientWidth=_ref1[0],clientHeight=_ref1[1];if(newZoom>prevZoom)return [0,0];var w=-(x-clientWidth/2)/(clientWidth/2)*newZoom/2,h=-(y-clientHeight/2)/(clientHeight/2)*newZoom/2;return w>newZoom/2-.5&&(w=3.5),h>newZoom/2-.5&&(h=3.5),[clientWidth*w,clientHeight*h]},this.fullZoomInOnPosition=function(x,y){var _this_options_max,zoom=null!=(_this_options_max=_this.options.max)?_this_options_max:DefaultOptions.max;_this.setZoom(null!=zoom?zoom:DefaultOptions.max),_this.setPos(_this.getNewPosition(x,y,zoom)),_this.setTransitionDuration(_this.options.animDuration);},this.getLimitedShift=function(shift,minLimit,maxLimit,minElement,maxElement){if(shift>0){if(minElement>minLimit)return 0;if(minElement+shift>minLimit)return minLimit-minElement}else if(shift<0){if(maxElement<maxLimit)return 0;if(maxElement+shift<maxLimit)return maxLimit-maxElement}return shift},this.getCursor=function(canMoveOnX,canMoveOnY){return canMoveOnX&&canMoveOnY?"move":canMoveOnX?"ew-resize":canMoveOnY?"ns-resize":"auto"},this.move=function(shiftX,shiftY,transitionDuration){if(void 0===transitionDuration&&(transitionDuration=0),_this.container){var newPosX=_this.pos[0],newPosY=_this.pos[1],rect=_this.container.getBoundingClientRect(),parentRect=_this.container.parentNode.getBoundingClientRect(),shiftHorizontal=_this.transform?shiftY:shiftX,shiftVertical=_this.transform?shiftX:shiftY,_ref=_this.transform?[rect.height>parentRect.bottom-parentRect.top,shiftVertical>0&&rect.top-parentRect.top<0,shiftVertical<0&&rect.bottom-parentRect.bottom>0]:[rect.width>parentRect.right-parentRect.left,shiftHorizontal>0&&rect.left-parentRect.left<0,shiftHorizontal<0&&rect.right-parentRect.right>0],canMoveOnX=_ref[0]||_ref[1]||_ref[2];canMoveOnX&&(_this.transform?newPosX+=_this.getLimitedShift(shiftVertical,parentRect.top,parentRect.bottom,rect.top,rect.bottom):newPosX+=_this.getLimitedShift(shiftHorizontal,parentRect.left,parentRect.right,rect.left,rect.right));var _ref1=_this.transform?[rect.width>parentRect.right-parentRect.left,shiftHorizontal>0&&rect.right-parentRect.right<0,shiftHorizontal<0&&rect.left-parentRect.left>0]:[rect.height>parentRect.bottom-parentRect.top,shiftVertical>0&&rect.top-parentRect.top<0,shiftVertical<0&&rect.bottom-parentRect.bottom>0],canMoveOnY=_ref1[0]||_ref1[1]||_ref1[2];if(canMoveOnY)if(_this.transform){newPosY+=function(shift,minLimit,maxLimit,minElement,maxElement){if(shift>0){if(maxElement<maxLimit+1)return 0;if(maxElement+shift<maxLimit+1)return maxLimit-maxElement}else if(shift<0){if(minElement+1>minLimit)return 0;if(minElement+1+shift>minLimit)return minLimit-minElement}return shift}(shiftHorizontal,parentRect.left,parentRect.right,rect.left,rect.right);}else newPosY+=_this.getLimitedShift(shiftVertical,parentRect.top,parentRect.bottom,rect.top,rect.bottom);var cursor=_this.getCursor(canMoveOnX,canMoveOnY);_this.setPos([newPosX,newPosY]),_this.setCursor(cursor),_this.setTransitionDuration(transitionDuration);}},this.isDoubleTapping=function(){var _this_lastTouchTime,_this_options_doubleTouchMaxDelay,_this_lastDoubleTapTime,_this_options_doubleTouchMaxDelay1,touchTime=(new Date).getTime();return touchTime-(null!=(_this_lastTouchTime=_this.lastTouchTime)?_this_lastTouchTime:0)<(null!=(_this_options_doubleTouchMaxDelay=_this.options.doubleTouchMaxDelay)?_this_options_doubleTouchMaxDelay:300)&&touchTime-(null!=(_this_lastDoubleTapTime=_this.lastDoubleTapTime)?_this_lastDoubleTapTime:0)>(null!=(_this_options_doubleTouchMaxDelay1=_this.options.doubleTouchMaxDelay)?_this_options_doubleTouchMaxDelay1:750)?(_this.lastDoubleTapTime=touchTime,true):(_this.lastTouchTime=touchTime,false)},this.startDeceleration=function(lastShiftOnX,lastShiftOnY){var startTimestamp=null,startDecelerationMove=function(timestamp){null===startTimestamp&&(startTimestamp=timestamp);var _this_options_decelerationDuration,_this_options_decelerationDuration1,_this_options_decelerationDuration2,progress=timestamp-startTimestamp,ratio=((null!=(_this_options_decelerationDuration=_this.options.decelerationDuration)?_this_options_decelerationDuration:750)-progress)/(null!=(_this_options_decelerationDuration1=_this.options.decelerationDuration)?_this_options_decelerationDuration1:750),_ref=[lastShiftOnX*ratio,lastShiftOnY*ratio],shiftX=_ref[0],shiftY=_ref[1];progress<(null!=(_this_options_decelerationDuration2=_this.options.decelerationDuration)?_this_options_decelerationDuration2:750)&&Math.max(Math.abs(shiftX),Math.abs(shiftY))>1?(_this.move(shiftX,shiftY,0),_this.lastRequestAnimationId=requestAnimationFrame(startDecelerationMove)):_this.lastRequestAnimationId=null;};_this.lastRequestAnimationId=requestAnimationFrame(startDecelerationMove);},this.reset=function(){_this.setZoom(_this.options.initialZoom,true),_this.cursor=_this.options.defaultCursor,_this.setTransitionDuration(_this.options.animDuration),_this.setPos(ZOOM_DEFAULT_POSITION);},this.addScale=function(scale){ void 0===scale&&(scale=1),_this.handleZoomAdd(scale);},this.handleZoomAdd=function(scale){if(void 0===scale&&(scale=1),_this.options.allowZoom&&_this.options.allowWheel){var _this_options_max,newZoom=parseFloat((_this.zoom+scale).toFixed(_this.getPrecision(_this.options.zoomStep)));newZoom>(null!=(_this_options_max=_this.options.max)?_this_options_max:8)&&(newZoom=8),_this.setZoom(newZoom),_this.setPos(_this.pos),_this.setTransitionDuration(.05);}},this.subScale=function(scale){ void 0===scale&&(scale=1),_this.handleZoomSub(scale);},this.handleZoomSub=function(scale){if(void 0===scale&&(scale=1),_this.options.allowZoom&&_this.options.allowWheel){var newZoom=parseFloat((_this.zoom-scale).toFixed(_this.getPrecision(_this.options.zoomStep)));newZoom<1&&(newZoom=1),_this.setZoom(newZoom),_this.setPos(_this.pos),_this.setTransitionDuration(.05);}},this.handleMouseWheel=function(event){if(event.preventDefault(),_this.options.allowZoom&&_this.options.allowWheel){var _this_options_max,_this_options_min,velocity=event.deltaY<0?_this.options.scrollVelocity:0-_this.options.scrollVelocity,newZoom=parseFloat(Math.max(Math.min(_this.zoom+velocity,null!=(_this_options_max=_this.options.max)?_this_options_max:8),null!=(_this_options_min=_this.options.min)?_this_options_min:1).toFixed(_this.getPrecision(_this.options.zoomStep)));_this.setZoom(newZoom),_this.setTransitionDuration(.05);}},this.handleMouseStart=function(event){var _this_options_ignoredMouseButtons;event.preventDefault(),_this.options.allowPan&&!(null==(_this_options_ignoredMouseButtons=_this.options.ignoredMouseButtons)?void 0:_this_options_ignoredMouseButtons.includes(event.button))&&(_this._dragging=true,_this.lastRequestAnimationId&&cancelAnimationFrame(_this.lastRequestAnimationId),_this.lastCursor=_this.getCoordinates(event));},this.handleMouseMove=function(event){event.preventDefault(),_this.options.allowPan&&_this.lastCursor&&_this._dragging&&_this._touchOrMouseDrag(event);},this.handleMouseStop=function(event){event.preventDefault(),_this.lastShift&&(_this.startDeceleration(_this.lastShift[0],_this.lastShift[1]),_this.lastShift=null),_this.lastCursor=null,_this.setCursor("auto"),_this._dragging=false;},this.handleTouchStart=function(event){var isThisDoubleTapping=_this.isDoubleTapping();_this.isMultiTouch=event.touches.length,_this.options.allowTouchEvents||event.preventDefault(),_this.lastRequestAnimationId&&cancelAnimationFrame(_this.lastRequestAnimationId);var _this_getCoordinates=_this.getCoordinates(event.touches[0]),posX=_this_getCoordinates[0],posY=_this_getCoordinates[1];if(_this.isMultiTouch>1)_this.lastCursor=[posX,posY];else if(isThisDoubleTapping&&_this.options.allowZoom)if(1===_this.zoom){var _this_container_getBoundingClientRect=_this.container.getBoundingClientRect();_this_container_getBoundingClientRect.top,_this_container_getBoundingClientRect.left;var ref,ref1,x=_this_container_getBoundingClientRect.x,y=_this_container_getBoundingClientRect.y;posX=(ref1=[posX-(x=(ref=_this.transform?[y,x]:[x,y])[0]),posY-(y=ref[1])])[0],posY=ref1[1],_this.fullZoomInOnPosition(posX,posY);}else _this.reset();else _this._tapStartTime=(new Date).getTime(),_this.options.allowPan&&(_this.lastCursor=[posX,posY]);},this.handleTouchMove=function(event){if(_this.options.allowTouchEvents||event.preventDefault(),_this.lastCursor)if(1===_this.isMultiTouch)_this._touchOrMouseDrag(event.touches[0]),_this.lastTouchDistance=null;else if(_this.isMultiTouch>1){var newZoom=_this.zoom,_this_getCoordinates=_this.getCoordinates(event.touches[0]),pos1X=_this_getCoordinates[0],pos1Y=_this_getCoordinates[1],_this_getCoordinates1=_this.getCoordinates(event.touches[1]),pos2X=_this_getCoordinates1[0],pos2Y=_this_getCoordinates1[1],distance=Math.sqrt(Math.pow(pos2X-pos1X,2)+Math.pow(pos2Y-pos1Y,2));if(_this.lastTouchDistance&&distance&&distance!==_this.lastTouchDistance){var _this_options_max,_this_options_min,_this_options_max1;if(_this.options.allowZoom)if((newZoom+=(distance-_this.lastTouchDistance)/100)>(null!=(_this_options_max=_this.options.max)?_this_options_max:8))newZoom=null!=(_this_options_max1=_this.options.max)?_this_options_max1:8;else if(newZoom<(null!=(_this_options_min=_this.options.min)?_this_options_min:1)){var _this_options_min1;newZoom=null!=(_this_options_min1=_this.options.min)?_this_options_min1:1;}_this.setZoom(newZoom),_this.setTransitionDuration(0);}_this.lastCursor=[pos1X,pos1Y],_this.lastTouchDistance=distance;}},this.handleTouchStop=function(){_this.lastShift&&(_this.startDeceleration(_this.lastShift[0],_this.lastShift[1]),_this.lastShift=null),_this._tapStartTime&&(new Date).getTime()-_this._tapStartTime<200&&(null==_this.options.onTap||_this.options.onTap.call(_this.options)),_this._tapStartTime=void 0,_this.lastCursor=null,_this.lastTouchDistance=null,_this.isMultiTouch=0;},this.container=container,this.options=Object.assign({},DefaultOptions,options||{}),this.percentPos=ZOOM_DEFAULT_POSITION,this.transition=this.options.animDuration,this.zoom=1,this.cursor="auto",this.lastCursor=[0,0],this.lastShift=null,this.lastTouchDistance=null,this.lastRequestAnimationId=null,this.lastTouchTime=(new Date).getTime(),this.lastDoubleTapTime=(new Date).getTime(),this.transform=false,this.isMultiTouch=1,this.handleMouseMove=this.handleMouseMove.bind(this),this.handleMouseStart=this.handleMouseStart.bind(this),this.handleMouseStop=this.handleMouseStop.bind(this),this.handleMouseWheel=this.handleMouseWheel.bind(this),this.handleTouchStart=this.handleTouchStart.bind(this),this.handleTouchMove=this.handleTouchMove.bind(this),this.handleTouchStop=this.handleTouchStop.bind(this),this.getZoom=this.getZoom.bind(this),this.setZoom=this.setZoom.bind(this);}var _proto=Zoom.prototype;return _proto.setUpEventListeners=function(){var refCurrentValue=this.container;window.matchMedia("(pointer: fine)").matches?(this.options.allowWheel&&(null==refCurrentValue||refCurrentValue.addEventListener("wheel",this.handleMouseWheel,{passive:false})),null==refCurrentValue||refCurrentValue.addEventListener("mousedown",this.handleMouseStart,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("mousemove",this.handleMouseMove,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("mouseup",this.handleMouseStop,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("mouseleave",this.handleMouseStop,{passive:false})):(null==refCurrentValue||refCurrentValue.addEventListener("touchstart",this.handleTouchStart,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("touchmove",this.handleTouchMove,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("touchend",this.handleTouchStop,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("touchcancel",this.handleTouchStop,{passive:false}));},_proto.removeEventListeners=function(){var refCurrentValue=this.container;window.matchMedia("(pointer: fine)").matches?(this.options.allowWheel&&(null==refCurrentValue||refCurrentValue.removeEventListener("wheel",this.handleMouseWheel)),null==refCurrentValue||refCurrentValue.removeEventListener("mousedown",this.handleMouseStart),null==refCurrentValue||refCurrentValue.removeEventListener("mousemove",this.handleMouseMove),null==refCurrentValue||refCurrentValue.removeEventListener("mouseup",this.handleMouseStop),null==refCurrentValue||refCurrentValue.removeEventListener("mouseleave",this.handleMouseStop)):(null==refCurrentValue||refCurrentValue.removeEventListener("touchstart",this.handleTouchStart),null==refCurrentValue||refCurrentValue.removeEventListener("touchmove",this.handleTouchMove),null==refCurrentValue||refCurrentValue.removeEventListener("touchend",this.handleTouchStop),null==refCurrentValue||refCurrentValue.removeEventListener("touchcancel",this.handleTouchStop));},_proto.getPrecision=function(value){ void 0===value&&(value=1);var valueStr=value.toString();return valueStr.includes(".")?valueStr.split(".")[1].length:1},_proto.getCoordinates=function(event){var clientHeight=this.container.clientHeight,clientTop=this.container.clientTop,clientLeft=this.container.clientLeft,_ref=this.transform?[event.clientY,clientHeight-event.clientX]:[event.clientX-clientTop,event.clientY-clientLeft];return [_ref[0],_ref[1]]},_proto._touchOrMouseDrag=function(event){if(this.lastCursor){var _this_getCoordinates=this.getCoordinates(event),posX=_this_getCoordinates[0],posY=_this_getCoordinates[1],shiftX=posX-this.lastCursor[0],shiftY=posY-this.lastCursor[1];this.move(shiftX,shiftY,0),this.lastCursor=[posX,posY],this.lastShift=[shiftX,shiftY];}},_create_class$a(Zoom,[{key:"pos",get:function(){return [this.container.clientWidth*this.percentPos[0],this.container.clientHeight*this.percentPos[1]]}}]),Zoom}();Zoom.VERSION="1.0.0-beta.2";
 
-	function _extends$l() {
-	    _extends$l = Object.assign || function(target) {
+	function _extends$o() {
+	    _extends$o = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -6297,10 +6393,10 @@
 	        }
 	        return target;
 	    };
-	    return _extends$l.apply(this, arguments);
+	    return _extends$o.apply(this, arguments);
 	}
 	function __zoom(theme, container, options) {
-	    theme.zoomUtil = new Zoom(container, _extends$l({}, options || {}, {
+	    theme.zoomUtil = new Zoom(container, _extends$o({}, options || {}, {
 	        min: 1,
 	        onChange: function(zoom, reset) {
 	            if (zoom !== theme._zoom) {
@@ -6525,8 +6621,8 @@
 	        });
 	    };
 	}
-	function _extends$k() {
-	    _extends$k = Object.assign || function(target) {
+	function _extends$n() {
+	    _extends$n = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -6537,7 +6633,7 @@
 	        }
 	        return target;
 	    };
-	    return _extends$k.apply(this, arguments);
+	    return _extends$n.apply(this, arguments);
 	}
 	function _ts_generator$6(thisArg, body) {
 	    var f, y, t, _ = {
@@ -6665,7 +6761,7 @@
 	        }
 	        if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
 	            // TODO: 因为回放是一组， 位置以第一个位置为准
-	            recControls.push(recControls[0] ? _extends$k({}, item, {
+	            recControls.push(recControls[0] ? _extends$n({}, item, {
 	                part: recControls[0].part
 	            }) : item);
 	            return false;
@@ -6688,7 +6784,7 @@
 	        }
 	        if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
 	            // TODO: 因为回放是一组， 位置以第一个位置为准
-	            recControls.push(recControls[0] ? _extends$k({}, item, {
+	            recControls.push(recControls[0] ? _extends$n({}, item, {
 	                part: recControls[0].part
 	            }) : item);
 	            return false;
@@ -6939,8 +7035,8 @@
 	    return Component;
 	}();
 
-	function _extends$j() {
-	    _extends$j = Object.assign || function(target) {
+	function _extends$m() {
+	    _extends$m = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -6951,9 +7047,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$j.apply(this, arguments);
+	    return _extends$m.apply(this, arguments);
 	}
-	function _inherits$i(subClass, superClass) {
+	function _inherits$l(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -6964,28 +7060,28 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$l(subClass, superClass);
+	    if (superClass) _set_prototype_of$o(subClass, superClass);
 	}
-	function _set_prototype_of$l(o, p) {
-	    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$o(o, p) {
+	    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$l(o, p);
+	    return _set_prototype_of$o(o, p);
 	}
 	var Footer = /*#__PURE__*/ function(Component) {
-	    _inherits$i(Footer, Component);
+	    _inherits$l(Footer, Component);
 	    function Footer(options) {
 	        if (options === void 0) options = {};
-	        return Component.call(this, _extends$j({}, options, {
+	        return Component.call(this, _extends$m({}, options, {
 	            cType: 'footer'
 	        })) || this;
 	    }
 	    return Footer;
 	}(Component);
 
-	function _extends$i() {
-	    _extends$i = Object.assign || function(target) {
+	function _extends$l() {
+	    _extends$l = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -6996,9 +7092,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$i.apply(this, arguments);
+	    return _extends$l.apply(this, arguments);
 	}
-	function _inherits$h(subClass, superClass) {
+	function _inherits$k(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7009,20 +7105,20 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$k(subClass, superClass);
+	    if (superClass) _set_prototype_of$n(subClass, superClass);
 	}
-	function _set_prototype_of$k(o, p) {
-	    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$n(o, p) {
+	    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$k(o, p);
+	    return _set_prototype_of$n(o, p);
 	}
 	var Header$1 = /*#__PURE__*/ function(Component) {
-	    _inherits$h(Header, Component);
+	    _inherits$k(Header, Component);
 	    function Header(options) {
 	        if (options === void 0) options = {};
-	        return Component.call(this, _extends$i({}, options, {
+	        return Component.call(this, _extends$l({}, options, {
 	            cType: 'header'
 	        })) || this;
 	    }
@@ -7188,8 +7284,8 @@
 	    };
 	}
 
-	function _extends$h() {
-	    _extends$h = Object.assign || function(target) {
+	function _extends$k() {
+	    _extends$k = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7200,9 +7296,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$h.apply(this, arguments);
+	    return _extends$k.apply(this, arguments);
 	}
-	function _inherits$g(subClass, superClass) {
+	function _inherits$j(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7213,23 +7309,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$j(subClass, superClass);
+	    if (superClass) _set_prototype_of$m(subClass, superClass);
 	}
-	function _set_prototype_of$j(o, p) {
-	    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$m(o, p) {
+	    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$j(o, p);
+	    return _set_prototype_of$m(o, p);
 	}
 	/**
 	 * 全局全屏
 	 * 主题和播放器不提供全局全屏的api， 如果开发者想要可以参考这个组件自己实现
 	 * @category Control
 	 */ var GlobalFullscreen = /*#__PURE__*/ function(Fullscreen) {
-	    _inherits$g(GlobalFullscreen, Fullscreen);
+	    _inherits$j(GlobalFullscreen, Fullscreen);
 	    function GlobalFullscreen(options) {
-	        return Fullscreen.call(this, _extends$h({}, options, {
+	        return Fullscreen.call(this, _extends$k({}, options, {
 	            controlType: 'button',
 	            classNameSuffix: 'global-fullscreen'
 	        })) || this;
@@ -7260,8 +7356,8 @@
 	    return GlobalFullscreen;
 	}(Fullscreen);
 
-	function _extends$g() {
-	    _extends$g = Object.assign || function(target) {
+	function _extends$j() {
+	    _extends$j = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7272,9 +7368,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$g.apply(this, arguments);
+	    return _extends$j.apply(this, arguments);
 	}
-	function _inherits$f(subClass, superClass) {
+	function _inherits$i(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7285,23 +7381,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$i(subClass, superClass);
+	    if (superClass) _set_prototype_of$l(subClass, superClass);
 	}
-	function _set_prototype_of$i(o, p) {
-	    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$l(o, p) {
+	    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$i(o, p);
+	    return _set_prototype_of$l(o, p);
 	}
 	/**
 	 * 截图控件，点击后会触发截图事件， 截图数据会通过 onCapture 回调函数返回
 	 * @category Control
 	 */ var CapturePicture = /*#__PURE__*/ function(Control) {
-	    _inherits$f(CapturePicture, Control);
+	    _inherits$i(CapturePicture, Control);
 	    function CapturePicture(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$g({}, options, {
+	        _this = Control.call(this, _extends$j({}, options, {
 	            tagName: 'span',
 	            classNameSuffix: 'capture-picture'
 	        })) || this, _this._timer = null;
@@ -7359,7 +7455,7 @@
 	* Copyright (c) 2026-05-04 Ezviz-OpenBiz
 	* Released under the MIT License.
 	*/
-	var PTZ_DEFAULT_OPTIONS={language:"zh",env:{domain:"https://open.ys7.com"},accessToken:"",speed:2,locales:{zh:{GET_PTZ_STATUS:"获取当前云台状态",GET_PTZ_STATUS_FAILED:"未加载Theme模块，无法获取云台状态",MOBILE_HIDE_PTZ:"移动端，非全屏状态不展示云台",OPTION_PTZ_FAILED:"未加载Theme模块，无法操作云台",MOBILE_PTZ_TIPS:"请通过操控云台来调整摄像机视角",PTZ_FAST:"快",PTZ_MID:"中",PTZ_SLOW:"慢",PTZ_SPEED:"调整云台转动速度",DEVICE_ZOOM:"控制设备放大/缩小画面",DEVICE_FOCUS:"调整设备焦距"},en:{GET_PTZ_STATUS:"Get current PTZ status",GET_PTZ_STATUS_FAILED:"Theme module is not loaded, PTZ status cannot be obtained",MOBILE_HIDE_PTZ:"Mobile terminal, PTZ is not displayed in non-full screen state",OPTION_PTZ_FAILED:"Theme module is not loaded, PTZ cannot be operated",MOBILE_PTZ_TIPS:"Adjust camera angle by manipulating gimbal",PTZ_FAST:"F",PTZ_MID:"M",PTZ_SLOW:"S",PTZ_SPEED:"Adjust the PTZ rotation speed",DEVICE_ZOOM:"Control the device to zoom in/out of the screen",DEVICE_FOCUS:"Adjusting the device's focal length"}}},PTZ_SPEED={1:1,2:3,3:7,slow:1,mid:3,fast:7},BasePtz=function(){function BasePtz(container,options){var _this_options_locales,_this_options_locales1,_this_options_locales2;if(void 0===options&&(options={}),!container)throw new Error("Ptz container is required");(this.options=deepmerge(PTZ_DEFAULT_OPTIONS,options,{clone:false}),null==(_this_options_locales=this.options.locales)?void 0:_this_options_locales[this.options.language])?this.locale=null==(_this_options_locales1=this.options.locales)?void 0:_this_options_locales1[this.options.language]:this.locale=null==(_this_options_locales2=this.options.locales)?void 0:_this_options_locales2.zh;this.$container=container,this.speed=PTZ_SPEED[this.options.speed||2];}var _proto=BasePtz.prototype;return _proto.updateOptions=function(options){this.options=deepmerge(this.options,options,{clone:false});},_proto.destroy=function(){},BasePtz}();function _set_prototype_of$1$3(o,p){return _set_prototype_of$1$3=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1$3(o,p)}var MobilePtz=function(BasePtz){function MobilePtz(container,options){var _this;return (_this=BasePtz.call(this,container,options)||this)._touchstart=_this._touchstart.bind(_this),_this._touchend=_this._touchend.bind(_this),_this._render(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1$3(subClass,superClass);}(MobilePtz,BasePtz);var _proto=MobilePtz.prototype;return _proto.destroy=function(){this._removeEventListener(),this.$content&&(this.$content.remove(),this.$content=null),BasePtz.prototype.destroy.call(this);},_proto._render=function(){this.$content=document.createElement("div"),this.$content.classList.add("ez-mobile-ptz-content"),this.$content.innerHTML='\n      <div class="ez-mobile-ptz-wrap">\n        <div class="ez-mobile-ptz-container">\n          <div class="ez-mobile-ptz-center ez-mobile-ptz-center"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-top ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-left ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-bottom ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-right ez-mobile-ptz-default"></div>\n        </div>\n      </div>\n    ',this.$container.appendChild(this.$content),this._addEventListener();},_proto._addEventListener=function(){var $warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),touchstart="PointerEvent"in window?"pointerdown":"touchstart",touchend="PointerEvent"in window?"pointerup":"touchend";$warp&&($warp.addEventListener(touchstart,this._touchstart),$warp.addEventListener(touchend,this._touchend));},_proto._touchstart=function(e){e.preventDefault(),this._handlePtzTouch(e,"start");},_proto._touchend=function(e){e.preventDefault(),this._handlePtzTouch(e,"stop");},_proto._removeEventListener=function(){var $warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),touchstart="PointerEvent"in window?"pointerdown":"touchstart",touchend="PointerEvent"in window?"pointerup":"touchend";$warp&&($warp.removeEventListener(touchstart,this._touchstart),$warp.removeEventListener(touchend,this._touchend));},_proto._handlePtzTouch=function(e,type){var _this_options_token_deviceToken,_this_options_token,_e_changedTouches_,_e_changedTouches_1,_this_options_env,_this_options_token_deviceToken1,_this_options_token1;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token.deviceToken)?void 0:_this_options_token_deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");var _this_options_env1,$warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),rect=$warp.getBoundingClientRect(),containerCenterX=rect.left+130,containerCenterY=rect.top+130,left=(e.x||(null==(_e_changedTouches_=e.changedTouches[0])?void 0:_e_changedTouches_.clientX))-containerCenterX,top=(e.y||(null==(_e_changedTouches_1=e.changedTouches[0])?void 0:_e_changedTouches_1.clientY))-containerCenterY,direction=0,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken1=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken1.video),$icons=$warp.querySelectorAll(".ez-mobile-ptz-icon");(Math.abs(left)>Math.abs(top)?left>0?(direction=3,$icons[3].className=$icons[3].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):(direction=2,$icons[1].className=$icons[1].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):top>0?(direction=1,$icons[2].className=$icons[2].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):(direction=0,$icons[0].className=$icons[0].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")),$warp.style.cssText="background-image:linear-gradient("+(0===direction?180:1===direction?0:2===direction?90:270)+"deg, #c0ddf1 0%, rgba(100,143,252,0.00) 50%)","stop"===type)&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop",$warp.style.cssText="",$icons[3].className=$icons[3].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[1].className=$icons[1].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[2].className=$icons[2].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[0].className=$icons[0].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"));var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{direction:direction,speed:this.speed,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed","1"),data.append("direction",direction+""),data.append("accessToken",token),fetch(url,{method:"POST",body:data}).then(function(response){return response.json()}).then(function(rt){200===rt.code||[60005,60002,60003,60004].includes(+rt.code)&&($warp.style.cssText="background-image:linear-gradient("+(0===direction?180:1===direction?0:2===direction?90:270)+"deg, #f45656 0%, rgba(100,143,252,0.00) 50%)"),null==operationResultCb||operationResultCb(rt);}).catch(function(err){}).finally(function(){operationResultCb=null;});},MobilePtz}(BasePtz);function asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,key,arg){try{var info=gen[key](arg),value=info.value;}catch(error){return void reject(error)}info.done?resolve(value):Promise.resolve(value).then(_next,_throw);}function _async_to_generator$5(fn){return function(){var self=this,args=arguments;return new Promise(function(resolve,reject){var gen=fn.apply(self,args);function _next(value){asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,"next",value);}function _throw(err){asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,"throw",err);}_next(void 0);})}}function _create_class$9(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$h(o,p){return _set_prototype_of$h=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$h(o,p)}function _ts_generator$5(thisArg,body){var f,y,t,_={label:0,sent:function(){if(1&t[0])throw t[1];return t[1]},trys:[],ops:[]},g=Object.create(("function"==typeof Iterator?Iterator:Object).prototype);return g.next=verb(0),g.throw=verb(1),g.return=verb(2),"function"==typeof Symbol&&(g[Symbol.iterator]=function(){return this}),g;function verb(n){return function(v){return function(op){if(f)throw new TypeError("Generator is already executing.");for(;g&&(g=0,op[0]&&(_=0)),_;)try{if(f=1,y&&(t=2&op[0]?y.return:op[0]?y.throw||((t=y.return)&&t.call(y),0):y.next)&&!(t=t.call(y,op[1])).done)return t;switch(y=0,t&&(op=[2&op[0],t.value]),op[0]){case 0:case 1:t=op;break;case 4:return _.label++,{value:op[1],done:!1};case 5:_.label++,y=op[1],op=[0];continue;case 7:op=_.ops.pop(),_.trys.pop();continue;default:if(!(t=_.trys,(t=t.length>0&&t[t.length-1])||6!==op[0]&&2!==op[0])){_=0;continue}if(3===op[0]&&(!t||op[1]>t[0]&&op[1]<t[3])){_.label=op[1];break}if(6===op[0]&&_.label<t[1]){_.label=t[1],t=op;break}if(t&&_.label<t[2]){_.label=t[2],_.ops.push(op);break}t[2]&&_.ops.pop(),_.trys.pop();continue}op=body.call(thisArg,_);}catch(e){op=[6,e],y=0;}finally{f=t=0;}if(5&op[0])throw op[1];return {value:op[0]?op[1]:void 0,done:true}}([n,v])}}}var Ptz$1=function(BasePtz){function Ptz(container,options){var _this;return void 0===options&&(options={}),(_this=BasePtz.call(this,container,options)||this)._isMobile=distExports$4.isMobile(),_this._isRotate=false,_this._clearTimer=null,_this._$wrapper=document.createElement("div"),_this._$wrapper.className="ez-ptz-container-wrap",_this._$directionCircleContainer=document.createElement("div"),_this._$directionCircleContainer.classList.add("ez-ptz-container"),_this._$directionCircleContainer.innerHTML='\n        <div class="ez-ptz-main ez-ptz-direction-center"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-top" data-direction="0"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-top-left" data-direction="4"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-left" data-direction="2"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-left-bottom" data-direction="5"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-bottom" data-direction="1"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-bottom-right" data-direction="7"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-right" data-direction="3"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-right-top" data-direction="6"></div>\n    ',_this._$wrapper.appendChild(_this._$directionCircleContainer),_this._$speedContainer=document.createElement("div"),_this._$speedContainer.classList.add("ez-ptz-speed-container"),_this._$speedContainer.innerHTML='\n        <div class="ez-ptz-speed-progress" title="'+_this.locale.PTZ_SPEED+'">\n          <div class="ez-ptz-speed-progress-line">\n            <div class="ez-ptz-speed-progress-line-dot '+(1===_this.speed?"ez-ptz-speed-active":"")+'" data-id="slow" data-index="1" data-value="1"></div>\n            <div class="ez-ptz-speed-progress-line-dot '+(3===_this.speed?"ez-ptz-speed-active":"")+'" data-id="mid" data-index="2" data-value="3"></div>\n            <div class="ez-ptz-speed-progress-line-dot '+(7===_this.speed?"ez-ptz-speed-active":"")+'" data-id="fast" data-index="3" data-value="7"></div>\n          </div>\n          <div class="ez-ptz-speed-progress-points">\n            <div class="ez-ptz-speed-progress-points-slow">\n            '+_this.locale.PTZ_SLOW+'\n            </div>\n            <div class="ez-ptz-speed-progress-points-mid">\n            '+_this.locale.PTZ_MID+'\n            </div>\n            <div class="ez-ptz-speed-progress-points-fast">\n              '+_this.locale.PTZ_FAST+"\n            </div>\n          </div>\n        </div>\n    ",_this._$wrapper.appendChild(_this._$speedContainer),_this._$btnContainer=document.createElement("div"),_this._$btnContainer.classList.add("ez-ptz-btn-container"),_this._$btnContainer.innerHTML='\n        <div class="ez-ptz-btn-zoom" title="'+_this.locale.DEVICE_ZOOM+'" style="user-select: none;">\n          <div class="ez-ptz-btn-zoom-add" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M563.2 198.4c179.2 0 326.4 147.2 326.4 326.4s-147.2 326.4-326.4 326.4S230.4 704 230.4 524.8s147.2-326.4 332.8-326.4z m0 64c-147.2 0-262.4 115.2-262.4 262.4s115.2 262.4 262.4 262.4 262.4-115.2 262.4-262.4S704 262.4 563.2 262.4z" fill="#ffffff"></path>\n              <path d="M691.2 556.8H428.8c-19.2 0-32-12.8-32-32s12.8-32 32-32h262.4c19.2 0 32 12.8 32 32s-12.8 32-32 32z" fill="#ffffff">\n              </path>\n              <path d="M556.8 691.2c-19.2 0-32-12.8-32-32V396.8c0-19.2 12.8-32 32-32s32 12.8 32 32v262.4c0 19.2-12.8 32-32 32z" fill="#ffffff"></path>\n            </svg>\n          </div>\n          <div class="ez-ptz-btn-zoom-sub" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M569.6 838.4c-172.8 0-307.2-140.8-307.2-307.2s140.8-307.2 307.2-307.2 307.2 140.8 307.2 307.2-140.8 307.2-307.2 307.2z m0-64c134.4 0 249.6-108.8 249.6-249.6S704 281.6 569.6 281.6 320 396.8 320 531.2s108.8 243.2 249.6 243.2z" fill="#ffffff"></path>\n              <path d="M691.2 563.2H448c-19.2 0-32-12.8-32-32s12.8-38.4 32-38.4h249.6c19.2 0 32 12.8 32 32s-19.2 38.4-38.4 38.4z" fill="#ffffff"></path>\n            </svg>\n          </div>\n        </div>\n        <div class="ez-ptz-btn-focal" title="'+_this.locale.DEVICE_FOCUS+'" style="user-select: none;">\n          <div class="ez-ptz-btn-focal-add" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M646.4 825.6H320c-44.8 0-83.2-38.4-83.2-83.2V409.6c0-44.8 38.4-83.2 83.2-83.2h326.4c44.8 0 83.2 38.4 83.2 83.2v326.4c0 51.2-38.4 89.6-83.2 89.6zM320 390.4c-12.8 0-19.2 6.4-19.2 19.2v326.4c0 12.8 6.4 19.2 19.2 19.2h326.4c12.8 0 19.2-6.4 19.2-19.2V409.6c0-12.8-6.4-19.2-19.2-19.2H320z" fill="#ffffff"></path>\n              <path d="M396.8 358.4V281.6c0-25.6 25.6-51.2 51.2-51.2h326.4c25.6 0 51.2 25.6 51.2 51.2v326.4c0 25.6-25.6 51.2-51.2 51.2H704l-6.4-268.8" fill="#ffffff"></path>\n            </svg>\n          </div>\n          <div class="ez-ptz-btn-focal-sub" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M320 358.4h326.4c25.6 0 51.2 25.6 51.2 51.2v326.4c0 25.6-25.6 51.2-51.2 51.2H320c-25.6 0-51.2-25.6-51.2-51.2V409.6c0-25.6 25.6-51.2 51.2-51.2z" fill="#ffffff"></path>\n              <path d="M774.4 697.6H704c-19.2 0-32-12.8-32-32s12.8-32 32-32h70.4c12.8 0 19.2-6.4 19.2-19.2V281.6c0-12.8-6.4-19.2-19.2-19.2H448c-12.8 0-19.2 6.4-19.2 19.2v70.4c0 19.2-12.8 32-32 32s-32-12.8-32-25.6V281.6c0-44.8 38.4-83.2 83.2-83.2h326.4c44.8 0 83.2 38.4 83.2 83.2v326.4c0 51.2-38.4 89.6-83.2 89.6z" fill="#ffffff"></path>\n            </svg>\n          </div>\n        </div>\n      ',_this._$wrapper.appendChild(_this._$btnContainer),container.appendChild(_this._$wrapper),_this._$directionCircleContainer.onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"start");},_this._$directionCircleContainer.onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"stop");},_this._$directionCircleContainer.ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"start");},_this._$directionCircleContainer.ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"stop");},_this._onSwitchSpeed=function(e){var list=Array.from(_this._$speedContainer.querySelectorAll(".ez-ptz-speed-progress-line-dot"));if(list.includes(e.target)&&!e.target.classList.contains("ez-ptz-speed-active")){list.forEach(function(item){item===e.target?item.classList.add("ez-ptz-speed-active"):item.classList.remove("ez-ptz-speed-active");});var value=e.target.getAttribute("data-value"),index=e.target.getAttribute("data-index");_this.speed=+value,null==_this.options.onSpeedChange||_this.options.onSpeedChange.call(_this.options,+index);}},_this._$speedContainer.onmouseup=_this._onSwitchSpeed,_this._isMobile&&(_this._$speedContainer.ontouchend=_this._onSwitchSpeed),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","stop");}),_this._isMobile&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","stop");})),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$h(subClass,superClass);}(Ptz,BasePtz);var _proto=Ptz.prototype;return _proto.destroy=function(){this._clearTimer&&(clearTimeout(this._clearTimer),this._clearTimer=null),this._$directionCircleContainer&&(this._$directionCircleContainer.remove(),this._$directionCircleContainer=null),this._$speedContainer&&(this._onSwitchSpeed=null,this._$speedContainer.remove(),this._$speedContainer=null),this._$btnContainer&&(this._$btnContainer.remove(),this._$btnContainer=null),this._$wrapper&&(this._$wrapper.remove(),this._$wrapper=null),BasePtz.prototype.destroy.call(this);},_proto._handlePtzTouch=function(e,type){var _this_options_token_deviceToken,_this_options_token,_this_options_env,_this_options_token_deviceToken1,_this_options_token1,_this=this;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token.deviceToken)?void 0:_this_options_token_deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");this._ptzQueue||(this._ptzQueue=Promise.resolve());var container=this._$directionCircleContainer.getBoundingClientRect(),containerCenterX=container.left+(this._$directionCircleContainer.clientWidth+2)/2,containerCenterY=container.top+(this._$directionCircleContainer.clientHeight+2)/2,eventX=e.x||e.changedTouches[0].clientX,eventY=e.y||e.changedTouches[0].clientY,direction=0,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken1=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken1.video),backDeg=0;function getAreaId(x,y){var rad=Math.atan2(y,x);rad<0&&(rad+=2*Math.PI);var deg=rad*(180/Math.PI)-225-12.5;return deg<0&&(deg+=360),Math.floor(deg/45)+1}var _this_options_env1,left=eventX-containerCenterX,top=eventY-containerCenterY;if(this.isRotate)switch(getAreaId(left,top)){case 1:direction=2,backDeg=90;break;case 2:direction=4,backDeg=135;break;case 3:direction=0,backDeg=180;break;case 4:direction=6,backDeg=225;break;case 5:direction=3,backDeg=270;break;case 6:direction=7,backDeg=315;break;case 7:direction=1,backDeg=0;break;case 8:direction=5,backDeg=45;}else switch(getAreaId(left,top)){case 1:direction=0,backDeg=180;break;case 2:direction=6,backDeg=225;break;case 3:direction=3,backDeg=270;break;case 4:direction=7,backDeg=315;break;case 5:direction=1,backDeg=0;break;case 6:direction=5,backDeg=45;break;case 7:direction=2,backDeg=90;break;case 8:direction=4,backDeg=135;}(this._clearTimer&&(clearTimeout(this._clearTimer),this._clearTimer=null),this._$directionCircleContainer.style.cssText="start"===type?"background-image:linear-gradient("+backDeg+"deg, #4277FF 0%, rgba(100,143,252,0.00) 30%)":"","stop"===type)&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop");var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{areaId:getAreaId(left,top),direction:direction,backDeg:backDeg,isRotate:this.isRotate,speed:this.speed,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed",this.speed+""),data.append("direction",direction+""),data.append("accessToken",token),this._ptzQueue=this._ptzQueue.then(function(){return _async_to_generator$5(function(){var _this;return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return _this=this,[4,fetch(url,{method:"POST",body:data}).then(function(response){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,response.json()];case 1:return [2,_state.sent()]}})})()}).then(function(rt){var _rt_result;null==operationResultCb||operationResultCb(rt);var code=rt.code||(null==rt||null==(_rt_result=rt.result)?void 0:_rt_result.code);return [6e4,60001,60002,60003,60004,60005,60006,10002].includes(+code)&&(_this._$directionCircleContainer.style.cssText="background-image:linear-gradient("+backDeg+"deg, #f45656 0%, rgba(100,143,252,0.00) 30%)"),rt}).catch(function(err){}).finally(function(){operationResultCb=null,"stop"===type&&(_this._clearTimer=setTimeout(function(){_this._$directionCircleContainer.style.cssText="";},1e3));})];case 1:return [2,_state.sent()]}})}).call(_this)}),"stop"===type&&(this._ptzQueue=this._ptzQueue.finally(function(){}));},_proto._handleBtnTouch=function(btn,option,type){var _this_options_token,_this_options_env,_this_options_token_deviceToken,_this_options_token1,_this=this;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)?void 0:_this_options_token.deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");this._ptzOperation||(this._ptzOperation=Promise.resolve());var direction=8;direction="zoom"===btn?"add"===option?8:9:"add"===option?10:11;var _this_options_env1,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken.video);"stop"===type&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop");var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{btn:btn,option:option,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed",this.speed+""),data.append("direction",direction+""),data.append("accessToken",token),this._ptzOperation=this._ptzOperation.then(function(){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,fetch(url,{method:"POST",body:data}).then(function(response){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,response.json()];case 1:return [2,_state.sent()]}})})()}).then(function(rt){return null==operationResultCb||operationResultCb(rt),rt}).catch(function(err){}).finally(function(){operationResultCb=null;})];case 1:return [2,_state.sent()]}})})()}),"stop"===type&&(this._ptzOperation=this._ptzOperation.finally(function(){_this._ptzOperation=null;}));},_create_class$9(Ptz,[{key:"isRotate",get:function(){return this._isRotate},set:function(isRotate){this._isRotate=isRotate;}}]),Ptz}(BasePtz);
+	var PTZ_DEFAULT_OPTIONS={language:"zh",env:{domain:"https://open.ys7.com"},accessToken:"",speed:2,locales:{zh:{GET_PTZ_STATUS:"获取当前云台状态",GET_PTZ_STATUS_FAILED:"未加载Theme模块，无法获取云台状态",MOBILE_HIDE_PTZ:"移动端，非全屏状态不展示云台",OPTION_PTZ_FAILED:"未加载Theme模块，无法操作云台",MOBILE_PTZ_TIPS:"请通过操控云台来调整摄像机视角",PTZ_FAST:"快",PTZ_MID:"中",PTZ_SLOW:"慢",PTZ_SPEED:"调整云台转动速度",DEVICE_ZOOM:"控制设备放大/缩小画面",DEVICE_FOCUS:"调整设备焦距"},en:{GET_PTZ_STATUS:"Get current PTZ status",GET_PTZ_STATUS_FAILED:"Theme module is not loaded, PTZ status cannot be obtained",MOBILE_HIDE_PTZ:"Mobile terminal, PTZ is not displayed in non-full screen state",OPTION_PTZ_FAILED:"Theme module is not loaded, PTZ cannot be operated",MOBILE_PTZ_TIPS:"Adjust camera angle by manipulating gimbal",PTZ_FAST:"F",PTZ_MID:"M",PTZ_SLOW:"S",PTZ_SPEED:"Adjust the PTZ rotation speed",DEVICE_ZOOM:"Control the device to zoom in/out of the screen",DEVICE_FOCUS:"Adjusting the device's focal length"}}},PTZ_SPEED={1:1,2:3,3:7,slow:1,mid:3,fast:7},BasePtz=function(){function BasePtz(container,options){var _this_options_locales,_this_options_locales1,_this_options_locales2;if(void 0===options&&(options={}),!container)throw new Error("Ptz container is required");(this.options=deepmerge(PTZ_DEFAULT_OPTIONS,options,{clone:false}),null==(_this_options_locales=this.options.locales)?void 0:_this_options_locales[this.options.language])?this.locale=null==(_this_options_locales1=this.options.locales)?void 0:_this_options_locales1[this.options.language]:this.locale=null==(_this_options_locales2=this.options.locales)?void 0:_this_options_locales2.zh;this.$container=container,this.speed=PTZ_SPEED[this.options.speed||2];}var _proto=BasePtz.prototype;return _proto.updateOptions=function(options){this.options=deepmerge(this.options,options,{clone:false});},_proto.destroy=function(){},BasePtz}();function _set_prototype_of$1$3(o,p){return _set_prototype_of$1$3=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1$3(o,p)}var MobilePtz=function(BasePtz){function MobilePtz(container,options){var _this;return (_this=BasePtz.call(this,container,options)||this)._touchstart=_this._touchstart.bind(_this),_this._touchend=_this._touchend.bind(_this),_this._render(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1$3(subClass,superClass);}(MobilePtz,BasePtz);var _proto=MobilePtz.prototype;return _proto.destroy=function(){this._removeEventListener(),this.$content&&(this.$content.remove(),this.$content=null),BasePtz.prototype.destroy.call(this);},_proto._render=function(){this.$content=document.createElement("div"),this.$content.classList.add("ez-mobile-ptz-content"),this.$content.innerHTML='\n      <div class="ez-mobile-ptz-wrap">\n        <div class="ez-mobile-ptz-container">\n          <div class="ez-mobile-ptz-center ez-mobile-ptz-center"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-top ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-left ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-bottom ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-right ez-mobile-ptz-default"></div>\n        </div>\n      </div>\n    ',this.$container.appendChild(this.$content),this._addEventListener();},_proto._addEventListener=function(){var $warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),touchstart="PointerEvent"in window?"pointerdown":"touchstart",touchend="PointerEvent"in window?"pointerup":"touchend";$warp&&($warp.addEventListener(touchstart,this._touchstart),$warp.addEventListener(touchend,this._touchend));},_proto._touchstart=function(e){e.preventDefault(),this._handlePtzTouch(e,"start");},_proto._touchend=function(e){e.preventDefault(),this._handlePtzTouch(e,"stop");},_proto._removeEventListener=function(){var $warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),touchstart="PointerEvent"in window?"pointerdown":"touchstart",touchend="PointerEvent"in window?"pointerup":"touchend";$warp&&($warp.removeEventListener(touchstart,this._touchstart),$warp.removeEventListener(touchend,this._touchend));},_proto._handlePtzTouch=function(e,type){var _this_options_token_deviceToken,_this_options_token,_e_changedTouches_,_e_changedTouches_1,_this_options_env,_this_options_token_deviceToken1,_this_options_token1;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token.deviceToken)?void 0:_this_options_token_deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");var _this_options_env1,$warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),rect=$warp.getBoundingClientRect(),containerCenterX=rect.left+130,containerCenterY=rect.top+130,left=(e.x||(null==(_e_changedTouches_=e.changedTouches[0])?void 0:_e_changedTouches_.clientX))-containerCenterX,top=(e.y||(null==(_e_changedTouches_1=e.changedTouches[0])?void 0:_e_changedTouches_1.clientY))-containerCenterY,direction=0,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken1=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken1.video),$icons=$warp.querySelectorAll(".ez-mobile-ptz-icon");(Math.abs(left)>Math.abs(top)?left>0?(direction=3,$icons[3].className=$icons[3].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):(direction=2,$icons[1].className=$icons[1].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):top>0?(direction=1,$icons[2].className=$icons[2].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):(direction=0,$icons[0].className=$icons[0].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")),$warp.style.cssText="background-image:linear-gradient("+(0===direction?180:1===direction?0:2===direction?90:270)+"deg, #c0ddf1 0%, rgba(100,143,252,0.00) 50%)","stop"===type)&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop",$warp.style.cssText="",$icons[3].className=$icons[3].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[1].className=$icons[1].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[2].className=$icons[2].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[0].className=$icons[0].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"));var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{direction:direction,speed:this.speed,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed","1"),data.append("direction",direction+""),data.append("accessToken",token),fetch(url,{method:"POST",body:data}).then(function(response){return response.json()}).then(function(rt){200===rt.code||[60005,60002,60003,60004].includes(+rt.code)&&($warp.style.cssText="background-image:linear-gradient("+(0===direction?180:1===direction?0:2===direction?90:270)+"deg, #f45656 0%, rgba(100,143,252,0.00) 50%)"),null==operationResultCb||operationResultCb(rt);}).catch(function(err){}).finally(function(){operationResultCb=null;});},MobilePtz}(BasePtz);function asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,key,arg){try{var info=gen[key](arg),value=info.value;}catch(error){return void reject(error)}info.done?resolve(value):Promise.resolve(value).then(_next,_throw);}function _async_to_generator$5(fn){return function(){var self=this,args=arguments;return new Promise(function(resolve,reject){var gen=fn.apply(self,args);function _next(value){asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,"next",value);}function _throw(err){asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,"throw",err);}_next(void 0);})}}function _create_class$9(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$k(o,p){return _set_prototype_of$k=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$k(o,p)}function _ts_generator$5(thisArg,body){var f,y,t,_={label:0,sent:function(){if(1&t[0])throw t[1];return t[1]},trys:[],ops:[]},g=Object.create(("function"==typeof Iterator?Iterator:Object).prototype);return g.next=verb(0),g.throw=verb(1),g.return=verb(2),"function"==typeof Symbol&&(g[Symbol.iterator]=function(){return this}),g;function verb(n){return function(v){return function(op){if(f)throw new TypeError("Generator is already executing.");for(;g&&(g=0,op[0]&&(_=0)),_;)try{if(f=1,y&&(t=2&op[0]?y.return:op[0]?y.throw||((t=y.return)&&t.call(y),0):y.next)&&!(t=t.call(y,op[1])).done)return t;switch(y=0,t&&(op=[2&op[0],t.value]),op[0]){case 0:case 1:t=op;break;case 4:return _.label++,{value:op[1],done:!1};case 5:_.label++,y=op[1],op=[0];continue;case 7:op=_.ops.pop(),_.trys.pop();continue;default:if(!(t=_.trys,(t=t.length>0&&t[t.length-1])||6!==op[0]&&2!==op[0])){_=0;continue}if(3===op[0]&&(!t||op[1]>t[0]&&op[1]<t[3])){_.label=op[1];break}if(6===op[0]&&_.label<t[1]){_.label=t[1],t=op;break}if(t&&_.label<t[2]){_.label=t[2],_.ops.push(op);break}t[2]&&_.ops.pop(),_.trys.pop();continue}op=body.call(thisArg,_);}catch(e){op=[6,e],y=0;}finally{f=t=0;}if(5&op[0])throw op[1];return {value:op[0]?op[1]:void 0,done:true}}([n,v])}}}var Ptz$1=function(BasePtz){function Ptz(container,options){var _this;return void 0===options&&(options={}),(_this=BasePtz.call(this,container,options)||this)._isMobile=distExports$4.isMobile(),_this._isRotate=false,_this._clearTimer=null,_this._$wrapper=document.createElement("div"),_this._$wrapper.className="ez-ptz-container-wrap",_this._$directionCircleContainer=document.createElement("div"),_this._$directionCircleContainer.classList.add("ez-ptz-container"),_this._$directionCircleContainer.innerHTML='\n        <div class="ez-ptz-main ez-ptz-direction-center"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-top" data-direction="0"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-top-left" data-direction="4"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-left" data-direction="2"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-left-bottom" data-direction="5"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-bottom" data-direction="1"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-bottom-right" data-direction="7"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-right" data-direction="3"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-right-top" data-direction="6"></div>\n    ',_this._$wrapper.appendChild(_this._$directionCircleContainer),_this._$speedContainer=document.createElement("div"),_this._$speedContainer.classList.add("ez-ptz-speed-container"),_this._$speedContainer.innerHTML='\n        <div class="ez-ptz-speed-progress" title="'+_this.locale.PTZ_SPEED+'">\n          <div class="ez-ptz-speed-progress-line">\n            <div class="ez-ptz-speed-progress-line-dot '+(1===_this.speed?"ez-ptz-speed-active":"")+'" data-id="slow" data-index="1" data-value="1"></div>\n            <div class="ez-ptz-speed-progress-line-dot '+(3===_this.speed?"ez-ptz-speed-active":"")+'" data-id="mid" data-index="2" data-value="3"></div>\n            <div class="ez-ptz-speed-progress-line-dot '+(7===_this.speed?"ez-ptz-speed-active":"")+'" data-id="fast" data-index="3" data-value="7"></div>\n          </div>\n          <div class="ez-ptz-speed-progress-points">\n            <div class="ez-ptz-speed-progress-points-slow">\n            '+_this.locale.PTZ_SLOW+'\n            </div>\n            <div class="ez-ptz-speed-progress-points-mid">\n            '+_this.locale.PTZ_MID+'\n            </div>\n            <div class="ez-ptz-speed-progress-points-fast">\n              '+_this.locale.PTZ_FAST+"\n            </div>\n          </div>\n        </div>\n    ",_this._$wrapper.appendChild(_this._$speedContainer),_this._$btnContainer=document.createElement("div"),_this._$btnContainer.classList.add("ez-ptz-btn-container"),_this._$btnContainer.innerHTML='\n        <div class="ez-ptz-btn-zoom" title="'+_this.locale.DEVICE_ZOOM+'" style="user-select: none;">\n          <div class="ez-ptz-btn-zoom-add" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M563.2 198.4c179.2 0 326.4 147.2 326.4 326.4s-147.2 326.4-326.4 326.4S230.4 704 230.4 524.8s147.2-326.4 332.8-326.4z m0 64c-147.2 0-262.4 115.2-262.4 262.4s115.2 262.4 262.4 262.4 262.4-115.2 262.4-262.4S704 262.4 563.2 262.4z" fill="#ffffff"></path>\n              <path d="M691.2 556.8H428.8c-19.2 0-32-12.8-32-32s12.8-32 32-32h262.4c19.2 0 32 12.8 32 32s-12.8 32-32 32z" fill="#ffffff">\n              </path>\n              <path d="M556.8 691.2c-19.2 0-32-12.8-32-32V396.8c0-19.2 12.8-32 32-32s32 12.8 32 32v262.4c0 19.2-12.8 32-32 32z" fill="#ffffff"></path>\n            </svg>\n          </div>\n          <div class="ez-ptz-btn-zoom-sub" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M569.6 838.4c-172.8 0-307.2-140.8-307.2-307.2s140.8-307.2 307.2-307.2 307.2 140.8 307.2 307.2-140.8 307.2-307.2 307.2z m0-64c134.4 0 249.6-108.8 249.6-249.6S704 281.6 569.6 281.6 320 396.8 320 531.2s108.8 243.2 249.6 243.2z" fill="#ffffff"></path>\n              <path d="M691.2 563.2H448c-19.2 0-32-12.8-32-32s12.8-38.4 32-38.4h249.6c19.2 0 32 12.8 32 32s-19.2 38.4-38.4 38.4z" fill="#ffffff"></path>\n            </svg>\n          </div>\n        </div>\n        <div class="ez-ptz-btn-focal" title="'+_this.locale.DEVICE_FOCUS+'" style="user-select: none;">\n          <div class="ez-ptz-btn-focal-add" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M646.4 825.6H320c-44.8 0-83.2-38.4-83.2-83.2V409.6c0-44.8 38.4-83.2 83.2-83.2h326.4c44.8 0 83.2 38.4 83.2 83.2v326.4c0 51.2-38.4 89.6-83.2 89.6zM320 390.4c-12.8 0-19.2 6.4-19.2 19.2v326.4c0 12.8 6.4 19.2 19.2 19.2h326.4c12.8 0 19.2-6.4 19.2-19.2V409.6c0-12.8-6.4-19.2-19.2-19.2H320z" fill="#ffffff"></path>\n              <path d="M396.8 358.4V281.6c0-25.6 25.6-51.2 51.2-51.2h326.4c25.6 0 51.2 25.6 51.2 51.2v326.4c0 25.6-25.6 51.2-51.2 51.2H704l-6.4-268.8" fill="#ffffff"></path>\n            </svg>\n          </div>\n          <div class="ez-ptz-btn-focal-sub" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M320 358.4h326.4c25.6 0 51.2 25.6 51.2 51.2v326.4c0 25.6-25.6 51.2-51.2 51.2H320c-25.6 0-51.2-25.6-51.2-51.2V409.6c0-25.6 25.6-51.2 51.2-51.2z" fill="#ffffff"></path>\n              <path d="M774.4 697.6H704c-19.2 0-32-12.8-32-32s12.8-32 32-32h70.4c12.8 0 19.2-6.4 19.2-19.2V281.6c0-12.8-6.4-19.2-19.2-19.2H448c-12.8 0-19.2 6.4-19.2 19.2v70.4c0 19.2-12.8 32-32 32s-32-12.8-32-25.6V281.6c0-44.8 38.4-83.2 83.2-83.2h326.4c44.8 0 83.2 38.4 83.2 83.2v326.4c0 51.2-38.4 89.6-83.2 89.6z" fill="#ffffff"></path>\n            </svg>\n          </div>\n        </div>\n      ',_this._$wrapper.appendChild(_this._$btnContainer),container.appendChild(_this._$wrapper),_this._$directionCircleContainer.onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"start");},_this._$directionCircleContainer.onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"stop");},_this._$directionCircleContainer.ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"start");},_this._$directionCircleContainer.ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"stop");},_this._onSwitchSpeed=function(e){var list=Array.from(_this._$speedContainer.querySelectorAll(".ez-ptz-speed-progress-line-dot"));if(list.includes(e.target)&&!e.target.classList.contains("ez-ptz-speed-active")){list.forEach(function(item){item===e.target?item.classList.add("ez-ptz-speed-active"):item.classList.remove("ez-ptz-speed-active");});var value=e.target.getAttribute("data-value"),index=e.target.getAttribute("data-index");_this.speed=+value,null==_this.options.onSpeedChange||_this.options.onSpeedChange.call(_this.options,+index);}},_this._$speedContainer.onmouseup=_this._onSwitchSpeed,_this._isMobile&&(_this._$speedContainer.ontouchend=_this._onSwitchSpeed),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","stop");}),_this._isMobile&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","stop");})),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$k(subClass,superClass);}(Ptz,BasePtz);var _proto=Ptz.prototype;return _proto.destroy=function(){this._clearTimer&&(clearTimeout(this._clearTimer),this._clearTimer=null),this._$directionCircleContainer&&(this._$directionCircleContainer.remove(),this._$directionCircleContainer=null),this._$speedContainer&&(this._onSwitchSpeed=null,this._$speedContainer.remove(),this._$speedContainer=null),this._$btnContainer&&(this._$btnContainer.remove(),this._$btnContainer=null),this._$wrapper&&(this._$wrapper.remove(),this._$wrapper=null),BasePtz.prototype.destroy.call(this);},_proto._handlePtzTouch=function(e,type){var _this_options_token_deviceToken,_this_options_token,_this_options_env,_this_options_token_deviceToken1,_this_options_token1,_this=this;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token.deviceToken)?void 0:_this_options_token_deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");this._ptzQueue||(this._ptzQueue=Promise.resolve());var container=this._$directionCircleContainer.getBoundingClientRect(),containerCenterX=container.left+(this._$directionCircleContainer.clientWidth+2)/2,containerCenterY=container.top+(this._$directionCircleContainer.clientHeight+2)/2,eventX=e.x||e.changedTouches[0].clientX,eventY=e.y||e.changedTouches[0].clientY,direction=0,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken1=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken1.video),backDeg=0;function getAreaId(x,y){var rad=Math.atan2(y,x);rad<0&&(rad+=2*Math.PI);var deg=rad*(180/Math.PI)-225-12.5;return deg<0&&(deg+=360),Math.floor(deg/45)+1}var _this_options_env1,left=eventX-containerCenterX,top=eventY-containerCenterY;if(this.isRotate)switch(getAreaId(left,top)){case 1:direction=2,backDeg=90;break;case 2:direction=4,backDeg=135;break;case 3:direction=0,backDeg=180;break;case 4:direction=6,backDeg=225;break;case 5:direction=3,backDeg=270;break;case 6:direction=7,backDeg=315;break;case 7:direction=1,backDeg=0;break;case 8:direction=5,backDeg=45;}else switch(getAreaId(left,top)){case 1:direction=0,backDeg=180;break;case 2:direction=6,backDeg=225;break;case 3:direction=3,backDeg=270;break;case 4:direction=7,backDeg=315;break;case 5:direction=1,backDeg=0;break;case 6:direction=5,backDeg=45;break;case 7:direction=2,backDeg=90;break;case 8:direction=4,backDeg=135;}(this._clearTimer&&(clearTimeout(this._clearTimer),this._clearTimer=null),this._$directionCircleContainer.style.cssText="start"===type?"background-image:linear-gradient("+backDeg+"deg, #4277FF 0%, rgba(100,143,252,0.00) 30%)":"","stop"===type)&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop");var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{areaId:getAreaId(left,top),direction:direction,backDeg:backDeg,isRotate:this.isRotate,speed:this.speed,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed",this.speed+""),data.append("direction",direction+""),data.append("accessToken",token),this._ptzQueue=this._ptzQueue.then(function(){return _async_to_generator$5(function(){var _this;return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return _this=this,[4,fetch(url,{method:"POST",body:data}).then(function(response){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,response.json()];case 1:return [2,_state.sent()]}})})()}).then(function(rt){var _rt_result;null==operationResultCb||operationResultCb(rt);var code=rt.code||(null==rt||null==(_rt_result=rt.result)?void 0:_rt_result.code);return [6e4,60001,60002,60003,60004,60005,60006,10002].includes(+code)&&(_this._$directionCircleContainer.style.cssText="background-image:linear-gradient("+backDeg+"deg, #f45656 0%, rgba(100,143,252,0.00) 30%)"),rt}).catch(function(err){}).finally(function(){operationResultCb=null,"stop"===type&&(_this._clearTimer=setTimeout(function(){_this._$directionCircleContainer.style.cssText="";},1e3));})];case 1:return [2,_state.sent()]}})}).call(_this)}),"stop"===type&&(this._ptzQueue=this._ptzQueue.finally(function(){}));},_proto._handleBtnTouch=function(btn,option,type){var _this_options_token,_this_options_env,_this_options_token_deviceToken,_this_options_token1,_this=this;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)?void 0:_this_options_token.deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");this._ptzOperation||(this._ptzOperation=Promise.resolve());var direction=8;direction="zoom"===btn?"add"===option?8:9:"add"===option?10:11;var _this_options_env1,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken.video);"stop"===type&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop");var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{btn:btn,option:option,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed",this.speed+""),data.append("direction",direction+""),data.append("accessToken",token),this._ptzOperation=this._ptzOperation.then(function(){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,fetch(url,{method:"POST",body:data}).then(function(response){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,response.json()];case 1:return [2,_state.sent()]}})})()}).then(function(rt){return null==operationResultCb||operationResultCb(rt),rt}).catch(function(err){}).finally(function(){operationResultCb=null;})];case 1:return [2,_state.sent()]}})})()}),"stop"===type&&(this._ptzOperation=this._ptzOperation.finally(function(){_this._ptzOperation=null;}));},_create_class$9(Ptz,[{key:"isRotate",get:function(){return this._isRotate},set:function(isRotate){this._isRotate=isRotate;}}]),Ptz}(BasePtz);
 
 	function _defineProperties$4(target, props) {
 	    for(var i = 0; i < props.length; i++){
@@ -7374,8 +7470,8 @@
 	    if (protoProps) _defineProperties$4(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$f() {
-	    _extends$f = Object.assign || function(target) {
+	function _extends$i() {
+	    _extends$i = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7386,9 +7482,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$f.apply(this, arguments);
+	    return _extends$i.apply(this, arguments);
 	}
-	function _inherits$e(subClass, superClass) {
+	function _inherits$h(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7399,23 +7495,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$g(subClass, superClass);
+	    if (superClass) _set_prototype_of$j(subClass, superClass);
 	}
-	function _set_prototype_of$g(o, p) {
-	    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$j(o, p) {
+	    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$g(o, p);
+	    return _set_prototype_of$j(o, p);
 	}
 	/**
 	 * 云台控件
 	 * @category Control
 	 */ var Ptz = /*#__PURE__*/ function(Control) {
-	    _inherits$e(Ptz, Control);
+	    _inherits$h(Ptz, Control);
 	    function Ptz(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$f({}, options, {
+	        _this = Control.call(this, _extends$i({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'ptz'
@@ -7458,7 +7554,7 @@
 	            this.$turntable.classList.add("" + PREFIX_CLASS + "-ptz-turntable");
 	            this.$panel.appendChild(this.$turntable);
 	            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-	            this._ptzControl = new Ptz$1(this.$turntable, _extends$f({}, this._options, {
+	            this._ptzControl = new Ptz$1(this.$turntable, _extends$i({}, this._options, {
 	                onSpeedChange: this._onSpeedChange.bind(this),
 	                onDirection: this._onDirection.bind(this)
 	            }));
@@ -7467,7 +7563,7 @@
 	    };
 	    _proto.renderMobileExtend = function renderMobileExtend($container) {
 	        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-	        if (!this._ptzControl1) this._ptzControl1 = new MobilePtz($container, _extends$f({}, this._options, {
+	        if (!this._ptzControl1) this._ptzControl1 = new MobilePtz($container, _extends$i({}, this._options, {
 	            onSpeedChange: this._onSpeedChange.bind(this),
 	            onDirection: this._onDirection.bind(this)
 	        }));
@@ -7570,8 +7666,8 @@
 	    if (protoProps) _defineProperties$3(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$e() {
-	    _extends$e = Object.assign || function(target) {
+	function _extends$h() {
+	    _extends$h = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7582,9 +7678,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$e.apply(this, arguments);
+	    return _extends$h.apply(this, arguments);
 	}
-	function _inherits$d(subClass, superClass) {
+	function _inherits$g(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7595,14 +7691,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$f(subClass, superClass);
+	    if (superClass) _set_prototype_of$i(subClass, superClass);
 	}
-	function _set_prototype_of$f(o, p) {
-	    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$i(o, p) {
+	    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$f(o, p);
+	    return _set_prototype_of$i(o, p);
 	}
 	var RECORD_DEFAULT_OPTIONS = {
 	    maxDuration: 3600
@@ -7616,10 +7712,10 @@
 	 *  2. 录制时间很短可能会因为浏览器的限制或没有I帧而无法生成有效的视频文件
 	 * @category Control
 	 */ var Record = /*#__PURE__*/ function(Control) {
-	    _inherits$d(Record, Control);
+	    _inherits$g(Record, Control);
 	    function Record(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$e({}, options, {
+	        _this = Control.call(this, _extends$h({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'record'
@@ -7760,8 +7856,8 @@
 	    if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$d() {
-	    _extends$d = Object.assign || function(target) {
+	function _extends$g() {
+	    _extends$g = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7772,9 +7868,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$d.apply(this, arguments);
+	    return _extends$g.apply(this, arguments);
 	}
-	function _inherits$c(subClass, superClass) {
+	function _inherits$f(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7785,14 +7881,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$e(subClass, superClass);
+	    if (superClass) _set_prototype_of$h(subClass, superClass);
 	}
-	function _set_prototype_of$e(o, p) {
-	    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$h(o, p) {
+	    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$e(o, p);
+	    return _set_prototype_of$h(o, p);
 	}
 	function _ts_generator$4(thisArg, body) {
 	    var f, y, t, _ = {
@@ -7894,10 +7990,10 @@
 	 *
 	 * @category Control
 	 */ var Talk = /*#__PURE__*/ function(Control) {
-	    _inherits$c(Talk, Control);
+	    _inherits$f(Talk, Control);
 	    function Talk(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$d({}, options, {
+	        _this = Control.call(this, _extends$g({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'talk'
@@ -8030,8 +8126,8 @@
 	        });
 	    };
 	}
-	function _extends$c() {
-	    _extends$c = Object.assign || function(target) {
+	function _extends$f() {
+	    _extends$f = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -8042,9 +8138,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$c.apply(this, arguments);
+	    return _extends$f.apply(this, arguments);
 	}
-	function _inherits$b(subClass, superClass) {
+	function _inherits$e(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -8055,14 +8151,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$d(subClass, superClass);
+	    if (superClass) _set_prototype_of$g(subClass, superClass);
 	}
-	function _set_prototype_of$d(o, p) {
-	    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$g(o, p) {
+	    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$d(o, p);
+	    return _set_prototype_of$g(o, p);
 	}
 	function _ts_generator$3(thisArg, body) {
 	    var f, y, t, _ = {
@@ -8162,10 +8258,10 @@
 	 *
 	 * @category Control
 	 */ var Broadcast = /*#__PURE__*/ function(Control) {
-	    _inherits$b(Broadcast, Control);
+	    _inherits$e(Broadcast, Control);
 	    function Broadcast(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$c({}, options, {
+	        _this = Control.call(this, _extends$f({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'broadcast'
@@ -8260,8 +8356,8 @@
 	        });
 	    };
 	}
-	function _extends$b() {
-	    _extends$b = Object.assign || function(target) {
+	function _extends$e() {
+	    _extends$e = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -8272,9 +8368,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$b.apply(this, arguments);
+	    return _extends$e.apply(this, arguments);
 	}
-	function _inherits$a(subClass, superClass) {
+	function _inherits$d(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -8285,14 +8381,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$c(subClass, superClass);
+	    if (superClass) _set_prototype_of$f(subClass, superClass);
 	}
-	function _set_prototype_of$c(o, p) {
-	    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$f(o, p) {
+	    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$c(o, p);
+	    return _set_prototype_of$f(o, p);
 	}
 	function _ts_generator$2(thisArg, body) {
 	    var f, y, t, _ = {
@@ -8392,10 +8488,10 @@
 	 *
 	 * @category Control
 	 */ var AIChat = /*#__PURE__*/ function(Control) {
-	    _inherits$a(AIChat, Control);
+	    _inherits$d(AIChat, Control);
 	    function AIChat(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$b({}, options, {
+	        _this = Control.call(this, _extends$e({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'aichat'
@@ -8459,6 +8555,348 @@
 	        }).call(this);
 	    };
 	    return AIChat;
+	}(Control);
+
+	function _extends$d() {
+	    _extends$d = Object.assign || function(target) {
+	        for(var i = 1; i < arguments.length; i++){
+	            var source = arguments[i];
+	            for(var key in source){
+	                if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                    target[key] = source[key];
+	                }
+	            }
+	        }
+	        return target;
+	    };
+	    return _extends$d.apply(this, arguments);
+	}
+	function _inherits$c(subClass, superClass) {
+	    if (typeof superClass !== "function" && superClass !== null) {
+	        throw new TypeError("Super expression must either be null or a function");
+	    }
+	    subClass.prototype = Object.create(superClass && superClass.prototype, {
+	        constructor: {
+	            value: subClass,
+	            writable: true,
+	            configurable: true
+	        }
+	    });
+	    if (superClass) _set_prototype_of$e(subClass, superClass);
+	}
+	function _set_prototype_of$e(o, p) {
+	    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	        o.__proto__ = p;
+	        return o;
+	    };
+	    return _set_prototype_of$e(o, p);
+	}
+	/**
+	 * 直播按钮控件
+	 *
+	 * 点击切换到直播模式
+	 *
+	 * @category Control
+	 */ var Live = /*#__PURE__*/ function(Control) {
+	    _inherits$c(Live, Control);
+	    function Live(options) {
+	        var _this;
+	        var _this___options_props1;
+	        _this = Control.call(this, _extends$d({}, options, {
+	            tagName: 'span',
+	            controlType: 'button',
+	            classNameSuffix: 'live'
+	        })) || this;
+	        _this._options = options;
+	        _this._render();
+	        // H5 端不展示直播/回放切换按钮
+	        if (Utils.isMobile) {
+	            _this.$container.style.display = 'none';
+	        }
+	        // 初始化时根据当前播放模式确定激活状态
+	        _this._syncActiveByUrlInfo((_this___options_props1 = _this.__options.props) == null ? void 0 : _this___options_props1.urlInfo);
+	        return _this;
+	    }
+	    var _proto = Live.prototype;
+	    /**
+	   * 根据 urlInfo 同步激活状态
+	   * 在初始化和播放地址切换后调用
+	   */ _proto._syncActiveByUrlInfo = function _syncActiveByUrlInfo(urlInfo) {
+	        var shouldBeActive = !!(urlInfo && urlInfo.type === 'live');
+	        this.active = shouldBeActive;
+	    };
+	    _proto._render = function _render() {
+	        var _this_locale;
+	        this.$container.innerHTML = IconComponents.live({
+	            title: ((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_LIVE) || '直播'
+	        });
+	    };
+	    /**
+	   * 销毁
+	   */ _proto.destroy = function destroy() {
+	        Control.prototype.destroy.call(this);
+	    };
+	    /**
+	   * 点击 Control 会触发
+	   */ _proto._onControlClick = function _onControlClick(e) {
+	        var _this__options_onChange, _this__options;
+	        Control.prototype._onControlClick.call(this, e);
+	        // 已经是直播模式则不触发
+	        if (this.active) {
+	            return;
+	        }
+	        this.active = true;
+	        this.emit(EVENTS.control.liveChange);
+	        (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options);
+	    };
+	    return Live;
+	}(Control);
+
+	function _extends$c() {
+	    _extends$c = Object.assign || function(target) {
+	        for(var i = 1; i < arguments.length; i++){
+	            var source = arguments[i];
+	            for(var key in source){
+	                if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                    target[key] = source[key];
+	                }
+	            }
+	        }
+	        return target;
+	    };
+	    return _extends$c.apply(this, arguments);
+	}
+	function _inherits$b(subClass, superClass) {
+	    if (typeof superClass !== "function" && superClass !== null) {
+	        throw new TypeError("Super expression must either be null or a function");
+	    }
+	    subClass.prototype = Object.create(superClass && superClass.prototype, {
+	        constructor: {
+	            value: subClass,
+	            writable: true,
+	            configurable: true
+	        }
+	    });
+	    if (superClass) _set_prototype_of$d(subClass, superClass);
+	}
+	function _set_prototype_of$d(o, p) {
+	    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	        o.__proto__ = p;
+	        return o;
+	    };
+	    return _set_prototype_of$d(o, p);
+	}
+	/**
+	 * 回放下拉控件
+	 *
+	 * 鼠标移入弹出气泡，展示云存储、云录制、本地回放三个选项
+	 *
+	 * @category Control
+	 */ var RecDropdown = /*#__PURE__*/ function(Control) {
+	    _inherits$b(RecDropdown, Control);
+	    function RecDropdown(options) {
+	        var _this;
+	        var _options_props, _this___options_props1;
+	        _this = Control.call(this, _extends$c({}, options, {
+	            tagName: 'span',
+	            controlType: 'button',
+	            classNameSuffix: 'rec-dropdown'
+	        })) || this;
+	        _this._options = options;
+	        // H5 端不展示直播/回放切换按钮
+	        if (Utils.isMobile) {
+	            _this.$container.style.display = 'none';
+	        }
+	        // 初始化时根据 urlInfo 确定当前回放类型和激活状态
+	        _this._recType = options.recType || ((_options_props = options.props) == null ? void 0 : _options_props.recType) || 'cloudRec';
+	        _this._syncActiveByUrlInfo((_this___options_props1 = _this.__options.props) == null ? void 0 : _this___options_props1.urlInfo);
+	        _this._render();
+	        _this._initPicker();
+	        return _this;
+	    }
+	    var _proto = RecDropdown.prototype;
+	    /**
+	   * 根据 urlInfo 同步激活状态和回放类型
+	   * 在初始化和播放地址切换后调用
+	   */ _proto._syncActiveByUrlInfo = function _syncActiveByUrlInfo(urlInfo) {
+	        if (urlInfo && urlInfo.type === 'rec') {
+	            var _urlInfo_searchParams1;
+	            this.active = true;
+	            if (urlInfo.recType === 'cloud' && ((_urlInfo_searchParams1 = urlInfo.searchParams) == null ? void 0 : _urlInfo_searchParams1.busType) === '7') {
+	                this._recType = 'cloudRecord';
+	            } else if (urlInfo.recType === 'cloud') {
+	                this._recType = 'cloudRec';
+	            } else {
+	                this._recType = 'rec';
+	            }
+	            this._activeOption(this._recType);
+	        } else {
+	            this.active = false;
+	        }
+	    };
+	    _proto._render = function _render() {
+	        var _this_locale;
+	        this.$container.innerHTML = IconComponents.recDropdown({
+	            title: ((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_REC_DROPDOWN) || '回放'
+	        });
+	    };
+	    _proto._initPicker = function _initPicker() {
+	        var _this = this;
+	        this._picker = new Picker(this.$container, {
+	            getPopupContainer: function() {
+	                return Utils.isMobile ? _this.__options.rootContainer : _this.$container;
+	            },
+	            trigger: Utils.isMobile ? 'click' : 'hover',
+	            isMobile: Utils.isMobile,
+	            wrapClassName: "" + PREFIX_CLASS + "-rec-dropdown-picker",
+	            placement: 'bottom',
+	            offset: [
+	                0,
+	                4
+	            ]
+	        });
+	        this._picker.innerHTML(this._getPanelHTML());
+	        this._activeOption(this._recType);
+	        this._bindPanelEvents();
+	    };
+	    _proto._getPanelHTML = function _getPanelHTML() {
+	        var _this_locale, _this_locale1, _this_locale2;
+	        var cloudRecLabel = ((_this_locale = this.locale) == null ? void 0 : _this_locale.REC_DROPDOWN_CLOUD_REC) || '云存储';
+	        var cloudRecordLabel = ((_this_locale1 = this.locale) == null ? void 0 : _this_locale1.REC_DROPDOWN_CLOUD_RECORD) || '云录制';
+	        var localRecLabel = ((_this_locale2 = this.locale) == null ? void 0 : _this_locale2.REC_DROPDOWN_LOCAL_REC) || '本地回放';
+	        return '<div class="' + PREFIX_CLASS + '-rec-dropdown-panel">\n      <ul class="' + PREFIX_CLASS + '-rec-dropdown-list">\n        <li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="cloudRec">\n          <span>' + cloudRecLabel + '</span>\n        </li>\n        <li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="cloudRecord">\n          <span>' + cloudRecordLabel + '</span>\n        </li>\n        <li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="rec">\n          <span>' + localRecLabel + "</span>\n        </li>\n      </ul>\n    </div>";
+	    };
+	    _proto._bindPanelEvents = function _bindPanelEvents() {
+	        var _this = this;
+	        this._delegation = delegate(this._picker.$body, "." + PREFIX_CLASS + "-rec-dropdown-item", 'click', function(e) {
+	            e.stopPropagation();
+	            var type = e.delegateTarget.getAttribute('data-type');
+	            if (type) {
+	                var _this__options_onChange, _this__options;
+	                _this._recType = type;
+	                _this._activeOption(type);
+	                // 设置自身为激活状态
+	                _this.active = true;
+	                _this.emit(EVENTS.control.recDropdownChange, type);
+	                (_this__options = _this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, type);
+	                _this._picker.open = false;
+	            }
+	        });
+	    };
+	    _proto._activeOption = function _activeOption(type) {
+	        var _this__picker;
+	        if ((_this__picker = this._picker) == null ? void 0 : _this__picker.$body) {
+	            var items = this._picker.$body.querySelectorAll("." + PREFIX_CLASS + "-rec-dropdown-item");
+	            items.forEach(function(item) {
+	                item.classList.remove("" + PREFIX_CLASS + "-active");
+	            });
+	            var target = this._picker.$body.querySelector("." + PREFIX_CLASS + '-rec-dropdown-item[data-type="' + type + '"]');
+	            target == null ? void 0 : target.classList.add("" + PREFIX_CLASS + "-active");
+	        }
+	    };
+	    /**
+	   * 销毁
+	   */ _proto.destroy = function destroy() {
+	        var _this__delegation_destroy, _this__delegation;
+	        (_this__delegation = this._delegation) == null ? void 0 : (_this__delegation_destroy = _this__delegation.destroy) == null ? void 0 : _this__delegation_destroy.call(_this__delegation);
+	        this._delegation = null;
+	        if (this._picker) {
+	            this._picker.destroy();
+	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	            this._picker = null;
+	        }
+	        Control.prototype.destroy.call(this);
+	    };
+	    /**
+	   * 点击 Control 会触发（移动端 click 触发 picker）
+	   */ // eslint-disable-next-line @typescript-eslint/no-unused-vars
+	    _proto._onControlClick = function _onControlClick(_e) {
+	    // picker 自行处理 click/hover，这里不额外处理
+	    };
+	    return RecDropdown;
+	}(Control);
+
+	function _extends$b() {
+	    _extends$b = Object.assign || function(target) {
+	        for(var i = 1; i < arguments.length; i++){
+	            var source = arguments[i];
+	            for(var key in source){
+	                if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                    target[key] = source[key];
+	                }
+	            }
+	        }
+	        return target;
+	    };
+	    return _extends$b.apply(this, arguments);
+	}
+	function _inherits$a(subClass, superClass) {
+	    if (typeof superClass !== "function" && superClass !== null) {
+	        throw new TypeError("Super expression must either be null or a function");
+	    }
+	    subClass.prototype = Object.create(superClass && superClass.prototype, {
+	        constructor: {
+	            value: subClass,
+	            writable: true,
+	            configurable: true
+	        }
+	    });
+	    if (superClass) _set_prototype_of$c(subClass, superClass);
+	}
+	function _set_prototype_of$c(o, p) {
+	    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	        o.__proto__ = p;
+	        return o;
+	    };
+	    return _set_prototype_of$c(o, p);
+	}
+	/**
+	 * 告警消息按钮控件
+	 *
+	 * 点击弹出告警消息列表弹窗（纯触发按钮，无激活状态）
+	 *
+	 * @category Control
+	 */ var AlarmMessage = /*#__PURE__*/ function(Control) {
+	    _inherits$a(AlarmMessage, Control);
+	    function AlarmMessage(options) {
+	        var _this;
+	        _this = Control.call(this, _extends$b({}, options, {
+	            tagName: 'span',
+	            controlType: 'button',
+	            classNameSuffix: 'alarm-message'
+	        })) || this, _this._panelOpen = false;
+	        _this._options = options;
+	        _this._render();
+	        _this.on(EVENTS.alarmMessageChange, function(open) {
+	            _this._panelOpen = open;
+	        });
+	        return _this;
+	    }
+	    var _proto = AlarmMessage.prototype;
+	    _proto._render = function _render() {
+	        var _this_locale;
+	        this.$container.innerHTML = IconComponents.alarmMessage({
+	            title: ((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_ALARM_MESSAGE) || '消息'
+	        });
+	    };
+	    /**
+	   * 销毁
+	   */ _proto.destroy = function destroy() {
+	        if (this._panelOpen) {
+	            this.emit(EVENTS.control.alarmMessageChange, false);
+	        }
+	        Control.prototype.destroy.call(this);
+	    };
+	    /**
+	   * 点击 Control 会触发
+	   */ _proto._onControlClick = function _onControlClick(e) {
+	        var _this__options_onChange, _this__options;
+	        Control.prototype._onControlClick.call(this, e);
+	        this._panelOpen = !this._panelOpen;
+	        this.emit(EVENTS.control.alarmMessageChange, this._panelOpen);
+	        (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, this._panelOpen);
+	    };
+	    return AlarmMessage;
 	}(Control);
 
 	function _defineProperties$1(target, props) {
@@ -10009,6 +10447,9 @@
 	    talk: Talk,
 	    broadcast: Broadcast,
 	    aiChat: AIChat,
+	    live: Live,
+	    recDropdown: RecDropdown,
+	    alarmMessage: AlarmMessage,
 	    zoom: Zoom$1,
 	    definition: Definition,
 	    fullscreen: Fullscreen,
@@ -10542,7 +10983,10 @@
 	// 需要权限的控件
 	var AUTH_KEY = [
 	    'ptz',
-	    'aiChat'
+	    'aiChat',
+	    'live',
+	    'recDropdown',
+	    'alarmMessage'
 	];
 	/**
 	 * 渲染控件
@@ -10622,7 +11066,7 @@
 	}
 	function _renderTheme(theme, data) {
 	    return _async_to_generator$1(function() {
-	        var _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, _filterThemeData_footer_btnList, list, _needTimeLine, hasPtz, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_options_mobileExtendOptions3, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions4, _filterThemeData_header1, _filterThemeData_footer1, _filterThemeData_footer_btnList1;
+	        var _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_urlInfo, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, _filterThemeData_footer_btnList, list, _needTimeLine, hasPtz, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_controls2, _theme_options_mobileExtendOptions3, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions4, _filterThemeData_header1, _filterThemeData_footer1, _filterThemeData_footer_btnList1, _theme_options;
 	        return _ts_generator$1(this, function(_state) {
 	            switch(_state.label){
 	                case 0:
@@ -10763,9 +11207,8 @@
 	                    list = [].concat(((_filterThemeData_header = filterThemeData.header) == null ? void 0 : _filterThemeData_header.btnList) || [], (_filterThemeData_footer_btnList = (_filterThemeData_footer = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer.btnList) != null ? _filterThemeData_footer_btnList : []);
 	                    // FIXME: 这个逻辑实际上是有问题的
 	                    _needTimeLine = list.some(function(item) {
-	                        return REC_GROUP.includes(item.iconId);
-	                    });
-	                    theme.$container.classList.remove("" + PREFIX_CLASS + "-has-time-line");
+	                        return REC_GROUP.includes(item.iconId) || item.iconId === 'recDropdown';
+	                    }) && ((_theme_urlInfo = theme.urlInfo) == null ? void 0 : _theme_urlInfo.type) === 'rec';
 	                    // PC 单独渲染timeLine
 	                    if (!Utils.isMobile && !(theme.options.timeLineOptions === null || theme.options.disabledTimeLine) && _needTimeLine) {
 	                        theme._recFooter = new RecFooter(theme.$container, {
@@ -10775,7 +11218,6 @@
 	                        _renderTimeLine(theme, theme._recFooter.$timeLineContainer, props);
 	                        if (theme._footer) {
 	                            theme._footer.$container.style.cssText += "bottom: 36px;";
-	                            theme.$container.classList.add("" + PREFIX_CLASS + "-has-time-line");
 	                        }
 	                        if (theme.options.dateOptions !== null) {
 	                            _renderDatePicker(theme, theme._recFooter.$datePickerContainer, props);
@@ -10797,6 +11239,23 @@
 	                                    if (REC_GROUP.includes(item.iconId)) _renderRecType(theme, (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight, item.iconId, props);
 	                                });
 	                            }
+	                            // 移动端：在 rec 控件旁渲染 alarmMessage 按钮
+	                            if (theme.options.alarmMessageOptions !== null && !((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2['alarmMessageControl'])) {
+	                                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	                                theme.controls['alarmMessageControl'] = new Controls['alarmMessage'](_extends$1({
+	                                    rootContainer: theme.$container,
+	                                    getPopupContainer: function() {
+	                                        var _theme__mobileExtend;
+	                                        return (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight;
+	                                    },
+	                                    language: theme.options.language || 'zh',
+	                                    locales: theme.i18n.translations,
+	                                    sdkType: theme.options.sdkType,
+	                                    urlInfo: theme.urlInfo
+	                                }, ((_theme_options = theme.options) == null ? void 0 : _theme_options.alarmMessageOptions) || {}, {
+	                                    props: props
+	                                }));
+	                            }
 	                            if ((theme.options.timeLineOptions !== null || !theme.options.disabledTimeLine) && ((_theme_options_mobileExtendOptions3 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions3.controls.includes('timeLine')) && _needTimeLine) {
 	                                _renderTimeLine(theme, theme._mobileExtend.$content, props);
 	                            }
@@ -10807,6 +11266,10 @@
 	                    }
 	                    theme.emit(EVENTS.control.mountedControls);
 	                    if (!theme.playing) theme._disabled(true);
+	                    // 同步 loading 状态（修复：_loadingControl 创建前设置的 loading=true 不生效的问题）
+	                    if (theme._loading && theme._loadingControl) {
+	                        theme._loadingControl.show();
+	                    }
 	                    _controlEventemitter(theme);
 	                    return [
 	                        2
@@ -11613,13 +12076,8 @@
 	            // 这里不要使用 $containerWarp.getBoundingClientRect() 获取宽和高  因为会出现小数导致两次(设置后的值和设置后再次获取的值)的宽高不一致 (因为缩放后取整设置，再次获取还有可能是带小数的然后取整 对比两次不一致，一般在屏幕缩放百分比变化和浏览器页面缩放时出现)，致使一直触发 resize 事件
 	            var width = Math.floor(_this.$container.clientWidth);
 	            var height = Math.floor(_this.$container.clientHeight);
-	            if (width > 280 && width <= 375) {
+	            if (width > 200 && width <= 375) {
 	                _this.$container.classList.add("" + PREFIX_CLASS + "-medium-width");
-	                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-width");
-	                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
-	            } else if (width > 200 && width <= 280) {
-	                _this.$container.classList.add("" + PREFIX_CLASS + "-small-width");
-	                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-width");
 	                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
 	            } else {
 	                if (width <= 200) {
@@ -11627,16 +12085,10 @@
 	                } else {
 	                    _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
 	                }
-	                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-width");
 	                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-width");
 	            }
-	            if (height > 280 && height <= 375) {
+	            if (height > 200 && height <= 375) {
 	                _this.$container.classList.add("" + PREFIX_CLASS + "-medium-height");
-	                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-height");
-	                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
-	            } else if (height > 200 && height <= 280) {
-	                _this.$container.classList.add("" + PREFIX_CLASS + "-small-height");
-	                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-height");
 	                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
 	            } else {
 	                if (height <= 200) {
@@ -11644,7 +12096,6 @@
 	                } else {
 	                    _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
 	                }
-	                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-height");
 	                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-height");
 	            }
 	            //
@@ -12414,7 +12865,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.2-beta.1';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.1-beta.4';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
