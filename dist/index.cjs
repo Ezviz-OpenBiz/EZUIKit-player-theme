@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.0.1-beta.4
-* Copyright (c) 2026-05-18 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.0.2-beta.3
+* Copyright (c) 2026-05-20 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -376,7 +376,7 @@ function _set_prototype_of$w(o, p) {
         if (this._camelCaseName) {
             this.emit("Control." + this._camelCaseName + "Destroy");
         }
-        if (((_this___options = this.__options) == null ? void 0 : _this___options.controlType) !== 'block') this.$container.addEventListener('dblclick', this._onDBlClick);
+        if (((_this___options = this.__options) == null ? void 0 : _this___options.controlType) !== 'block') this.$container.removeEventListener('dblclick', this._onDBlClick);
         this._active = false;
         this.removeAllListeners();
         (_this_$container = this.$container) == null ? void 0 : (_this_$container_remove = _this_$container.remove) == null ? void 0 : _this_$container_remove.call(_this_$container);
@@ -3295,6 +3295,12 @@ var en = {
             },
             {
                 iconId: 'volume',
+                part: 'left',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
+                iconId: 'zoom',
                 part: 'left',
                 defaultActive: 0,
                 isrender: 1
@@ -9150,6 +9156,7 @@ function _renderTheme(theme, data) {
                     _needTimeLine = list.some(function(item) {
                         return REC_GROUP.includes(item.iconId) || item.iconId === 'recDropdown';
                     }) && ((_theme_urlInfo = theme.urlInfo) == null ? void 0 : _theme_urlInfo.type) === 'rec';
+                    theme.$container.classList.remove("" + PREFIX_CLASS + "-has-time-line");
                     // PC 单独渲染timeLine
                     if (!Utils.isMobile && !(theme.options.timeLineOptions === null || theme.options.disabledTimeLine) && _needTimeLine) {
                         theme._recFooter = new RecFooter(theme.$container, {
@@ -9159,6 +9166,7 @@ function _renderTheme(theme, data) {
                         _renderTimeLine(theme, theme._recFooter.$timeLineContainer, props);
                         if (theme._footer) {
                             theme._footer.$container.style.cssText += "bottom: 36px;";
+                            theme.$container.classList.add("" + PREFIX_CLASS + "-has-time-line");
                         }
                         if (theme.options.dateOptions !== null) {
                             _renderDatePicker(theme, theme._recFooter.$datePickerContainer, props);
@@ -10017,8 +10025,13 @@ var THEME_DEFAULT_OPTIONS = {
             // 这里不要使用 $containerWarp.getBoundingClientRect() 获取宽和高  因为会出现小数导致两次(设置后的值和设置后再次获取的值)的宽高不一致 (因为缩放后取整设置，再次获取还有可能是带小数的然后取整 对比两次不一致，一般在屏幕缩放百分比变化和浏览器页面缩放时出现)，致使一直触发 resize 事件
             var width = Math.floor(_this.$container.clientWidth);
             var height = Math.floor(_this.$container.clientHeight);
-            if (width > 200 && width <= 375) {
+            if (width > 280 && width <= 375) {
                 _this.$container.classList.add("" + PREFIX_CLASS + "-medium-width");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-width");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
+            } else if (width > 200 && width <= 280) {
+                _this.$container.classList.add("" + PREFIX_CLASS + "-small-width");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-width");
                 _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
             } else {
                 if (width <= 200) {
@@ -10026,10 +10039,16 @@ var THEME_DEFAULT_OPTIONS = {
                 } else {
                     _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
                 }
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-width");
                 _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-width");
             }
-            if (height > 200 && height <= 375) {
+            if (height > 280 && height <= 375) {
                 _this.$container.classList.add("" + PREFIX_CLASS + "-medium-height");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-height");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
+            } else if (height > 200 && height <= 280) {
+                _this.$container.classList.add("" + PREFIX_CLASS + "-small-height");
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-height");
                 _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
             } else {
                 if (height <= 200) {
@@ -10037,6 +10056,7 @@ var THEME_DEFAULT_OPTIONS = {
                 } else {
                     _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
                 }
+                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-height");
                 _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-height");
             }
             //
@@ -10806,7 +10826,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.1-beta.4';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.2-beta.3';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;
