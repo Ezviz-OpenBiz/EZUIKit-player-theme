@@ -6,14 +6,14 @@ settings:
 
 dependencies:
   '@ezuikit/control-date-picker':
-    specifier: ^2.0.0-beta.4
-    version: 2.0.0-beta.4
+    specifier: 2.1.0-beta.1
+    version: 2.1.0-beta.1
   '@ezuikit/control-ptz':
     specifier: ^1.0.0-beta.5
     version: 1.0.0-beta.5
   '@ezuikit/control-time-line':
-    specifier: ^2.0.0-beta.4
-    version: 2.0.0-beta.4
+    specifier: 2.1.0-beta.2
+    version: 2.1.0-beta.2
   '@ezuikit/control-zoom':
     specifier: ^1.0.0-beta.3
     version: 1.0.0-beta.3
@@ -47,8 +47,8 @@ dependencies:
 
 packages:
 
-  /@ezuikit/control-date-picker@2.0.0-beta.4:
-    resolution: {integrity: sha512-0+uN3s8W78uSZSvWXbmFUY5kmK8I/94uWqBm9cSRlG7OtSvLCrySVXj/fbYXMrDWpXx6okHfxPZRqke6GbpK9Q==}
+  /@ezuikit/control-date-picker@2.1.0-beta.1:
+    resolution: {integrity: sha512-cA0JY0FoPW5i+w1jVM2qnVkKC4q2oZ9ydEmGAw8fyxvfohHS3MJNRjCqcH6scbvTQx9I4U1lahvsdK3fPKJSLQ==}
     dependencies:
       '@ezuikit/utils-i18n': 2.0.0
       '@ezuikit/utils-tools': 2.0.3
@@ -64,8 +64,8 @@ packages:
       deepmerge: 4.3.1
     dev: false
 
-  /@ezuikit/control-time-line@2.0.0-beta.4:
-    resolution: {integrity: sha512-BwNQo8Kq/qQ3xtEnM6ya0JXstixUORNcUrXS+QTxPyU6+PxTs/YlurgE4uLb0kYuH6ny6ErxaumHVn3sqFq8zw==}
+  /@ezuikit/control-time-line@2.1.0-beta.2:
+    resolution: {integrity: sha512-n/HDHrgGJlqH7rh7aUwX+RQbB5QJjeeTGAfthDNqhliKoQIu9ZxMabcWZL02Pad6LN/9xSq3iNpcV0lh2QfNtA==}
     dependencies:
       '@ezuikit/utils-i18n': 2.0.0
       '@ezuikit/utils-tools': 2.0.3

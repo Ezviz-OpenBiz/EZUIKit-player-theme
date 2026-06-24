@@ -5,6 +5,7 @@ import { LoggerCls, LoggerOptions } from '@ezuikit/utils-logger';
 import { BasePtzOptions } from '@ezuikit/control-ptz';
 import Zoom from '@ezuikit/control-zoom';
 import { TimeLineTimeSection } from '@ezuikit/control-time-line';
+import { TimePickerOptions } from '@ezuikit/control-date-picker';
 
 /** 填充模式 */
 declare const THEME_SCALE_MODE_TYPE: {
@@ -209,6 +210,10 @@ declare const EVENTS: {
         readonly dateMonthChange: "Control.dateMonthChange";
         /** 日期销毁 */
         readonly dateDestroy: "Control.datePanelDestroy";
+        /** 时间面板展示隐藏变换 */
+        readonly timePanelOpenChange: "Control.timePanelOpenChange";
+        /** 时间改变 */
+        readonly timeChange: "Control.timeChange";
         /** 时间轴拖动结束 */
         readonly timeLineChange: "Control.timeLineChange";
         /** 时间轴图片列表面板 */
@@ -986,6 +991,8 @@ type ControlType =
  | 'speed'
 /** 日期选择 */
  | 'date'
+/** 时间选择 */
+ | 'time'
 /** 时间轴 */
  | 'timeLine';
 type MergeControlType = 
@@ -1308,12 +1315,15 @@ declare class MobileExtend extends EventEmitter {
 
 interface RecFooterOptions {
     hasDatePicker?: boolean;
+    hasTimePicker?: boolean;
 }
 declare class RecFooter extends EventEmitter {
     $container: HTMLElement;
     $popupContainer: HTMLElement;
     $timeLineContainer: HTMLElement;
+    $rightContainer: HTMLElement;
     $datePickerContainer: HTMLElement;
+    $timePickerContainer: HTMLElement;
     options: RecFooterOptions;
     constructor(container: HTMLElement, options?: RecFooterOptions);
     destroy(): void;
@@ -1529,6 +1539,8 @@ declare class Theme extends EventEmitter {
             readonly dateChange: "Control.dateChange";
             readonly dateMonthChange: "Control.dateMonthChange";
             readonly dateDestroy: "Control.datePanelDestroy";
+            readonly timePanelOpenChange: "Control.timePanelOpenChange";
+            readonly timeChange: "Control.timeChange";
             readonly timeLineChange: "Control.timeLineChange";
             readonly timeLinePanelOpenChange: "Control.timeLinePanelOpenChange";
             readonly timeLineDestroy: "Control.timeLineDestroy";
@@ -1538,7 +1550,12 @@ declare class Theme extends EventEmitter {
             readonly unmountedControls: "Control.unmountedControls";
             readonly posterDestroy: "Control.posterDestroy";
             readonly loadingDestroy: "Control.loadingDestroy";
-            readonly messageDestroy: "Control.messageDestroy";
+            readonly messageDestroy: "Control.messageDestroy"; /**
+             * 容器的高(单位 px)
+             * ```ts
+             * theme.height // number
+             * ```
+             */
             readonly contentDestroy: "Control.contentDestroy";
             readonly contentRerender: "Control.contentRerender";
         };
@@ -1757,34 +1774,34 @@ declare class Theme extends EventEmitter {
             BTN_REC: string;
             BTN_CALENDAR: string;
             /**  resizeObserver 监听销毁 */
+            BTN_TIME: string;
             BTN_MORE: string;
             DEVICE_NAME: string;
             DEVICE_ID: string;
             CAPTURE_SUCCESS: string;
             CAPTURE_FAILED: string;
             START_RECORD_SUCCESS: string;
-            START_RECORD_FAILED: string;
+            START_RECORD_FAILED: string; /** 容器的高 */
             STOP_RECORD_SUCCESS: string;
-            STOP_RECORD_FAILED: string; /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */
+            STOP_RECORD_FAILED: string;
             RECORD_TIPS: string;
             RECORDS: string;
             OPEN_SOUND: string;
-            CLOSE_SOUND: string; /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */
+            CLOSE_SOUND: string;
             SOUND_OPENED: string;
             ZOOM: string;
             START_ZOOM: string;
-            /** 是否播放中 @private */
             CLOSE_ZOOM: string;
             ZOOM_ADD: string;
             ZOOM_SUB: string;
-            ZOOM_ADD_MAX: string; /** 音量 */
+            ZOOM_ADD_MAX: string;
             ZOOM_SUB_MIN: string;
-            ZOOM_LIMIT_MAX: string; /** 电子放大倍数 @private */
-            ZOOM_LIMIT_MIN: string; /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */
+            ZOOM_LIMIT_MAX: string;
+            ZOOM_LIMIT_MIN: string;
             ZOOM_NOT_ENABLED: string;
             '3D_ZOOM': string;
             '3D_ZOOM_DISABLE': string;
-            '3D_ZOOM_FAILED': string; /** 对讲中 @private */
+            '3D_ZOOM_FAILED': string;
             START_3D_ZOOM: string;
             CLOSE_3D_ZOOM: string;
             DEVICE_NOT_SUPPORT_3D_ZOOM: string;
@@ -1792,24 +1809,25 @@ declare class Theme extends EventEmitter {
             '3D_ZOOM_NOT_ACTIVED': string;
             '3D_ZOOM_CLOSED': string;
             CHANGE_ZOOM_TYPE: string;
-            /** 窗口尺寸变化时，设置窗口超出隐藏，防止出现滚动条 */
             FULLSCREEN: string;
             FULLSCREEN_EXIT: string;
             GET_WEB_FULLSCREEN_STATUS: string;
-            WEB_FULLSCREEN: string;
             /**
              * 录像回放的月份列表 @private
              */
+            WEB_FULLSCREEN: string;
             WEB_FULLSCREEN_EXIT: string;
             DESTROY: string;
             GET_CAPACITY: string;
             GET_PTZ_STATUS: string;
             GET_PTZ_STATUS_FAILED: string;
-            MOBILE_HIDE_PTZ: string;
             /**
              * 录像回放的月份列表 @private
              */
-            OPTION_PTZ_FAILED: string;
+            MOBILE_HIDE_PTZ: string;
+            OPTION_PTZ_FAILED: string; /**
+             * 录像回放的月份列表 @private
+             */
             MOBILE_PTZ_TIPS: string;
             PTZ_FAST: string;
             PTZ_MID: string;
@@ -2056,6 +2074,7 @@ declare class Theme extends EventEmitter {
             BTN_CLOUDRECORD: string;
             BTN_REC: string;
             BTN_CALENDAR: string;
+            BTN_TIME: string;
             BTN_MORE: string;
             DEVICE_NAME: string;
             DEVICE_ID: string;
@@ -2106,9 +2125,6 @@ declare class Theme extends EventEmitter {
             PTZ_MID: string;
             PTZ_SLOW: string;
             PTZ_SPEED: string;
-            /**
-             * 倍速
-             */
             DEVICE_ZOOM: string;
             DEVICE_FOCUS: string;
             NOT_SUPPORT_DEVICE_ZOOM: string;
@@ -2118,10 +2134,7 @@ declare class Theme extends EventEmitter {
             CHANGE_FEC_TYPE: string;
             DEVICE_NOT_SUPPORT: string;
             TYPE_NOT_SUPPORT: string;
-            FEC_SUPPORT_VERSION: string; /**
-             * 录制中， 仅 ezopen 支持
-             * @since 0.0.1
-             */
+            FEC_SUPPORT_VERSION: string;
             NO_CANVAS_ID: string;
             SET_FEC_PARAMS: string;
             GET_FEC_PARAMS: string;
@@ -2615,6 +2628,13 @@ interface DeviceOptions extends Omit<ControlOptions, 'tagName'> {
 }
 
 /**
+ * 时间选择器控件配置项
+ */
+interface TimePickerControlOptions extends Omit<ControlOptions, 'tagName'>, Partial<Omit<TimePickerOptions, 'locale' | 'locales'>> {
+    onPanelChange?: (open: boolean, time: string) => void;
+}
+
+/**
  * 主题配置项
  *
  * Theme configuration options
@@ -2712,6 +2732,8 @@ interface ThemeOptions {
     globalFullscreenOptions?: OmitControlOptions<GlobalFullscreenOptions>;
     /** 日历控件配置 @since 0.0.1 */
     dateOptions?: any;
+    /** 时间控件配置 @since 3.0.3 */
+    timeOptions?: OmitControlOptions<TimePickerControlOptions>;
     /** 时间轴控件配置 @since 0.0.1 */
     timeLineOptions?: any;
     /** 初始化开始回调, 在内部可以添加事件(Control.beforeMountControls, Control.mountedControls)监听 @since 0.0.1 */

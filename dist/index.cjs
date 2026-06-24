@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.0.2-beta.3
-* Copyright (c) 2026-05-20 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.0-beta.1
+* Copyright (c) 2026-06-24 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -21,7 +21,6 @@ var controlTimeLine = require('@ezuikit/control-time-line');
 /**
  * 播放器的类名前缀
  */ var PREFIX_CLASS = 'ezplayer';
-/** */ var DATE_PICKER_ICON_WIDTH = 36;
 /** 填充模式 */ var THEME_SCALE_MODE_TYPE = {
     /** 画面完全填充canvas区域,画面会被拉伸 */ full: 0,
     /** 画面做等比缩放后,高或宽对齐canvas区域,画面不被拉伸,但有黑边 */ auto: 1,
@@ -210,6 +209,8 @@ var EVENTS = {
         /** 日期改变 */ dateChange: 'Control.dateChange',
         /** 日期改变 */ dateMonthChange: 'Control.dateMonthChange',
         /** 日期销毁 */ dateDestroy: 'Control.datePanelDestroy',
+        /** 时间面板展示隐藏变换 */ timePanelOpenChange: 'Control.timePanelOpenChange',
+        /** 时间改变 */ timeChange: 'Control.timeChange',
         /** 时间轴拖动结束 */ timeLineChange: 'Control.timeLineChange',
         /** 时间轴图片列表面板 */ timeLinePanelOpenChange: 'Control.timeLinePanelOpenChange',
         /** 时间轴控件销毁 */ timeLineDestroy: 'Control.timeLineDestroy',
@@ -252,7 +253,7 @@ function _create_class$9(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$9(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _inherits$w(subClass, superClass) {
+function _inherits$x(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -263,14 +264,14 @@ function _inherits$w(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$w(subClass, superClass);
+    if (superClass) _set_prototype_of$x(subClass, superClass);
 }
-function _set_prototype_of$w(o, p) {
-    _set_prototype_of$w = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$x(o, p) {
+    _set_prototype_of$x = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$w(o, p);
+    return _set_prototype_of$x(o, p);
 }
 /**
  * 控件基类
@@ -284,7 +285,7 @@ function _set_prototype_of$w(o, p) {
  * const myControl = new MyControl({})
  * ```
  */ var Control = /*#__PURE__*/ function(EventEmitter) {
-    _inherits$w(Control, EventEmitter);
+    _inherits$x(Control, EventEmitter);
     function Control(options) {
         var _this;
         var _this___options;
@@ -459,8 +460,8 @@ function _set_prototype_of$w(o, p) {
     return Control;
 }(EventEmitter);
 
-function _extends$v() {
-    _extends$v = Object.assign || function(target) {
+function _extends$w() {
+    _extends$w = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -471,9 +472,9 @@ function _extends$v() {
         }
         return target;
     };
-    return _extends$v.apply(this, arguments);
+    return _extends$w.apply(this, arguments);
 }
-function _inherits$v(subClass, superClass) {
+function _inherits$w(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -484,25 +485,25 @@ function _inherits$v(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$v(subClass, superClass);
+    if (superClass) _set_prototype_of$w(subClass, superClass);
 }
-function _set_prototype_of$v(o, p) {
-    _set_prototype_of$v = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$w(o, p) {
+    _set_prototype_of$w = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$v(o, p);
+    return _set_prototype_of$w(o, p);
 }
 var LOADING_DEFAULT_OPTIONS = {};
 /**
  * 加载动画控件
  * @category Control
  */ var Loading = /*#__PURE__*/ function(Control) {
-    _inherits$v(Loading, Control);
+    _inherits$w(Loading, Control);
     function Loading(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$v({}, options, {
+        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$w({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'loading'
@@ -540,8 +541,8 @@ var LOADING_DEFAULT_OPTIONS = {};
     return Loading;
 }(Control);
 
-function _extends$u() {
-    _extends$u = Object.assign || function(target) {
+function _extends$v() {
+    _extends$v = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -552,9 +553,9 @@ function _extends$u() {
         }
         return target;
     };
-    return _extends$u.apply(this, arguments);
+    return _extends$v.apply(this, arguments);
 }
-function _inherits$u(subClass, superClass) {
+function _inherits$v(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -565,14 +566,14 @@ function _inherits$u(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$u(subClass, superClass);
+    if (superClass) _set_prototype_of$v(subClass, superClass);
 }
-function _set_prototype_of$u(o, p) {
-    _set_prototype_of$u = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$v(o, p) {
+    _set_prototype_of$v = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$u(o, p);
+    return _set_prototype_of$v(o, p);
 }
 // 不放在服务器上 是因为有可能http加载失败
 // prettier-ignore
@@ -584,11 +585,11 @@ var POSTER_OPTIONS = {
  * 封面控件
  * @category Control
  */ var Poster = /*#__PURE__*/ function(Control) {
-    _inherits$u(Poster, Control);
+    _inherits$v(Poster, Control);
     function Poster(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$u({}, options, {
+        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$v({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'poster'
@@ -697,7 +698,8 @@ var Icons = {
     reduce: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="reduce">\n   	<path  d="M3.4375 9.25781L16.5625 9.25781C16.6667 9.25781 16.7188 9.3099 16.7188 9.41406L16.7188 10.5859C16.7188 10.6901 16.6667 10.7422 16.5625 10.7422L3.4375 10.7422C3.33333 10.7422 3.28125 10.6901 3.28125 10.5859L3.28125 9.41406C3.28125 9.3099 3.33333 9.25781 3.4375 9.25781Z" fill-rule="evenodd" />\n  </svg>',
     /** 直播 */ live: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="live">\n    <rect width="18" height="13" x="3" y="7" rx="1.6" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M8.26636 4.8L10.466 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M15.996 4.8L13.796 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M9.8 17L15.4 13.354L9.8 10L9.8 17Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
     /** 回放 */ recDropdown: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="rec-dropdown">\n    <path d="M9.168 2.556C9.168 2.556 12.51 4.445 12 4.445C7.306 4.445 3.5 8.251 3.5 12.945C3.5 17.64 7.306 21.445 12 21.445C16.695 21.445 20.5 17.64 20.5 12.945C20.5 10.622 19.568 8.517 18.058 6.982" stroke-linecap="round" stroke-width="1.5"/>\n    <path d="M11.61 9.829L11.61 13.731L16.064 13.731" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
-    /** 消息/告警 */ alarmMessage: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="alarm-message">\n    <path d="M9.708 18.344L9.708 18.709C9.708 19.974 10.734 21 12 21C13.266 21 14.292 19.974 14.292 18.709L14.292 18.343" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M13.833 5.751L13.833 4.833C13.833 3.821 13.013 3 12 3C10.987 3 10.167 3.821 10.167 4.833L10.167 5.751" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M6.563 10.189C6.563 7.686 8.592 5.657 11.094 5.657L12.907 5.657C15.41 5.657 17.438 7.686 17.438 10.189L17.438 12.986C17.438 13.516 17.649 14.025 18.024 14.4L18.665 15.04C19.04 15.416 19.251 15.925 19.251 16.455C19.251 17.499 18.405 18.345 17.361 18.345L6.64 18.345C5.596 18.345 4.75 17.499 4.75 16.455C4.75 15.925 4.961 15.416 5.336 15.04L5.977 14.4C6.352 14.025 6.563 13.516 6.563 12.986L6.563 10.189Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>'
+    /** 消息/告警 */ alarmMessage: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="alarm-message">\n    <path d="M9.708 18.344L9.708 18.709C9.708 19.974 10.734 21 12 21C13.266 21 14.292 19.974 14.292 18.709L14.292 18.343" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M13.833 5.751L13.833 4.833C13.833 3.821 13.013 3 12 3C10.987 3 10.167 3.821 10.167 4.833L10.167 5.751" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M6.563 10.189C6.563 7.686 8.592 5.657 11.094 5.657L12.907 5.657C15.41 5.657 17.438 7.686 17.438 10.189L17.438 12.986C17.438 13.516 17.649 14.025 18.024 14.4L18.665 15.04C19.04 15.416 19.251 15.925 19.251 16.455C19.251 17.499 18.405 18.345 17.361 18.345L6.64 18.345C5.596 18.345 4.75 17.499 4.75 16.455C4.75 15.925 4.961 15.416 5.336 15.04L5.977 14.4C6.352 14.025 6.563 13.516 6.563 12.986L6.563 10.189Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
+    time: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="time">\n   	<path d="M10 1.66504C14.6026 1.66521 18.333 5.39635 18.333 9.99902C18.3328 14.6015 14.6025 18.3319 10 18.332C5.39733 18.332 1.66619 14.6017 1.66602 9.99902C1.66602 5.39624 5.39722 1.66504 10 1.66504ZM10 2.91504C6.08758 2.91504 2.91602 6.0866 2.91602 9.99902C2.91619 13.9113 6.08769 17.082 10 17.082C13.9122 17.0819 17.0828 13.9112 17.083 9.99902C17.083 6.08671 13.9123 2.91521 10 2.91504ZM10 6.875C10.3451 6.87508 10.625 7.1549 10.625 7.5V9.59863L10.71 9.63672C12.71 10.5481 13.253 10.796 13.6406 10.9727L13.7217 11.0098L13.8008 11.0459C13.8799 11.082 13.9609 11.1179 14.0557 11.1611C14.3697 11.3043 14.5083 11.6752 14.3652 11.9893C14.2221 12.3034 13.8512 12.442 13.5371 12.2988C13.4108 12.2412 13.3093 12.1949 13.2031 12.1465L13.1221 12.1094C12.7068 11.9201 12.1127 11.6495 9.74023 10.5684C9.51771 10.4667 9.375 10.2447 9.375 10V7.5C9.37504 7.15485 9.65485 6.875 10 6.875Z"/>\n  </svg>'
 };
 
 /**
@@ -867,11 +869,15 @@ var IconComponents = {
     /** 消息 */ alarmMessage: function(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.alarmMessage, 'alarm-message', attr);
+    },
+    time: function(attr) {
+        if (attr === void 0) attr = {};
+        return createIcon(Icons.time, 'time', attr);
     }
 };
 
-function _extends$t() {
-    _extends$t = Object.assign || function(target) {
+function _extends$u() {
+    _extends$u = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -882,9 +888,9 @@ function _extends$t() {
         }
         return target;
     };
-    return _extends$t.apply(this, arguments);
+    return _extends$u.apply(this, arguments);
 }
-function _inherits$t(subClass, superClass) {
+function _inherits$u(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -895,25 +901,25 @@ function _inherits$t(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$t(subClass, superClass);
+    if (superClass) _set_prototype_of$u(subClass, superClass);
 }
-function _set_prototype_of$t(o, p) {
-    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$u(o, p) {
+    _set_prototype_of$u = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$t(o, p);
+    return _set_prototype_of$u(o, p);
 }
 var MESSAGE_DEFAULT_OPTIONS = {};
 /**
  * 消息控件
  * @category Control
  */ var Message = /*#__PURE__*/ function(Control) {
-    _inherits$t(Message, Control);
+    _inherits$u(Message, Control);
     function Message(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$t({}, options, {
+        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$u({}, options, {
             tagName: 'div',
             controlType: 'block'
         }))) || this, _this._$toast = null;
@@ -1066,8 +1072,8 @@ function _create_class$8(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$8(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$s() {
-    _extends$s = Object.assign || function(target) {
+function _extends$t() {
+    _extends$t = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -1078,9 +1084,9 @@ function _extends$s() {
         }
         return target;
     };
-    return _extends$s.apply(this, arguments);
+    return _extends$t.apply(this, arguments);
 }
-function _inherits$s(subClass, superClass) {
+function _inherits$t(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -1091,23 +1097,23 @@ function _inherits$s(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$s(subClass, superClass);
+    if (superClass) _set_prototype_of$t(subClass, superClass);
 }
-function _set_prototype_of$s(o, p) {
-    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$t(o, p) {
+    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$s(o, p);
+    return _set_prototype_of$t(o, p);
 }
 /**
  * 播放/暂停控件
  * @category Control
  */ var Play = /*#__PURE__*/ function(Control) {
-    _inherits$s(Play, Control);
+    _inherits$t(Play, Control);
     function Play(options) {
         var _this;
-        _this = Control.call(this, _extends$s({}, options, {
+        _this = Control.call(this, _extends$t({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'play'
@@ -1723,8 +1729,8 @@ function _create_class$6(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$6(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$r() {
-    _extends$r = Object.assign || function(target) {
+function _extends$s() {
+    _extends$s = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -1735,9 +1741,9 @@ function _extends$r() {
         }
         return target;
     };
-    return _extends$r.apply(this, arguments);
+    return _extends$s.apply(this, arguments);
 }
-function _inherits$r(subClass, superClass) {
+function _inherits$s(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -1748,14 +1754,14 @@ function _inherits$r(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$r(subClass, superClass);
+    if (superClass) _set_prototype_of$s(subClass, superClass);
 }
-function _set_prototype_of$r(o, p) {
-    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$s(o, p) {
+    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$r(o, p);
+    return _set_prototype_of$s(o, p);
 }
 var VOLUME_DEFAULT_OPTIONS = {
     volume: 0.8,
@@ -1769,12 +1775,12 @@ var VOLUME_DEFAULT_OPTIONS = {
  * 音量调节控件
  * @category Control
  */ var Volume = /*#__PURE__*/ function(Control) {
-    _inherits$r(Volume, Control);
+    _inherits$s(Volume, Control);
     function Volume(options) {
         if (options === void 0) options = {};
         var _this;
         var _this__options_props, _this__options_props1, _this__options_props2, _this__options_props3;
-        _this = Control.call(this, _extends$r({}, options, {
+        _this = Control.call(this, _extends$s({}, options, {
             tagName: 'span',
             classNameSuffix: 'volume',
             controlType: 'button'
@@ -2434,8 +2440,8 @@ var __fullscreenProvider__ = Provider.getInstance();
     return Fullscreen;
 }();
 
-function _extends$q() {
-    _extends$q = Object.assign || function(target) {
+function _extends$r() {
+    _extends$r = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -2446,9 +2452,9 @@ function _extends$q() {
         }
         return target;
     };
-    return _extends$q.apply(this, arguments);
+    return _extends$r.apply(this, arguments);
 }
-function _inherits$q(subClass, superClass) {
+function _inherits$r(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -2459,24 +2465,24 @@ function _inherits$q(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$q(subClass, superClass);
+    if (superClass) _set_prototype_of$r(subClass, superClass);
 }
-function _set_prototype_of$q(o, p) {
-    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$r(o, p) {
+    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$q(o, p);
+    return _set_prototype_of$r(o, p);
 }
 /**
  * 全屏控件
  * @category Control
  */ var Fullscreen = /*#__PURE__*/ function(Control) {
-    _inherits$q(Fullscreen, Control);
+    _inherits$r(Fullscreen, Control);
     function Fullscreen(options) {
         var _this;
         var _options_props, _this_options;
-        _this = Control.call(this, _extends$q({
+        _this = Control.call(this, _extends$r({
             tagName: 'span',
             classNameSuffix: 'fullscreen',
             controlType: 'button'
@@ -2541,8 +2547,8 @@ function _set_prototype_of$q(o, p) {
     return Fullscreen;
 }(Control);
 
-function _extends$p() {
-    _extends$p = Object.assign || function(target) {
+function _extends$q() {
+    _extends$q = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -2553,9 +2559,9 @@ function _extends$p() {
         }
         return target;
     };
-    return _extends$p.apply(this, arguments);
+    return _extends$q.apply(this, arguments);
 }
-function _inherits$p(subClass, superClass) {
+function _inherits$q(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -2566,24 +2572,24 @@ function _inherits$p(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$p(subClass, superClass);
+    if (superClass) _set_prototype_of$q(subClass, superClass);
 }
-function _set_prototype_of$p(o, p) {
-    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$q(o, p) {
+    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$p(o, p);
+    return _set_prototype_of$q(o, p);
 }
 /**
  * 回放类型切换（本地回放(sdk 卡)， 云存储回放， 云录制回放）控件
  * @category Control
  */ var Rec = /*#__PURE__*/ function(Control) {
-    _inherits$p(Rec, Control);
+    _inherits$q(Rec, Control);
     function Rec(options) {
         var _this;
         var _options_props;
-        _this = Control.call(this, _extends$p({}, options, {
+        _this = Control.call(this, _extends$q({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'rec'
@@ -2879,6 +2885,7 @@ var zh = {
     BTN_CLOUDRECORD: '云录制',
     BTN_REC: '本地存储',
     BTN_CALENDAR: '日历',
+    BTN_TIME: '时间',
     BTN_MORE: '更多',
     DEVICE_NAME: '设备名称',
     DEVICE_ID: '设备序列号',
@@ -3159,6 +3166,7 @@ var en = {
     BTN_CLOUDRECORD: 'Cloud recording',
     BTN_REC: 'Local storage',
     BTN_CALENDAR: 'Calendar',
+    BTN_TIME: 'Time',
     BTN_MORE: 'More',
     DEVICE_NAME: 'Device name',
     DEVICE_ID: 'Device serial number',
@@ -3856,7 +3864,7 @@ var en = {
     voice: voice
 };
 
-function _inherits$o(subClass, superClass) {
+function _inherits$p(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -3867,20 +3875,20 @@ function _inherits$o(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$o(subClass, superClass);
+    if (superClass) _set_prototype_of$p(subClass, superClass);
 }
-function _set_prototype_of$o(o, p) {
-    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$p(o, p) {
+    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$o(o, p);
+    return _set_prototype_of$p(o, p);
 }
 /**
  * 截图控件
  * @category Content
  */ var Content = /*#__PURE__*/ function(EventEmitter) {
-    _inherits$o(Content, EventEmitter);
+    _inherits$p(Content, EventEmitter);
     function Content(options) {
         var _this;
         _this = EventEmitter.call(this) || this, _this._scaleMode = 0, _this._cleanUpResizeObserver = null, _this._originWidth = 0, _this._originHeight = 0, _this._width = 0, _this._height = 0;
@@ -3995,8 +4003,8 @@ function _set_prototype_of$o(o, p) {
     return Content;
 }(EventEmitter);
 
-function _extends$o() {
-    _extends$o = Object.assign || function(target) {
+function _extends$p() {
+    _extends$p = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -4007,9 +4015,9 @@ function _extends$o() {
         }
         return target;
     };
-    return _extends$o.apply(this, arguments);
+    return _extends$p.apply(this, arguments);
 }
-function _inherits$n(subClass, superClass) {
+function _inherits$o(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -4020,23 +4028,23 @@ function _inherits$n(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$n(subClass, superClass);
+    if (superClass) _set_prototype_of$o(subClass, superClass);
 }
-function _set_prototype_of$n(o, p) {
-    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$o(o, p) {
+    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$n(o, p);
+    return _set_prototype_of$o(o, p);
 }
 /**
  * 更多控件
  * @category Control
  */ var More = /*#__PURE__*/ function(Control) {
-    _inherits$n(More, Control);
+    _inherits$o(More, Control);
     function More(options) {
         var _this;
-        _this = Control.call(this, _extends$o({}, options, {
+        _this = Control.call(this, _extends$p({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'more'
@@ -4356,7 +4364,7 @@ function debounce(func, wait) {
  *
  * @param theme - Theme
  */ function _controlEventemitter(theme) {
-    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16, _theme_controls17, _theme_controls18, _theme_controls19, _theme_controls20, _theme_controls21;
+    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16, _theme_controls17, _theme_controls18, _theme_controls19, _theme_controls20, _theme_controls21, _theme_controls22;
     // Controls
     if (theme._recFooter) {
         theme._recFooter.on(EVENTS.theme.recFooterDestroy, function() {
@@ -4611,10 +4619,14 @@ function debounce(func, wait) {
             theme.emit(EVENTS.control.timeLineChange, date);
         });
         theme.controls.timeLineControl.on(EVENTS.control.timeLinePanelOpenChange, function(open) {
-            var _theme_controls_dateControl, _theme_controls;
+            var _theme_controls_dateControl, _theme_controls, _theme_controls_timeControl, _theme_controls1;
             if ((_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_dateControl = _theme_controls.dateControl) == null ? void 0 : _theme_controls_dateControl.datePicker) {
-                var _theme_controls_dateControl_datePicker, _theme_controls_dateControl1, _theme_controls1;
-                (_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_dateControl1 = _theme_controls1.dateControl) == null ? void 0 : (_theme_controls_dateControl_datePicker = _theme_controls_dateControl1.datePicker) == null ? void 0 : _theme_controls_dateControl_datePicker.hide();
+                var _theme_controls_dateControl_datePicker, _theme_controls_dateControl1, _theme_controls2;
+                (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_dateControl1 = _theme_controls2.dateControl) == null ? void 0 : (_theme_controls_dateControl_datePicker = _theme_controls_dateControl1.datePicker) == null ? void 0 : _theme_controls_dateControl_datePicker.hide();
+            }
+            if ((_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_timeControl = _theme_controls1.timeControl) == null ? void 0 : _theme_controls_timeControl.timePicker) {
+                var _theme_controls_timeControl_timePicker, _theme_controls_timeControl1, _theme_controls3;
+                (_theme_controls3 = theme.controls) == null ? void 0 : (_theme_controls_timeControl1 = _theme_controls3.timeControl) == null ? void 0 : (_theme_controls_timeControl_timePicker = _theme_controls_timeControl1.timePicker) == null ? void 0 : _theme_controls_timeControl_timePicker.hide();
             }
             theme.emit(EVENTS.control.timeLinePanelOpenChange, open);
         });
@@ -4632,6 +4644,15 @@ function debounce(func, wait) {
         });
         theme.controls.dateControl.on(EVENTS.control.dateDestroy, function() {
             theme.emit(EVENTS.control.recDestroy);
+        });
+    }
+    // 时间控件
+    if ((_theme_controls22 = theme.controls) == null ? void 0 : _theme_controls22.timeControl) {
+        theme.controls.timeControl.on(EVENTS.control.timePanelOpenChange, function(open, time) {
+            theme.emit(EVENTS.control.timePanelOpenChange, open, time);
+        });
+        theme.controls.timeControl.on(EVENTS.control.timeChange, function(time) {
+            theme.emit(EVENTS.control.timeChange, time);
         });
     }
 }
@@ -4718,8 +4739,8 @@ function _create_class$5(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$5(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$n() {
-    _extends$n = Object.assign || function(target) {
+function _extends$o() {
+    _extends$o = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -4730,9 +4751,9 @@ function _extends$n() {
         }
         return target;
     };
-    return _extends$n.apply(this, arguments);
+    return _extends$o.apply(this, arguments);
 }
-function _inherits$m(subClass, superClass) {
+function _inherits$n(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -4743,14 +4764,14 @@ function _inherits$m(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$m(subClass, superClass);
+    if (superClass) _set_prototype_of$n(subClass, superClass);
 }
-function _set_prototype_of$m(o, p) {
-    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$n(o, p) {
+    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$m(o, p);
+    return _set_prototype_of$n(o, p);
 }
 var ZOOM_DEFAULT_OPTIONS = {
     open: false,
@@ -4760,10 +4781,10 @@ var ZOOM_DEFAULT_OPTIONS = {
  * 电子放大控件
  * @category Control
  */ var Zoom = /*#__PURE__*/ function(Control) {
-    _inherits$m(Zoom, Control);
+    _inherits$n(Zoom, Control);
     function Zoom(options) {
         var _this;
-        _this = Control.call(this, _extends$n({}, options, {
+        _this = Control.call(this, _extends$o({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'zoom'
@@ -4891,8 +4912,8 @@ var ZOOM_DEFAULT_OPTIONS = {
     return Zoom;
 }(Control);
 
-function _extends$m() {
-    _extends$m = Object.assign || function(target) {
+function _extends$n() {
+    _extends$n = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -4903,10 +4924,10 @@ function _extends$m() {
         }
         return target;
     };
-    return _extends$m.apply(this, arguments);
+    return _extends$n.apply(this, arguments);
 }
 function __zoom(theme, container, options) {
-    theme.zoomUtil = new Zoom$1(container, _extends$m({}, options || {}, {
+    theme.zoomUtil = new Zoom$1(container, _extends$n({}, options || {}, {
         min: 1,
         onChange: function(zoom, reset) {
             if (zoom !== theme._zoom) {
@@ -5131,8 +5152,8 @@ function _async_to_generator$5(fn) {
         });
     };
 }
-function _extends$l() {
-    _extends$l = Object.assign || function(target) {
+function _extends$m() {
+    _extends$m = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -5143,7 +5164,7 @@ function _extends$l() {
         }
         return target;
     };
-    return _extends$l.apply(this, arguments);
+    return _extends$m.apply(this, arguments);
 }
 function _ts_generator$5(thisArg, body) {
     var f, y, t, _ = {
@@ -5271,7 +5292,7 @@ function _ts_generator$5(thisArg, body) {
         }
         if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
-            recControls.push(recControls[0] ? _extends$l({}, item, {
+            recControls.push(recControls[0] ? _extends$m({}, item, {
                 part: recControls[0].part
             }) : item);
             return false;
@@ -5294,7 +5315,7 @@ function _ts_generator$5(thisArg, body) {
         }
         if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
-            recControls.push(recControls[0] ? _extends$l({}, item, {
+            recControls.push(recControls[0] ? _extends$m({}, item, {
                 part: recControls[0].part
             }) : item);
             return false;
@@ -5545,6 +5566,51 @@ function rgbOrHexToRgbaWithOpacity(color, opacity) {
     return Component;
 }();
 
+function _extends$l() {
+    _extends$l = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source){
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    };
+    return _extends$l.apply(this, arguments);
+}
+function _inherits$m(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$m(subClass, superClass);
+}
+function _set_prototype_of$m(o, p) {
+    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$m(o, p);
+}
+var Footer = /*#__PURE__*/ function(Component) {
+    _inherits$m(Footer, Component);
+    function Footer(options) {
+        if (options === void 0) options = {};
+        return Component.call(this, _extends$l({}, options, {
+            cType: 'footer'
+        })) || this;
+    }
+    return Footer;
+}(Component);
+
 function _extends$k() {
     _extends$k = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
@@ -5579,56 +5645,11 @@ function _set_prototype_of$l(o, p) {
     };
     return _set_prototype_of$l(o, p);
 }
-var Footer = /*#__PURE__*/ function(Component) {
-    _inherits$l(Footer, Component);
-    function Footer(options) {
-        if (options === void 0) options = {};
-        return Component.call(this, _extends$k({}, options, {
-            cType: 'footer'
-        })) || this;
-    }
-    return Footer;
-}(Component);
-
-function _extends$j() {
-    _extends$j = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
-        }
-        return target;
-    };
-    return _extends$j.apply(this, arguments);
-}
-function _inherits$k(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-        constructor: {
-            value: subClass,
-            writable: true,
-            configurable: true
-        }
-    });
-    if (superClass) _set_prototype_of$k(subClass, superClass);
-}
-function _set_prototype_of$k(o, p) {
-    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
-        o.__proto__ = p;
-        return o;
-    };
-    return _set_prototype_of$k(o, p);
-}
 var Header = /*#__PURE__*/ function(Component) {
-    _inherits$k(Header, Component);
+    _inherits$l(Header, Component);
     function Header(options) {
         if (options === void 0) options = {};
-        return Component.call(this, _extends$j({}, options, {
+        return Component.call(this, _extends$k({}, options, {
             cType: 'header'
         })) || this;
     }
@@ -5794,6 +5815,78 @@ function interactiveHF($container, second, callback) {
     };
 }
 
+function _extends$j() {
+    _extends$j = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source){
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    };
+    return _extends$j.apply(this, arguments);
+}
+function _inherits$k(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$k(subClass, superClass);
+}
+function _set_prototype_of$k(o, p) {
+    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$k(o, p);
+}
+/**
+ * 全局全屏
+ * 主题和播放器不提供全局全屏的api， 如果开发者想要可以参考这个组件自己实现
+ * @category Control
+ */ var GlobalFullscreen = /*#__PURE__*/ function(Fullscreen) {
+    _inherits$k(GlobalFullscreen, Fullscreen);
+    function GlobalFullscreen(options) {
+        return Fullscreen.call(this, _extends$j({}, options, {
+            controlType: 'button',
+            classNameSuffix: 'global-fullscreen'
+        })) || this;
+    }
+    var _proto = GlobalFullscreen.prototype;
+    _proto._render = function _render() {
+        var _this_locale, _this_locale1;
+        this.$container.innerHTML = IconComponents.exitGlobalFullscreen({
+            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_EXIT_GLOBAL_FULLSCREEN
+        }) + IconComponents.globalFullscreen({
+            title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_GLOBAL_FULLSCREEN
+        });
+    };
+    /**
+   * 点击 Control 会触发
+   */ _proto._onControlClick = function _onControlClick() {
+        // 网页全屏的情况下 还可以执行全局全屏
+        if (this.isCurrentFullscreen && this._$rootContainer.classList.contains("" + PREFIX_CLASS + "-global-fullscreen")) {
+            var _this__fullscreenUtil;
+            this._$rootContainer.classList.remove("" + PREFIX_CLASS + "-global-fullscreen");
+            (_this__fullscreenUtil = this._fullscreenUtil) == null ? void 0 : _this__fullscreenUtil.exitFullscreen();
+        } else {
+            var _this__fullscreenUtil1;
+            this._$rootContainer.classList.add("" + PREFIX_CLASS + "-global-fullscreen");
+            (_this__fullscreenUtil1 = this._fullscreenUtil) == null ? void 0 : _this__fullscreenUtil1.fullscreen();
+        }
+    };
+    return GlobalFullscreen;
+}(Fullscreen);
+
 function _extends$i() {
     _extends$i = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
@@ -5829,85 +5922,13 @@ function _set_prototype_of$j(o, p) {
     return _set_prototype_of$j(o, p);
 }
 /**
- * 全局全屏
- * 主题和播放器不提供全局全屏的api， 如果开发者想要可以参考这个组件自己实现
- * @category Control
- */ var GlobalFullscreen = /*#__PURE__*/ function(Fullscreen) {
-    _inherits$j(GlobalFullscreen, Fullscreen);
-    function GlobalFullscreen(options) {
-        return Fullscreen.call(this, _extends$i({}, options, {
-            controlType: 'button',
-            classNameSuffix: 'global-fullscreen'
-        })) || this;
-    }
-    var _proto = GlobalFullscreen.prototype;
-    _proto._render = function _render() {
-        var _this_locale, _this_locale1;
-        this.$container.innerHTML = IconComponents.exitGlobalFullscreen({
-            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_EXIT_GLOBAL_FULLSCREEN
-        }) + IconComponents.globalFullscreen({
-            title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_GLOBAL_FULLSCREEN
-        });
-    };
-    /**
-   * 点击 Control 会触发
-   */ _proto._onControlClick = function _onControlClick() {
-        // 网页全屏的情况下 还可以执行全局全屏
-        if (this.isCurrentFullscreen && this._$rootContainer.classList.contains("" + PREFIX_CLASS + "-global-fullscreen")) {
-            var _this__fullscreenUtil;
-            this._$rootContainer.classList.remove("" + PREFIX_CLASS + "-global-fullscreen");
-            (_this__fullscreenUtil = this._fullscreenUtil) == null ? void 0 : _this__fullscreenUtil.exitFullscreen();
-        } else {
-            var _this__fullscreenUtil1;
-            this._$rootContainer.classList.add("" + PREFIX_CLASS + "-global-fullscreen");
-            (_this__fullscreenUtil1 = this._fullscreenUtil) == null ? void 0 : _this__fullscreenUtil1.fullscreen();
-        }
-    };
-    return GlobalFullscreen;
-}(Fullscreen);
-
-function _extends$h() {
-    _extends$h = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
-        }
-        return target;
-    };
-    return _extends$h.apply(this, arguments);
-}
-function _inherits$i(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-        constructor: {
-            value: subClass,
-            writable: true,
-            configurable: true
-        }
-    });
-    if (superClass) _set_prototype_of$i(subClass, superClass);
-}
-function _set_prototype_of$i(o, p) {
-    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
-        o.__proto__ = p;
-        return o;
-    };
-    return _set_prototype_of$i(o, p);
-}
-/**
  * 截图控件，点击后会触发截图事件， 截图数据会通过 onCapture 回调函数返回
  * @category Control
  */ var CapturePicture = /*#__PURE__*/ function(Control) {
-    _inherits$i(CapturePicture, Control);
+    _inherits$j(CapturePicture, Control);
     function CapturePicture(options) {
         var _this;
-        _this = Control.call(this, _extends$h({}, options, {
+        _this = Control.call(this, _extends$i({}, options, {
             tagName: 'span',
             classNameSuffix: 'capture-picture'
         })) || this, _this._timer = null;
@@ -5973,8 +5994,8 @@ function _create_class$4(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$4(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$g() {
-    _extends$g = Object.assign || function(target) {
+function _extends$h() {
+    _extends$h = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -5985,9 +6006,9 @@ function _extends$g() {
         }
         return target;
     };
-    return _extends$g.apply(this, arguments);
+    return _extends$h.apply(this, arguments);
 }
-function _inherits$h(subClass, superClass) {
+function _inherits$i(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -5998,23 +6019,23 @@ function _inherits$h(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$h(subClass, superClass);
+    if (superClass) _set_prototype_of$i(subClass, superClass);
 }
-function _set_prototype_of$h(o, p) {
-    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$i(o, p) {
+    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$h(o, p);
+    return _set_prototype_of$i(o, p);
 }
 /**
  * 云台控件
  * @category Control
  */ var Ptz = /*#__PURE__*/ function(Control) {
-    _inherits$h(Ptz, Control);
+    _inherits$i(Ptz, Control);
     function Ptz(options) {
         var _this;
-        _this = Control.call(this, _extends$g({}, options, {
+        _this = Control.call(this, _extends$h({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'ptz'
@@ -6057,7 +6078,7 @@ function _set_prototype_of$h(o, p) {
             this.$turntable.classList.add("" + PREFIX_CLASS + "-ptz-turntable");
             this.$panel.appendChild(this.$turntable);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            this._ptzControl = new controlPtz.Ptz(this.$turntable, _extends$g({}, this._options, {
+            this._ptzControl = new controlPtz.Ptz(this.$turntable, _extends$h({}, this._options, {
                 onSpeedChange: this._onSpeedChange.bind(this),
                 onDirection: this._onDirection.bind(this)
             }));
@@ -6066,7 +6087,7 @@ function _set_prototype_of$h(o, p) {
     };
     _proto.renderMobileExtend = function renderMobileExtend($container) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        if (!this._ptzControl1) this._ptzControl1 = new controlPtz.MobilePtz($container, _extends$g({}, this._options, {
+        if (!this._ptzControl1) this._ptzControl1 = new controlPtz.MobilePtz($container, _extends$h({}, this._options, {
             onSpeedChange: this._onSpeedChange.bind(this),
             onDirection: this._onDirection.bind(this)
         }));
@@ -6169,8 +6190,8 @@ function _create_class$3(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$3(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$f() {
-    _extends$f = Object.assign || function(target) {
+function _extends$g() {
+    _extends$g = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -6181,9 +6202,9 @@ function _extends$f() {
         }
         return target;
     };
-    return _extends$f.apply(this, arguments);
+    return _extends$g.apply(this, arguments);
 }
-function _inherits$g(subClass, superClass) {
+function _inherits$h(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6194,14 +6215,14 @@ function _inherits$g(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$g(subClass, superClass);
+    if (superClass) _set_prototype_of$h(subClass, superClass);
 }
-function _set_prototype_of$g(o, p) {
-    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$h(o, p) {
+    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$g(o, p);
+    return _set_prototype_of$h(o, p);
 }
 var RECORD_DEFAULT_OPTIONS = {
     maxDuration: 3600
@@ -6215,10 +6236,10 @@ var RECORD_DEFAULT_OPTIONS = {
  *  2. 录制时间很短可能会因为浏览器的限制或没有I帧而无法生成有效的视频文件
  * @category Control
  */ var Record = /*#__PURE__*/ function(Control) {
-    _inherits$g(Record, Control);
+    _inherits$h(Record, Control);
     function Record(options) {
         var _this;
-        _this = Control.call(this, _extends$f({}, options, {
+        _this = Control.call(this, _extends$g({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'record'
@@ -6359,8 +6380,8 @@ function _create_class$2(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$e() {
-    _extends$e = Object.assign || function(target) {
+function _extends$f() {
+    _extends$f = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -6371,9 +6392,9 @@ function _extends$e() {
         }
         return target;
     };
-    return _extends$e.apply(this, arguments);
+    return _extends$f.apply(this, arguments);
 }
-function _inherits$f(subClass, superClass) {
+function _inherits$g(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6384,14 +6405,14 @@ function _inherits$f(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$f(subClass, superClass);
+    if (superClass) _set_prototype_of$g(subClass, superClass);
 }
-function _set_prototype_of$f(o, p) {
-    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$g(o, p) {
+    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$f(o, p);
+    return _set_prototype_of$g(o, p);
 }
 function _ts_generator$4(thisArg, body) {
     var f, y, t, _ = {
@@ -6493,10 +6514,10 @@ function _ts_generator$4(thisArg, body) {
  *
  * @category Control
  */ var Talk = /*#__PURE__*/ function(Control) {
-    _inherits$f(Talk, Control);
+    _inherits$g(Talk, Control);
     function Talk(options) {
         var _this;
-        _this = Control.call(this, _extends$e({}, options, {
+        _this = Control.call(this, _extends$f({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'talk'
@@ -6629,8 +6650,8 @@ function _async_to_generator$3(fn) {
         });
     };
 }
-function _extends$d() {
-    _extends$d = Object.assign || function(target) {
+function _extends$e() {
+    _extends$e = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -6641,9 +6662,9 @@ function _extends$d() {
         }
         return target;
     };
-    return _extends$d.apply(this, arguments);
+    return _extends$e.apply(this, arguments);
 }
-function _inherits$e(subClass, superClass) {
+function _inherits$f(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6654,14 +6675,14 @@ function _inherits$e(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$e(subClass, superClass);
+    if (superClass) _set_prototype_of$f(subClass, superClass);
 }
-function _set_prototype_of$e(o, p) {
-    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$f(o, p) {
+    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$e(o, p);
+    return _set_prototype_of$f(o, p);
 }
 function _ts_generator$3(thisArg, body) {
     var f, y, t, _ = {
@@ -6761,10 +6782,10 @@ function _ts_generator$3(thisArg, body) {
  *
  * @category Control
  */ var Broadcast = /*#__PURE__*/ function(Control) {
-    _inherits$e(Broadcast, Control);
+    _inherits$f(Broadcast, Control);
     function Broadcast(options) {
         var _this;
-        _this = Control.call(this, _extends$d({}, options, {
+        _this = Control.call(this, _extends$e({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'broadcast'
@@ -6859,8 +6880,8 @@ function _async_to_generator$2(fn) {
         });
     };
 }
-function _extends$c() {
-    _extends$c = Object.assign || function(target) {
+function _extends$d() {
+    _extends$d = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -6871,9 +6892,9 @@ function _extends$c() {
         }
         return target;
     };
-    return _extends$c.apply(this, arguments);
+    return _extends$d.apply(this, arguments);
 }
-function _inherits$d(subClass, superClass) {
+function _inherits$e(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6884,14 +6905,14 @@ function _inherits$d(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$d(subClass, superClass);
+    if (superClass) _set_prototype_of$e(subClass, superClass);
 }
-function _set_prototype_of$d(o, p) {
-    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$e(o, p) {
+    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$d(o, p);
+    return _set_prototype_of$e(o, p);
 }
 function _ts_generator$2(thisArg, body) {
     var f, y, t, _ = {
@@ -6991,10 +7012,10 @@ function _ts_generator$2(thisArg, body) {
  *
  * @category Control
  */ var AIChat = /*#__PURE__*/ function(Control) {
-    _inherits$d(AIChat, Control);
+    _inherits$e(AIChat, Control);
     function AIChat(options) {
         var _this;
-        _this = Control.call(this, _extends$c({}, options, {
+        _this = Control.call(this, _extends$d({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'aichat'
@@ -7060,8 +7081,8 @@ function _ts_generator$2(thisArg, body) {
     return AIChat;
 }(Control);
 
-function _extends$b() {
-    _extends$b = Object.assign || function(target) {
+function _extends$c() {
+    _extends$c = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -7072,9 +7093,9 @@ function _extends$b() {
         }
         return target;
     };
-    return _extends$b.apply(this, arguments);
+    return _extends$c.apply(this, arguments);
 }
-function _inherits$c(subClass, superClass) {
+function _inherits$d(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7085,14 +7106,14 @@ function _inherits$c(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$c(subClass, superClass);
+    if (superClass) _set_prototype_of$d(subClass, superClass);
 }
-function _set_prototype_of$c(o, p) {
-    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$d(o, p) {
+    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$c(o, p);
+    return _set_prototype_of$d(o, p);
 }
 /**
  * 直播按钮控件
@@ -7101,11 +7122,11 @@ function _set_prototype_of$c(o, p) {
  *
  * @category Control
  */ var Live = /*#__PURE__*/ function(Control) {
-    _inherits$c(Live, Control);
+    _inherits$d(Live, Control);
     function Live(options) {
         var _this;
         var _this___options_props1;
-        _this = Control.call(this, _extends$b({}, options, {
+        _this = Control.call(this, _extends$c({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'live'
@@ -7155,8 +7176,8 @@ function _set_prototype_of$c(o, p) {
     return Live;
 }(Control);
 
-function _extends$a() {
-    _extends$a = Object.assign || function(target) {
+function _extends$b() {
+    _extends$b = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -7167,9 +7188,9 @@ function _extends$a() {
         }
         return target;
     };
-    return _extends$a.apply(this, arguments);
+    return _extends$b.apply(this, arguments);
 }
-function _inherits$b(subClass, superClass) {
+function _inherits$c(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7180,14 +7201,14 @@ function _inherits$b(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$b(subClass, superClass);
+    if (superClass) _set_prototype_of$c(subClass, superClass);
 }
-function _set_prototype_of$b(o, p) {
-    _set_prototype_of$b = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$c(o, p) {
+    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$b(o, p);
+    return _set_prototype_of$c(o, p);
 }
 /**
  * 回放下拉控件
@@ -7196,11 +7217,11 @@ function _set_prototype_of$b(o, p) {
  *
  * @category Control
  */ var RecDropdown = /*#__PURE__*/ function(Control) {
-    _inherits$b(RecDropdown, Control);
+    _inherits$c(RecDropdown, Control);
     function RecDropdown(options) {
         var _this;
         var _options_props, _this___options_props1;
-        _this = Control.call(this, _extends$a({}, options, {
+        _this = Control.call(this, _extends$b({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'rec-dropdown'
@@ -7319,8 +7340,8 @@ function _set_prototype_of$b(o, p) {
     return RecDropdown;
 }(Control);
 
-function _extends$9() {
-    _extends$9 = Object.assign || function(target) {
+function _extends$a() {
+    _extends$a = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -7331,9 +7352,9 @@ function _extends$9() {
         }
         return target;
     };
-    return _extends$9.apply(this, arguments);
+    return _extends$a.apply(this, arguments);
 }
-function _inherits$a(subClass, superClass) {
+function _inherits$b(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7344,14 +7365,14 @@ function _inherits$a(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$a(subClass, superClass);
+    if (superClass) _set_prototype_of$b(subClass, superClass);
 }
-function _set_prototype_of$a(o, p) {
-    _set_prototype_of$a = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$b(o, p) {
+    _set_prototype_of$b = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$a(o, p);
+    return _set_prototype_of$b(o, p);
 }
 /**
  * 告警消息按钮控件
@@ -7360,10 +7381,10 @@ function _set_prototype_of$a(o, p) {
  *
  * @category Control
  */ var AlarmMessage = /*#__PURE__*/ function(Control) {
-    _inherits$a(AlarmMessage, Control);
+    _inherits$b(AlarmMessage, Control);
     function AlarmMessage(options) {
         var _this;
-        _this = Control.call(this, _extends$9({}, options, {
+        _this = Control.call(this, _extends$a({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'alarm-message'
@@ -7415,8 +7436,8 @@ function _create_class$1(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$1(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$8() {
-    _extends$8 = Object.assign || function(target) {
+function _extends$9() {
+    _extends$9 = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -7427,9 +7448,9 @@ function _extends$8() {
         }
         return target;
     };
-    return _extends$8.apply(this, arguments);
+    return _extends$9.apply(this, arguments);
 }
-function _inherits$9(subClass, superClass) {
+function _inherits$a(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7440,14 +7461,14 @@ function _inherits$9(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$9(subClass, superClass);
+    if (superClass) _set_prototype_of$a(subClass, superClass);
 }
-function _set_prototype_of$9(o, p) {
-    _set_prototype_of$9 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$a(o, p) {
+    _set_prototype_of$a = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$9(o, p);
+    return _set_prototype_of$a(o, p);
 }
 var SELECT_DEFAULT_OPTIONS = {
     fieldNames: {
@@ -7509,11 +7530,11 @@ var SELECT_DEFAULT_OPTIONS = {
  * }
  * ```
  */ var Select = /*#__PURE__*/ function(Control) {
-    _inherits$9(Select, Control);
+    _inherits$a(Select, Control);
     function Select(options) {
         var _this;
         var _this__options_fieldNames, _this__picker_$body;
-        _this = Control.call(this, _extends$8({
+        _this = Control.call(this, _extends$9({
             tagName: 'span',
             type: 'button',
             controlType: 'button'
@@ -7711,8 +7732,8 @@ function _assert_this_initialized$1(self) {
     }
     return self;
 }
-function _extends$7() {
-    _extends$7 = Object.assign || function(target) {
+function _extends$8() {
+    _extends$8 = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -7723,9 +7744,9 @@ function _extends$7() {
         }
         return target;
     };
-    return _extends$7.apply(this, arguments);
+    return _extends$8.apply(this, arguments);
 }
-function _inherits$8(subClass, superClass) {
+function _inherits$9(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7736,14 +7757,14 @@ function _inherits$8(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$8(subClass, superClass);
+    if (superClass) _set_prototype_of$9(subClass, superClass);
 }
-function _set_prototype_of$8(o, p) {
-    _set_prototype_of$8 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$9(o, p) {
+    _set_prototype_of$9 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$8(o, p);
+    return _set_prototype_of$9(o, p);
 }
 function _type_of(obj) {
     "@swc/helpers - typeof";
@@ -7793,12 +7814,12 @@ function __filter(list, locale) {
  *
  * @category Control
  */ var Definition = /*#__PURE__*/ function(Select) {
-    _inherits$8(Definition, Select);
+    _inherits$9(Definition, Select);
     function Definition(options) {
         if (options === void 0) options = {};
         var _this;
         var _options_props, _options_props1, _options_locales_options_language;
-        _this = Select.call(this, _extends$7({}, DEFINITION_DEFAULT_OPTIONS, {
+        _this = Select.call(this, _extends$8({}, DEFINITION_DEFAULT_OPTIONS, {
             value: (_options_props = options.props) == null ? void 0 : _options_props.videoLevel
         }, options, {
             fieldNames: {
@@ -7872,8 +7893,8 @@ function _assert_this_initialized(self) {
     }
     return self;
 }
-function _extends$6() {
-    _extends$6 = Object.assign || function(target) {
+function _extends$7() {
+    _extends$7 = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -7884,9 +7905,9 @@ function _extends$6() {
         }
         return target;
     };
-    return _extends$6.apply(this, arguments);
+    return _extends$7.apply(this, arguments);
 }
-function _inherits$7(subClass, superClass) {
+function _inherits$8(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7897,14 +7918,14 @@ function _inherits$7(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$7(subClass, superClass);
+    if (superClass) _set_prototype_of$8(subClass, superClass);
 }
-function _set_prototype_of$7(o, p) {
-    _set_prototype_of$7 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$8(o, p) {
+    _set_prototype_of$8 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$7(o, p);
+    return _set_prototype_of$8(o, p);
 }
 // 支持的倍速列表, 需要是 2 的指数，不能小于 0.5， 最大 16 倍
 var SUPPORT_SPEED = [
@@ -7938,11 +7959,11 @@ var SPEED_DEFAULT_OPTIONS = {
  *   2. 标准流不支持；
  * @category Control
  */ var Speed = /*#__PURE__*/ function(Select) {
-    _inherits$7(Speed, Select);
+    _inherits$8(Speed, Select);
     function Speed(options) {
         var _this;
         var _options_locales_options_language, _options_locales;
-        _this = Select.call(this, _extends$6({}, SPEED_DEFAULT_OPTIONS, options, {
+        _this = Select.call(this, _extends$7({}, SPEED_DEFAULT_OPTIONS, options, {
             value: (options.props.speed || 1) + '',
             classNameSuffix: 'speed',
             controlType: 'button',
@@ -7996,8 +8017,8 @@ var SPEED_DEFAULT_OPTIONS = {
     return Speed;
 }(Select);
 
-function _extends$5() {
-    _extends$5 = Object.assign || function(target) {
+function _extends$6() {
+    _extends$6 = Object.assign || function(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source){
@@ -8008,9 +8029,9 @@ function _extends$5() {
         }
         return target;
     };
-    return _extends$5.apply(this, arguments);
+    return _extends$6.apply(this, arguments);
 }
-function _inherits$6(subClass, superClass) {
+function _inherits$7(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -8021,24 +8042,24 @@ function _inherits$6(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$6(subClass, superClass);
+    if (superClass) _set_prototype_of$7(subClass, superClass);
 }
-function _set_prototype_of$6(o, p) {
-    _set_prototype_of$6 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$7(o, p) {
+    _set_prototype_of$7 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$6(o, p);
+    return _set_prototype_of$7(o, p);
 }
 /**
  * 日历选择器控件
  * @category Control
  */ var DatePickerControl = /*#__PURE__*/ function(Control) {
-    _inherits$6(DatePickerControl, Control);
+    _inherits$7(DatePickerControl, Control);
     function DatePickerControl(options) {
         var _this;
         var _this_options_props_urlInfo_searchParams, _this_options_props_urlInfo, _this_options_props;
-        _this = Control.call(this, _extends$5({
+        _this = Control.call(this, _extends$6({
             maxDate: new Date()
         }, options, {
             tagName: 'span',
@@ -8069,11 +8090,8 @@ function _set_prototype_of$6(o, p) {
                 title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_CALENDAR
             });
         }
-        this.datePicker = new controlDatePicker.DatePicker(this.$container, {
+        this.datePicker = new controlDatePicker.DatePicker(this.$container, _extends$6({
             isMobile: isMobile1,
-            getPopupContainer: function() {
-                return _this.$container;
-            },
             mode: 'date',
             offset: [
                 0,
@@ -8086,6 +8104,11 @@ function _set_prototype_of$6(o, p) {
             triggerClose: true,
             disabledDate: function(date) {
                 return date.getTime() > (_this.options.maxDate || new Date()).getTime();
+            }
+        }, this.options || {}, {
+            // 不支持自定义
+            getPopupContainer: function() {
+                return _this.$container;
             },
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             onOk: function(date, _mode) {
@@ -8109,7 +8132,7 @@ function _set_prototype_of$6(o, p) {
                 _this.options.onPanelChange == null ? void 0 : _this.options.onPanelChange.call(_this.options, open, _this.datePicker.current);
                 _this.emit(EVENTS.control.datePanelOpenChange, open, _this.datePicker.current);
             }
-        });
+        }));
     };
     /**
    * 设置日期, change = true 时触发 onChange 事件
@@ -8152,6 +8175,145 @@ function _set_prototype_of$6(o, p) {
         Control.prototype._onControlClick.call(this, e);
     };
     return DatePickerControl;
+}(Control);
+
+function _extends$5() {
+    _extends$5 = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source){
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    };
+    return _extends$5.apply(this, arguments);
+}
+function _inherits$6(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$6(subClass, superClass);
+}
+function _set_prototype_of$6(o, p) {
+    _set_prototype_of$6 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$6(o, p);
+}
+/** 时间格式 HH:mm:ss */ var TIME_FORMAT = 'HH:mm:ss';
+/**
+ * 时间选择器控件
+ * @category Control
+ */ var TimePickerControl = /*#__PURE__*/ function(Control) {
+    _inherits$6(TimePickerControl, Control);
+    function TimePickerControl(options) {
+        var _this;
+        var _this_options_props_urlInfo_searchParams, _this_options_props_urlInfo, _this_options_props;
+        _this = Control.call(this, _extends$5({}, options, {
+            tagName: 'span',
+            controlType: 'button',
+            classNameSuffix: 'time'
+        })) || this;
+        _this.options = options;
+        _this._value = utilsTools.DateTime.format(((_this_options_props = _this.options.props) == null ? void 0 : (_this_options_props_urlInfo = _this_options_props.urlInfo) == null ? void 0 : (_this_options_props_urlInfo_searchParams = _this_options_props_urlInfo.searchParams) == null ? void 0 : _this_options_props_urlInfo_searchParams.begin) || _this.options.current || new Date(), TIME_FORMAT);
+        _this._render();
+        return _this;
+    }
+    var _proto = TimePickerControl.prototype;
+    _proto._render = function _render() {
+        var _this = this;
+        var _this_locale;
+        utilsTools.isMobile();
+        // if (isMobile1) {
+        //   this.$container.innerHTML = `
+        //     <span class="${PREFIX_CLASS}-mobile-date-filter" title="${(this.locale?.BTN_TIME || '') as string}">
+        //       <span class="${PREFIX_CLASS}-mobile-date-filter-value">${this._getTimeStr()}</span>
+        //       ${IconComponents.filter()}
+        //     <span>`;
+        // } else {
+        this.$container.innerHTML = IconComponents.time({
+            title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_TIME
+        });
+        // }
+        this.timePicker = new controlDatePicker.TimePicker(this.$container, _extends$5({
+            showHeader: false,
+            isMobile: false,
+            offset: [
+                0,
+                -10
+            ],
+            language: this.options.language === 'zh' ? 'zh' : 'en',
+            current: this._value,
+            placement: 'tr',
+            triggerClose: true
+        }, this.options || {}, {
+            // 不支持自定义
+            getPopupContainer: function() {
+                return _this.$container;
+            },
+            onChange: function(time, _times) {
+                if (time && _this._value !== time) {
+                    _this._value = time;
+                    _this.options.onChange == null ? void 0 : _this.options.onChange.call(_this.options, time, _times);
+                    _this.emit(EVENTS.control.timeChange, time);
+                }
+            },
+            onOpenChange: function(open) {
+                _this.options.onPanelChange == null ? void 0 : _this.options.onPanelChange.call(_this.options, open, _this.timePicker.current);
+                _this.emit(EVENTS.control.timePanelOpenChange, open, _this.timePicker.current);
+            }
+        }));
+    };
+    /**
+   * 设置时间
+   * @param time 设置的时间 HH:mm:ss
+   */ _proto.setTime = function setTime(time) {
+        var _this_timePicker;
+        (_this_timePicker = this.timePicker) == null ? void 0 : _this_timePicker.setCurrent(time);
+        if (time && this._value !== time) {
+            this._value = time;
+            var valueEl = this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value");
+            if (valueEl) {
+                valueEl.innerHTML = this._getTimeStr();
+            }
+        }
+    };
+    _proto.reset = function reset() {
+        if (this.timePicker) this.timePicker.open = false;
+        Control.prototype.reset.call(this);
+    };
+    /**
+   * 销毁控件
+   * @override
+   */ _proto.destroy = function destroy() {
+        if (this.timePicker) {
+            this.timePicker.destroy();
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            this.timePicker = null;
+        }
+        Control.prototype.destroy.call(this);
+    };
+    _proto._getTimeStr = function _getTimeStr() {
+        return this._value;
+    };
+    /**
+   * 点击 Control 会触发
+   * @overload super._onControlClick(e: Event)
+   */ _proto._onControlClick = function _onControlClick(e) {
+        Control.prototype._onControlClick.call(this, e);
+    };
+    return TimePickerControl;
 }(Control);
 
 function _extends$4() {
@@ -8199,9 +8361,16 @@ function _set_prototype_of$5(o, p) {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'time-line'
-        })) || this, _this._$add = null, _this._$reduce = null, _this._currentTime = 0, _this.records = [];
+        })) || this, _this._$add = null, _this._$reduce = null, _this._$scaleWrapper = null, _this._currentTime = 0, _this.records = [];
         _this._currentTime = 0;
-        _this._options = options;
+        _this._options = deepmerge.all([
+            {
+                showTimeWidthBtn: true
+            },
+            options
+        ], {
+            clone: false
+        });
         _this.records = ((_this__options = _this._options) == null ? void 0 : (_this__options_props = _this__options.props) == null ? void 0 : _this__options_props.recordList) || [];
         _this._render();
         _this.on(EVENTS.setAllDayRecTimes, function(records) {
@@ -8226,11 +8395,19 @@ function _set_prototype_of$5(o, p) {
         var _this = this;
         var _this_timeLineUtil_updateTimeSections, _this_timeLineUtil;
         var _this__options_showTimeWidthBtn, _this__options_showCoverFold;
-        var _timeLineOptions = {
+        var _timeLineOptions = _extends$4({
             language: this._options.language || 'zh',
             coverQuery: this._options.coverQuery || '',
             showTimeWidthBtn: (_this__options_showTimeWidthBtn = this._options.showTimeWidthBtn) != null ? _this__options_showTimeWidthBtn : true,
             showCoverFold: (_this__options_showCoverFold = this._options.showCoverFold) != null ? _this__options_showCoverFold : true,
+            hoverTipPlacement: 'top'
+        }, this._options || {}, {
+            onClickSeek: function(date) {
+                if (date == null ? void 0 : date.getTime()) {
+                    _this._options.onClickSeek == null ? void 0 : _this._options.onClickSeek.call(_this._options, date);
+                    _this.emit(EVENTS.control.timeLineChange, date);
+                }
+            },
             onChange: function(date) {
                 if (_this._currentTime !== (date == null ? void 0 : date.getTime())) {
                     _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, date);
@@ -8252,12 +8429,12 @@ function _set_prototype_of$5(o, p) {
                 } catch (error) {
                 }
             }
-        };
+        });
         if (utilsTools.isMobile()) {
             this.timeLineUtil = new controlTimeLine.MobileTimeLine(this.$container, _timeLineOptions);
         } else {
             this.timeLineUtil = new controlTimeLine.TimeLine(this.$container, _timeLineOptions);
-            this._renderAddReduce();
+            if (this._options.showTimeWidthBtn) this._renderAddReduce();
         }
         (_this_timeLineUtil = this.timeLineUtil) == null ? void 0 : (_this_timeLineUtil_updateTimeSections = _this_timeLineUtil.updateTimeSections) == null ? void 0 : _this_timeLineUtil_updateTimeSections.call(_this_timeLineUtil, this.records);
         this.timeLineUtil.update(new Date());
@@ -8268,7 +8445,7 @@ function _set_prototype_of$5(o, p) {
     _proto._renderAddReduce = function _renderAddReduce() {
         var _this = this;
         this._$add = document.createElement('span');
-        this._$add.classList.add("" + PREFIX_CLASS + "-time-line-scale-add");
+        this._$add.classList.add("" + PREFIX_CLASS + "-time-line-zoom-add");
         this._$add.innerHTML = IconComponents.add();
         this._$add.addEventListener('click', function() {
             if (_this.timeLineUtil) {
@@ -8277,7 +8454,7 @@ function _set_prototype_of$5(o, p) {
             }
         });
         this._$reduce = document.createElement('span');
-        this._$reduce.classList.add("" + PREFIX_CLASS + "-time-line-scale-sub");
+        this._$reduce.classList.add("" + PREFIX_CLASS + "-time-line-zoom-sub");
         this._$reduce.innerHTML = IconComponents.reduce();
         this._$reduce.addEventListener('click', function() {
             if (_this.timeLineUtil) {
@@ -8285,8 +8462,11 @@ function _set_prototype_of$5(o, p) {
                 _this.timeLineUtil.setTimeWidth(currentScale - 1);
             }
         });
-        this.$container.appendChild(this._$add);
-        this.$container.appendChild(this._$reduce);
+        this._$scaleWrapper = document.createElement('span');
+        this._$scaleWrapper.classList.add("" + PREFIX_CLASS + "-time-line-zoom");
+        this._$scaleWrapper.appendChild(this._$add);
+        this._$scaleWrapper.appendChild(this._$reduce);
+        this.$container.appendChild(this._$scaleWrapper);
     };
     _proto.destroy = function destroy() {
         if (this._$add) {
@@ -8296,6 +8476,10 @@ function _set_prototype_of$5(o, p) {
         if (this._$reduce) {
             this._$reduce.remove();
             this._$reduce = null;
+        }
+        if (this._$scaleWrapper) {
+            this._$scaleWrapper.remove();
+            this._$scaleWrapper = null;
         }
         if (this.timeLineUtil) {
             this.timeLineUtil.destroy();
@@ -8404,6 +8588,7 @@ var Controls = {
     rec: Rec,
     speed: Speed,
     date: DatePickerControl,
+    time: TimePickerControl,
     timeLine: TimeLineControl
 };
 
@@ -8439,17 +8624,25 @@ var RecFooter = /*#__PURE__*/ function(EventEmitter) {
         _this.$container = container;
         _this.$popupContainer = document.createElement('div');
         _this.$popupContainer.classList.add("" + PREFIX_CLASS + "-rec-footer");
-        if (_this.options.hasDatePicker) {
-            _this.$popupContainer.classList.add("" + PREFIX_CLASS + "-rec-footer-has-date-picker");
-        }
         _this.$container.appendChild(_this.$popupContainer);
         _this.$timeLineContainer = document.createElement('div');
         _this.$timeLineContainer.classList.add("" + PREFIX_CLASS + "-rec-footer-time-line");
-        if (_this.options.hasDatePicker) {
+        if (_this.options.hasDatePicker || _this.options.hasTimePicker) {
             _this.$popupContainer.appendChild(_this.$timeLineContainer);
+            // 右侧容器: 放置时间选择器和日期选择器
+            _this.$rightContainer = document.createElement('div');
+            _this.$rightContainer.classList.add("" + PREFIX_CLASS + "-rec-footer-right");
+            _this.$popupContainer.appendChild(_this.$rightContainer);
+        }
+        if (_this.options.hasTimePicker) {
+            _this.$timePickerContainer = document.createElement('div');
+            _this.$timePickerContainer.classList.add("" + PREFIX_CLASS + "-rec-footer-btn", "" + PREFIX_CLASS + "-rec-footer-time-picker");
+            _this.$rightContainer.appendChild(_this.$timePickerContainer);
+        }
+        if (_this.options.hasDatePicker) {
             _this.$datePickerContainer = document.createElement('div');
-            _this.$datePickerContainer.classList.add("" + PREFIX_CLASS + "-rec-footer-date-picker");
-            _this.$popupContainer.appendChild(_this.$datePickerContainer);
+            _this.$datePickerContainer.classList.add("" + PREFIX_CLASS + "-rec-footer-btn", "" + PREFIX_CLASS + "-rec-footer-date-picker");
+            _this.$rightContainer.appendChild(_this.$datePickerContainer);
         }
         _this.$popupContainer.addEventListener('dblclick', function(e) {
             e.preventDefault();
@@ -8462,6 +8655,14 @@ var RecFooter = /*#__PURE__*/ function(EventEmitter) {
         if (this.$datePickerContainer) {
             this.$datePickerContainer.remove();
             this.$datePickerContainer = null;
+        }
+        if (this.$timePickerContainer) {
+            this.$timePickerContainer.remove();
+            this.$timePickerContainer = null;
+        }
+        if (this.$rightContainer) {
+            this.$rightContainer.remove();
+            this.$rightContainer = null;
         }
         if (this.$timeLineContainer) {
             var _this_$timeLineContainer_remove, _this_$timeLineContainer;
@@ -9013,7 +9214,7 @@ function _renderControls(theme, $container, btnList, props) {
 }
 function _renderTheme(theme, data) {
     return _async_to_generator$1(function() {
-        var _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_urlInfo, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, _filterThemeData_footer_btnList, list, _needTimeLine, hasPtz, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_controls2, _theme_options_mobileExtendOptions3, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions4, _filterThemeData_header1, _filterThemeData_footer1, _filterThemeData_footer_btnList1, _theme_options;
+        var _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_urlInfo, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, _filterThemeData_footer_btnList, list, _needTimeLine, hasPtz, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_options_mobileExtendOptions3, _theme_controls2, _theme_options_mobileExtendOptions4, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions5, _filterThemeData_header1, _filterThemeData_footer1, _filterThemeData_footer_btnList1, _theme_options;
         return _ts_generator$1(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -9160,7 +9361,8 @@ function _renderTheme(theme, data) {
                     // PC 单独渲染timeLine
                     if (!Utils.isMobile && !(theme.options.timeLineOptions === null || theme.options.disabledTimeLine) && _needTimeLine) {
                         theme._recFooter = new RecFooter(theme.$container, {
-                            hasDatePicker: theme.options.dateOptions !== null
+                            hasDatePicker: theme.options.dateOptions !== null,
+                            hasTimePicker: theme.options.timeOptions !== null
                         });
                         //
                         _renderTimeLine(theme, theme._recFooter.$timeLineContainer, props);
@@ -9170,6 +9372,9 @@ function _renderTheme(theme, data) {
                         }
                         if (theme.options.dateOptions !== null) {
                             _renderDatePicker(theme, theme._recFooter.$datePickerContainer, props);
+                        }
+                        if (theme.options.timeOptions !== null) {
+                            _renderTimePicker(theme, theme._recFooter.$timePickerContainer, props);
                         }
                     }
                     // 移动端扩展
@@ -9182,7 +9387,10 @@ function _renderTheme(theme, data) {
                             if (theme.options.dateOptions !== null && ((_theme_options_mobileExtendOptions1 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions1.controls.includes('date')) && _needTimeLine) {
                                 _renderDatePicker(theme, theme._mobileExtend.$topLeft, props);
                             }
-                            if (theme.options.recOptions !== null && ((_theme_options_mobileExtendOptions2 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions2.controls.includes('rec')) && _needTimeLine) {
+                            if (theme.options.timeOptions !== null && ((_theme_options_mobileExtendOptions2 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions2.controls.includes('time')) && _needTimeLine) {
+                                _renderTimePicker(theme, theme._mobileExtend.$topLeft, props);
+                            }
+                            if (theme.options.recOptions !== null && ((_theme_options_mobileExtendOptions3 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions3.controls.includes('rec')) && _needTimeLine) {
                                 [].concat(((_filterThemeData_header1 = filterThemeData.header) == null ? void 0 : _filterThemeData_header1.btnList) || [], (_filterThemeData_footer_btnList1 = (_filterThemeData_footer1 = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer1.btnList) != null ? _filterThemeData_footer_btnList1 : []).forEach(function(item) {
                                     var _theme__mobileExtend;
                                     if (REC_GROUP.includes(item.iconId)) _renderRecType(theme, (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight, item.iconId, props);
@@ -9205,10 +9413,10 @@ function _renderTheme(theme, data) {
                                     props: props
                                 }));
                             }
-                            if ((theme.options.timeLineOptions !== null || !theme.options.disabledTimeLine) && ((_theme_options_mobileExtendOptions3 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions3.controls.includes('timeLine')) && _needTimeLine) {
+                            if ((theme.options.timeLineOptions !== null || !theme.options.disabledTimeLine) && ((_theme_options_mobileExtendOptions4 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions4.controls.includes('timeLine')) && _needTimeLine) {
                                 _renderTimeLine(theme, theme._mobileExtend.$content, props);
                             }
-                            if (Utils.isMobile && ((_theme_options_mobileExtendOptions4 = theme.options.mobileExtendOptions) == null ? void 0 : (_theme_options_mobileExtendOptions_controls1 = _theme_options_mobileExtendOptions4.controls) == null ? void 0 : _theme_options_mobileExtendOptions_controls1.includes('ptz')) && hasPtz && theme.controls.ptzControl) {
+                            if (Utils.isMobile && ((_theme_options_mobileExtendOptions5 = theme.options.mobileExtendOptions) == null ? void 0 : (_theme_options_mobileExtendOptions_controls1 = _theme_options_mobileExtendOptions5.controls) == null ? void 0 : _theme_options_mobileExtendOptions_controls1.includes('ptz')) && hasPtz && theme.controls.ptzControl) {
                                 theme.controls.ptzControl.renderMobileExtend(theme._mobileExtend.$content);
                             }
                         }
@@ -9256,6 +9464,22 @@ var _renderDatePicker = function(theme, container, props) {
             language: theme.options.language,
             locales: theme.i18n.translations
         }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["dateOptions"]) || {}, {
+            props: props
+        }));
+    }
+};
+var _renderTimePicker = function(theme, container, props) {
+    if (props === void 0) props = {};
+    if (!theme.controls.timeControl && theme.options.timeOptions !== null) {
+        var _theme_options;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        theme.controls.timeControl = new Controls['time'](_extends$1({
+            getPopupContainer: function() {
+                return container;
+            },
+            language: theme.options.language,
+            locales: theme.i18n.translations
+        }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["timeOptions"]) || {}, {
             props: props
         }));
     }
@@ -10072,7 +10296,9 @@ var THEME_DEFAULT_OPTIONS = {
                 _this._width = width;
                 _this._height = height;
                 if ((_this_controls = _this.controls) == null ? void 0 : _this_controls.timeLineControl) {
-                    _this.controls.timeLineControl.setWidth(width - 20 - DATE_PICKER_ICON_WIDTH);
+                    var _this_$container_querySelector;
+                    var rcFooterRightWidth = ((_this_$container_querySelector = _this.$container.querySelector("." + PREFIX_CLASS + "-rec-footer-right")) == null ? void 0 : _this_$container_querySelector.clientWidth) || 0;
+                    _this.controls.timeLineControl.setWidth(width - rcFooterRightWidth);
                 }
                 // header 和 footer 使用防抖去实现， 避免频繁触发，
                 _this._headerMoreControlShow();
@@ -10826,7 +11052,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.0.2-beta.3';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.0-beta.1';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;

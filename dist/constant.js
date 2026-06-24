@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.0.2-beta.3
-* Copyright (c) 2026-05-20 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.0-beta.1
+* Copyright (c) 2026-06-24 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 /**
@@ -225,6 +225,8 @@ var EVENTS = {
         /** 日期改变 */ dateChange: 'Control.dateChange',
         /** 日期改变 */ dateMonthChange: 'Control.dateMonthChange',
         /** 日期销毁 */ dateDestroy: 'Control.datePanelDestroy',
+        /** 时间面板展示隐藏变换 */ timePanelOpenChange: 'Control.timePanelOpenChange',
+        /** 时间改变 */ timeChange: 'Control.timeChange',
         /** 时间轴拖动结束 */ timeLineChange: 'Control.timeLineChange',
         /** 时间轴图片列表面板 */ timeLinePanelOpenChange: 'Control.timeLinePanelOpenChange',
         /** 时间轴控件销毁 */ timeLineDestroy: 'Control.timeLineDestroy',
