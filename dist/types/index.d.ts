@@ -2696,47 +2696,47 @@ interface ThemeOptions {
     loggerOptions?: LoggerOptions;
     /** 双击全屏, 默认true, 仅 PC 支持 @since 0.0.1 */
     dblClickFullscreen?: boolean;
-    /** 加载动画控件配置, 默认 undefined, 初始化 null 不渲染控件 @since 0.0.1 */
+    /** 加载动画控件配置, 默认 undefined, 设置 null 不渲染控件 @since 0.0.1 */
     loadingOptions?: OmitControlOptions<LoadingOptions> | null;
-    /** 暂停控件配置, 默认 undefined, 初始化 null 不渲染控件 @since 0.0.1 */
+    /** 暂停控件配置, 默认 undefined, 设置 null 不渲染控件 @since 0.0.1 */
     pauseOptions?: OmitControlOptions<PauseOptions> | null;
-    /** 消息控件配置，默认 undefined, 初始化 null 不渲染控件@since 0.0.1  */
+    /** 消息控件配置，默认 undefined, 设置 null 不渲染控件@since 0.0.1  */
     messageOptions?: OmitControlOptions<MessageOptions> | null;
-    /** 封面控件配置， 默认 undefined, 初始化 null 不渲染控件 @since 0.0.1 */
+    /** 封面控件配置， 默认 undefined, 设置 null 不渲染控件 @since 0.0.1 */
     posterOptions?: OmitControlOptions<PosterOptions> | null;
-    /** 设备信息控件配置，默认 undefined, 初始化 null 不渲染控件 @since 0.0.1 */
+    /** 设备信息控件配置，默认 undefined, 设置 null 不渲染控件 @since 0.0.1 */
     deviceOptions?: OmitControlOptions<DeviceOptions> | null;
-    /** 播放控件配置，默认 undefined, 初始化 null 不渲染控件 @since 0.0.1 */
+    /** 播放控件配置，默认 undefined, 设置 null 不渲染控件 @since 0.0.1 */
     playOptions?: OmitControlOptions<PlayOptions> | null;
-    /** 音量控件配置 @since 0.0.1 */
-    volumeOptions?: OmitControlOptions<VolumeOptions>;
-    /** 截图控件配置 @since 0.0.1 */
-    capturePictureOptions?: OmitControlOptions<CapturePictureOptions>;
-    /** 清晰度控件配置 @since 0.0.1 */
-    definitionOptions?: OmitControlOptions<DefinitionOptions>;
-    /** 云台控件配置 @since 0.0.1 */
-    ptzOptions?: OmitControlOptions<PtzOptions>;
-    /** 回放类型控件配置 @since 0.0.1 */
-    recOptions?: OmitControlOptions<RecOptions>;
-    /** 录制控件配置 @since 0.0.1 */
-    recordOptions?: OmitControlOptions<RecordOptions>;
-    /** 倍速控件配置 @since 0.0.1 */
-    speedOptions?: OmitControlOptions<SpeedOptions>;
-    /** 对讲控件配置 @since 0.0.1 */
-    talkOptions?: OmitControlOptions<TalkOptions>;
-    /** 缩放控件配置 @since 0.0.1 */
-    zoomOptions?: OmitControlOptions<ZoomOptions>;
-    /** 全屏控件配置 @since 0.0.1 */
-    fullscreenOptions?: OmitControlOptions<FullscreenOptions>;
-    /** 全局全屏控件配置 @since 0.0.1 */
-    globalFullscreenOptions?: OmitControlOptions<GlobalFullscreenOptions>;
-    /** 日历控件配置 @since 0.0.1 */
+    /** 音量控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    volumeOptions?: OmitControlOptions<VolumeOptions> | null;
+    /** 截图控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    capturePictureOptions?: OmitControlOptions<CapturePictureOptions> | null;
+    /** 清晰度控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    definitionOptions?: OmitControlOptions<DefinitionOptions> | null;
+    /** 云台控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    ptzOptions?: OmitControlOptions<PtzOptions> | null;
+    /** 回放类型控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    recOptions?: OmitControlOptions<RecOptions> | null;
+    /** 录制控件配置 ，设置 null 不渲染控件 @since 0.0.1 */
+    recordOptions?: OmitControlOptions<RecordOptions> | null;
+    /** 倍速控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    speedOptions?: OmitControlOptions<SpeedOptions> | null;
+    /** 对讲控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    talkOptions?: OmitControlOptions<TalkOptions> | null;
+    /** 缩放控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    zoomOptions?: OmitControlOptions<ZoomOptions> | null;
+    /** 全屏控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    fullscreenOptions?: OmitControlOptions<FullscreenOptions> | null;
+    /** 全局全屏控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    globalFullscreenOptions?: OmitControlOptions<GlobalFullscreenOptions> | null;
+    /** 日历控件配置， 设置 null 不渲染控件 @since 0.0.1 */
     dateOptions?: any;
-    /** 时间控件配置 @since 3.0.3 */
-    timeOptions?: OmitControlOptions<TimePickerControlOptions>;
-    /** 时间轴控件配置 @since 0.0.1 */
-    timeLineOptions?: any;
-    /** 初始化开始回调, 在内部可以添加事件(Control.beforeMountControls, Control.mountedControls)监听 @since 0.0.1 */
+    /** 时间控件配置，  设置 null 不渲染控件 @since 3.0.3 */
+    timeOptions?: OmitControlOptions<TimePickerControlOptions> | null;
+    /** 时间轴控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    timeLineOptions?: any | null;
+    /** 初始化开始回调, 在内部可以添加事件(Control.beforeMountControls, Control.mountedControls)监听，设置 null 不渲染控件 @since 0.0.1 */
     onInitializing?: (theme: Theme) => void;
     /**
      * 移动端扩展 仅针对 ezopen 有效 @since 0.0.1 (2025-08-01),  默认 true, 当值为 null 不展示扩展
@@ -2757,12 +2757,6 @@ interface ThemeOptions {
      * 9.x 开始弃用  请使用 timeLineOptions: null来关闭时间轴
      */
     disabledTimeLine?: boolean;
-    /**
-     * 默认 false
-     * @deprecated
-     * 9.x 开始弃用  请使用 ptzOptions: null来关闭云台
-     */
-    disabledPTZ?: boolean;
     [kye: string]: any;
 }
 /**

@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.0-beta.1
-* Copyright (c) 2026-06-24 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.0-beta.2
+* Copyright (c) 2026-06-26 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -9364,17 +9364,18 @@ function _renderTheme(theme, data) {
                             hasDatePicker: theme.options.dateOptions !== null,
                             hasTimePicker: theme.options.timeOptions !== null
                         });
-                        //
-                        _renderTimeLine(theme, theme._recFooter.$timeLineContainer, props);
-                        if (theme._footer) {
-                            theme._footer.$container.style.cssText += "bottom: 36px;";
-                            theme.$container.classList.add("" + PREFIX_CLASS + "-has-time-line");
-                        }
+                        // 放置在 timeline 前面是为了防止 时间轴宽度设置后导致 图标按钮被挤出 footer
                         if (theme.options.dateOptions !== null) {
                             _renderDatePicker(theme, theme._recFooter.$datePickerContainer, props);
                         }
                         if (theme.options.timeOptions !== null) {
                             _renderTimePicker(theme, theme._recFooter.$timePickerContainer, props);
+                        }
+                        //
+                        _renderTimeLine(theme, theme._recFooter.$timeLineContainer, props);
+                        if (theme._footer) {
+                            theme._footer.$container.style.cssText += "bottom: 36px;";
+                            theme.$container.classList.add("" + PREFIX_CLASS + "-has-time-line");
                         }
                     }
                     // 移动端扩展
@@ -11052,7 +11053,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.0-beta.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.0-beta.2';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;
