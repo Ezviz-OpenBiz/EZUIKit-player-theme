@@ -3,6 +3,7 @@ import Picker from '@skax/picker';
 import I18n, { I18nTranslation } from '@ezuikit/utils-i18n';
 import { LoggerCls, LoggerOptions } from '@ezuikit/utils-logger';
 import { BasePtzOptions } from '@ezuikit/control-ptz';
+import { RecListModalOptions } from '@ezuikit/control-rec-list-modal';
 import Zoom from '@ezuikit/control-zoom';
 import { TimeLineTimeSection } from '@ezuikit/control-time-line';
 import { TimePickerOptions } from '@ezuikit/control-date-picker';
@@ -96,6 +97,8 @@ declare const EVENTS: {
     readonly liveChange: "liveChange";
     /** 回放下拉选择变化 */
     readonly recDropdownChange: "recDropdownChange";
+    /** 录像列表面板状态变化 */
+    readonly recListChange: "recListChange";
     /** 告警消息面板状态变化 */
     readonly alarmMessageChange: "alarmMessageChange";
     /** 动态切换日志配置 */
@@ -188,6 +191,11 @@ declare const EVENTS: {
         readonly recDropdownChange: "Control.recDropdownChange";
         /** 回放下拉控件销毁 */
         readonly recDropdownDestroy: "Control.recDropdownDestroy";
+        /** 录像列表面板状态变化 */
+        readonly recListChange: "Control.recListChange";
+        readonly recListCardClick: "Control.recListCardClick";
+        /** 录像列表控件销毁 */
+        readonly recListDestroy: "Control.recListDestroy";
         /** 告警消息面板开关 */
         readonly alarmMessageChange: "Control.alarmMessageChange";
         /** 告警消息面板销毁 */
@@ -977,6 +985,8 @@ type ControlType =
  | 'live'
 /** 回放下拉 */
  | 'recDropdown'
+/** 录像列表 */
+ | 'recList'
 /** 告警消息 */
  | 'alarmMessage'
 /** 电子放大 */
@@ -1183,6 +1193,12 @@ type DefinitionOptions = Omit<SelectOptions, 'list' | 'fieldNames'> & {
  * 云台控件配置项
  */
 interface PtzOptions extends Omit<ControlOptions, 'tagName'>, BasePtzOptions {
+}
+
+/**
+ * 录像列表按钮控件配置项
+ */
+interface RecListOptions extends Omit<ControlOptions, 'tagName'>, RecListModalOptions {
 }
 
 /**
@@ -1478,6 +1494,7 @@ declare class Theme extends EventEmitter {
         readonly aichatChange: "aichatChange";
         readonly liveChange: "liveChange";
         readonly recDropdownChange: "recDropdownChange";
+        readonly recListChange: "recListChange";
         readonly alarmMessageChange: "alarmMessageChange";
         readonly setLoggerOptions: "setLoggerOptions";
         readonly records: "records";
@@ -1491,6 +1508,7 @@ declare class Theme extends EventEmitter {
             readonly play: "Control.play";
             readonly playDestroy: "Control.playDestroy";
             readonly capturePicture: "Control.capturePicture";
+            /** 清除屏幕旋转 */
             readonly capturePictureResult: "Control.capturePictureResult";
             readonly capturePictureDestroy: "Control.capturePictureDestroy";
             readonly volumechange: "Control.volumechange";
@@ -1503,6 +1521,9 @@ declare class Theme extends EventEmitter {
             readonly footerMorePanelOpenChange: "Control.footerMorePanelOpenChange";
             readonly deviceDestroy: "Control.deviceDestroy";
             readonly recTypeChange: "Control.recTypeChange";
+            /**
+             * 录像回放的月份列表 @private
+             */
             readonly recDestroy: "Control.recDestroy";
             readonly definitionChange: "Control.definitionChange";
             readonly definitionList: "Control.definitionList";
@@ -1528,6 +1549,9 @@ declare class Theme extends EventEmitter {
             readonly liveDestroy: "Control.liveDestroy";
             readonly recDropdownChange: "Control.recDropdownChange";
             readonly recDropdownDestroy: "Control.recDropdownDestroy";
+            readonly recListChange: "Control.recListChange";
+            readonly recListCardClick: "Control.recListCardClick";
+            readonly recListDestroy: "Control.recListDestroy";
             readonly alarmMessageChange: "Control.alarmMessageChange";
             readonly alarmMessageDestroy: "Control.alarmMessageDestroy";
             readonly zoomChange: "Control.zoomChange";
@@ -1550,12 +1574,7 @@ declare class Theme extends EventEmitter {
             readonly unmountedControls: "Control.unmountedControls";
             readonly posterDestroy: "Control.posterDestroy";
             readonly loadingDestroy: "Control.loadingDestroy";
-            readonly messageDestroy: "Control.messageDestroy"; /**
-             * 容器的高(单位 px)
-             * ```ts
-             * theme.height // number
-             * ```
-             */
+            readonly messageDestroy: "Control.messageDestroy";
             readonly contentDestroy: "Control.contentDestroy";
             readonly contentRerender: "Control.contentRerender";
         };
@@ -1802,7 +1821,7 @@ declare class Theme extends EventEmitter {
             '3D_ZOOM': string;
             '3D_ZOOM_DISABLE': string;
             '3D_ZOOM_FAILED': string;
-            START_3D_ZOOM: string;
+            START_3D_ZOOM: string; /** 倍速 @private */
             CLOSE_3D_ZOOM: string;
             DEVICE_NOT_SUPPORT_3D_ZOOM: string;
             '3D_ZOOM_ACTIVED': string;
@@ -1834,7 +1853,7 @@ declare class Theme extends EventEmitter {
             PTZ_SLOW: string;
             PTZ_SPEED: string;
             DEVICE_ZOOM: string;
-            DEVICE_FOCUS: string;
+            DEVICE_FOCUS: string; /** 销毁标识  @readonly */
             NOT_SUPPORT_DEVICE_ZOOM: string;
             NOT_SUPPORT_FOCUS: string;
             MIRROR: string;
@@ -1854,6 +1873,7 @@ declare class Theme extends EventEmitter {
             cancel: string;
             ok: string;
             close: string;
+            BTN_REC_LIST_TITLE: string;
         };
         en: {
             391001: string;
@@ -2146,6 +2166,7 @@ declare class Theme extends EventEmitter {
             cancel: string;
             ok: string;
             close: string;
+            BTN_REC_LIST_TITLE: string;
         };
     };
     /** 版本号 @since 0.0.1 */
@@ -2226,8 +2247,8 @@ declare class Theme extends EventEmitter {
     private _orientationAngle;
     /** 是否播放中 @private */
     _playing: boolean;
-    /** 加载中 */
-    private _loading;
+    /** @private 加载中 */
+    _loading: boolean;
     /** 音量 */
     private _volume;
     /** 静音 */
@@ -2718,6 +2739,8 @@ interface ThemeOptions {
     ptzOptions?: OmitControlOptions<PtzOptions> | null;
     /** 回放类型控件配置， 设置 null 不渲染控件 @since 0.0.1 */
     recOptions?: OmitControlOptions<RecOptions> | null;
+    /** 录像列表控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    recListOptions?: OmitControlOptions<RecListOptions> | null;
     /** 录制控件配置 ，设置 null 不渲染控件 @since 0.0.1 */
     recordOptions?: OmitControlOptions<RecordOptions> | null;
     /** 倍速控件配置， 设置 null 不渲染控件 @since 0.0.1 */

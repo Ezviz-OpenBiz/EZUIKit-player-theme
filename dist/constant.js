@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.0-beta.2
-* Copyright (c) 2026-06-26 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.0-beta.3
+* Copyright (c) 2026-07-03 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 /**
@@ -162,6 +162,7 @@ var EVENTS = {
     /** AI对话框状态变化 */ aichatChange: 'aichatChange',
     /** 直播模式切换 */ liveChange: 'liveChange',
     /** 回放下拉选择变化 */ recDropdownChange: 'recDropdownChange',
+    /** 录像列表面板状态变化 */ recListChange: 'recListChange',
     /** 告警消息面板状态变化 */ alarmMessageChange: 'alarmMessageChange',
     /** 动态切换日志配置 */ setLoggerOptions: 'setLoggerOptions',
     records: 'records',
@@ -214,6 +215,9 @@ var EVENTS = {
         /** 直播控件销毁 */ liveDestroy: 'Control.liveDestroy',
         /** 回放下拉选择变化 */ recDropdownChange: 'Control.recDropdownChange',
         /** 回放下拉控件销毁 */ recDropdownDestroy: 'Control.recDropdownDestroy',
+        /** 录像列表面板状态变化 */ recListChange: 'Control.recListChange',
+        recListCardClick: 'Control.recListCardClick',
+        /** 录像列表控件销毁 */ recListDestroy: 'Control.recListDestroy',
         /** 告警消息面板开关 */ alarmMessageChange: 'Control.alarmMessageChange',
         /** 告警消息面板销毁 */ alarmMessageDestroy: 'Control.alarmMessageDestroy',
         /** 缩放比例改变 */ zoomChange: 'Control.zoomChange',

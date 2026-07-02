@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.0-beta.2
-* Copyright (c) 2026-06-26 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.0-beta.3
+* Copyright (c) 2026-07-03 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -15,13 +15,13 @@
 		return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
 	}
 
-	var eventemitter3 = {exports: {}};
+	var eventemitter3$1 = {exports: {}};
 
-	var hasRequiredEventemitter3;
+	var hasRequiredEventemitter3$1;
 
-	function requireEventemitter3 () {
-		if (hasRequiredEventemitter3) return eventemitter3.exports;
-		hasRequiredEventemitter3 = 1;
+	function requireEventemitter3$1 () {
+		if (hasRequiredEventemitter3$1) return eventemitter3$1.exports;
+		hasRequiredEventemitter3$1 = 1;
 		(function (module) {
 
 			var has = Object.prototype.hasOwnProperty
@@ -358,12 +358,12 @@
 			{
 			  module.exports = EventEmitter;
 			} 
-		} (eventemitter3));
-		return eventemitter3.exports;
+		} (eventemitter3$1));
+		return eventemitter3$1.exports;
 	}
 
-	var eventemitter3Exports = requireEventemitter3();
-	var EventEmitter = /*@__PURE__*/getDefaultExportFromCjs(eventemitter3Exports);
+	var eventemitter3Exports$1 = requireEventemitter3$1();
+	var EventEmitter$1 = /*@__PURE__*/getDefaultExportFromCjs(eventemitter3Exports$1);
 
 	/**
 	 * 播放器的类名前缀
@@ -460,7 +460,7 @@
 	 * ```
 	 *
 	 */ // 事件命名不要超过两层
-	var EVENTS = {
+	var EVENTS$2 = {
 	    loading: 'loading',
 	    /** 播放 */ play: 'play',
 	    /** 截图 */ capturePicture: 'capturePicture',
@@ -493,6 +493,7 @@
 	    /** AI对话框状态变化 */ aichatChange: 'aichatChange',
 	    /** 直播模式切换 */ liveChange: 'liveChange',
 	    /** 回放下拉选择变化 */ recDropdownChange: 'recDropdownChange',
+	    /** 录像列表面板状态变化 */ recListChange: 'recListChange',
 	    /** 告警消息面板状态变化 */ alarmMessageChange: 'alarmMessageChange',
 	    /** 动态切换日志配置 */ setLoggerOptions: 'setLoggerOptions',
 	    records: 'records',
@@ -545,6 +546,9 @@
 	        /** 直播控件销毁 */ liveDestroy: 'Control.liveDestroy',
 	        /** 回放下拉选择变化 */ recDropdownChange: 'Control.recDropdownChange',
 	        /** 回放下拉控件销毁 */ recDropdownDestroy: 'Control.recDropdownDestroy',
+	        /** 录像列表面板状态变化 */ recListChange: 'Control.recListChange',
+	        recListCardClick: 'Control.recListCardClick',
+	        /** 录像列表控件销毁 */ recListDestroy: 'Control.recListDestroy',
 	        /** 告警消息面板开关 */ alarmMessageChange: 'Control.alarmMessageChange',
 	        /** 告警消息面板销毁 */ alarmMessageDestroy: 'Control.alarmMessageDestroy',
 	        /** 缩放比例改变 */ zoomChange: 'Control.zoomChange',
@@ -596,11 +600,11 @@
 	        Object.defineProperty(target, descriptor.key, descriptor);
 	    }
 	}
-	function _create_class$h(Constructor, protoProps, staticProps) {
+	function _create_class$k(Constructor, protoProps, staticProps) {
 	    if (protoProps) _defineProperties$9(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _inherits$x(subClass, superClass) {
+	function _inherits$y(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -611,14 +615,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$A(subClass, superClass);
+	    if (superClass) _set_prototype_of$C(subClass, superClass);
 	}
-	function _set_prototype_of$A(o, p) {
-	    _set_prototype_of$A = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$C(o, p) {
+	    _set_prototype_of$C = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$A(o, p);
+	    return _set_prototype_of$C(o, p);
 	}
 	/**
 	 * 控件基类
@@ -632,7 +636,7 @@
 	 * const myControl = new MyControl({})
 	 * ```
 	 */ var Control = /*#__PURE__*/ function(EventEmitter) {
-	    _inherits$x(Control, EventEmitter);
+	    _inherits$y(Control, EventEmitter);
 	    function Control(options) {
 	        var _this;
 	        var _this___options;
@@ -774,7 +778,7 @@
 	        // 这是一个空函数， 子类可以实现重新改方法
 	        this.__options.onClick == null ? void 0 : this.__options.onClick.call(this.__options, e);
 	    };
-	    _create_class$h(Control, [
+	    _create_class$k(Control, [
 	        {
 	            key: "active",
 	            get: /**
@@ -805,10 +809,10 @@
 	        }
 	    ]);
 	    return Control;
-	}(EventEmitter);
+	}(EventEmitter$1);
 
-	function _extends$y() {
-	    _extends$y = Object.assign || function(target) {
+	function _extends$A() {
+	    _extends$A = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -819,9 +823,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$y.apply(this, arguments);
+	    return _extends$A.apply(this, arguments);
 	}
-	function _inherits$w(subClass, superClass) {
+	function _inherits$x(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -832,25 +836,25 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$z(subClass, superClass);
+	    if (superClass) _set_prototype_of$B(subClass, superClass);
 	}
-	function _set_prototype_of$z(o, p) {
-	    _set_prototype_of$z = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$B(o, p) {
+	    _set_prototype_of$B = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$z(o, p);
+	    return _set_prototype_of$B(o, p);
 	}
 	var LOADING_DEFAULT_OPTIONS = {};
 	/**
 	 * 加载动画控件
 	 * @category Control
 	 */ var Loading = /*#__PURE__*/ function(Control) {
-	    _inherits$w(Loading, Control);
+	    _inherits$x(Loading, Control);
 	    function Loading(options) {
 	        if (options === void 0) options = {};
 	        var _this;
-	        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$y({}, options, {
+	        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$A({}, options, {
 	            tagName: 'div',
 	            controlType: 'block',
 	            classNameSuffix: 'loading'
@@ -888,8 +892,8 @@
 	    return Loading;
 	}(Control);
 
-	function _extends$x() {
-	    _extends$x = Object.assign || function(target) {
+	function _extends$z() {
+	    _extends$z = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -900,9 +904,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$x.apply(this, arguments);
+	    return _extends$z.apply(this, arguments);
 	}
-	function _inherits$v(subClass, superClass) {
+	function _inherits$w(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -913,14 +917,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$y(subClass, superClass);
+	    if (superClass) _set_prototype_of$A(subClass, superClass);
 	}
-	function _set_prototype_of$y(o, p) {
-	    _set_prototype_of$y = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$A(o, p) {
+	    _set_prototype_of$A = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$y(o, p);
+	    return _set_prototype_of$A(o, p);
 	}
 	// 不放在服务器上 是因为有可能http加载失败
 	// prettier-ignore
@@ -932,11 +936,11 @@
 	 * 封面控件
 	 * @category Control
 	 */ var Poster = /*#__PURE__*/ function(Control) {
-	    _inherits$v(Poster, Control);
+	    _inherits$w(Poster, Control);
 	    function Poster(options) {
 	        if (options === void 0) options = {};
 	        var _this;
-	        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$x({}, options, {
+	        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$z({}, options, {
 	            tagName: 'div',
 	            controlType: 'block',
 	            classNameSuffix: 'poster'
@@ -1043,10 +1047,11 @@
 	    date: '<svg width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" focusable="false" aria-hidden="true" data-icon="date">\n    <g>\n    <path d="m13.35,5.9c-0.3,0 -0.5,-0.2 -0.5,-0.5l0,-3.3c0,-0.3 0.2,-0.5 0.5,-0.5s0.5,0.2 0.5,0.5l0,3.3c0,0.3 -0.3,0.5 -0.5,0.5z" />\n    <path d="m6.65,5.9c-0.3,0 -0.5,-0.2 -0.5,-0.5l0,-3.3c0,-0.3 0.2,-0.5 0.5,-0.5s0.5,0.2 0.5,0.5l0,3.3c0,0.3 -0.2,0.5 -0.5,0.5z" />\n    <path d="m17.45,8.4l-15,0c-0.3,0 -0.5,-0.2 -0.5,-0.5s0.2,-0.5 0.5,-0.5l15,0c0.3,0 0.5,0.2 0.5,0.5s-0.2,0.5 -0.5,0.5z" />\n    <path d="m15.85,18.4l-11.7,0c-1.2,0 -2.2,-1 -2.2,-2.2l0,-10.8c0,-1.2 1,-2.2 2.2,-2.2l11.7,0c1.2,0 2.2,1 2.2,2.2l0,10.8c-0.1,1.3 -1,2.2 -2.2,2.2zm-11.7,-14.1c-0.6,0 -1.2,0.5 -1.2,1.2l0,10.8c0,0.6 0.5,1.2 1.2,1.2l11.7,0c0.6,0 1.2,-0.5 1.2,-1.2l0,-10.9c0,-0.6 -0.5,-1.2 -1.2,-1.2l-11.7,0l0,0.1z" />\n    <path d="m9.95,12c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5s0.3,-0.2 0.5,-0.2l0,0l0,0c0.4,0 0.7,0.3 0.7,0.7s-0.3,0.7 -0.7,0.7z" />\n    <path d="m14.15,12c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5c0.1,-0.1 0.3,-0.2 0.5,-0.2c0.4,0 0.7,0.3 0.7,0.7s-0.3,0.7 -0.7,0.7zm0,-1c-0.2,0 -0.3,0.1 -0.3,0.3c0,0.2 0.3,0.4 0.5,0.2c0.1,-0.1 0.1,-0.1 0.1,-0.2c0,-0.2 -0.1,-0.3 -0.3,-0.3z" />\n    <path d="m5.85,15.3c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5c0.1,-0.1 0.3,-0.2 0.5,-0.2l0,0l0,0c0.4,0 0.7,0.3 0.7,0.7c0,0.4 -0.3,0.7 -0.7,0.7z" />\n    <path d="m9.95,15.3c-0.4,0 -0.7,-0.3 -0.7,-0.7c0,-0.2 0.1,-0.4 0.2,-0.5c0.1,-0.1 0.3,-0.2 0.5,-0.2l0,0l0,0c0.4,0 0.7,0.3 0.7,0.7c0.1,0.4 -0.3,0.7 -0.7,0.7z" />\n    </g>\n  </svg>',
 	    add: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="add">\n  <path d="M10.5859 2.96875L9.41406 2.96875C9.3099 2.96875 9.25781 3.02083 9.25781 3.125L9.25781 9.25781L3.4375 9.25781C3.38542 9.25781 3.34635 9.27083 3.32031 9.29688C3.29427 9.32292 3.28125 9.36198 3.28125 9.41406L3.28125 10.5859C3.28125 10.6901 3.33333 10.7422 3.4375 10.7422L9.25781 10.7422L9.25781 16.875C9.25781 16.9792 9.3099 17.0312 9.41406 17.0312L10.5859 17.0312C10.6901 17.0312 10.7422 16.9792 10.7422 16.875L10.7422 10.7422L16.5625 10.7422C16.6667 10.7422 16.7188 10.6901 16.7188 10.5859L16.7188 9.41406C16.7188 9.3099 16.6667 9.25781 16.5625 9.25781L10.7422 9.25781L10.7422 3.125C10.7422 3.07292 10.7292 3.03385 10.7031 3.00781C10.6771 2.98177 10.638 2.96875 10.5859 2.96875Z" fill-rule="evenodd" /></svg>',
 	    reduce: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="reduce">\n   	<path  d="M3.4375 9.25781L16.5625 9.25781C16.6667 9.25781 16.7188 9.3099 16.7188 9.41406L16.7188 10.5859C16.7188 10.6901 16.6667 10.7422 16.5625 10.7422L3.4375 10.7422C3.33333 10.7422 3.28125 10.6901 3.28125 10.5859L3.28125 9.41406C3.28125 9.3099 3.33333 9.25781 3.4375 9.25781Z" fill-rule="evenodd" />\n  </svg>',
-	    /** 直播 */ live: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="live">\n    <rect width="18" height="13" x="3" y="7" rx="1.6" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M8.26636 4.8L10.466 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M15.996 4.8L13.796 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M9.8 17L15.4 13.354L9.8 10L9.8 17Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
-	    /** 回放 */ recDropdown: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="rec-dropdown">\n    <path d="M9.168 2.556C9.168 2.556 12.51 4.445 12 4.445C7.306 4.445 3.5 8.251 3.5 12.945C3.5 17.64 7.306 21.445 12 21.445C16.695 21.445 20.5 17.64 20.5 12.945C20.5 10.622 19.568 8.517 18.058 6.982" stroke-linecap="round" stroke-width="1.5"/>\n    <path d="M11.61 9.829L11.61 13.731L16.064 13.731" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
-	    /** 消息/告警 */ alarmMessage: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="alarm-message">\n    <path d="M9.708 18.344L9.708 18.709C9.708 19.974 10.734 21 12 21C13.266 21 14.292 19.974 14.292 18.709L14.292 18.343" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M13.833 5.751L13.833 4.833C13.833 3.821 13.013 3 12 3C10.987 3 10.167 3.821 10.167 4.833L10.167 5.751" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M6.563 10.189C6.563 7.686 8.592 5.657 11.094 5.657L12.907 5.657C15.41 5.657 17.438 7.686 17.438 10.189L17.438 12.986C17.438 13.516 17.649 14.025 18.024 14.4L18.665 15.04C19.04 15.416 19.251 15.925 19.251 16.455C19.251 17.499 18.405 18.345 17.361 18.345L6.64 18.345C5.596 18.345 4.75 17.499 4.75 16.455C4.75 15.925 4.961 15.416 5.336 15.04L5.977 14.4C6.352 14.025 6.563 13.516 6.563 12.986L6.563 10.189Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
-	    time: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="time">\n   	<path d="M10 1.66504C14.6026 1.66521 18.333 5.39635 18.333 9.99902C18.3328 14.6015 14.6025 18.3319 10 18.332C5.39733 18.332 1.66619 14.6017 1.66602 9.99902C1.66602 5.39624 5.39722 1.66504 10 1.66504ZM10 2.91504C6.08758 2.91504 2.91602 6.0866 2.91602 9.99902C2.91619 13.9113 6.08769 17.082 10 17.082C13.9122 17.0819 17.0828 13.9112 17.083 9.99902C17.083 6.08671 13.9123 2.91521 10 2.91504ZM10 6.875C10.3451 6.87508 10.625 7.1549 10.625 7.5V9.59863L10.71 9.63672C12.71 10.5481 13.253 10.796 13.6406 10.9727L13.7217 11.0098L13.8008 11.0459C13.8799 11.082 13.9609 11.1179 14.0557 11.1611C14.3697 11.3043 14.5083 11.6752 14.3652 11.9893C14.2221 12.3034 13.8512 12.442 13.5371 12.2988C13.4108 12.2412 13.3093 12.1949 13.2031 12.1465L13.1221 12.1094C12.7068 11.9201 12.1127 11.6495 9.74023 10.5684C9.51771 10.4667 9.375 10.2447 9.375 10V7.5C9.37504 7.15485 9.65485 6.875 10 6.875Z"/>\n  </svg>'
+	    /** 直播 */ live: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="live">\n    <rect width="18" height="13" x="3" y="7" rx="1.6" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M8.26636 4.8L10.466 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M15.996 4.8L13.796 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M9.8 17L15.4 13.354L9.8 10L9.8 17Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
+	    /** 回放 */ recDropdown: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="rec-dropdown">\n    <path d="M9.168 2.556C9.168 2.556 12.51 4.445 12 4.445C7.306 4.445 3.5 8.251 3.5 12.945C3.5 17.64 7.306 21.445 12 21.445C16.695 21.445 20.5 17.64 20.5 12.945C20.5 10.622 19.568 8.517 18.058 6.982" stroke-linecap="round" stroke-width="1.5"/>\n    <path d="M11.61 9.829L11.61 13.731L16.064 13.731" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
+	    /** 消息/告警 */ alarmMessage: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="alarm-message">\n    <path d="M9.708 18.344L9.708 18.709C9.708 19.974 10.734 21 12 21C13.266 21 14.292 19.974 14.292 18.709L14.292 18.343" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M13.833 5.751L13.833 4.833C13.833 3.821 13.013 3 12 3C10.987 3 10.167 3.821 10.167 4.833L10.167 5.751" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n    <path d="M6.563 10.189C6.563 7.686 8.592 5.657 11.094 5.657L12.907 5.657C15.41 5.657 17.438 7.686 17.438 10.189L17.438 12.986C17.438 13.516 17.649 14.025 18.024 14.4L18.665 15.04C19.04 15.416 19.251 15.925 19.251 16.455C19.251 17.499 18.405 18.345 17.361 18.345L6.64 18.345C5.596 18.345 4.75 17.499 4.75 16.455C4.75 15.925 4.961 15.416 5.336 15.04L5.977 14.4C6.352 14.025 6.563 13.516 6.563 12.986L6.563 10.189Z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>\n  </svg>',
+	    time: '<svg fill="currentColor" width="1em" height="1em" viewBox="0 0 20 20" focusable="false" aria-hidden="true" data-icon="time">\n   	<path d="M10 1.66504C14.6026 1.66521 18.333 5.39635 18.333 9.99902C18.3328 14.6015 14.6025 18.3319 10 18.332C5.39733 18.332 1.66619 14.6017 1.66602 9.99902C1.66602 5.39624 5.39722 1.66504 10 1.66504ZM10 2.91504C6.08758 2.91504 2.91602 6.0866 2.91602 9.99902C2.91619 13.9113 6.08769 17.082 10 17.082C13.9122 17.0819 17.0828 13.9112 17.083 9.99902C17.083 6.08671 13.9123 2.91521 10 2.91504ZM10 6.875C10.3451 6.87508 10.625 7.1549 10.625 7.5V9.59863L10.71 9.63672C12.71 10.5481 13.253 10.796 13.6406 10.9727L13.7217 11.0098L13.8008 11.0459C13.8799 11.082 13.9609 11.1179 14.0557 11.1611C14.3697 11.3043 14.5083 11.6752 14.3652 11.9893C14.2221 12.3034 13.8512 12.442 13.5371 12.2988C13.4108 12.2412 13.3093 12.1949 13.2031 12.1465L13.1221 12.1094C12.7068 11.9201 12.1127 11.6495 9.74023 10.5684C9.51771 10.4667 9.375 10.2447 9.375 10V7.5C9.37504 7.15485 9.65485 6.875 10 6.875Z"/>\n  </svg>',
+	    list: '<svg stroke="currentColor" fill="none" width="1em" height="1em" viewBox="0 0 24 24" focusable="false" aria-hidden="true" data-icon="list">\n   	<path d="M10.9995 5H21.0005" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M10.9995 12H21.0005" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M10.9995 19H21.0005" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.99951 5C6.99951 3.896 6.10351 3 4.99951 3C3.89551 3 2.99951 3.896 2.99951 5C2.99951 6.105 3.89551 7 4.99951 7C6.10351 7 6.99951 6.105 6.99951 5V5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.99951 12C6.99951 10.896 6.10351 10 4.99951 10C3.89551 10 2.99951 10.896 2.99951 12C2.99951 13.105 3.89551 14 4.99951 14C6.10351 14 6.99951 13.105 6.99951 12V12Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.99951 12C6.99951 10.896 6.10351 10 4.99951 10C3.89551 10 2.99951 10.896 2.99951 12C2.99951 13.105 3.89551 14 4.99951 14C6.10351 14 6.99951 13.105 6.99951 12V12Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.99951 19C6.99951 17.896 6.10351 17 4.99951 17C3.89551 17 2.99951 17.896 2.99951 19C2.99951 20.105 3.89551 21 4.99951 21C6.10351 21 6.99951 20.105 6.99951 19V19Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>\n  </svg>'
 	};
 
 	/**
@@ -1213,6 +1218,10 @@
 	        if (attr === void 0) attr = {};
 	        return createIcon(Icons.recDropdown, 'rec-dropdown', attr);
 	    },
+	    /** 录像列表 */ recList: function(attr) {
+	        if (attr === void 0) attr = {};
+	        return createIcon(Icons.list, 'rec-list', attr);
+	    },
 	    /** 消息 */ alarmMessage: function(attr) {
 	        if (attr === void 0) attr = {};
 	        return createIcon(Icons.alarmMessage, 'alarm-message', attr);
@@ -1223,8 +1232,8 @@
 	    }
 	};
 
-	function _extends$w() {
-	    _extends$w = Object.assign || function(target) {
+	function _extends$y() {
+	    _extends$y = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -1235,9 +1244,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$w.apply(this, arguments);
+	    return _extends$y.apply(this, arguments);
 	}
-	function _inherits$u(subClass, superClass) {
+	function _inherits$v(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -1248,25 +1257,25 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$x(subClass, superClass);
+	    if (superClass) _set_prototype_of$z(subClass, superClass);
 	}
-	function _set_prototype_of$x(o, p) {
-	    _set_prototype_of$x = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$z(o, p) {
+	    _set_prototype_of$z = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$x(o, p);
+	    return _set_prototype_of$z(o, p);
 	}
 	var MESSAGE_DEFAULT_OPTIONS = {};
 	/**
 	 * 消息控件
 	 * @category Control
 	 */ var Message = /*#__PURE__*/ function(Control) {
-	    _inherits$u(Message, Control);
+	    _inherits$v(Message, Control);
 	    function Message(options) {
 	        if (options === void 0) options = {};
 	        var _this;
-	        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$w({}, options, {
+	        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$y({}, options, {
 	            tagName: 'div',
 	            controlType: 'block'
 	        }))) || this, _this._$toast = null;
@@ -1415,12 +1424,12 @@
 	        Object.defineProperty(target, descriptor.key, descriptor);
 	    }
 	}
-	function _create_class$g(Constructor, protoProps, staticProps) {
+	function _create_class$j(Constructor, protoProps, staticProps) {
 	    if (protoProps) _defineProperties$8(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$v() {
-	    _extends$v = Object.assign || function(target) {
+	function _extends$x() {
+	    _extends$x = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -1431,9 +1440,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$v.apply(this, arguments);
+	    return _extends$x.apply(this, arguments);
 	}
-	function _inherits$t(subClass, superClass) {
+	function _inherits$u(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -1444,30 +1453,30 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$w(subClass, superClass);
+	    if (superClass) _set_prototype_of$y(subClass, superClass);
 	}
-	function _set_prototype_of$w(o, p) {
-	    _set_prototype_of$w = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$y(o, p) {
+	    _set_prototype_of$y = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$w(o, p);
+	    return _set_prototype_of$y(o, p);
 	}
 	/**
 	 * 播放/暂停控件
 	 * @category Control
 	 */ var Play = /*#__PURE__*/ function(Control) {
-	    _inherits$t(Play, Control);
+	    _inherits$u(Play, Control);
 	    function Play(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$v({}, options, {
+	        _this = Control.call(this, _extends$x({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'play'
 	        })) || this, _this._playing = false;
 	        _this._options = options;
 	        _this._playing = !!options.props.playing;
-	        _this.on(EVENTS.play, function(playing) {
+	        _this.on(EVENTS$2.play, function(playing) {
 	            if (_this._playing !== playing) {
 	                _this._playing = playing;
 	                _this._render();
@@ -1481,7 +1490,7 @@
 	   * 点击 Control 会触发
 	   */ _proto._onControlClick = function _onControlClick(e) {
 	        this._playing = !this._playing;
-	        this.emit(EVENTS.control.play, this._playing);
+	        this.emit(EVENTS$2.control.play, this._playing);
 	        this._options.onClick == null ? void 0 : this._options.onClick.call(this._options, e, this._playing);
 	        this._render();
 	    };
@@ -1498,7 +1507,7 @@
 	            });
 	        }
 	    };
-	    _create_class$g(Play, [
+	    _create_class$j(Play, [
 	        {
 	            key: "playing",
 	            get: /**
@@ -2443,20 +2452,20 @@
 	    };
 	}
 
-	function _array_like_to_array$2(arr, len) {
+	function _array_like_to_array$3(arr, len) {
 	    if (len == null || len > arr.length) len = arr.length;
 	    for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
 	    return arr2;
 	}
 	function _unsupported_iterable_to_array$2(o, minLen) {
 	    if (!o) return;
-	    if (typeof o === "string") return _array_like_to_array$2(o, minLen);
+	    if (typeof o === "string") return _array_like_to_array$3(o, minLen);
 	    var n = Object.prototype.toString.call(o).slice(8, -1);
 	    if (n === "Object" && o.constructor) n = o.constructor.name;
 	    if (n === "Map" || n === "Set") return Array.from(n);
-	    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array$2(o, minLen);
+	    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array$3(o, minLen);
 	}
-	function _create_for_of_iterator_helper_loose$2(o, allowArrayLike) {
+	function _create_for_of_iterator_helper_loose$3(o, allowArrayLike) {
 	    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
 	    if (it) return (it = it.call(o)).next.bind(it);
 	    if (Array.isArray(o) || (it = _unsupported_iterable_to_array$2(o)) || allowArrayLike) {
@@ -2603,7 +2612,7 @@
 	    Utils.resizeObserver = function resizeObserver(node, callback) {
 	        // prettier-ignore
 	        var observerFn = function(entries, observer) {
-	            for(var _iterator = _create_for_of_iterator_helper_loose$2(entries), _step; !(_step = _iterator()).done;){
+	            for(var _iterator = _create_for_of_iterator_helper_loose$3(entries), _step; !(_step = _iterator()).done;){
 	                var entry = _step.value;
 	                if (entry.target === node) {
 	                    if (callback) callback(entries, observer);
@@ -2650,7 +2659,7 @@
 	        Object.defineProperty(target, descriptor.key, descriptor);
 	    }
 	}
-	function _create_class$f(Constructor, protoProps, staticProps) {
+	function _create_class$i(Constructor, protoProps, staticProps) {
 	    if (protoProps) _defineProperties$7(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
@@ -2917,7 +2926,7 @@
 	            });
 	        });
 	    };
-	    _create_class$f(Progress, [
+	    _create_class$i(Progress, [
 	        {
 	            key: "disabled",
 	            get: function get() {
@@ -2974,12 +2983,12 @@
 	        Object.defineProperty(target, descriptor.key, descriptor);
 	    }
 	}
-	function _create_class$e(Constructor, protoProps, staticProps) {
+	function _create_class$h(Constructor, protoProps, staticProps) {
 	    if (protoProps) _defineProperties$6(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$u() {
-	    _extends$u = Object.assign || function(target) {
+	function _extends$w() {
+	    _extends$w = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -2990,9 +2999,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$u.apply(this, arguments);
+	    return _extends$w.apply(this, arguments);
 	}
-	function _inherits$s(subClass, superClass) {
+	function _inherits$t(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -3003,14 +3012,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$v(subClass, superClass);
+	    if (superClass) _set_prototype_of$x(subClass, superClass);
 	}
-	function _set_prototype_of$v(o, p) {
-	    _set_prototype_of$v = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$x(o, p) {
+	    _set_prototype_of$x = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$v(o, p);
+	    return _set_prototype_of$x(o, p);
 	}
 	var VOLUME_DEFAULT_OPTIONS = {
 	    volume: 0.8,
@@ -3024,12 +3033,12 @@
 	 * 音量调节控件
 	 * @category Control
 	 */ var Volume = /*#__PURE__*/ function(Control) {
-	    _inherits$s(Volume, Control);
+	    _inherits$t(Volume, Control);
 	    function Volume(options) {
 	        if (options === void 0) options = {};
 	        var _this;
 	        var _this__options_props, _this__options_props1, _this__options_props2, _this__options_props3;
-	        _this = Control.call(this, _extends$u({}, options, {
+	        _this = Control.call(this, _extends$w({}, options, {
 	            tagName: 'span',
 	            classNameSuffix: 'volume',
 	            controlType: 'button'
@@ -3060,7 +3069,7 @@
 	                onOpenChange: function(open) {
 	                    _this._options.onOpenChange == null ? void 0 : _this._options.onOpenChange.call(_this._options, open, _this._muted ? _this._lastVolume : _this.volume, _this._muted);
 	                    // prettier-ignore
-	                    _this.emit(EVENTS.control.volumePanelOpenChange, open, _this._lastVolume, _this._muted);
+	                    _this.emit(EVENTS$2.control.volumePanelOpenChange, open, _this._lastVolume, _this._muted);
 	                }
 	            });
 	            _this._progress = new Progress({
@@ -3084,11 +3093,11 @@
 	        }
 	        _this._updateUI();
 	        _this._addEventListener();
-	        _this.on(EVENTS.audioCodecUnsupported, function(flag) {
+	        _this.on(EVENTS$2.audioCodecUnsupported, function(flag) {
 	            flag = flag != null ? flag : true;
 	            _this.disabled = flag;
 	        });
-	        _this.on(EVENTS.volumechange, function(volume, muted) {
+	        _this.on(EVENTS$2.volumechange, function(volume, muted) {
 	            // 接收
 	            if (_this._muted !== muted) _this.muted = muted;
 	            if (_this._lastVolume !== volume) _this.volume = volume;
@@ -3170,7 +3179,7 @@
 	            }
 	        });
 	    };
-	    _create_class$e(Volume, [
+	    _create_class$h(Volume, [
 	        {
 	            key: "muted",
 	            get: /**
@@ -3191,7 +3200,7 @@
 	                    }
 	                    this._muted = muted;
 	                    this._options.onChange == null ? void 0 : this._options.onChange.call(this._options, this.volume, muted);
-	                    this.emit(EVENTS.control.volumechange, this.volume, muted);
+	                    this.emit(EVENTS$2.control.volumechange, this.volume, muted);
 	                }
 	                this._updateUI();
 	            }
@@ -3214,7 +3223,7 @@
 	                            this._progress.value = this._muted ? 0 : _volume;
 	                        }
 	                        this._options.onChange == null ? void 0 : this._options.onChange.call(this._options, _volume, this._muted);
-	                        this.emit(EVENTS.control.volumechange, _volume, this._muted);
+	                        this.emit(EVENTS$2.control.volumechange, _volume, this._muted);
 	                    }
 	                    this._updateUI();
 	                }
@@ -3888,8 +3897,8 @@
 	    return Fullscreen;
 	}();
 
-	function _extends$t() {
-	    _extends$t = Object.assign || function(target) {
+	function _extends$v() {
+	    _extends$v = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -3900,9 +3909,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$t.apply(this, arguments);
+	    return _extends$v.apply(this, arguments);
 	}
-	function _inherits$r(subClass, superClass) {
+	function _inherits$s(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -3913,24 +3922,24 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$u(subClass, superClass);
+	    if (superClass) _set_prototype_of$w(subClass, superClass);
 	}
-	function _set_prototype_of$u(o, p) {
-	    _set_prototype_of$u = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$w(o, p) {
+	    _set_prototype_of$w = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$u(o, p);
+	    return _set_prototype_of$w(o, p);
 	}
 	/**
 	 * 全屏控件
 	 * @category Control
 	 */ var Fullscreen = /*#__PURE__*/ function(Control) {
-	    _inherits$r(Fullscreen, Control);
+	    _inherits$s(Fullscreen, Control);
 	    function Fullscreen(options) {
 	        var _this;
 	        var _options_props, _this_options;
-	        _this = Control.call(this, _extends$t({
+	        _this = Control.call(this, _extends$v({
 	            tagName: 'span',
 	            classNameSuffix: 'fullscreen',
 	            controlType: 'button'
@@ -3995,8 +4004,8 @@
 	    return Fullscreen;
 	}(Control);
 
-	function _extends$s() {
-	    _extends$s = Object.assign || function(target) {
+	function _extends$u() {
+	    _extends$u = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -4007,9 +4016,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$s.apply(this, arguments);
+	    return _extends$u.apply(this, arguments);
 	}
-	function _inherits$q(subClass, superClass) {
+	function _inherits$r(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -4020,24 +4029,24 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$t(subClass, superClass);
+	    if (superClass) _set_prototype_of$v(subClass, superClass);
 	}
-	function _set_prototype_of$t(o, p) {
-	    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$v(o, p) {
+	    _set_prototype_of$v = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$t(o, p);
+	    return _set_prototype_of$v(o, p);
 	}
 	/**
 	 * 回放类型切换（本地回放(sdk 卡)， 云存储回放， 云录制回放）控件
 	 * @category Control
 	 */ var Rec = /*#__PURE__*/ function(Control) {
-	    _inherits$q(Rec, Control);
+	    _inherits$r(Rec, Control);
 	    function Rec(options) {
 	        var _this;
 	        var _options_props;
-	        _this = Control.call(this, _extends$s({}, options, {
+	        _this = Control.call(this, _extends$u({}, options, {
 	            tagName: 'div',
 	            controlType: 'block',
 	            classNameSuffix: 'rec'
@@ -4117,7 +4126,7 @@
 	                if (_this.recType !== type) {
 	                    _this.recType = type;
 	                    _this._activeIcon(type);
-	                    _this.emit(EVENTS.control.recTypeChange, type);
+	                    _this.emit(EVENTS$2.control.recTypeChange, type);
 	                    _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, type);
 	                }
 	            }
@@ -4445,7 +4454,8 @@
 	    FETCH_THEME_FAILED: '获取主题模板失败',
 	    cancel: '取消',
 	    ok: '确定',
-	    close: '关闭'
+	    close: '关闭',
+	    BTN_REC_LIST_TITLE: '录像片段'
 	};
 
 	// 不要出现多层的的数据, 数据铺平
@@ -4726,7 +4736,8 @@
 	    FETCH_THEME_FAILED: 'Failed to fetch theme template',
 	    cancel: 'Cancel',
 	    ok: 'Ok',
-	    close: 'Close'
+	    close: 'Close',
+	    BTN_REC_LIST_TITLE: 'Records'
 	};
 
 	/**
@@ -4947,6 +4958,11 @@
 	                iconId: 'recDropdown',
 	                part: 'right',
 	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'recList',
+	                part: 'right',
 	                isrender: 1
 	            },
 	            {
@@ -5353,7 +5369,7 @@
 	    voice: voice
 	};
 
-	function _inherits$p(subClass, superClass) {
+	function _inherits$q(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -5364,20 +5380,20 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$s(subClass, superClass);
+	    if (superClass) _set_prototype_of$u(subClass, superClass);
 	}
-	function _set_prototype_of$s(o, p) {
-	    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$u(o, p) {
+	    _set_prototype_of$u = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$s(o, p);
+	    return _set_prototype_of$u(o, p);
 	}
 	/**
 	 * 截图控件
 	 * @category Content
 	 */ var Content = /*#__PURE__*/ function(EventEmitter) {
-	    _inherits$p(Content, EventEmitter);
+	    _inherits$q(Content, EventEmitter);
 	    function Content(options) {
 	        var _this;
 	        _this = EventEmitter.call(this) || this, _this._scaleMode = 0, _this._cleanUpResizeObserver = null, _this._originWidth = 0, _this._originHeight = 0, _this._width = 0, _this._height = 0;
@@ -5395,7 +5411,7 @@
 	            var $popupContainer = options.getContainer();
 	            $popupContainer.appendChild(_this.$wrapper);
 	        }
-	        _this.on(EVENTS.videoInfo, function(originWidth, originHeight) {
+	        _this.on(EVENTS$2.videoInfo, function(originWidth, originHeight) {
 	            _this.rerender(originWidth, originHeight);
 	        });
 	        // prettier-ignore
@@ -5452,7 +5468,7 @@
 	                scale = wScale > hScale ? wScale : hScale;
 	            }
 	            this.$video.style.cssText += "\n        width: " + this._originWidth + "px;\n        height: " + this._originHeight + "px;\n        position: absolute;\n        object-fit:" + objectFill + ";\n        left: " + left + "px;\n        top: " + top + "px;\n        transform-origin: 50% 50%;\n        transform: scale(" + scale + ");\n      ";
-	            this.emit(EVENTS.control.contentRerender, {
+	            this.emit(EVENTS$2.control.contentRerender, {
 	                scaleMode: this._scaleMode,
 	                objectFill: objectFill,
 	                scale: scale,
@@ -5486,14 +5502,14 @@
 	        (_this_$wrapper = this.$wrapper) == null ? void 0 : _this_$wrapper.remove();
 	        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	        this.$wrapper = null;
-	        this.emit(EVENTS.control.contentDestroy);
+	        this.emit(EVENTS$2.control.contentDestroy);
 	        this.removeAllListeners();
 	    };
 	    return Content;
-	}(EventEmitter);
+	}(EventEmitter$1);
 
-	function _extends$r() {
-	    _extends$r = Object.assign || function(target) {
+	function _extends$t() {
+	    _extends$t = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -5504,9 +5520,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$r.apply(this, arguments);
+	    return _extends$t.apply(this, arguments);
 	}
-	function _inherits$o(subClass, superClass) {
+	function _inherits$p(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -5517,23 +5533,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$r(subClass, superClass);
+	    if (superClass) _set_prototype_of$t(subClass, superClass);
 	}
-	function _set_prototype_of$r(o, p) {
-	    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$t(o, p) {
+	    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$r(o, p);
+	    return _set_prototype_of$t(o, p);
 	}
 	/**
 	 * 更多控件
 	 * @category Control
 	 */ var More = /*#__PURE__*/ function(Control) {
-	    _inherits$o(More, Control);
+	    _inherits$p(More, Control);
 	    function More(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$r({}, options, {
+	        _this = Control.call(this, _extends$t({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'more'
@@ -5643,14 +5659,14 @@
 	 * @param theme - Theme
 	 */ function _themeEventemitter(theme) {
 	    // prettier-ignore
-	    theme == null ? void 0 : theme.on(EVENTS.audioCodecUnsupported, function(flag) {
+	    theme == null ? void 0 : theme.on(EVENTS$2.audioCodecUnsupported, function(flag) {
 	        var _theme_controls;
 	        if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.volumeControl) {
-	            theme.controls.volumeControl.emit(EVENTS.audioCodecUnsupported, flag);
+	            theme.controls.volumeControl.emit(EVENTS$2.audioCodecUnsupported, flag);
 	        }
 	    });
 	    // 处理信息提示 duration 单位秒
-	    theme == null ? void 0 : theme.on(EVENTS.message, function(message, type, duration) {
+	    theme == null ? void 0 : theme.on(EVENTS$2.message, function(message, type, duration) {
 	        if (/error$/gi.test(type) && [
 	            'ptzError',
 	            'talkError',
@@ -5673,33 +5689,33 @@
 	            (_theme_messageControl3 = theme.messageControl) == null ? void 0 : _theme_messageControl3.info(message, duration);
 	        }
 	    });
-	    theme == null ? void 0 : theme.on(EVENTS.audioInfo, function(info) {
+	    theme == null ? void 0 : theme.on(EVENTS$2.audioInfo, function(info) {
 	        var _theme_controls;
 	        // audioFormatName 是私有流的字段
 	        if ((theme == null ? void 0 : (_theme_controls = theme.controls) == null ? void 0 : _theme_controls.volumeControl) && (info.audioFormatName || info.encType)) {
 	            theme.controls.volumeControl.disabled = false;
 	        }
 	    });
-	    theme == null ? void 0 : theme.on(EVENTS.videoInfo, function(info) {
+	    theme == null ? void 0 : theme.on(EVENTS$2.videoInfo, function(info) {
 	        // 排除流信息回调触发的事件
 	        if (info) {
 	            var // rerender 画面
 	            _theme_contentControl_emit, _theme_contentControl;
-	            (_theme_contentControl = theme.contentControl) == null ? void 0 : (_theme_contentControl_emit = _theme_contentControl.emit) == null ? void 0 : _theme_contentControl_emit.call(_theme_contentControl, EVENTS.videoInfo, info.width, info.height);
+	            (_theme_contentControl = theme.contentControl) == null ? void 0 : (_theme_contentControl_emit = _theme_contentControl.emit) == null ? void 0 : _theme_contentControl_emit.call(_theme_contentControl, EVENTS$2.videoInfo, info.width, info.height);
 	        }
 	    });
-	    theme == null ? void 0 : theme.on(EVENTS.resize, function() {
+	    theme == null ? void 0 : theme.on(EVENTS$2.resize, function() {
 	        var // rerender 画面
 	        _theme_contentControl_emit, _theme_contentControl;
-	        (_theme_contentControl = theme.contentControl) == null ? void 0 : (_theme_contentControl_emit = _theme_contentControl.emit) == null ? void 0 : _theme_contentControl_emit.call(_theme_contentControl, EVENTS.resize);
+	        (_theme_contentControl = theme.contentControl) == null ? void 0 : (_theme_contentControl_emit = _theme_contentControl.emit) == null ? void 0 : _theme_contentControl_emit.call(_theme_contentControl, EVENTS$2.resize);
 	    });
 	    theme == null ? void 0 : theme.on('getDeviceInfo', function(info) {
 	    });
-	    theme == null ? void 0 : theme.on(EVENTS.firstFrameDisplay, function() {
+	    theme == null ? void 0 : theme.on(EVENTS$2.firstFrameDisplay, function() {
 	        theme._disabled(false);
 	    });
 	    //
-	    theme == null ? void 0 : theme.on(EVENTS.play, function(playing) {
+	    theme == null ? void 0 : theme.on(EVENTS$2.play, function(playing) {
 	        var _theme_controls;
 	        if (playing) {
 	            var _theme_messageControl;
@@ -5716,51 +5732,63 @@
 	    // =======================================================
 	    // 对讲
 	    // =======================================================
-	    theme.on(EVENTS.talkingChange, function(talking) {
+	    theme.on(EVENTS$2.talkingChange, function(talking) {
 	        var _theme_controls, _theme_controls_talkControl, _theme_controls1;
 	        theme._talking = talking;
 	        if (((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.talkControl) && talking !== ((_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_talkControl = _theme_controls1.talkControl) == null ? void 0 : _theme_controls_talkControl.active)) {
 	            var _theme_controls_talkControl1, _theme_controls2;
-	            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_talkControl1 = _theme_controls2.talkControl) == null ? void 0 : _theme_controls_talkControl1.emit(EVENTS.talkingChange, talking);
+	            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_talkControl1 = _theme_controls2.talkControl) == null ? void 0 : _theme_controls_talkControl1.emit(EVENTS$2.talkingChange, talking);
 	        }
 	    });
-	    theme.on(EVENTS.talkVolumeChange, function(value) {
+	    theme.on(EVENTS$2.talkVolumeChange, function(value) {
 	        var _theme_controls_talkControl_emit, _theme_controls_talkControl, _theme_controls;
-	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_talkControl = _theme_controls.talkControl) == null ? void 0 : (_theme_controls_talkControl_emit = _theme_controls_talkControl.emit) == null ? void 0 : _theme_controls_talkControl_emit.call(_theme_controls_talkControl, EVENTS.talkVolumeChange, value);
+	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_talkControl = _theme_controls.talkControl) == null ? void 0 : (_theme_controls_talkControl_emit = _theme_controls_talkControl.emit) == null ? void 0 : _theme_controls_talkControl_emit.call(_theme_controls_talkControl, EVENTS$2.talkVolumeChange, value);
 	    });
 	    // =======================================================
 	    // 语音广播
 	    // =======================================================
-	    theme.on(EVENTS.broadcastChange, function(active) {
+	    theme.on(EVENTS$2.broadcastChange, function(active) {
 	        var _theme_controls, _theme_controls_broadcastControl, _theme_controls1;
 	        if (((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.broadcastControl) && active !== ((_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_broadcastControl = _theme_controls1.broadcastControl) == null ? void 0 : _theme_controls_broadcastControl.active)) {
 	            var _theme_controls_broadcastControl1, _theme_controls2;
-	            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_broadcastControl1 = _theme_controls2.broadcastControl) == null ? void 0 : _theme_controls_broadcastControl1.emit(EVENTS.broadcastChange, active);
+	            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_broadcastControl1 = _theme_controls2.broadcastControl) == null ? void 0 : _theme_controls_broadcastControl1.emit(EVENTS$2.broadcastChange, active);
 	        }
 	    });
 	    // =======================================================
 	    // AI对话框
 	    // =======================================================
-	    theme.on(EVENTS.aichatChange, function(active) {
+	    theme.on(EVENTS$2.aichatChange, function(active) {
 	        var _theme_controls, _theme_controls_aiChatControl, _theme_controls1;
 	        if (((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.aiChatControl) && active !== ((_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_aiChatControl = _theme_controls1.aiChatControl) == null ? void 0 : _theme_controls_aiChatControl.active)) {
 	            var _theme_controls_aiChatControl1, _theme_controls2;
-	            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_aiChatControl1 = _theme_controls2.aiChatControl) == null ? void 0 : _theme_controls_aiChatControl1.emit(EVENTS.aichatChange, active);
+	            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_aiChatControl1 = _theme_controls2.aiChatControl) == null ? void 0 : _theme_controls_aiChatControl1.emit(EVENTS$2.aichatChange, active);
 	        }
 	    });
 	    // =======================================================
 	    // 告警消息
 	    // =======================================================
-	    theme.on(EVENTS.alarmMessageChange, function(active) {
+	    theme.on(EVENTS$2.alarmMessageChange, function(active) {
 	        var _theme_controls;
 	        if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.alarmMessageControl) {
 	            theme.controls.alarmMessageControl._panelOpen = active;
 	        }
 	    });
 	    // =======================================================
+	    // 录像列表
+	    // =======================================================
+	    theme.on(EVENTS$2.recListChange, function(active) {
+	        var _theme_controls;
+	        if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.recListControl) {
+	            theme.controls.recListControl._panelOpen = active;
+	            if (theme.controls.recListControl.active !== active) {
+	                theme.controls.recListControl.active = active;
+	            }
+	        }
+	    });
+	    // =======================================================
 	    // 录制
 	    // =======================================================
-	    theme.on(EVENTS.recordingChange, function(recording) {
+	    theme.on(EVENTS$2.recordingChange, function(recording) {
 	        var _theme_controls, _theme_controls_recordControl, _theme_controls1;
 	        theme._recording = recording;
 	        if (((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.recordControl) && recording !== ((_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_recordControl = _theme_controls1.recordControl) == null ? void 0 : _theme_controls_recordControl.active)) theme.controls.recordControl.active = recording;
@@ -5768,24 +5796,24 @@
 	    // =======================================================
 	    // 清晰度
 	    // =======================================================
-	    theme.on(EVENTS.setVideoLevelList, function(list) {
+	    theme.on(EVENTS$2.setVideoLevelList, function(list) {
 	        var _theme_controls_definitionControl_emit, _theme_controls_definitionControl, _theme_controls;
-	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_definitionControl = _theme_controls.definitionControl) == null ? void 0 : (_theme_controls_definitionControl_emit = _theme_controls_definitionControl.emit) == null ? void 0 : _theme_controls_definitionControl_emit.call(_theme_controls_definitionControl, EVENTS.setVideoLevelList, list || []);
+	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_definitionControl = _theme_controls.definitionControl) == null ? void 0 : (_theme_controls_definitionControl_emit = _theme_controls_definitionControl.emit) == null ? void 0 : _theme_controls_definitionControl_emit.call(_theme_controls_definitionControl, EVENTS$2.setVideoLevelList, list || []);
 	    });
-	    theme.on(EVENTS.currentVideoLevel, function(item, level) {
+	    theme.on(EVENTS$2.currentVideoLevel, function(item, level) {
 	        var _theme_controls_definitionControl_emit, _theme_controls_definitionControl, _theme_controls;
-	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_definitionControl = _theme_controls.definitionControl) == null ? void 0 : (_theme_controls_definitionControl_emit = _theme_controls_definitionControl.emit) == null ? void 0 : _theme_controls_definitionControl_emit.call(_theme_controls_definitionControl, EVENTS.currentVideoLevel, item, level);
+	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_definitionControl = _theme_controls.definitionControl) == null ? void 0 : (_theme_controls_definitionControl_emit = _theme_controls_definitionControl.emit) == null ? void 0 : _theme_controls_definitionControl_emit.call(_theme_controls_definitionControl, EVENTS$2.currentVideoLevel, item, level);
 	    });
 	    // =======================================================
 	    // 放大
 	    // =======================================================
-	    theme.on(EVENTS.zoomingChange, function(zooming) {
+	    theme.on(EVENTS$2.zoomingChange, function(zooming) {
 	        var _theme_controls1, _theme_controls_zoomControl1, _theme_controls2;
 	        if (((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1.zoomControl) && ((_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_zoomControl1 = _theme_controls2.zoomControl) == null ? void 0 : _theme_controls_zoomControl1.active) !== zooming) {
 	            theme.controls.zoomControl.active = zooming;
 	        }
 	    });
-	    theme.on(EVENTS.zoomChange, function(zoom) {
+	    theme.on(EVENTS$2.zoomChange, function(zoom) {
 	        var _theme_controls, _theme_controls_zoomControl, _theme_controls1;
 	        if (((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.zoomControl) && ((_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_zoomControl = _theme_controls1.zoomControl) == null ? void 0 : _theme_controls_zoomControl.value) !== zoom) {
 	            theme.controls.zoomControl.value = zoom;
@@ -5794,25 +5822,27 @@
 	    // =======================================================
 	    // 倍速
 	    // =======================================================
-	    theme.on(EVENTS.speedChange, function(speed) {
+	    theme.on(EVENTS$2.speedChange, function(speed) {
 	        var _theme_controls_speedControl_emit, _theme_controls_speedControl, _theme_controls;
-	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_speedControl = _theme_controls.speedControl) == null ? void 0 : (_theme_controls_speedControl_emit = _theme_controls_speedControl.emit) == null ? void 0 : _theme_controls_speedControl_emit.call(_theme_controls_speedControl, EVENTS.speedChange, speed);
+	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_speedControl = _theme_controls.speedControl) == null ? void 0 : (_theme_controls_speedControl_emit = _theme_controls_speedControl.emit) == null ? void 0 : _theme_controls_speedControl_emit.call(_theme_controls_speedControl, EVENTS$2.speedChange, speed);
 	    });
 	    // =======================================================
 	    // 回放片段
 	    // =======================================================
-	    theme.on(EVENTS.setAllDayRecTimes, function(list) {
-	        var _theme_controls_timeLineControl_emit, _theme_controls_timeLineControl, _theme_controls;
-	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_timeLineControl = _theme_controls.timeLineControl) == null ? void 0 : (_theme_controls_timeLineControl_emit = _theme_controls_timeLineControl.emit) == null ? void 0 : _theme_controls_timeLineControl_emit.call(_theme_controls_timeLineControl, EVENTS.setAllDayRecTimes, list.list);
+	    theme.on(EVENTS$2.setAllDayRecTimes, function(list) {
+	        var _theme_controls_timeLineControl_emit, _theme_controls_timeLineControl, _theme_controls, _theme_controls_recListControl_emit, _theme_controls_recListControl, _theme_controls1;
+	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_timeLineControl = _theme_controls.timeLineControl) == null ? void 0 : (_theme_controls_timeLineControl_emit = _theme_controls_timeLineControl.emit) == null ? void 0 : _theme_controls_timeLineControl_emit.call(_theme_controls_timeLineControl, EVENTS$2.setAllDayRecTimes, list.list);
+	        (_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_recListControl = _theme_controls1.recListControl) == null ? void 0 : (_theme_controls_recListControl_emit = _theme_controls_recListControl.emit) == null ? void 0 : _theme_controls_recListControl_emit.call(_theme_controls_recListControl, EVENTS$2.setAllDayRecTimes, list.list);
 	    });
-	    theme.on(EVENTS.getOSDTime, function(time) {
-	        var _theme_controls_timeLineControl_emit, _theme_controls_timeLineControl, _theme_controls;
-	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_timeLineControl = _theme_controls.timeLineControl) == null ? void 0 : (_theme_controls_timeLineControl_emit = _theme_controls_timeLineControl.emit) == null ? void 0 : _theme_controls_timeLineControl_emit.call(_theme_controls_timeLineControl, EVENTS.getOSDTime, time.data);
+	    theme.on(EVENTS$2.getOSDTime, function(time) {
+	        var _theme_controls_timeLineControl_emit, _theme_controls_timeLineControl, _theme_controls, _theme_controls_recListControl_emit, _theme_controls_recListControl, _theme_controls1;
+	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_timeLineControl = _theme_controls.timeLineControl) == null ? void 0 : (_theme_controls_timeLineControl_emit = _theme_controls_timeLineControl.emit) == null ? void 0 : _theme_controls_timeLineControl_emit.call(_theme_controls_timeLineControl, EVENTS$2.getOSDTime, time.data);
+	        (_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_recListControl = _theme_controls1.recListControl) == null ? void 0 : (_theme_controls_recListControl_emit = _theme_controls_recListControl.emit) == null ? void 0 : _theme_controls_recListControl_emit.call(_theme_controls_recListControl, EVENTS$2.getOSDTime, time.data);
 	    });
 	    // =======================================================
 	    // 全屏
 	    // =======================================================
-	    theme == null ? void 0 : theme.on(EVENTS.fullscreenChange, function(info) {
+	    theme == null ? void 0 : theme.on(EVENTS$2.fullscreenChange, function(info) {
 	        if (theme.zoomUtil) {
 	            if ([
 	                0,
@@ -5827,7 +5857,7 @@
 	            }
 	        }
 	    });
-	    theme == null ? void 0 : theme.on(EVENTS.orientationChange, function(angle) {
+	    theme == null ? void 0 : theme.on(EVENTS$2.orientationChange, function(angle) {
 	        if (theme.zoomUtil) {
 	            if ([
 	                0,
@@ -5843,9 +5873,9 @@
 	        }
 	    });
 	    // 日期选择器
-	    theme == null ? void 0 : theme.on(EVENTS.control.dateMonthChange, function(dates) {
+	    theme == null ? void 0 : theme.on(EVENTS$2.control.dateMonthChange, function(dates) {
 	        var _theme_controls_dateControl_emit, _theme_controls_dateControl, _theme_controls;
-	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_dateControl = _theme_controls.dateControl) == null ? void 0 : (_theme_controls_dateControl_emit = _theme_controls_dateControl.emit) == null ? void 0 : _theme_controls_dateControl_emit.call(_theme_controls_dateControl, EVENTS.control.dateMonthChange, dates);
+	        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_dateControl = _theme_controls.dateControl) == null ? void 0 : (_theme_controls_dateControl_emit = _theme_controls_dateControl.emit) == null ? void 0 : _theme_controls_dateControl_emit.call(_theme_controls_dateControl, EVENTS$2.control.dateMonthChange, dates);
 	    });
 	}
 	/**
@@ -5853,26 +5883,26 @@
 	 *
 	 * @param theme - Theme
 	 */ function _controlEventemitter(theme) {
-	    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16, _theme_controls17, _theme_controls18, _theme_controls19, _theme_controls20, _theme_controls21, _theme_controls22;
+	    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16, _theme_controls17, _theme_controls18, _theme_controls19, _theme_controls20, _theme_controls21, _theme_controls22, _theme_controls23, _theme_controls24;
 	    // Controls
 	    if (theme._recFooter) {
-	        theme._recFooter.on(EVENTS.theme.recFooterDestroy, function() {
-	            theme.emit(EVENTS.theme.recFooterDestroy);
+	        theme._recFooter.on(EVENTS$2.theme.recFooterDestroy, function() {
+	            theme.emit(EVENTS$2.theme.recFooterDestroy);
 	        });
 	    }
 	    if (theme._mobileExtend) {
-	        theme._mobileExtend.on(EVENTS.theme.mobileExtendDestroy, function() {
-	            theme.emit(EVENTS.theme.mobileExtendDestroy);
+	        theme._mobileExtend.on(EVENTS$2.theme.mobileExtendDestroy, function() {
+	            theme.emit(EVENTS$2.theme.mobileExtendDestroy);
 	        });
 	    }
 	    // 主题和控件之间通过 事件监听进行通信， （不推荐回调，因为控件不能定义统一回调函数和控件间通信不好做）
 	    // controls => theme => 对外
 	    if (theme._pauseControl) {
 	        // 播放暂停控件
-	        theme._pauseControl.on(EVENTS.control.play, function(playing, form) {
+	        theme._pauseControl.on(EVENTS$2.control.play, function(playing, form) {
 	            if (!theme.playing) {
 	                theme.playing = playing;
-	                theme.emit(EVENTS.control.play, playing, form);
+	                theme.emit(EVENTS$2.control.play, playing, form);
 	            }
 	        });
 	    }
@@ -5880,122 +5910,131 @@
 	    if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.playControl) {
 	        // 播放暂停控件播放状态变化
 	        // prettier-ignore
-	        theme.controls.playControl.on(EVENTS.control.play, function(playing) {
+	        theme.controls.playControl.on(EVENTS$2.control.play, function(playing) {
 	            if (theme.playing !== playing) {
 	                theme.playing = playing;
-	                theme.emit(EVENTS.control.play, playing);
+	                theme.emit(EVENTS$2.control.play, playing);
 	            }
 	        });
-	        theme.controls.playControl.on(EVENTS.control.playDestroy, function() {
-	            theme.emit(EVENTS.control.playDestroy);
+	        theme.controls.playControl.on(EVENTS$2.control.playDestroy, function() {
+	            theme.emit(EVENTS$2.control.playDestroy);
 	        });
 	    }
 	    // 音量控件
 	    if ((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1.volumeControl) {
 	        // 音量控件音量变化
 	        // prettier-ignore
-	        theme.controls.volumeControl.on(EVENTS.control.volumechange, function(volume, muted) {
+	        theme.controls.volumeControl.on(EVENTS$2.control.volumechange, function(volume, muted) {
 	            if (theme.muted !== muted) theme.muted = muted;
 	            if (theme.volume !== volume) theme.volume = volume;
-	            theme.emit(EVENTS.control.volumechange, volume, muted);
+	            theme.emit(EVENTS$2.control.volumechange, volume, muted);
 	        });
-	        theme.controls.volumeControl.on(EVENTS.control.volumePanelOpenChange, function(open, volume, muted) {
-	            theme.emit(EVENTS.control.volumePanelOpenChange, open, volume, muted);
+	        theme.controls.volumeControl.on(EVENTS$2.control.volumePanelOpenChange, function(open, volume, muted) {
+	            theme.emit(EVENTS$2.control.volumePanelOpenChange, open, volume, muted);
 	        });
-	        theme.controls.volumeControl.on(EVENTS.control.volumeDestroy, function() {
-	            theme.emit(EVENTS.control.volumeDestroy);
+	        theme.controls.volumeControl.on(EVENTS$2.control.volumeDestroy, function() {
+	            theme.emit(EVENTS$2.control.volumeDestroy);
 	        });
 	    }
 	    // 云台控件
 	    if ((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2.ptzControl) {
-	        theme.controls.ptzControl.on(EVENTS.control.ptzPanelOpenChange, function(open) {
+	        theme.controls.ptzControl.on(EVENTS$2.control.ptzPanelOpenChange, function(open) {
 	            if (Utils.isMobile) theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open);
-	            theme.emit(EVENTS.control.ptzPanelOpenChange, open);
+	            theme.emit(EVENTS$2.control.ptzPanelOpenChange, open);
 	        });
-	        theme.controls.ptzControl.on(EVENTS.control.ptzSpeedChange, function(speed) {
-	            theme.emit(EVENTS.control.ptzSpeedChange, speed);
-	            theme.emit(EVENTS.ptzSpeedChange, speed);
+	        theme.controls.ptzControl.on(EVENTS$2.control.ptzSpeedChange, function(speed) {
+	            theme.emit(EVENTS$2.control.ptzSpeedChange, speed);
+	            theme.emit(EVENTS$2.ptzSpeedChange, speed);
 	        });
-	        theme.controls.ptzControl.on(EVENTS.control.ptzError, function(info) {
-	            theme.emit(EVENTS.control.ptzError, info);
+	        theme.controls.ptzControl.on(EVENTS$2.control.ptzError, function(info) {
+	            theme.emit(EVENTS$2.control.ptzError, info);
 	            var message = theme.i18n.t(info.localeKey);
 	            if (/^\[missing/.test(message)) {
 	                message = info.msg;
 	            }
-	            theme.emit(EVENTS.message, message + " [" + info.code + "]", 'ptzError', 2);
+	            theme.emit(EVENTS$2.message, message + " [" + info.code + "]", 'ptzError', 2);
 	        });
-	        theme.controls.ptzControl.on(EVENTS.control.ptzDestroy, function() {
-	            theme.emit(EVENTS.control.ptzDestroy);
+	        theme.controls.ptzControl.on(EVENTS$2.control.ptzDestroy, function() {
+	            theme.emit(EVENTS$2.control.ptzDestroy);
 	        });
 	    }
 	    // 录制控件
 	    if ((_theme_controls3 = theme.controls) == null ? void 0 : _theme_controls3.recordControl) {
-	        theme.controls.recordControl.on(EVENTS.control.recordingChange, function(recording) {
-	            if (theme.recording !== recording) theme.emit(EVENTS.control.recordingChange, recording);
+	        theme.controls.recordControl.on(EVENTS$2.control.recordingChange, function(recording) {
+	            if (theme.recording !== recording) theme.emit(EVENTS$2.control.recordingChange, recording);
 	        });
-	        theme.controls.recordControl.on(EVENTS.control.recordDestroy, function() {
-	            theme.emit(EVENTS.control.recordDestroy);
+	        theme.controls.recordControl.on(EVENTS$2.control.recordDestroy, function() {
+	            theme.emit(EVENTS$2.control.recordDestroy);
 	        });
 	    }
 	    // 对讲控件
 	    if ((_theme_controls4 = theme.controls) == null ? void 0 : _theme_controls4.talkControl) {
-	        theme.controls.talkControl.on(EVENTS.control.talkingChange, function(talking) {
-	            if (theme.talking !== talking) theme.emit(EVENTS.control.talkingChange, talking);
+	        theme.controls.talkControl.on(EVENTS$2.control.talkingChange, function(talking) {
+	            if (theme.talking !== talking) theme.emit(EVENTS$2.control.talkingChange, talking);
 	        });
-	        theme.controls.talkControl.on(EVENTS.control.talkDestroy, function() {
-	            theme.emit(EVENTS.control.talkDestroy);
+	        theme.controls.talkControl.on(EVENTS$2.control.talkDestroy, function() {
+	            theme.emit(EVENTS$2.control.talkDestroy);
 	        });
 	    }
 	    // 语音广播控件
 	    if ((_theme_controls5 = theme.controls) == null ? void 0 : _theme_controls5.broadcastControl) {
-	        theme.controls.broadcastControl.on(EVENTS.control.broadcastChange, function(active) {
-	            theme.emit(EVENTS.control.broadcastChange, active);
+	        theme.controls.broadcastControl.on(EVENTS$2.control.broadcastChange, function(active) {
+	            theme.emit(EVENTS$2.control.broadcastChange, active);
 	        });
-	        theme.controls.broadcastControl.on(EVENTS.control.broadcastDestroy, function() {
-	            theme.emit(EVENTS.control.broadcastDestroy);
+	        theme.controls.broadcastControl.on(EVENTS$2.control.broadcastDestroy, function() {
+	            theme.emit(EVENTS$2.control.broadcastDestroy);
 	        });
 	    }
 	    // AI对话框
 	    if ((_theme_controls6 = theme.controls) == null ? void 0 : _theme_controls6.aiChatControl) {
-	        theme.controls.aiChatControl.on(EVENTS.control.aichatChange, function(active) {
-	            theme.emit(EVENTS.control.aichatChange, active);
+	        theme.controls.aiChatControl.on(EVENTS$2.control.aichatChange, function(active) {
+	            theme.emit(EVENTS$2.control.aichatChange, active);
 	        });
-	        theme.controls.aiChatControl.on(EVENTS.control.aichatDestroy, function() {
-	            theme.emit(EVENTS.control.aichatDestroy);
+	        theme.controls.aiChatControl.on(EVENTS$2.control.aichatDestroy, function() {
+	            theme.emit(EVENTS$2.control.aichatDestroy);
 	        });
 	    }
 	    // 直播按钮
 	    if ((_theme_controls7 = theme.controls) == null ? void 0 : _theme_controls7.liveControl) {
-	        theme.controls.liveControl.on(EVENTS.control.liveChange, function() {
+	        theme.controls.liveControl.on(EVENTS$2.control.liveChange, function() {
 	            var _theme_controls;
 	            // 直接设置回放下拉控件为非激活状态
 	            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.recDropdownControl) {
 	                theme.controls.recDropdownControl.active = false;
 	            }
-	            theme.emit(EVENTS.control.liveChange);
+	            theme.emit(EVENTS$2.control.liveChange);
 	        });
 	    }
 	    // 回放下拉
 	    if ((_theme_controls8 = theme.controls) == null ? void 0 : _theme_controls8.recDropdownControl) {
-	        theme.controls.recDropdownControl.on(EVENTS.control.recDropdownChange, function(type) {
+	        theme.controls.recDropdownControl.on(EVENTS$2.control.recDropdownChange, function(type) {
 	            var _theme_controls;
 	            // 直接设置直播控件为非激活状态
 	            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.liveControl) {
 	                theme.controls.liveControl.active = false;
 	            }
-	            theme.emit(EVENTS.control.recDropdownChange, type);
+	            theme.emit(EVENTS$2.control.recDropdownChange, type);
 	        });
 	    }
 	    // 告警消息
 	    if ((_theme_controls9 = theme.controls) == null ? void 0 : _theme_controls9.alarmMessageControl) {
-	        theme.controls.alarmMessageControl.on(EVENTS.control.alarmMessageChange, function(active) {
-	            theme.emit(EVENTS.control.alarmMessageChange, active);
+	        theme.controls.alarmMessageControl.on(EVENTS$2.control.alarmMessageChange, function(active) {
+	            theme.emit(EVENTS$2.control.alarmMessageChange, active);
+	        });
+	    }
+	    // 录像列表
+	    if ((_theme_controls10 = theme.controls) == null ? void 0 : _theme_controls10.recListControl) {
+	        theme.controls.recListControl.on(EVENTS$2.control.recListChange, function(active) {
+	            theme.emit(EVENTS$2.control.recListChange, active);
+	        });
+	        theme.controls.recListControl.on(EVENTS$2.control.recListDestroy, function() {
+	            theme.emit(EVENTS$2.control.recListDestroy);
 	        });
 	    }
 	    // 播放地址切换后同步 Live/RecDropdown 激活状态
 	    // changePlayUrl 后 urlInfo 已更新，firstFrameDisplay 表示新地址播放成功
-	    if (((_theme_controls10 = theme.controls) == null ? void 0 : _theme_controls10.liveControl) || ((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.recDropdownControl)) {
-	        theme.on(EVENTS.firstFrameDisplay, function() {
+	    if (((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.liveControl) || ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.recDropdownControl)) {
+	        theme.on(EVENTS$2.firstFrameDisplay, function() {
 	            var _theme_controls, _theme_controls1;
 	            var urlInfo = theme.urlInfo;
 	            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.liveControl) {
@@ -6007,107 +6046,107 @@
 	        });
 	    }
 	    // 缩放控件
-	    if ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.zoomControl) {
-	        theme.controls.zoomControl.on(EVENTS.control.zoomChange, function(value, _percent, _range) {
+	    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.zoomControl) {
+	        theme.controls.zoomControl.on(EVENTS$2.control.zoomChange, function(value, _percent, _range) {
 	            if (theme.zoom !== value) {
 	                theme.zoom = value;
-	                theme.emit(EVENTS.control.zoomChange, value);
+	                theme.emit(EVENTS$2.control.zoomChange, value);
 	            }
 	        });
-	        theme.controls.zoomControl.on(EVENTS.control.zoomPanelOpenChange, function(open, _zoom) {
+	        theme.controls.zoomControl.on(EVENTS$2.control.zoomPanelOpenChange, function(open, _zoom) {
 	            if (theme.zooming !== open) {
 	                theme.zooming = open;
-	                theme.emit(EVENTS.control.zoomPanelOpenChange, open);
+	                theme.emit(EVENTS$2.control.zoomPanelOpenChange, open);
 	            }
 	        });
-	        theme.controls.zoomControl.on(EVENTS.control.zoomDestroy, function() {
+	        theme.controls.zoomControl.on(EVENTS$2.control.zoomDestroy, function() {
 	            if (theme.zooming) {
 	                theme.zoom = 1;
 	                theme.zooming = false;
 	            }
-	            theme.emit(EVENTS.control.zoomDestroy);
+	            theme.emit(EVENTS$2.control.zoomDestroy);
 	        });
 	    }
 	    // 清晰度控件
-	    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.definitionControl) {
-	        theme.controls.definitionControl.on(EVENTS.control.definitionPanelOpenChange, function(open, definition, item) {
+	    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.definitionControl) {
+	        theme.controls.definitionControl.on(EVENTS$2.control.definitionPanelOpenChange, function(open, definition, item) {
 	            theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, definition);
-	            theme.emit(EVENTS.control.definitionPanelOpenChange, open, definition, item);
+	            theme.emit(EVENTS$2.control.definitionPanelOpenChange, open, definition, item);
 	        });
-	        theme.controls.definitionControl.on(EVENTS.control.definitionChange, function(definition, item) {
-	            theme.emit(EVENTS.control.definitionChange, definition, item);
+	        theme.controls.definitionControl.on(EVENTS$2.control.definitionChange, function(definition, item) {
+	            theme.emit(EVENTS$2.control.definitionChange, definition, item);
 	        });
-	        theme.controls.definitionControl.on(EVENTS.control.definitionDestroy, function() {
-	            theme.emit(EVENTS.control.definitionDestroy);
+	        theme.controls.definitionControl.on(EVENTS$2.control.definitionDestroy, function() {
+	            theme.emit(EVENTS$2.control.definitionDestroy);
 	        });
 	    }
 	    // 倍速控件
-	    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.speedControl) {
-	        theme.controls.speedControl.on(EVENTS.control.speedPanelOpenChange, function(open, speed, item) {
+	    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.speedControl) {
+	        theme.controls.speedControl.on(EVENTS$2.control.speedPanelOpenChange, function(open, speed, item) {
 	            theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, speed);
-	            theme.emit(EVENTS.control.speedPanelOpenChange, open, speed, item);
+	            theme.emit(EVENTS$2.control.speedPanelOpenChange, open, speed, item);
 	        });
-	        theme.controls.speedControl.on(EVENTS.control.speedChange, function(speed, item) {
-	            theme.emit(EVENTS.control.speedChange, speed, item);
+	        theme.controls.speedControl.on(EVENTS$2.control.speedChange, function(speed, item) {
+	            theme.emit(EVENTS$2.control.speedChange, speed, item);
 	        });
-	        theme.controls.speedControl.on(EVENTS.control.speedDestroy, function() {
-	            theme.emit(EVENTS.control.speedDestroy);
+	        theme.controls.speedControl.on(EVENTS$2.control.speedDestroy, function() {
+	            theme.emit(EVENTS$2.control.speedDestroy);
 	        });
 	    }
 	    // 截图控件
-	    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.capturePictureControl) {
-	        theme.controls.capturePictureControl.on(EVENTS.control.capturePicture, function(options) {
-	            theme.emit(EVENTS.control.capturePicture, options);
+	    if ((_theme_controls16 = theme.controls) == null ? void 0 : _theme_controls16.capturePictureControl) {
+	        theme.controls.capturePictureControl.on(EVENTS$2.control.capturePicture, function(options) {
+	            theme.emit(EVENTS$2.control.capturePicture, options);
 	        });
-	        theme.controls.capturePictureControl.on(EVENTS.control.capturePictureDestroy, function() {
-	            theme.emit(EVENTS.control.capturePictureDestroy);
+	        theme.controls.capturePictureControl.on(EVENTS$2.control.capturePictureDestroy, function() {
+	            theme.emit(EVENTS$2.control.capturePictureDestroy);
 	        });
 	    }
 	    // 全屏控件
-	    if ((_theme_controls16 = theme.controls) == null ? void 0 : _theme_controls16.fullscreenControl) {
-	        theme.controls.fullscreenControl.on(EVENTS.control.fullscreenDestroy, function() {
-	            theme.emit(EVENTS.control.fullscreenDestroy);
+	    if ((_theme_controls17 = theme.controls) == null ? void 0 : _theme_controls17.fullscreenControl) {
+	        theme.controls.fullscreenControl.on(EVENTS$2.control.fullscreenDestroy, function() {
+	            theme.emit(EVENTS$2.control.fullscreenDestroy);
 	        });
 	    }
 	    // 全局全屏控件
-	    if ((_theme_controls17 = theme.controls) == null ? void 0 : _theme_controls17.globalFullscreenControl) {
-	        theme.controls.globalFullscreenControl.on(EVENTS.control.globalFullscreenDestroy, function() {
-	            theme.emit(EVENTS.control.globalFullscreenDestroy);
+	    if ((_theme_controls18 = theme.controls) == null ? void 0 : _theme_controls18.globalFullscreenControl) {
+	        theme.controls.globalFullscreenControl.on(EVENTS$2.control.globalFullscreenDestroy, function() {
+	            theme.emit(EVENTS$2.control.globalFullscreenDestroy);
 	        });
 	    }
 	    // 设备信息控件
-	    if ((_theme_controls18 = theme.controls) == null ? void 0 : _theme_controls18.deviceControl) {
-	        theme.controls.deviceControl.on(EVENTS.control.deviceDestroy, function() {
-	            theme.emit(EVENTS.control.deviceDestroy);
+	    if ((_theme_controls19 = theme.controls) == null ? void 0 : _theme_controls19.deviceControl) {
+	        theme.controls.deviceControl.on(EVENTS$2.control.deviceDestroy, function() {
+	            theme.emit(EVENTS$2.control.deviceDestroy);
 	        });
 	    }
 	    // 回放类型切换控件
-	    if ((_theme_controls19 = theme.controls) == null ? void 0 : _theme_controls19.recControl) {
+	    if ((_theme_controls20 = theme.controls) == null ? void 0 : _theme_controls20.recControl) {
 	        // prettier-ignore
-	        theme.controls.recControl.on(EVENTS.control.recTypeChange, function(type) {
+	        theme.controls.recControl.on(EVENTS$2.control.recTypeChange, function(type) {
 	            if (theme.recType !== type) {
 	                var _theme__headerMoreControl, _theme_controls;
 	                theme.recType = type;
-	                theme.emit(EVENTS.control.recTypeChange, type);
+	                theme.emit(EVENTS$2.control.recTypeChange, type);
 	                // theme.emit(EVENTS.recTypeChange, type);
 	                if ((_theme__headerMoreControl = theme._headerMoreControl) == null ? void 0 : _theme__headerMoreControl.picker) {
 	                    theme._headerMoreControl.picker.open = false;
 	                }
 	                if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.speedControl) {
-	                    theme.controls.speedControl.emit(EVENTS.control.recTypeChange, type);
+	                    theme.controls.speedControl.emit(EVENTS$2.control.recTypeChange, type);
 	                }
 	            }
 	        });
-	        theme.controls.recControl.on(EVENTS.control.recDestroy, function() {
-	            theme.emit(EVENTS.control.recDestroy);
+	        theme.controls.recControl.on(EVENTS$2.control.recDestroy, function() {
+	            theme.emit(EVENTS$2.control.recDestroy);
 	        });
 	    }
 	    // 时间轴控件
-	    if ((_theme_controls20 = theme.controls) == null ? void 0 : _theme_controls20.timeLineControl) {
-	        theme.controls.timeLineControl.on(EVENTS.control.timeLineChange, function(date) {
-	            theme.emit(EVENTS.control.timeLineChange, date);
+	    if ((_theme_controls21 = theme.controls) == null ? void 0 : _theme_controls21.timeLineControl) {
+	        theme.controls.timeLineControl.on(EVENTS$2.control.timeLineChange, function(date) {
+	            theme.emit(EVENTS$2.control.timeLineChange, date);
 	        });
-	        theme.controls.timeLineControl.on(EVENTS.control.timeLinePanelOpenChange, function(open) {
+	        theme.controls.timeLineControl.on(EVENTS$2.control.timeLinePanelOpenChange, function(open) {
 	            var _theme_controls_dateControl, _theme_controls, _theme_controls_timeControl, _theme_controls1;
 	            if ((_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_dateControl = _theme_controls.dateControl) == null ? void 0 : _theme_controls_dateControl.datePicker) {
 	                var _theme_controls_dateControl_datePicker, _theme_controls_dateControl1, _theme_controls2;
@@ -6117,38 +6156,54 @@
 	                var _theme_controls_timeControl_timePicker, _theme_controls_timeControl1, _theme_controls3;
 	                (_theme_controls3 = theme.controls) == null ? void 0 : (_theme_controls_timeControl1 = _theme_controls3.timeControl) == null ? void 0 : (_theme_controls_timeControl_timePicker = _theme_controls_timeControl1.timePicker) == null ? void 0 : _theme_controls_timeControl_timePicker.hide();
 	            }
-	            theme.emit(EVENTS.control.timeLinePanelOpenChange, open);
+	            theme.emit(EVENTS$2.control.timeLinePanelOpenChange, open);
 	        });
-	        theme.controls.timeLineControl.on(EVENTS.control.timeLineDestroy, function() {
-	            theme.emit(EVENTS.control.timeLineDestroy);
+	        theme.controls.timeLineControl.on(EVENTS$2.control.timeLineDestroy, function() {
+	            theme.emit(EVENTS$2.control.timeLineDestroy);
+	        });
+	        // this.emit("TimeLine.onSectionIconClick", result)
+	        theme.controls.timeLineControl.on("TimeLine.onSectionIconClick", function(result) {
+	            var _theme_controls;
+	            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.recListControl) {
+	                var _theme_controls_recListControl, _theme_controls1;
+	                (_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_recListControl = _theme_controls1.recListControl) == null ? void 0 : _theme_controls_recListControl.emit("TimeLine.onSectionIconClick", result);
+	            }
+	            theme.emit("TimeLine.onSectionIconClick", result);
 	        });
 	    }
 	    // 日历控件
-	    if ((_theme_controls21 = theme.controls) == null ? void 0 : _theme_controls21.dateControl) {
-	        theme.controls.dateControl.on(EVENTS.control.datePanelOpenChange, function(open, date) {
-	            theme.emit(EVENTS.control.datePanelOpenChange, open, date);
+	    if ((_theme_controls22 = theme.controls) == null ? void 0 : _theme_controls22.dateControl) {
+	        theme.controls.dateControl.on(EVENTS$2.control.datePanelOpenChange, function(open, date) {
+	            theme.emit(EVENTS$2.control.datePanelOpenChange, open, date);
 	        });
-	        theme.controls.dateControl.on(EVENTS.control.dateChange, function(date) {
-	            theme.emit(EVENTS.control.dateChange, date);
+	        theme.controls.dateControl.on(EVENTS$2.control.dateChange, function(date) {
+	            theme.emit(EVENTS$2.control.dateChange, date);
 	        });
-	        theme.controls.dateControl.on(EVENTS.control.dateDestroy, function() {
-	            theme.emit(EVENTS.control.recDestroy);
+	        theme.controls.dateControl.on(EVENTS$2.control.dateDestroy, function() {
+	            theme.emit(EVENTS$2.control.recDestroy);
 	        });
 	    }
 	    // 时间控件
-	    if ((_theme_controls22 = theme.controls) == null ? void 0 : _theme_controls22.timeControl) {
-	        theme.controls.timeControl.on(EVENTS.control.timePanelOpenChange, function(open, time) {
-	            theme.emit(EVENTS.control.timePanelOpenChange, open, time);
+	    if ((_theme_controls23 = theme.controls) == null ? void 0 : _theme_controls23.timeControl) {
+	        theme.controls.timeControl.on(EVENTS$2.control.timePanelOpenChange, function(open, time) {
+	            theme.emit(EVENTS$2.control.timePanelOpenChange, open, time);
 	        });
-	        theme.controls.timeControl.on(EVENTS.control.timeChange, function(time) {
-	            theme.emit(EVENTS.control.timeChange, time);
+	        theme.controls.timeControl.on(EVENTS$2.control.timeChange, function(time) {
+	            theme.emit(EVENTS$2.control.timeChange, time);
+	        });
+	    }
+	    // 回放片段列表
+	    if ((_theme_controls24 = theme.controls) == null ? void 0 : _theme_controls24.recListControl) {
+	        theme.controls.recListControl.on(EVENTS$2.control.recListCardClick, function(section, index, sections) {
+	            theme.emit(EVENTS$2.control.recListCardClick, section, index, sections);
 	        });
 	    }
 	}
 	var ignoreList = [
-	    EVENTS.getOSDTime,
-	    EVENTS.setAllDayRecTimes,
-	    EVENTS.talkVolumeChange
+	    EVENTS$2.getOSDTime,
+	    EVENTS$2.setAllDayRecTimes,
+	    EVENTS$2.talkVolumeChange,
+	    EVENTS$2.control.recListCardClick
 	];
 	/**
 	 * 打印所有事件触发日志（仅主题层， 没有控件层因为已经透传到主题层了）
@@ -6224,12 +6279,12 @@
 	        Object.defineProperty(target, descriptor.key, descriptor);
 	    }
 	}
-	function _create_class$d(Constructor, protoProps, staticProps) {
+	function _create_class$g(Constructor, protoProps, staticProps) {
 	    if (protoProps) _defineProperties$5(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$q() {
-	    _extends$q = Object.assign || function(target) {
+	function _extends$s() {
+	    _extends$s = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -6240,9 +6295,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$q.apply(this, arguments);
+	    return _extends$s.apply(this, arguments);
 	}
-	function _inherits$n(subClass, superClass) {
+	function _inherits$o(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -6253,14 +6308,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$q(subClass, superClass);
+	    if (superClass) _set_prototype_of$s(subClass, superClass);
 	}
-	function _set_prototype_of$q(o, p) {
-	    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$s(o, p) {
+	    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$q(o, p);
+	    return _set_prototype_of$s(o, p);
 	}
 	var ZOOM_DEFAULT_OPTIONS = {
 	    open: false,
@@ -6270,17 +6325,17 @@
 	 * 电子放大控件
 	 * @category Control
 	 */ var Zoom$1 = /*#__PURE__*/ function(Control) {
-	    _inherits$n(Zoom, Control);
+	    _inherits$o(Zoom, Control);
 	    function Zoom(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$q({}, options, {
+	        _this = Control.call(this, _extends$s({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'zoom'
 	        })) || this, _this._value = 1, _this._isRotated = false;
 	        _this._options = Object.assign({}, ZOOM_DEFAULT_OPTIONS, options || {});
 	        _this._render();
-	        _this.emit(EVENTS.zoomChange, function(zoom) {
+	        _this.emit(EVENTS$2.zoomChange, function(zoom) {
 	            if (_this._progress) {
 	                _this.value = zoom;
 	            }
@@ -6319,7 +6374,7 @@
 	                if (value !== _this._value) {
 	                    _this._value = value;
 	                    _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, value, percent, range);
-	                    _this.emit(EVENTS.control.zoomChange, value, percent, range);
+	                    _this.emit(EVENTS$2.control.zoomChange, value, percent, range);
 	                }
 	            },
 	            renderText: function(value) {
@@ -6351,7 +6406,7 @@
 	        this.active = !this.active;
 	        Control.prototype._onControlClick.call(this, e);
 	    };
-	    _create_class$d(Zoom, [
+	    _create_class$g(Zoom, [
 	        {
 	            key: "value",
 	            get: function get() {
@@ -6377,12 +6432,12 @@
 	                if (this.active) {
 	                    var _this__$zoomPanel_classList, _this__$zoomPanel;
 	                    (_this__$zoomPanel = this._$zoomPanel) == null ? void 0 : (_this__$zoomPanel_classList = _this__$zoomPanel.classList) == null ? void 0 : _this__$zoomPanel_classList.remove("" + PREFIX_CLASS + "-hide");
-	                    this.emit(EVENTS.control.zoomPanelOpenChange, true);
+	                    this.emit(EVENTS$2.control.zoomPanelOpenChange, true);
 	                } else {
 	                    var _this__$zoomPanel_classList1, _this__$zoomPanel1;
 	                    (_this__$zoomPanel1 = this._$zoomPanel) == null ? void 0 : (_this__$zoomPanel_classList1 = _this__$zoomPanel1.classList) == null ? void 0 : _this__$zoomPanel_classList1.add("" + PREFIX_CLASS + "-hide");
 	                    this._progress.value = 1;
-	                    this.emit(EVENTS.control.zoomPanelOpenChange, false);
+	                    this.emit(EVENTS$2.control.zoomPanelOpenChange, false);
 	                }
 	            }
 	        },
@@ -6406,10 +6461,10 @@
 	* Copyright (c) 2026-05-04 Ezviz-OpenBiz
 	* Released under the MIT License.
 	*/
-	function _create_class$c(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}var ZOOM_DEFAULT_POSITION=[0,0],DefaultOptions={initialZoom:1,defaultCursor:"pointer",scrollVelocity:.1,animDuration:.25,allowZoom:true,allowPan:true,onChange:function(){},onTranslateChange:function(){},onTap:function(){},max:8,min:1,zoomStep:.1,allowTouchEvents:false,allowWheel:true,ignoredMouseButtons:[],doubleTouchMaxDelay:300,decelerationDuration:750},Zoom=function(){function Zoom(container,options){var _this=this;this._dragging=false,this.destroy=function(){_this.setAllowZoom(false),_this.reset(),_this.removeEventListeners();},this.setTransform=function(trans){_this.transform=trans;},this.getTransform=function(){return _this.transform},this.updateTranslate=function(){var translateX=0,translateY=0;translateX=_this.percentPos[0]<0?_this.percentPos[0]<-0.5*(_this.zoom-1)?-0.5*(_this.zoom-1):_this.percentPos[0]:_this.percentPos[0]>.5*(_this.zoom-1)?.5*(_this.zoom-1):_this.percentPos[0],translateY=_this.percentPos[1]<0?_this.percentPos[1]<-0.5*(_this.zoom-1)?-0.5*(_this.zoom-1):_this.percentPos[1]:_this.percentPos[1]>.5*(_this.zoom-1)?.5*(_this.zoom-1):_this.percentPos[1],_this.percentPos=[translateX,translateY];},this.update=function(){_this.container&&(_this.updateTranslate(),_this.container.style.transition="transform ease-out "+_this.transition+"s",_this.container.style.transform="translate3d("+100*_this.percentPos[0]+"%, "+100*_this.percentPos[1]+"%, 0) scale("+_this.zoom+")");},this.setAllowZoom=function(allow){_this.options.allowZoom=allow;},this.setZoom=function(zoom,reset){zoom=parseFloat(zoom.toFixed(_this.getPrecision(_this.options.zoomStep))),_this.zoom!==zoom&&(_this.zoom=zoom,_this.update(),null==_this.options.onChange||_this.options.onChange.call(_this.options,+_this.zoom.toFixed(_this.getPrecision(_this.options.zoomStep)),reset));},this.getZoom=function(){return _this.zoom},this.setPos=function(pos){var _this_container,_this_container1,containerWidth=null==(_this_container=_this.container)?void 0:_this_container.clientWidth,containerHeight=null==(_this_container1=_this.container)?void 0:_this_container1.clientHeight;+_this.pos[0]===pos[0]&&+_this.pos[1]===pos[1]||(_this.percentPos=[pos[0]/containerWidth,pos[1]/containerHeight],_this.update(),null==_this.options.onTranslateChange||_this.options.onTranslateChange.call(_this.options,{posX:pos[0],posY:pos[1]}));},this.setTransitionDuration=function(duration){_this.transition=duration,_this.update();},this.setCursor=function(cursor){_this.container&&(_this.container.style.cssText+="cursor:"+cursor+";",_this.cursor=cursor);},this.zoomIn=function(value){var _this_options_max,_this_options_max1,newPosX=_this.pos[0],newPosY=_this.pos[1],prevZoom=_this.zoom,newZoom=prevZoom+value<(null!=(_this_options_max=_this.options.max)?_this_options_max:8)?prevZoom+value:null!=(_this_options_max1=_this.options.max)?_this_options_max1:8;newZoom!==prevZoom&&(newPosX=newPosX*(newZoom-1)/(prevZoom>1?prevZoom-1:prevZoom),newPosY=newPosY*(newZoom-1)/(prevZoom>1?prevZoom-1:prevZoom)),_this.setZoom(newZoom),_this.setPos([newPosX,newPosY]),_this.setTransitionDuration(_this.options.animDuration);},this.zoomOut=function(value){var _this_options_min,_this_options_min1,newPosX=_this.pos[0],newPosY=_this.pos[1],prevZoom=_this.zoom,newZoom=prevZoom-value>(null!=(_this_options_min=_this.options.min)?_this_options_min:1)?prevZoom-value:null!=(_this_options_min1=_this.options.min)?_this_options_min1:1;newZoom!==prevZoom&&(newPosX=newPosX*(newZoom-1)/(prevZoom-1),newPosY=newPosY*(newZoom-1)/(prevZoom-1)),_this.setZoom(newZoom),_this.setPos([newPosX,newPosY]),_this.setTransitionDuration(_this.options.animDuration);},this.zoomToZone=function(relX,relY,relWidth,relHeight){var _this_container;if(_this.container){var _this_options_max,newPosX=_this.pos[0],newPosY=_this.pos[1],parentRect=(null==(_this_container=_this.container)?void 0:_this_container.parentNode).getBoundingClientRect(),prevZoom=_this.zoom,optimalZoomX=parentRect.width/relWidth,optimalZoomY=parentRect.height/relHeight,newZoom=Math.min(optimalZoomX,optimalZoomY,null!=(_this_options_max=_this.options.max)?_this_options_max:8),rect=_this.container.getBoundingClientRect(),_ref=[rect.width/prevZoom/2,rect.height/prevZoom/2],_ref1=[relX+relWidth/2,relY+relHeight/2];newPosX=(_ref[0]-_ref1[0])*newZoom,newPosY=(_ref[1]-_ref1[1])*newZoom,_this.setZoom(newZoom),_this.setPos([newPosX,newPosY]),_this.setTransitionDuration(_this.options.animDuration);}},this.getNewPosition=function(x,y,newZoom){var prevZoom=[_this.zoom,_this.pos[0],_this.pos[1]][0];if(1===newZoom||!_this)return ZOOM_DEFAULT_POSITION;var _ref1=[_this.container.clientWidth,_this.container.clientHeight],clientWidth=_ref1[0],clientHeight=_ref1[1];if(newZoom>prevZoom)return [0,0];var w=-(x-clientWidth/2)/(clientWidth/2)*newZoom/2,h=-(y-clientHeight/2)/(clientHeight/2)*newZoom/2;return w>newZoom/2-.5&&(w=3.5),h>newZoom/2-.5&&(h=3.5),[clientWidth*w,clientHeight*h]},this.fullZoomInOnPosition=function(x,y){var _this_options_max,zoom=null!=(_this_options_max=_this.options.max)?_this_options_max:DefaultOptions.max;_this.setZoom(null!=zoom?zoom:DefaultOptions.max),_this.setPos(_this.getNewPosition(x,y,zoom)),_this.setTransitionDuration(_this.options.animDuration);},this.getLimitedShift=function(shift,minLimit,maxLimit,minElement,maxElement){if(shift>0){if(minElement>minLimit)return 0;if(minElement+shift>minLimit)return minLimit-minElement}else if(shift<0){if(maxElement<maxLimit)return 0;if(maxElement+shift<maxLimit)return maxLimit-maxElement}return shift},this.getCursor=function(canMoveOnX,canMoveOnY){return canMoveOnX&&canMoveOnY?"move":canMoveOnX?"ew-resize":canMoveOnY?"ns-resize":"auto"},this.move=function(shiftX,shiftY,transitionDuration){if(void 0===transitionDuration&&(transitionDuration=0),_this.container){var newPosX=_this.pos[0],newPosY=_this.pos[1],rect=_this.container.getBoundingClientRect(),parentRect=_this.container.parentNode.getBoundingClientRect(),shiftHorizontal=_this.transform?shiftY:shiftX,shiftVertical=_this.transform?shiftX:shiftY,_ref=_this.transform?[rect.height>parentRect.bottom-parentRect.top,shiftVertical>0&&rect.top-parentRect.top<0,shiftVertical<0&&rect.bottom-parentRect.bottom>0]:[rect.width>parentRect.right-parentRect.left,shiftHorizontal>0&&rect.left-parentRect.left<0,shiftHorizontal<0&&rect.right-parentRect.right>0],canMoveOnX=_ref[0]||_ref[1]||_ref[2];canMoveOnX&&(_this.transform?newPosX+=_this.getLimitedShift(shiftVertical,parentRect.top,parentRect.bottom,rect.top,rect.bottom):newPosX+=_this.getLimitedShift(shiftHorizontal,parentRect.left,parentRect.right,rect.left,rect.right));var _ref1=_this.transform?[rect.width>parentRect.right-parentRect.left,shiftHorizontal>0&&rect.right-parentRect.right<0,shiftHorizontal<0&&rect.left-parentRect.left>0]:[rect.height>parentRect.bottom-parentRect.top,shiftVertical>0&&rect.top-parentRect.top<0,shiftVertical<0&&rect.bottom-parentRect.bottom>0],canMoveOnY=_ref1[0]||_ref1[1]||_ref1[2];if(canMoveOnY)if(_this.transform){newPosY+=function(shift,minLimit,maxLimit,minElement,maxElement){if(shift>0){if(maxElement<maxLimit+1)return 0;if(maxElement+shift<maxLimit+1)return maxLimit-maxElement}else if(shift<0){if(minElement+1>minLimit)return 0;if(minElement+1+shift>minLimit)return minLimit-minElement}return shift}(shiftHorizontal,parentRect.left,parentRect.right,rect.left,rect.right);}else newPosY+=_this.getLimitedShift(shiftVertical,parentRect.top,parentRect.bottom,rect.top,rect.bottom);var cursor=_this.getCursor(canMoveOnX,canMoveOnY);_this.setPos([newPosX,newPosY]),_this.setCursor(cursor),_this.setTransitionDuration(transitionDuration);}},this.isDoubleTapping=function(){var _this_lastTouchTime,_this_options_doubleTouchMaxDelay,_this_lastDoubleTapTime,_this_options_doubleTouchMaxDelay1,touchTime=(new Date).getTime();return touchTime-(null!=(_this_lastTouchTime=_this.lastTouchTime)?_this_lastTouchTime:0)<(null!=(_this_options_doubleTouchMaxDelay=_this.options.doubleTouchMaxDelay)?_this_options_doubleTouchMaxDelay:300)&&touchTime-(null!=(_this_lastDoubleTapTime=_this.lastDoubleTapTime)?_this_lastDoubleTapTime:0)>(null!=(_this_options_doubleTouchMaxDelay1=_this.options.doubleTouchMaxDelay)?_this_options_doubleTouchMaxDelay1:750)?(_this.lastDoubleTapTime=touchTime,true):(_this.lastTouchTime=touchTime,false)},this.startDeceleration=function(lastShiftOnX,lastShiftOnY){var startTimestamp=null,startDecelerationMove=function(timestamp){null===startTimestamp&&(startTimestamp=timestamp);var _this_options_decelerationDuration,_this_options_decelerationDuration1,_this_options_decelerationDuration2,progress=timestamp-startTimestamp,ratio=((null!=(_this_options_decelerationDuration=_this.options.decelerationDuration)?_this_options_decelerationDuration:750)-progress)/(null!=(_this_options_decelerationDuration1=_this.options.decelerationDuration)?_this_options_decelerationDuration1:750),_ref=[lastShiftOnX*ratio,lastShiftOnY*ratio],shiftX=_ref[0],shiftY=_ref[1];progress<(null!=(_this_options_decelerationDuration2=_this.options.decelerationDuration)?_this_options_decelerationDuration2:750)&&Math.max(Math.abs(shiftX),Math.abs(shiftY))>1?(_this.move(shiftX,shiftY,0),_this.lastRequestAnimationId=requestAnimationFrame(startDecelerationMove)):_this.lastRequestAnimationId=null;};_this.lastRequestAnimationId=requestAnimationFrame(startDecelerationMove);},this.reset=function(){_this.setZoom(_this.options.initialZoom,true),_this.cursor=_this.options.defaultCursor,_this.setTransitionDuration(_this.options.animDuration),_this.setPos(ZOOM_DEFAULT_POSITION);},this.addScale=function(scale){ void 0===scale&&(scale=1),_this.handleZoomAdd(scale);},this.handleZoomAdd=function(scale){if(void 0===scale&&(scale=1),_this.options.allowZoom&&_this.options.allowWheel){var _this_options_max,newZoom=parseFloat((_this.zoom+scale).toFixed(_this.getPrecision(_this.options.zoomStep)));newZoom>(null!=(_this_options_max=_this.options.max)?_this_options_max:8)&&(newZoom=8),_this.setZoom(newZoom),_this.setPos(_this.pos),_this.setTransitionDuration(.05);}},this.subScale=function(scale){ void 0===scale&&(scale=1),_this.handleZoomSub(scale);},this.handleZoomSub=function(scale){if(void 0===scale&&(scale=1),_this.options.allowZoom&&_this.options.allowWheel){var newZoom=parseFloat((_this.zoom-scale).toFixed(_this.getPrecision(_this.options.zoomStep)));newZoom<1&&(newZoom=1),_this.setZoom(newZoom),_this.setPos(_this.pos),_this.setTransitionDuration(.05);}},this.handleMouseWheel=function(event){if(event.preventDefault(),_this.options.allowZoom&&_this.options.allowWheel){var _this_options_max,_this_options_min,velocity=event.deltaY<0?_this.options.scrollVelocity:0-_this.options.scrollVelocity,newZoom=parseFloat(Math.max(Math.min(_this.zoom+velocity,null!=(_this_options_max=_this.options.max)?_this_options_max:8),null!=(_this_options_min=_this.options.min)?_this_options_min:1).toFixed(_this.getPrecision(_this.options.zoomStep)));_this.setZoom(newZoom),_this.setTransitionDuration(.05);}},this.handleMouseStart=function(event){var _this_options_ignoredMouseButtons;event.preventDefault(),_this.options.allowPan&&!(null==(_this_options_ignoredMouseButtons=_this.options.ignoredMouseButtons)?void 0:_this_options_ignoredMouseButtons.includes(event.button))&&(_this._dragging=true,_this.lastRequestAnimationId&&cancelAnimationFrame(_this.lastRequestAnimationId),_this.lastCursor=_this.getCoordinates(event));},this.handleMouseMove=function(event){event.preventDefault(),_this.options.allowPan&&_this.lastCursor&&_this._dragging&&_this._touchOrMouseDrag(event);},this.handleMouseStop=function(event){event.preventDefault(),_this.lastShift&&(_this.startDeceleration(_this.lastShift[0],_this.lastShift[1]),_this.lastShift=null),_this.lastCursor=null,_this.setCursor("auto"),_this._dragging=false;},this.handleTouchStart=function(event){var isThisDoubleTapping=_this.isDoubleTapping();_this.isMultiTouch=event.touches.length,_this.options.allowTouchEvents||event.preventDefault(),_this.lastRequestAnimationId&&cancelAnimationFrame(_this.lastRequestAnimationId);var _this_getCoordinates=_this.getCoordinates(event.touches[0]),posX=_this_getCoordinates[0],posY=_this_getCoordinates[1];if(_this.isMultiTouch>1)_this.lastCursor=[posX,posY];else if(isThisDoubleTapping&&_this.options.allowZoom)if(1===_this.zoom){var _this_container_getBoundingClientRect=_this.container.getBoundingClientRect();_this_container_getBoundingClientRect.top,_this_container_getBoundingClientRect.left;var ref,ref1,x=_this_container_getBoundingClientRect.x,y=_this_container_getBoundingClientRect.y;posX=(ref1=[posX-(x=(ref=_this.transform?[y,x]:[x,y])[0]),posY-(y=ref[1])])[0],posY=ref1[1],_this.fullZoomInOnPosition(posX,posY);}else _this.reset();else _this._tapStartTime=(new Date).getTime(),_this.options.allowPan&&(_this.lastCursor=[posX,posY]);},this.handleTouchMove=function(event){if(_this.options.allowTouchEvents||event.preventDefault(),_this.lastCursor)if(1===_this.isMultiTouch)_this._touchOrMouseDrag(event.touches[0]),_this.lastTouchDistance=null;else if(_this.isMultiTouch>1){var newZoom=_this.zoom,_this_getCoordinates=_this.getCoordinates(event.touches[0]),pos1X=_this_getCoordinates[0],pos1Y=_this_getCoordinates[1],_this_getCoordinates1=_this.getCoordinates(event.touches[1]),pos2X=_this_getCoordinates1[0],pos2Y=_this_getCoordinates1[1],distance=Math.sqrt(Math.pow(pos2X-pos1X,2)+Math.pow(pos2Y-pos1Y,2));if(_this.lastTouchDistance&&distance&&distance!==_this.lastTouchDistance){var _this_options_max,_this_options_min,_this_options_max1;if(_this.options.allowZoom)if((newZoom+=(distance-_this.lastTouchDistance)/100)>(null!=(_this_options_max=_this.options.max)?_this_options_max:8))newZoom=null!=(_this_options_max1=_this.options.max)?_this_options_max1:8;else if(newZoom<(null!=(_this_options_min=_this.options.min)?_this_options_min:1)){var _this_options_min1;newZoom=null!=(_this_options_min1=_this.options.min)?_this_options_min1:1;}_this.setZoom(newZoom),_this.setTransitionDuration(0);}_this.lastCursor=[pos1X,pos1Y],_this.lastTouchDistance=distance;}},this.handleTouchStop=function(){_this.lastShift&&(_this.startDeceleration(_this.lastShift[0],_this.lastShift[1]),_this.lastShift=null),_this._tapStartTime&&(new Date).getTime()-_this._tapStartTime<200&&(null==_this.options.onTap||_this.options.onTap.call(_this.options)),_this._tapStartTime=void 0,_this.lastCursor=null,_this.lastTouchDistance=null,_this.isMultiTouch=0;},this.container=container,this.options=Object.assign({},DefaultOptions,options||{}),this.percentPos=ZOOM_DEFAULT_POSITION,this.transition=this.options.animDuration,this.zoom=1,this.cursor="auto",this.lastCursor=[0,0],this.lastShift=null,this.lastTouchDistance=null,this.lastRequestAnimationId=null,this.lastTouchTime=(new Date).getTime(),this.lastDoubleTapTime=(new Date).getTime(),this.transform=false,this.isMultiTouch=1,this.handleMouseMove=this.handleMouseMove.bind(this),this.handleMouseStart=this.handleMouseStart.bind(this),this.handleMouseStop=this.handleMouseStop.bind(this),this.handleMouseWheel=this.handleMouseWheel.bind(this),this.handleTouchStart=this.handleTouchStart.bind(this),this.handleTouchMove=this.handleTouchMove.bind(this),this.handleTouchStop=this.handleTouchStop.bind(this),this.getZoom=this.getZoom.bind(this),this.setZoom=this.setZoom.bind(this);}var _proto=Zoom.prototype;return _proto.setUpEventListeners=function(){var refCurrentValue=this.container;window.matchMedia("(pointer: fine)").matches?(this.options.allowWheel&&(null==refCurrentValue||refCurrentValue.addEventListener("wheel",this.handleMouseWheel,{passive:false})),null==refCurrentValue||refCurrentValue.addEventListener("mousedown",this.handleMouseStart,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("mousemove",this.handleMouseMove,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("mouseup",this.handleMouseStop,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("mouseleave",this.handleMouseStop,{passive:false})):(null==refCurrentValue||refCurrentValue.addEventListener("touchstart",this.handleTouchStart,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("touchmove",this.handleTouchMove,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("touchend",this.handleTouchStop,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("touchcancel",this.handleTouchStop,{passive:false}));},_proto.removeEventListeners=function(){var refCurrentValue=this.container;window.matchMedia("(pointer: fine)").matches?(this.options.allowWheel&&(null==refCurrentValue||refCurrentValue.removeEventListener("wheel",this.handleMouseWheel)),null==refCurrentValue||refCurrentValue.removeEventListener("mousedown",this.handleMouseStart),null==refCurrentValue||refCurrentValue.removeEventListener("mousemove",this.handleMouseMove),null==refCurrentValue||refCurrentValue.removeEventListener("mouseup",this.handleMouseStop),null==refCurrentValue||refCurrentValue.removeEventListener("mouseleave",this.handleMouseStop)):(null==refCurrentValue||refCurrentValue.removeEventListener("touchstart",this.handleTouchStart),null==refCurrentValue||refCurrentValue.removeEventListener("touchmove",this.handleTouchMove),null==refCurrentValue||refCurrentValue.removeEventListener("touchend",this.handleTouchStop),null==refCurrentValue||refCurrentValue.removeEventListener("touchcancel",this.handleTouchStop));},_proto.getPrecision=function(value){ void 0===value&&(value=1);var valueStr=value.toString();return valueStr.includes(".")?valueStr.split(".")[1].length:1},_proto.getCoordinates=function(event){var clientHeight=this.container.clientHeight,clientTop=this.container.clientTop,clientLeft=this.container.clientLeft,_ref=this.transform?[event.clientY,clientHeight-event.clientX]:[event.clientX-clientTop,event.clientY-clientLeft];return [_ref[0],_ref[1]]},_proto._touchOrMouseDrag=function(event){if(this.lastCursor){var _this_getCoordinates=this.getCoordinates(event),posX=_this_getCoordinates[0],posY=_this_getCoordinates[1],shiftX=posX-this.lastCursor[0],shiftY=posY-this.lastCursor[1];this.move(shiftX,shiftY,0),this.lastCursor=[posX,posY],this.lastShift=[shiftX,shiftY];}},_create_class$c(Zoom,[{key:"pos",get:function(){return [this.container.clientWidth*this.percentPos[0],this.container.clientHeight*this.percentPos[1]]}}]),Zoom}();Zoom.VERSION="1.0.0-beta.2";
+	function _create_class$f(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}var ZOOM_DEFAULT_POSITION=[0,0],DefaultOptions$1={initialZoom:1,defaultCursor:"pointer",scrollVelocity:.1,animDuration:.25,allowZoom:true,allowPan:true,onChange:function(){},onTranslateChange:function(){},onTap:function(){},max:8,min:1,zoomStep:.1,allowTouchEvents:false,allowWheel:true,ignoredMouseButtons:[],doubleTouchMaxDelay:300,decelerationDuration:750},Zoom=function(){function Zoom(container,options){var _this=this;this._dragging=false,this.destroy=function(){_this.setAllowZoom(false),_this.reset(),_this.removeEventListeners();},this.setTransform=function(trans){_this.transform=trans;},this.getTransform=function(){return _this.transform},this.updateTranslate=function(){var translateX=0,translateY=0;translateX=_this.percentPos[0]<0?_this.percentPos[0]<-0.5*(_this.zoom-1)?-0.5*(_this.zoom-1):_this.percentPos[0]:_this.percentPos[0]>.5*(_this.zoom-1)?.5*(_this.zoom-1):_this.percentPos[0],translateY=_this.percentPos[1]<0?_this.percentPos[1]<-0.5*(_this.zoom-1)?-0.5*(_this.zoom-1):_this.percentPos[1]:_this.percentPos[1]>.5*(_this.zoom-1)?.5*(_this.zoom-1):_this.percentPos[1],_this.percentPos=[translateX,translateY];},this.update=function(){_this.container&&(_this.updateTranslate(),_this.container.style.transition="transform ease-out "+_this.transition+"s",_this.container.style.transform="translate3d("+100*_this.percentPos[0]+"%, "+100*_this.percentPos[1]+"%, 0) scale("+_this.zoom+")");},this.setAllowZoom=function(allow){_this.options.allowZoom=allow;},this.setZoom=function(zoom,reset){zoom=parseFloat(zoom.toFixed(_this.getPrecision(_this.options.zoomStep))),_this.zoom!==zoom&&(_this.zoom=zoom,_this.update(),null==_this.options.onChange||_this.options.onChange.call(_this.options,+_this.zoom.toFixed(_this.getPrecision(_this.options.zoomStep)),reset));},this.getZoom=function(){return _this.zoom},this.setPos=function(pos){var _this_container,_this_container1,containerWidth=null==(_this_container=_this.container)?void 0:_this_container.clientWidth,containerHeight=null==(_this_container1=_this.container)?void 0:_this_container1.clientHeight;+_this.pos[0]===pos[0]&&+_this.pos[1]===pos[1]||(_this.percentPos=[pos[0]/containerWidth,pos[1]/containerHeight],_this.update(),null==_this.options.onTranslateChange||_this.options.onTranslateChange.call(_this.options,{posX:pos[0],posY:pos[1]}));},this.setTransitionDuration=function(duration){_this.transition=duration,_this.update();},this.setCursor=function(cursor){_this.container&&(_this.container.style.cssText+="cursor:"+cursor+";",_this.cursor=cursor);},this.zoomIn=function(value){var _this_options_max,_this_options_max1,newPosX=_this.pos[0],newPosY=_this.pos[1],prevZoom=_this.zoom,newZoom=prevZoom+value<(null!=(_this_options_max=_this.options.max)?_this_options_max:8)?prevZoom+value:null!=(_this_options_max1=_this.options.max)?_this_options_max1:8;newZoom!==prevZoom&&(newPosX=newPosX*(newZoom-1)/(prevZoom>1?prevZoom-1:prevZoom),newPosY=newPosY*(newZoom-1)/(prevZoom>1?prevZoom-1:prevZoom)),_this.setZoom(newZoom),_this.setPos([newPosX,newPosY]),_this.setTransitionDuration(_this.options.animDuration);},this.zoomOut=function(value){var _this_options_min,_this_options_min1,newPosX=_this.pos[0],newPosY=_this.pos[1],prevZoom=_this.zoom,newZoom=prevZoom-value>(null!=(_this_options_min=_this.options.min)?_this_options_min:1)?prevZoom-value:null!=(_this_options_min1=_this.options.min)?_this_options_min1:1;newZoom!==prevZoom&&(newPosX=newPosX*(newZoom-1)/(prevZoom-1),newPosY=newPosY*(newZoom-1)/(prevZoom-1)),_this.setZoom(newZoom),_this.setPos([newPosX,newPosY]),_this.setTransitionDuration(_this.options.animDuration);},this.zoomToZone=function(relX,relY,relWidth,relHeight){var _this_container;if(_this.container){var _this_options_max,newPosX=_this.pos[0],newPosY=_this.pos[1],parentRect=(null==(_this_container=_this.container)?void 0:_this_container.parentNode).getBoundingClientRect(),prevZoom=_this.zoom,optimalZoomX=parentRect.width/relWidth,optimalZoomY=parentRect.height/relHeight,newZoom=Math.min(optimalZoomX,optimalZoomY,null!=(_this_options_max=_this.options.max)?_this_options_max:8),rect=_this.container.getBoundingClientRect(),_ref=[rect.width/prevZoom/2,rect.height/prevZoom/2],_ref1=[relX+relWidth/2,relY+relHeight/2];newPosX=(_ref[0]-_ref1[0])*newZoom,newPosY=(_ref[1]-_ref1[1])*newZoom,_this.setZoom(newZoom),_this.setPos([newPosX,newPosY]),_this.setTransitionDuration(_this.options.animDuration);}},this.getNewPosition=function(x,y,newZoom){var prevZoom=[_this.zoom,_this.pos[0],_this.pos[1]][0];if(1===newZoom||!_this)return ZOOM_DEFAULT_POSITION;var _ref1=[_this.container.clientWidth,_this.container.clientHeight],clientWidth=_ref1[0],clientHeight=_ref1[1];if(newZoom>prevZoom)return [0,0];var w=-(x-clientWidth/2)/(clientWidth/2)*newZoom/2,h=-(y-clientHeight/2)/(clientHeight/2)*newZoom/2;return w>newZoom/2-.5&&(w=3.5),h>newZoom/2-.5&&(h=3.5),[clientWidth*w,clientHeight*h]},this.fullZoomInOnPosition=function(x,y){var _this_options_max,zoom=null!=(_this_options_max=_this.options.max)?_this_options_max:DefaultOptions$1.max;_this.setZoom(null!=zoom?zoom:DefaultOptions$1.max),_this.setPos(_this.getNewPosition(x,y,zoom)),_this.setTransitionDuration(_this.options.animDuration);},this.getLimitedShift=function(shift,minLimit,maxLimit,minElement,maxElement){if(shift>0){if(minElement>minLimit)return 0;if(minElement+shift>minLimit)return minLimit-minElement}else if(shift<0){if(maxElement<maxLimit)return 0;if(maxElement+shift<maxLimit)return maxLimit-maxElement}return shift},this.getCursor=function(canMoveOnX,canMoveOnY){return canMoveOnX&&canMoveOnY?"move":canMoveOnX?"ew-resize":canMoveOnY?"ns-resize":"auto"},this.move=function(shiftX,shiftY,transitionDuration){if(void 0===transitionDuration&&(transitionDuration=0),_this.container){var newPosX=_this.pos[0],newPosY=_this.pos[1],rect=_this.container.getBoundingClientRect(),parentRect=_this.container.parentNode.getBoundingClientRect(),shiftHorizontal=_this.transform?shiftY:shiftX,shiftVertical=_this.transform?shiftX:shiftY,_ref=_this.transform?[rect.height>parentRect.bottom-parentRect.top,shiftVertical>0&&rect.top-parentRect.top<0,shiftVertical<0&&rect.bottom-parentRect.bottom>0]:[rect.width>parentRect.right-parentRect.left,shiftHorizontal>0&&rect.left-parentRect.left<0,shiftHorizontal<0&&rect.right-parentRect.right>0],canMoveOnX=_ref[0]||_ref[1]||_ref[2];canMoveOnX&&(_this.transform?newPosX+=_this.getLimitedShift(shiftVertical,parentRect.top,parentRect.bottom,rect.top,rect.bottom):newPosX+=_this.getLimitedShift(shiftHorizontal,parentRect.left,parentRect.right,rect.left,rect.right));var _ref1=_this.transform?[rect.width>parentRect.right-parentRect.left,shiftHorizontal>0&&rect.right-parentRect.right<0,shiftHorizontal<0&&rect.left-parentRect.left>0]:[rect.height>parentRect.bottom-parentRect.top,shiftVertical>0&&rect.top-parentRect.top<0,shiftVertical<0&&rect.bottom-parentRect.bottom>0],canMoveOnY=_ref1[0]||_ref1[1]||_ref1[2];if(canMoveOnY)if(_this.transform){newPosY+=function(shift,minLimit,maxLimit,minElement,maxElement){if(shift>0){if(maxElement<maxLimit+1)return 0;if(maxElement+shift<maxLimit+1)return maxLimit-maxElement}else if(shift<0){if(minElement+1>minLimit)return 0;if(minElement+1+shift>minLimit)return minLimit-minElement}return shift}(shiftHorizontal,parentRect.left,parentRect.right,rect.left,rect.right);}else newPosY+=_this.getLimitedShift(shiftVertical,parentRect.top,parentRect.bottom,rect.top,rect.bottom);var cursor=_this.getCursor(canMoveOnX,canMoveOnY);_this.setPos([newPosX,newPosY]),_this.setCursor(cursor),_this.setTransitionDuration(transitionDuration);}},this.isDoubleTapping=function(){var _this_lastTouchTime,_this_options_doubleTouchMaxDelay,_this_lastDoubleTapTime,_this_options_doubleTouchMaxDelay1,touchTime=(new Date).getTime();return touchTime-(null!=(_this_lastTouchTime=_this.lastTouchTime)?_this_lastTouchTime:0)<(null!=(_this_options_doubleTouchMaxDelay=_this.options.doubleTouchMaxDelay)?_this_options_doubleTouchMaxDelay:300)&&touchTime-(null!=(_this_lastDoubleTapTime=_this.lastDoubleTapTime)?_this_lastDoubleTapTime:0)>(null!=(_this_options_doubleTouchMaxDelay1=_this.options.doubleTouchMaxDelay)?_this_options_doubleTouchMaxDelay1:750)?(_this.lastDoubleTapTime=touchTime,true):(_this.lastTouchTime=touchTime,false)},this.startDeceleration=function(lastShiftOnX,lastShiftOnY){var startTimestamp=null,startDecelerationMove=function(timestamp){null===startTimestamp&&(startTimestamp=timestamp);var _this_options_decelerationDuration,_this_options_decelerationDuration1,_this_options_decelerationDuration2,progress=timestamp-startTimestamp,ratio=((null!=(_this_options_decelerationDuration=_this.options.decelerationDuration)?_this_options_decelerationDuration:750)-progress)/(null!=(_this_options_decelerationDuration1=_this.options.decelerationDuration)?_this_options_decelerationDuration1:750),_ref=[lastShiftOnX*ratio,lastShiftOnY*ratio],shiftX=_ref[0],shiftY=_ref[1];progress<(null!=(_this_options_decelerationDuration2=_this.options.decelerationDuration)?_this_options_decelerationDuration2:750)&&Math.max(Math.abs(shiftX),Math.abs(shiftY))>1?(_this.move(shiftX,shiftY,0),_this.lastRequestAnimationId=requestAnimationFrame(startDecelerationMove)):_this.lastRequestAnimationId=null;};_this.lastRequestAnimationId=requestAnimationFrame(startDecelerationMove);},this.reset=function(){_this.setZoom(_this.options.initialZoom,true),_this.cursor=_this.options.defaultCursor,_this.setTransitionDuration(_this.options.animDuration),_this.setPos(ZOOM_DEFAULT_POSITION);},this.addScale=function(scale){ void 0===scale&&(scale=1),_this.handleZoomAdd(scale);},this.handleZoomAdd=function(scale){if(void 0===scale&&(scale=1),_this.options.allowZoom&&_this.options.allowWheel){var _this_options_max,newZoom=parseFloat((_this.zoom+scale).toFixed(_this.getPrecision(_this.options.zoomStep)));newZoom>(null!=(_this_options_max=_this.options.max)?_this_options_max:8)&&(newZoom=8),_this.setZoom(newZoom),_this.setPos(_this.pos),_this.setTransitionDuration(.05);}},this.subScale=function(scale){ void 0===scale&&(scale=1),_this.handleZoomSub(scale);},this.handleZoomSub=function(scale){if(void 0===scale&&(scale=1),_this.options.allowZoom&&_this.options.allowWheel){var newZoom=parseFloat((_this.zoom-scale).toFixed(_this.getPrecision(_this.options.zoomStep)));newZoom<1&&(newZoom=1),_this.setZoom(newZoom),_this.setPos(_this.pos),_this.setTransitionDuration(.05);}},this.handleMouseWheel=function(event){if(event.preventDefault(),_this.options.allowZoom&&_this.options.allowWheel){var _this_options_max,_this_options_min,velocity=event.deltaY<0?_this.options.scrollVelocity:0-_this.options.scrollVelocity,newZoom=parseFloat(Math.max(Math.min(_this.zoom+velocity,null!=(_this_options_max=_this.options.max)?_this_options_max:8),null!=(_this_options_min=_this.options.min)?_this_options_min:1).toFixed(_this.getPrecision(_this.options.zoomStep)));_this.setZoom(newZoom),_this.setTransitionDuration(.05);}},this.handleMouseStart=function(event){var _this_options_ignoredMouseButtons;event.preventDefault(),_this.options.allowPan&&!(null==(_this_options_ignoredMouseButtons=_this.options.ignoredMouseButtons)?void 0:_this_options_ignoredMouseButtons.includes(event.button))&&(_this._dragging=true,_this.lastRequestAnimationId&&cancelAnimationFrame(_this.lastRequestAnimationId),_this.lastCursor=_this.getCoordinates(event));},this.handleMouseMove=function(event){event.preventDefault(),_this.options.allowPan&&_this.lastCursor&&_this._dragging&&_this._touchOrMouseDrag(event);},this.handleMouseStop=function(event){event.preventDefault(),_this.lastShift&&(_this.startDeceleration(_this.lastShift[0],_this.lastShift[1]),_this.lastShift=null),_this.lastCursor=null,_this.setCursor("auto"),_this._dragging=false;},this.handleTouchStart=function(event){var isThisDoubleTapping=_this.isDoubleTapping();_this.isMultiTouch=event.touches.length,_this.options.allowTouchEvents||event.preventDefault(),_this.lastRequestAnimationId&&cancelAnimationFrame(_this.lastRequestAnimationId);var _this_getCoordinates=_this.getCoordinates(event.touches[0]),posX=_this_getCoordinates[0],posY=_this_getCoordinates[1];if(_this.isMultiTouch>1)_this.lastCursor=[posX,posY];else if(isThisDoubleTapping&&_this.options.allowZoom)if(1===_this.zoom){var _this_container_getBoundingClientRect=_this.container.getBoundingClientRect();_this_container_getBoundingClientRect.top,_this_container_getBoundingClientRect.left;var ref,ref1,x=_this_container_getBoundingClientRect.x,y=_this_container_getBoundingClientRect.y;posX=(ref1=[posX-(x=(ref=_this.transform?[y,x]:[x,y])[0]),posY-(y=ref[1])])[0],posY=ref1[1],_this.fullZoomInOnPosition(posX,posY);}else _this.reset();else _this._tapStartTime=(new Date).getTime(),_this.options.allowPan&&(_this.lastCursor=[posX,posY]);},this.handleTouchMove=function(event){if(_this.options.allowTouchEvents||event.preventDefault(),_this.lastCursor)if(1===_this.isMultiTouch)_this._touchOrMouseDrag(event.touches[0]),_this.lastTouchDistance=null;else if(_this.isMultiTouch>1){var newZoom=_this.zoom,_this_getCoordinates=_this.getCoordinates(event.touches[0]),pos1X=_this_getCoordinates[0],pos1Y=_this_getCoordinates[1],_this_getCoordinates1=_this.getCoordinates(event.touches[1]),pos2X=_this_getCoordinates1[0],pos2Y=_this_getCoordinates1[1],distance=Math.sqrt(Math.pow(pos2X-pos1X,2)+Math.pow(pos2Y-pos1Y,2));if(_this.lastTouchDistance&&distance&&distance!==_this.lastTouchDistance){var _this_options_max,_this_options_min,_this_options_max1;if(_this.options.allowZoom)if((newZoom+=(distance-_this.lastTouchDistance)/100)>(null!=(_this_options_max=_this.options.max)?_this_options_max:8))newZoom=null!=(_this_options_max1=_this.options.max)?_this_options_max1:8;else if(newZoom<(null!=(_this_options_min=_this.options.min)?_this_options_min:1)){var _this_options_min1;newZoom=null!=(_this_options_min1=_this.options.min)?_this_options_min1:1;}_this.setZoom(newZoom),_this.setTransitionDuration(0);}_this.lastCursor=[pos1X,pos1Y],_this.lastTouchDistance=distance;}},this.handleTouchStop=function(){_this.lastShift&&(_this.startDeceleration(_this.lastShift[0],_this.lastShift[1]),_this.lastShift=null),_this._tapStartTime&&(new Date).getTime()-_this._tapStartTime<200&&(null==_this.options.onTap||_this.options.onTap.call(_this.options)),_this._tapStartTime=void 0,_this.lastCursor=null,_this.lastTouchDistance=null,_this.isMultiTouch=0;},this.container=container,this.options=Object.assign({},DefaultOptions$1,options||{}),this.percentPos=ZOOM_DEFAULT_POSITION,this.transition=this.options.animDuration,this.zoom=1,this.cursor="auto",this.lastCursor=[0,0],this.lastShift=null,this.lastTouchDistance=null,this.lastRequestAnimationId=null,this.lastTouchTime=(new Date).getTime(),this.lastDoubleTapTime=(new Date).getTime(),this.transform=false,this.isMultiTouch=1,this.handleMouseMove=this.handleMouseMove.bind(this),this.handleMouseStart=this.handleMouseStart.bind(this),this.handleMouseStop=this.handleMouseStop.bind(this),this.handleMouseWheel=this.handleMouseWheel.bind(this),this.handleTouchStart=this.handleTouchStart.bind(this),this.handleTouchMove=this.handleTouchMove.bind(this),this.handleTouchStop=this.handleTouchStop.bind(this),this.getZoom=this.getZoom.bind(this),this.setZoom=this.setZoom.bind(this);}var _proto=Zoom.prototype;return _proto.setUpEventListeners=function(){var refCurrentValue=this.container;window.matchMedia("(pointer: fine)").matches?(this.options.allowWheel&&(null==refCurrentValue||refCurrentValue.addEventListener("wheel",this.handleMouseWheel,{passive:false})),null==refCurrentValue||refCurrentValue.addEventListener("mousedown",this.handleMouseStart,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("mousemove",this.handleMouseMove,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("mouseup",this.handleMouseStop,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("mouseleave",this.handleMouseStop,{passive:false})):(null==refCurrentValue||refCurrentValue.addEventListener("touchstart",this.handleTouchStart,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("touchmove",this.handleTouchMove,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("touchend",this.handleTouchStop,{passive:false}),null==refCurrentValue||refCurrentValue.addEventListener("touchcancel",this.handleTouchStop,{passive:false}));},_proto.removeEventListeners=function(){var refCurrentValue=this.container;window.matchMedia("(pointer: fine)").matches?(this.options.allowWheel&&(null==refCurrentValue||refCurrentValue.removeEventListener("wheel",this.handleMouseWheel)),null==refCurrentValue||refCurrentValue.removeEventListener("mousedown",this.handleMouseStart),null==refCurrentValue||refCurrentValue.removeEventListener("mousemove",this.handleMouseMove),null==refCurrentValue||refCurrentValue.removeEventListener("mouseup",this.handleMouseStop),null==refCurrentValue||refCurrentValue.removeEventListener("mouseleave",this.handleMouseStop)):(null==refCurrentValue||refCurrentValue.removeEventListener("touchstart",this.handleTouchStart),null==refCurrentValue||refCurrentValue.removeEventListener("touchmove",this.handleTouchMove),null==refCurrentValue||refCurrentValue.removeEventListener("touchend",this.handleTouchStop),null==refCurrentValue||refCurrentValue.removeEventListener("touchcancel",this.handleTouchStop));},_proto.getPrecision=function(value){ void 0===value&&(value=1);var valueStr=value.toString();return valueStr.includes(".")?valueStr.split(".")[1].length:1},_proto.getCoordinates=function(event){var clientHeight=this.container.clientHeight,clientTop=this.container.clientTop,clientLeft=this.container.clientLeft,_ref=this.transform?[event.clientY,clientHeight-event.clientX]:[event.clientX-clientTop,event.clientY-clientLeft];return [_ref[0],_ref[1]]},_proto._touchOrMouseDrag=function(event){if(this.lastCursor){var _this_getCoordinates=this.getCoordinates(event),posX=_this_getCoordinates[0],posY=_this_getCoordinates[1],shiftX=posX-this.lastCursor[0],shiftY=posY-this.lastCursor[1];this.move(shiftX,shiftY,0),this.lastCursor=[posX,posY],this.lastShift=[shiftX,shiftY];}},_create_class$f(Zoom,[{key:"pos",get:function(){return [this.container.clientWidth*this.percentPos[0],this.container.clientHeight*this.percentPos[1]]}}]),Zoom}();Zoom.VERSION="1.0.0-beta.2";
 
-	function _extends$p() {
-	    _extends$p = Object.assign || function(target) {
+	function _extends$r() {
+	    _extends$r = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -6420,10 +6475,10 @@
 	        }
 	        return target;
 	    };
-	    return _extends$p.apply(this, arguments);
+	    return _extends$r.apply(this, arguments);
 	}
 	function __zoom(theme, container, options) {
-	    theme.zoomUtil = new Zoom(container, _extends$p({}, options || {}, {
+	    theme.zoomUtil = new Zoom(container, _extends$r({}, options || {}, {
 	        min: 1,
 	        onChange: function(zoom, reset) {
 	            if (zoom !== theme._zoom) {
@@ -6434,7 +6489,7 @@
 	        },
 	        onTranslateChange: function(pos) {
 	            var _options_onTranslateChange;
-	            theme.emit(EVENTS.zoomTranslateChange, pos);
+	            theme.emit(EVENTS$2.zoomTranslateChange, pos);
 	            options == null ? void 0 : (_options_onTranslateChange = options.onTranslateChange) == null ? void 0 : _options_onTranslateChange.call(options, pos);
 	        },
 	        onTap: options == null ? void 0 : options.onTap
@@ -6648,8 +6703,8 @@
 	        });
 	    };
 	}
-	function _extends$o() {
-	    _extends$o = Object.assign || function(target) {
+	function _extends$q() {
+	    _extends$q = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -6660,7 +6715,7 @@
 	        }
 	        return target;
 	    };
-	    return _extends$o.apply(this, arguments);
+	    return _extends$q.apply(this, arguments);
 	}
 	function _ts_generator$6(thisArg, body) {
 	    var f, y, t, _ = {
@@ -6788,7 +6843,7 @@
 	        }
 	        if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
 	            // TODO: 因为回放是一组， 位置以第一个位置为准
-	            recControls.push(recControls[0] ? _extends$o({}, item, {
+	            recControls.push(recControls[0] ? _extends$q({}, item, {
 	                part: recControls[0].part
 	            }) : item);
 	            return false;
@@ -6811,7 +6866,7 @@
 	        }
 	        if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
 	            // TODO: 因为回放是一组， 位置以第一个位置为准
-	            recControls.push(recControls[0] ? _extends$o({}, item, {
+	            recControls.push(recControls[0] ? _extends$q({}, item, {
 	                part: recControls[0].part
 	            }) : item);
 	            return false;
@@ -6920,14 +6975,14 @@
 	                        2,
 	                        template
 	                    ];
-	                    theme.emit(EVENTS.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
+	                    theme.emit(EVENTS$2.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
 	                    return [
 	                        2,
 	                        null
 	                    ];
 	                case 4:
 	                    _state.sent();
-	                    theme.emit(EVENTS.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
+	                    theme.emit(EVENTS$2.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
 	                    return [
 	                        2,
 	                        null
@@ -7062,8 +7117,8 @@
 	    return Component;
 	}();
 
-	function _extends$n() {
-	    _extends$n = Object.assign || function(target) {
+	function _extends$p() {
+	    _extends$p = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7074,7 +7129,52 @@
 	        }
 	        return target;
 	    };
-	    return _extends$n.apply(this, arguments);
+	    return _extends$p.apply(this, arguments);
+	}
+	function _inherits$n(subClass, superClass) {
+	    if (typeof superClass !== "function" && superClass !== null) {
+	        throw new TypeError("Super expression must either be null or a function");
+	    }
+	    subClass.prototype = Object.create(superClass && superClass.prototype, {
+	        constructor: {
+	            value: subClass,
+	            writable: true,
+	            configurable: true
+	        }
+	    });
+	    if (superClass) _set_prototype_of$r(subClass, superClass);
+	}
+	function _set_prototype_of$r(o, p) {
+	    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	        o.__proto__ = p;
+	        return o;
+	    };
+	    return _set_prototype_of$r(o, p);
+	}
+	var Footer$1 = /*#__PURE__*/ function(Component) {
+	    _inherits$n(Footer, Component);
+	    function Footer(options) {
+	        if (options === void 0) options = {};
+	        return Component.call(this, _extends$p({}, options, {
+	            cType: 'footer'
+	        })) || this;
+	    }
+	    return Footer;
+	}(Component);
+
+	function _extends$o() {
+	    _extends$o = Object.assign || function(target) {
+	        for(var i = 1; i < arguments.length; i++){
+	            var source = arguments[i];
+	            for(var key in source){
+	                if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                    target[key] = source[key];
+	                }
+	            }
+	        }
+	        return target;
+	    };
+	    return _extends$o.apply(this, arguments);
 	}
 	function _inherits$m(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
@@ -7087,65 +7187,20 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$p(subClass, superClass);
+	    if (superClass) _set_prototype_of$q(subClass, superClass);
 	}
-	function _set_prototype_of$p(o, p) {
-	    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$q(o, p) {
+	    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$p(o, p);
-	}
-	var Footer$1 = /*#__PURE__*/ function(Component) {
-	    _inherits$m(Footer, Component);
-	    function Footer(options) {
-	        if (options === void 0) options = {};
-	        return Component.call(this, _extends$n({}, options, {
-	            cType: 'footer'
-	        })) || this;
-	    }
-	    return Footer;
-	}(Component);
-
-	function _extends$m() {
-	    _extends$m = Object.assign || function(target) {
-	        for(var i = 1; i < arguments.length; i++){
-	            var source = arguments[i];
-	            for(var key in source){
-	                if (Object.prototype.hasOwnProperty.call(source, key)) {
-	                    target[key] = source[key];
-	                }
-	            }
-	        }
-	        return target;
-	    };
-	    return _extends$m.apply(this, arguments);
-	}
-	function _inherits$l(subClass, superClass) {
-	    if (typeof superClass !== "function" && superClass !== null) {
-	        throw new TypeError("Super expression must either be null or a function");
-	    }
-	    subClass.prototype = Object.create(superClass && superClass.prototype, {
-	        constructor: {
-	            value: subClass,
-	            writable: true,
-	            configurable: true
-	        }
-	    });
-	    if (superClass) _set_prototype_of$o(subClass, superClass);
-	}
-	function _set_prototype_of$o(o, p) {
-	    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
-	        o.__proto__ = p;
-	        return o;
-	    };
-	    return _set_prototype_of$o(o, p);
+	    return _set_prototype_of$q(o, p);
 	}
 	var Header$1 = /*#__PURE__*/ function(Component) {
-	    _inherits$l(Header, Component);
+	    _inherits$m(Header, Component);
 	    function Header(options) {
 	        if (options === void 0) options = {};
-	        return Component.call(this, _extends$m({}, options, {
+	        return Component.call(this, _extends$o({}, options, {
 	            cType: 'header'
 	        })) || this;
 	    }
@@ -7311,8 +7366,8 @@
 	    };
 	}
 
-	function _extends$l() {
-	    _extends$l = Object.assign || function(target) {
+	function _extends$n() {
+	    _extends$n = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7323,9 +7378,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$l.apply(this, arguments);
+	    return _extends$n.apply(this, arguments);
 	}
-	function _inherits$k(subClass, superClass) {
+	function _inherits$l(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7336,23 +7391,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$n(subClass, superClass);
+	    if (superClass) _set_prototype_of$p(subClass, superClass);
 	}
-	function _set_prototype_of$n(o, p) {
-	    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$p(o, p) {
+	    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$n(o, p);
+	    return _set_prototype_of$p(o, p);
 	}
 	/**
 	 * 全局全屏
 	 * 主题和播放器不提供全局全屏的api， 如果开发者想要可以参考这个组件自己实现
 	 * @category Control
 	 */ var GlobalFullscreen = /*#__PURE__*/ function(Fullscreen) {
-	    _inherits$k(GlobalFullscreen, Fullscreen);
+	    _inherits$l(GlobalFullscreen, Fullscreen);
 	    function GlobalFullscreen(options) {
-	        return Fullscreen.call(this, _extends$l({}, options, {
+	        return Fullscreen.call(this, _extends$n({}, options, {
 	            controlType: 'button',
 	            classNameSuffix: 'global-fullscreen'
 	        })) || this;
@@ -7383,8 +7438,8 @@
 	    return GlobalFullscreen;
 	}(Fullscreen);
 
-	function _extends$k() {
-	    _extends$k = Object.assign || function(target) {
+	function _extends$m() {
+	    _extends$m = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7395,9 +7450,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$k.apply(this, arguments);
+	    return _extends$m.apply(this, arguments);
 	}
-	function _inherits$j(subClass, superClass) {
+	function _inherits$k(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7408,23 +7463,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$m(subClass, superClass);
+	    if (superClass) _set_prototype_of$o(subClass, superClass);
 	}
-	function _set_prototype_of$m(o, p) {
-	    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$o(o, p) {
+	    _set_prototype_of$o = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$m(o, p);
+	    return _set_prototype_of$o(o, p);
 	}
 	/**
 	 * 截图控件，点击后会触发截图事件， 截图数据会通过 onCapture 回调函数返回
 	 * @category Control
 	 */ var CapturePicture = /*#__PURE__*/ function(Control) {
-	    _inherits$j(CapturePicture, Control);
+	    _inherits$k(CapturePicture, Control);
 	    function CapturePicture(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$k({}, options, {
+	        _this = Control.call(this, _extends$m({}, options, {
 	            tagName: 'span',
 	            classNameSuffix: 'capture-picture'
 	        })) || this, _this._timer = null;
@@ -7432,7 +7487,7 @@
 	        _this._render();
 	        if (typeof _this.options.onCapture === 'function') {
 	            // 监听截图结果事件
-	            _this.on(EVENTS.control.capturePictureResult, _this.options.onCapture);
+	            _this.on(EVENTS$2.control.capturePictureResult, _this.options.onCapture);
 	        }
 	        return _this;
 	    }
@@ -7456,7 +7511,7 @@
 	        var _this = this;
 	        this.active = true;
 	        var _this_options_type, _this_options_cloudRecUpload;
-	        this.emit(EVENTS.control.capturePicture, {
+	        this.emit(EVENTS$2.control.capturePicture, {
 	            type: (_this_options_type = this.options.type) != null ? _this_options_type : 'download',
 	            quality: this.options.quality || 0.9,
 	            cloudRecUpload: (_this_options_cloudRecUpload = this.options.cloudRecUpload) != null ? _this_options_cloudRecUpload : true
@@ -7482,7 +7537,7 @@
 	* Copyright (c) 2026-05-04 Ezviz-OpenBiz
 	* Released under the MIT License.
 	*/
-	var PTZ_DEFAULT_OPTIONS={language:"zh",env:{domain:"https://open.ys7.com"},accessToken:"",speed:2,locales:{zh:{GET_PTZ_STATUS:"获取当前云台状态",GET_PTZ_STATUS_FAILED:"未加载Theme模块，无法获取云台状态",MOBILE_HIDE_PTZ:"移动端，非全屏状态不展示云台",OPTION_PTZ_FAILED:"未加载Theme模块，无法操作云台",MOBILE_PTZ_TIPS:"请通过操控云台来调整摄像机视角",PTZ_FAST:"快",PTZ_MID:"中",PTZ_SLOW:"慢",PTZ_SPEED:"调整云台转动速度",DEVICE_ZOOM:"控制设备放大/缩小画面",DEVICE_FOCUS:"调整设备焦距"},en:{GET_PTZ_STATUS:"Get current PTZ status",GET_PTZ_STATUS_FAILED:"Theme module is not loaded, PTZ status cannot be obtained",MOBILE_HIDE_PTZ:"Mobile terminal, PTZ is not displayed in non-full screen state",OPTION_PTZ_FAILED:"Theme module is not loaded, PTZ cannot be operated",MOBILE_PTZ_TIPS:"Adjust camera angle by manipulating gimbal",PTZ_FAST:"F",PTZ_MID:"M",PTZ_SLOW:"S",PTZ_SPEED:"Adjust the PTZ rotation speed",DEVICE_ZOOM:"Control the device to zoom in/out of the screen",DEVICE_FOCUS:"Adjusting the device's focal length"}}},PTZ_SPEED={1:1,2:3,3:7,slow:1,mid:3,fast:7},BasePtz=function(){function BasePtz(container,options){var _this_options_locales,_this_options_locales1,_this_options_locales2;if(void 0===options&&(options={}),!container)throw new Error("Ptz container is required");(this.options=deepmerge(PTZ_DEFAULT_OPTIONS,options,{clone:false}),null==(_this_options_locales=this.options.locales)?void 0:_this_options_locales[this.options.language])?this.locale=null==(_this_options_locales1=this.options.locales)?void 0:_this_options_locales1[this.options.language]:this.locale=null==(_this_options_locales2=this.options.locales)?void 0:_this_options_locales2.zh;this.$container=container,this.speed=PTZ_SPEED[this.options.speed||2];}var _proto=BasePtz.prototype;return _proto.updateOptions=function(options){this.options=deepmerge(this.options,options,{clone:false});},_proto.destroy=function(){},BasePtz}();function _set_prototype_of$1$3(o,p){return _set_prototype_of$1$3=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1$3(o,p)}var MobilePtz=function(BasePtz){function MobilePtz(container,options){var _this;return (_this=BasePtz.call(this,container,options)||this)._touchstart=_this._touchstart.bind(_this),_this._touchend=_this._touchend.bind(_this),_this._render(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1$3(subClass,superClass);}(MobilePtz,BasePtz);var _proto=MobilePtz.prototype;return _proto.destroy=function(){this._removeEventListener(),this.$content&&(this.$content.remove(),this.$content=null),BasePtz.prototype.destroy.call(this);},_proto._render=function(){this.$content=document.createElement("div"),this.$content.classList.add("ez-mobile-ptz-content"),this.$content.innerHTML='\n      <div class="ez-mobile-ptz-wrap">\n        <div class="ez-mobile-ptz-container">\n          <div class="ez-mobile-ptz-center ez-mobile-ptz-center"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-top ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-left ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-bottom ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-right ez-mobile-ptz-default"></div>\n        </div>\n      </div>\n    ',this.$container.appendChild(this.$content),this._addEventListener();},_proto._addEventListener=function(){var $warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),touchstart="PointerEvent"in window?"pointerdown":"touchstart",touchend="PointerEvent"in window?"pointerup":"touchend";$warp&&($warp.addEventListener(touchstart,this._touchstart),$warp.addEventListener(touchend,this._touchend));},_proto._touchstart=function(e){e.preventDefault(),this._handlePtzTouch(e,"start");},_proto._touchend=function(e){e.preventDefault(),this._handlePtzTouch(e,"stop");},_proto._removeEventListener=function(){var $warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),touchstart="PointerEvent"in window?"pointerdown":"touchstart",touchend="PointerEvent"in window?"pointerup":"touchend";$warp&&($warp.removeEventListener(touchstart,this._touchstart),$warp.removeEventListener(touchend,this._touchend));},_proto._handlePtzTouch=function(e,type){var _this_options_token_deviceToken,_this_options_token,_e_changedTouches_,_e_changedTouches_1,_this_options_env,_this_options_token_deviceToken1,_this_options_token1;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token.deviceToken)?void 0:_this_options_token_deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");var _this_options_env1,$warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),rect=$warp.getBoundingClientRect(),containerCenterX=rect.left+130,containerCenterY=rect.top+130,left=(e.x||(null==(_e_changedTouches_=e.changedTouches[0])?void 0:_e_changedTouches_.clientX))-containerCenterX,top=(e.y||(null==(_e_changedTouches_1=e.changedTouches[0])?void 0:_e_changedTouches_1.clientY))-containerCenterY,direction=0,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken1=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken1.video),$icons=$warp.querySelectorAll(".ez-mobile-ptz-icon");(Math.abs(left)>Math.abs(top)?left>0?(direction=3,$icons[3].className=$icons[3].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):(direction=2,$icons[1].className=$icons[1].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):top>0?(direction=1,$icons[2].className=$icons[2].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):(direction=0,$icons[0].className=$icons[0].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")),$warp.style.cssText="background-image:linear-gradient("+(0===direction?180:1===direction?0:2===direction?90:270)+"deg, #c0ddf1 0%, rgba(100,143,252,0.00) 50%)","stop"===type)&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop",$warp.style.cssText="",$icons[3].className=$icons[3].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[1].className=$icons[1].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[2].className=$icons[2].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[0].className=$icons[0].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"));var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{direction:direction,speed:this.speed,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed","1"),data.append("direction",direction+""),data.append("accessToken",token),fetch(url,{method:"POST",body:data}).then(function(response){return response.json()}).then(function(rt){200===rt.code||[60005,60002,60003,60004].includes(+rt.code)&&($warp.style.cssText="background-image:linear-gradient("+(0===direction?180:1===direction?0:2===direction?90:270)+"deg, #f45656 0%, rgba(100,143,252,0.00) 50%)"),null==operationResultCb||operationResultCb(rt);}).catch(function(err){}).finally(function(){operationResultCb=null;});},MobilePtz}(BasePtz);function asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,key,arg){try{var info=gen[key](arg),value=info.value;}catch(error){return void reject(error)}info.done?resolve(value):Promise.resolve(value).then(_next,_throw);}function _async_to_generator$5(fn){return function(){var self=this,args=arguments;return new Promise(function(resolve,reject){var gen=fn.apply(self,args);function _next(value){asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,"next",value);}function _throw(err){asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,"throw",err);}_next(void 0);})}}function _create_class$b(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$l(o,p){return _set_prototype_of$l=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$l(o,p)}function _ts_generator$5(thisArg,body){var f,y,t,_={label:0,sent:function(){if(1&t[0])throw t[1];return t[1]},trys:[],ops:[]},g=Object.create(("function"==typeof Iterator?Iterator:Object).prototype);return g.next=verb(0),g.throw=verb(1),g.return=verb(2),"function"==typeof Symbol&&(g[Symbol.iterator]=function(){return this}),g;function verb(n){return function(v){return function(op){if(f)throw new TypeError("Generator is already executing.");for(;g&&(g=0,op[0]&&(_=0)),_;)try{if(f=1,y&&(t=2&op[0]?y.return:op[0]?y.throw||((t=y.return)&&t.call(y),0):y.next)&&!(t=t.call(y,op[1])).done)return t;switch(y=0,t&&(op=[2&op[0],t.value]),op[0]){case 0:case 1:t=op;break;case 4:return _.label++,{value:op[1],done:!1};case 5:_.label++,y=op[1],op=[0];continue;case 7:op=_.ops.pop(),_.trys.pop();continue;default:if(!(t=_.trys,(t=t.length>0&&t[t.length-1])||6!==op[0]&&2!==op[0])){_=0;continue}if(3===op[0]&&(!t||op[1]>t[0]&&op[1]<t[3])){_.label=op[1];break}if(6===op[0]&&_.label<t[1]){_.label=t[1],t=op;break}if(t&&_.label<t[2]){_.label=t[2],_.ops.push(op);break}t[2]&&_.ops.pop(),_.trys.pop();continue}op=body.call(thisArg,_);}catch(e){op=[6,e],y=0;}finally{f=t=0;}if(5&op[0])throw op[1];return {value:op[0]?op[1]:void 0,done:true}}([n,v])}}}var Ptz$1=function(BasePtz){function Ptz(container,options){var _this;return void 0===options&&(options={}),(_this=BasePtz.call(this,container,options)||this)._isMobile=distExports$4.isMobile(),_this._isRotate=false,_this._clearTimer=null,_this._$wrapper=document.createElement("div"),_this._$wrapper.className="ez-ptz-container-wrap",_this._$directionCircleContainer=document.createElement("div"),_this._$directionCircleContainer.classList.add("ez-ptz-container"),_this._$directionCircleContainer.innerHTML='\n        <div class="ez-ptz-main ez-ptz-direction-center"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-top" data-direction="0"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-top-left" data-direction="4"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-left" data-direction="2"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-left-bottom" data-direction="5"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-bottom" data-direction="1"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-bottom-right" data-direction="7"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-right" data-direction="3"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-right-top" data-direction="6"></div>\n    ',_this._$wrapper.appendChild(_this._$directionCircleContainer),_this._$speedContainer=document.createElement("div"),_this._$speedContainer.classList.add("ez-ptz-speed-container"),_this._$speedContainer.innerHTML='\n        <div class="ez-ptz-speed-progress" title="'+_this.locale.PTZ_SPEED+'">\n          <div class="ez-ptz-speed-progress-line">\n            <div class="ez-ptz-speed-progress-line-dot '+(1===_this.speed?"ez-ptz-speed-active":"")+'" data-id="slow" data-index="1" data-value="1"></div>\n            <div class="ez-ptz-speed-progress-line-dot '+(3===_this.speed?"ez-ptz-speed-active":"")+'" data-id="mid" data-index="2" data-value="3"></div>\n            <div class="ez-ptz-speed-progress-line-dot '+(7===_this.speed?"ez-ptz-speed-active":"")+'" data-id="fast" data-index="3" data-value="7"></div>\n          </div>\n          <div class="ez-ptz-speed-progress-points">\n            <div class="ez-ptz-speed-progress-points-slow">\n            '+_this.locale.PTZ_SLOW+'\n            </div>\n            <div class="ez-ptz-speed-progress-points-mid">\n            '+_this.locale.PTZ_MID+'\n            </div>\n            <div class="ez-ptz-speed-progress-points-fast">\n              '+_this.locale.PTZ_FAST+"\n            </div>\n          </div>\n        </div>\n    ",_this._$wrapper.appendChild(_this._$speedContainer),_this._$btnContainer=document.createElement("div"),_this._$btnContainer.classList.add("ez-ptz-btn-container"),_this._$btnContainer.innerHTML='\n        <div class="ez-ptz-btn-zoom" title="'+_this.locale.DEVICE_ZOOM+'" style="user-select: none;">\n          <div class="ez-ptz-btn-zoom-add" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M563.2 198.4c179.2 0 326.4 147.2 326.4 326.4s-147.2 326.4-326.4 326.4S230.4 704 230.4 524.8s147.2-326.4 332.8-326.4z m0 64c-147.2 0-262.4 115.2-262.4 262.4s115.2 262.4 262.4 262.4 262.4-115.2 262.4-262.4S704 262.4 563.2 262.4z" fill="#ffffff"></path>\n              <path d="M691.2 556.8H428.8c-19.2 0-32-12.8-32-32s12.8-32 32-32h262.4c19.2 0 32 12.8 32 32s-12.8 32-32 32z" fill="#ffffff">\n              </path>\n              <path d="M556.8 691.2c-19.2 0-32-12.8-32-32V396.8c0-19.2 12.8-32 32-32s32 12.8 32 32v262.4c0 19.2-12.8 32-32 32z" fill="#ffffff"></path>\n            </svg>\n          </div>\n          <div class="ez-ptz-btn-zoom-sub" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M569.6 838.4c-172.8 0-307.2-140.8-307.2-307.2s140.8-307.2 307.2-307.2 307.2 140.8 307.2 307.2-140.8 307.2-307.2 307.2z m0-64c134.4 0 249.6-108.8 249.6-249.6S704 281.6 569.6 281.6 320 396.8 320 531.2s108.8 243.2 249.6 243.2z" fill="#ffffff"></path>\n              <path d="M691.2 563.2H448c-19.2 0-32-12.8-32-32s12.8-38.4 32-38.4h249.6c19.2 0 32 12.8 32 32s-19.2 38.4-38.4 38.4z" fill="#ffffff"></path>\n            </svg>\n          </div>\n        </div>\n        <div class="ez-ptz-btn-focal" title="'+_this.locale.DEVICE_FOCUS+'" style="user-select: none;">\n          <div class="ez-ptz-btn-focal-add" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M646.4 825.6H320c-44.8 0-83.2-38.4-83.2-83.2V409.6c0-44.8 38.4-83.2 83.2-83.2h326.4c44.8 0 83.2 38.4 83.2 83.2v326.4c0 51.2-38.4 89.6-83.2 89.6zM320 390.4c-12.8 0-19.2 6.4-19.2 19.2v326.4c0 12.8 6.4 19.2 19.2 19.2h326.4c12.8 0 19.2-6.4 19.2-19.2V409.6c0-12.8-6.4-19.2-19.2-19.2H320z" fill="#ffffff"></path>\n              <path d="M396.8 358.4V281.6c0-25.6 25.6-51.2 51.2-51.2h326.4c25.6 0 51.2 25.6 51.2 51.2v326.4c0 25.6-25.6 51.2-51.2 51.2H704l-6.4-268.8" fill="#ffffff"></path>\n            </svg>\n          </div>\n          <div class="ez-ptz-btn-focal-sub" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M320 358.4h326.4c25.6 0 51.2 25.6 51.2 51.2v326.4c0 25.6-25.6 51.2-51.2 51.2H320c-25.6 0-51.2-25.6-51.2-51.2V409.6c0-25.6 25.6-51.2 51.2-51.2z" fill="#ffffff"></path>\n              <path d="M774.4 697.6H704c-19.2 0-32-12.8-32-32s12.8-32 32-32h70.4c12.8 0 19.2-6.4 19.2-19.2V281.6c0-12.8-6.4-19.2-19.2-19.2H448c-12.8 0-19.2 6.4-19.2 19.2v70.4c0 19.2-12.8 32-32 32s-32-12.8-32-25.6V281.6c0-44.8 38.4-83.2 83.2-83.2h326.4c44.8 0 83.2 38.4 83.2 83.2v326.4c0 51.2-38.4 89.6-83.2 89.6z" fill="#ffffff"></path>\n            </svg>\n          </div>\n        </div>\n      ',_this._$wrapper.appendChild(_this._$btnContainer),container.appendChild(_this._$wrapper),_this._$directionCircleContainer.onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"start");},_this._$directionCircleContainer.onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"stop");},_this._$directionCircleContainer.ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"start");},_this._$directionCircleContainer.ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"stop");},_this._onSwitchSpeed=function(e){var list=Array.from(_this._$speedContainer.querySelectorAll(".ez-ptz-speed-progress-line-dot"));if(list.includes(e.target)&&!e.target.classList.contains("ez-ptz-speed-active")){list.forEach(function(item){item===e.target?item.classList.add("ez-ptz-speed-active"):item.classList.remove("ez-ptz-speed-active");});var value=e.target.getAttribute("data-value"),index=e.target.getAttribute("data-index");_this.speed=+value,null==_this.options.onSpeedChange||_this.options.onSpeedChange.call(_this.options,+index);}},_this._$speedContainer.onmouseup=_this._onSwitchSpeed,_this._isMobile&&(_this._$speedContainer.ontouchend=_this._onSwitchSpeed),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","stop");}),_this._isMobile&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","stop");})),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$l(subClass,superClass);}(Ptz,BasePtz);var _proto=Ptz.prototype;return _proto.destroy=function(){this._clearTimer&&(clearTimeout(this._clearTimer),this._clearTimer=null),this._$directionCircleContainer&&(this._$directionCircleContainer.remove(),this._$directionCircleContainer=null),this._$speedContainer&&(this._onSwitchSpeed=null,this._$speedContainer.remove(),this._$speedContainer=null),this._$btnContainer&&(this._$btnContainer.remove(),this._$btnContainer=null),this._$wrapper&&(this._$wrapper.remove(),this._$wrapper=null),BasePtz.prototype.destroy.call(this);},_proto._handlePtzTouch=function(e,type){var _this_options_token_deviceToken,_this_options_token,_this_options_env,_this_options_token_deviceToken1,_this_options_token1,_this=this;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token.deviceToken)?void 0:_this_options_token_deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");this._ptzQueue||(this._ptzQueue=Promise.resolve());var container=this._$directionCircleContainer.getBoundingClientRect(),containerCenterX=container.left+(this._$directionCircleContainer.clientWidth+2)/2,containerCenterY=container.top+(this._$directionCircleContainer.clientHeight+2)/2,eventX=e.x||e.changedTouches[0].clientX,eventY=e.y||e.changedTouches[0].clientY,direction=0,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken1=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken1.video),backDeg=0;function getAreaId(x,y){var rad=Math.atan2(y,x);rad<0&&(rad+=2*Math.PI);var deg=rad*(180/Math.PI)-225-12.5;return deg<0&&(deg+=360),Math.floor(deg/45)+1}var _this_options_env1,left=eventX-containerCenterX,top=eventY-containerCenterY;if(this.isRotate)switch(getAreaId(left,top)){case 1:direction=2,backDeg=90;break;case 2:direction=4,backDeg=135;break;case 3:direction=0,backDeg=180;break;case 4:direction=6,backDeg=225;break;case 5:direction=3,backDeg=270;break;case 6:direction=7,backDeg=315;break;case 7:direction=1,backDeg=0;break;case 8:direction=5,backDeg=45;}else switch(getAreaId(left,top)){case 1:direction=0,backDeg=180;break;case 2:direction=6,backDeg=225;break;case 3:direction=3,backDeg=270;break;case 4:direction=7,backDeg=315;break;case 5:direction=1,backDeg=0;break;case 6:direction=5,backDeg=45;break;case 7:direction=2,backDeg=90;break;case 8:direction=4,backDeg=135;}(this._clearTimer&&(clearTimeout(this._clearTimer),this._clearTimer=null),this._$directionCircleContainer.style.cssText="start"===type?"background-image:linear-gradient("+backDeg+"deg, #4277FF 0%, rgba(100,143,252,0.00) 30%)":"","stop"===type)&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop");var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{areaId:getAreaId(left,top),direction:direction,backDeg:backDeg,isRotate:this.isRotate,speed:this.speed,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed",this.speed+""),data.append("direction",direction+""),data.append("accessToken",token),this._ptzQueue=this._ptzQueue.then(function(){return _async_to_generator$5(function(){var _this;return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return _this=this,[4,fetch(url,{method:"POST",body:data}).then(function(response){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,response.json()];case 1:return [2,_state.sent()]}})})()}).then(function(rt){var _rt_result;null==operationResultCb||operationResultCb(rt);var code=rt.code||(null==rt||null==(_rt_result=rt.result)?void 0:_rt_result.code);return [6e4,60001,60002,60003,60004,60005,60006,10002].includes(+code)&&(_this._$directionCircleContainer.style.cssText="background-image:linear-gradient("+backDeg+"deg, #f45656 0%, rgba(100,143,252,0.00) 30%)"),rt}).catch(function(err){}).finally(function(){operationResultCb=null,"stop"===type&&(_this._clearTimer=setTimeout(function(){_this._$directionCircleContainer.style.cssText="";},1e3));})];case 1:return [2,_state.sent()]}})}).call(_this)}),"stop"===type&&(this._ptzQueue=this._ptzQueue.finally(function(){}));},_proto._handleBtnTouch=function(btn,option,type){var _this_options_token,_this_options_env,_this_options_token_deviceToken,_this_options_token1,_this=this;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)?void 0:_this_options_token.deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");this._ptzOperation||(this._ptzOperation=Promise.resolve());var direction=8;direction="zoom"===btn?"add"===option?8:9:"add"===option?10:11;var _this_options_env1,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken.video);"stop"===type&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop");var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{btn:btn,option:option,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed",this.speed+""),data.append("direction",direction+""),data.append("accessToken",token),this._ptzOperation=this._ptzOperation.then(function(){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,fetch(url,{method:"POST",body:data}).then(function(response){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,response.json()];case 1:return [2,_state.sent()]}})})()}).then(function(rt){return null==operationResultCb||operationResultCb(rt),rt}).catch(function(err){}).finally(function(){operationResultCb=null;})];case 1:return [2,_state.sent()]}})})()}),"stop"===type&&(this._ptzOperation=this._ptzOperation.finally(function(){_this._ptzOperation=null;}));},_create_class$b(Ptz,[{key:"isRotate",get:function(){return this._isRotate},set:function(isRotate){this._isRotate=isRotate;}}]),Ptz}(BasePtz);
+	var PTZ_DEFAULT_OPTIONS={language:"zh",env:{domain:"https://open.ys7.com"},accessToken:"",speed:2,locales:{zh:{GET_PTZ_STATUS:"获取当前云台状态",GET_PTZ_STATUS_FAILED:"未加载Theme模块，无法获取云台状态",MOBILE_HIDE_PTZ:"移动端，非全屏状态不展示云台",OPTION_PTZ_FAILED:"未加载Theme模块，无法操作云台",MOBILE_PTZ_TIPS:"请通过操控云台来调整摄像机视角",PTZ_FAST:"快",PTZ_MID:"中",PTZ_SLOW:"慢",PTZ_SPEED:"调整云台转动速度",DEVICE_ZOOM:"控制设备放大/缩小画面",DEVICE_FOCUS:"调整设备焦距"},en:{GET_PTZ_STATUS:"Get current PTZ status",GET_PTZ_STATUS_FAILED:"Theme module is not loaded, PTZ status cannot be obtained",MOBILE_HIDE_PTZ:"Mobile terminal, PTZ is not displayed in non-full screen state",OPTION_PTZ_FAILED:"Theme module is not loaded, PTZ cannot be operated",MOBILE_PTZ_TIPS:"Adjust camera angle by manipulating gimbal",PTZ_FAST:"F",PTZ_MID:"M",PTZ_SLOW:"S",PTZ_SPEED:"Adjust the PTZ rotation speed",DEVICE_ZOOM:"Control the device to zoom in/out of the screen",DEVICE_FOCUS:"Adjusting the device's focal length"}}},PTZ_SPEED={1:1,2:3,3:7,slow:1,mid:3,fast:7},BasePtz=function(){function BasePtz(container,options){var _this_options_locales,_this_options_locales1,_this_options_locales2;if(void 0===options&&(options={}),!container)throw new Error("Ptz container is required");(this.options=deepmerge(PTZ_DEFAULT_OPTIONS,options,{clone:false}),null==(_this_options_locales=this.options.locales)?void 0:_this_options_locales[this.options.language])?this.locale=null==(_this_options_locales1=this.options.locales)?void 0:_this_options_locales1[this.options.language]:this.locale=null==(_this_options_locales2=this.options.locales)?void 0:_this_options_locales2.zh;this.$container=container,this.speed=PTZ_SPEED[this.options.speed||2];}var _proto=BasePtz.prototype;return _proto.updateOptions=function(options){this.options=deepmerge(this.options,options,{clone:false});},_proto.destroy=function(){},BasePtz}();function _set_prototype_of$1$3(o,p){return _set_prototype_of$1$3=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1$3(o,p)}var MobilePtz=function(BasePtz){function MobilePtz(container,options){var _this;return (_this=BasePtz.call(this,container,options)||this)._touchstart=_this._touchstart.bind(_this),_this._touchend=_this._touchend.bind(_this),_this._render(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1$3(subClass,superClass);}(MobilePtz,BasePtz);var _proto=MobilePtz.prototype;return _proto.destroy=function(){this._removeEventListener(),this.$content&&(this.$content.remove(),this.$content=null),BasePtz.prototype.destroy.call(this);},_proto._render=function(){this.$content=document.createElement("div"),this.$content.classList.add("ez-mobile-ptz-content"),this.$content.innerHTML='\n      <div class="ez-mobile-ptz-wrap">\n        <div class="ez-mobile-ptz-container">\n          <div class="ez-mobile-ptz-center ez-mobile-ptz-center"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-top ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-left ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-bottom ez-mobile-ptz-default"></div>\n          <div class="ez-mobile-ptz-icon ez-mobile-ptz-right ez-mobile-ptz-default"></div>\n        </div>\n      </div>\n    ',this.$container.appendChild(this.$content),this._addEventListener();},_proto._addEventListener=function(){var $warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),touchstart="PointerEvent"in window?"pointerdown":"touchstart",touchend="PointerEvent"in window?"pointerup":"touchend";$warp&&($warp.addEventListener(touchstart,this._touchstart),$warp.addEventListener(touchend,this._touchend));},_proto._touchstart=function(e){e.preventDefault(),this._handlePtzTouch(e,"start");},_proto._touchend=function(e){e.preventDefault(),this._handlePtzTouch(e,"stop");},_proto._removeEventListener=function(){var $warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),touchstart="PointerEvent"in window?"pointerdown":"touchstart",touchend="PointerEvent"in window?"pointerup":"touchend";$warp&&($warp.removeEventListener(touchstart,this._touchstart),$warp.removeEventListener(touchend,this._touchend));},_proto._handlePtzTouch=function(e,type){var _this_options_token_deviceToken,_this_options_token,_e_changedTouches_,_e_changedTouches_1,_this_options_env,_this_options_token_deviceToken1,_this_options_token1;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token.deviceToken)?void 0:_this_options_token_deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");var _this_options_env1,$warp=this.$content.querySelector(".ez-mobile-ptz-wrap"),rect=$warp.getBoundingClientRect(),containerCenterX=rect.left+130,containerCenterY=rect.top+130,left=(e.x||(null==(_e_changedTouches_=e.changedTouches[0])?void 0:_e_changedTouches_.clientX))-containerCenterX,top=(e.y||(null==(_e_changedTouches_1=e.changedTouches[0])?void 0:_e_changedTouches_1.clientY))-containerCenterY,direction=0,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken1=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken1.video),$icons=$warp.querySelectorAll(".ez-mobile-ptz-icon");(Math.abs(left)>Math.abs(top)?left>0?(direction=3,$icons[3].className=$icons[3].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):(direction=2,$icons[1].className=$icons[1].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):top>0?(direction=1,$icons[2].className=$icons[2].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")):(direction=0,$icons[0].className=$icons[0].className.replace("ez-mobile-ptz-default","ez-mobile-ptz-active")),$warp.style.cssText="background-image:linear-gradient("+(0===direction?180:1===direction?0:2===direction?90:270)+"deg, #c0ddf1 0%, rgba(100,143,252,0.00) 50%)","stop"===type)&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop",$warp.style.cssText="",$icons[3].className=$icons[3].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[1].className=$icons[1].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[2].className=$icons[2].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"),$icons[0].className=$icons[0].className.replace("ez-mobile-ptz-active","ez-mobile-ptz-default"));var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{direction:direction,speed:this.speed,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed","1"),data.append("direction",direction+""),data.append("accessToken",token),fetch(url,{method:"POST",body:data}).then(function(response){return response.json()}).then(function(rt){200===rt.code||[60005,60002,60003,60004].includes(+rt.code)&&($warp.style.cssText="background-image:linear-gradient("+(0===direction?180:1===direction?0:2===direction?90:270)+"deg, #f45656 0%, rgba(100,143,252,0.00) 50%)"),null==operationResultCb||operationResultCb(rt);}).catch(function(err){}).finally(function(){operationResultCb=null;});},MobilePtz}(BasePtz);function asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,key,arg){try{var info=gen[key](arg),value=info.value;}catch(error){return void reject(error)}info.done?resolve(value):Promise.resolve(value).then(_next,_throw);}function _async_to_generator$5(fn){return function(){var self=this,args=arguments;return new Promise(function(resolve,reject){var gen=fn.apply(self,args);function _next(value){asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,"next",value);}function _throw(err){asyncGeneratorStep$5(gen,resolve,reject,_next,_throw,"throw",err);}_next(void 0);})}}function _create_class$e(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$n(o,p){return _set_prototype_of$n=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$n(o,p)}function _ts_generator$5(thisArg,body){var f,y,t,_={label:0,sent:function(){if(1&t[0])throw t[1];return t[1]},trys:[],ops:[]},g=Object.create(("function"==typeof Iterator?Iterator:Object).prototype);return g.next=verb(0),g.throw=verb(1),g.return=verb(2),"function"==typeof Symbol&&(g[Symbol.iterator]=function(){return this}),g;function verb(n){return function(v){return function(op){if(f)throw new TypeError("Generator is already executing.");for(;g&&(g=0,op[0]&&(_=0)),_;)try{if(f=1,y&&(t=2&op[0]?y.return:op[0]?y.throw||((t=y.return)&&t.call(y),0):y.next)&&!(t=t.call(y,op[1])).done)return t;switch(y=0,t&&(op=[2&op[0],t.value]),op[0]){case 0:case 1:t=op;break;case 4:return _.label++,{value:op[1],done:!1};case 5:_.label++,y=op[1],op=[0];continue;case 7:op=_.ops.pop(),_.trys.pop();continue;default:if(!(t=_.trys,(t=t.length>0&&t[t.length-1])||6!==op[0]&&2!==op[0])){_=0;continue}if(3===op[0]&&(!t||op[1]>t[0]&&op[1]<t[3])){_.label=op[1];break}if(6===op[0]&&_.label<t[1]){_.label=t[1],t=op;break}if(t&&_.label<t[2]){_.label=t[2],_.ops.push(op);break}t[2]&&_.ops.pop(),_.trys.pop();continue}op=body.call(thisArg,_);}catch(e){op=[6,e],y=0;}finally{f=t=0;}if(5&op[0])throw op[1];return {value:op[0]?op[1]:void 0,done:true}}([n,v])}}}var Ptz$1=function(BasePtz){function Ptz(container,options){var _this;return void 0===options&&(options={}),(_this=BasePtz.call(this,container,options)||this)._isMobile=distExports$4.isMobile(),_this._isRotate=false,_this._clearTimer=null,_this._$wrapper=document.createElement("div"),_this._$wrapper.className="ez-ptz-container-wrap",_this._$directionCircleContainer=document.createElement("div"),_this._$directionCircleContainer.classList.add("ez-ptz-container"),_this._$directionCircleContainer.innerHTML='\n        <div class="ez-ptz-main ez-ptz-direction-center"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-top" data-direction="0"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-top-left" data-direction="4"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-left" data-direction="2"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-left-bottom" data-direction="5"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-bottom" data-direction="1"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-bottom-right" data-direction="7"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-right" data-direction="3"></div>\n        <div class="ez-ptz-icon ez-ptz-direction-right-top" data-direction="6"></div>\n    ',_this._$wrapper.appendChild(_this._$directionCircleContainer),_this._$speedContainer=document.createElement("div"),_this._$speedContainer.classList.add("ez-ptz-speed-container"),_this._$speedContainer.innerHTML='\n        <div class="ez-ptz-speed-progress" title="'+_this.locale.PTZ_SPEED+'">\n          <div class="ez-ptz-speed-progress-line">\n            <div class="ez-ptz-speed-progress-line-dot '+(1===_this.speed?"ez-ptz-speed-active":"")+'" data-id="slow" data-index="1" data-value="1"></div>\n            <div class="ez-ptz-speed-progress-line-dot '+(3===_this.speed?"ez-ptz-speed-active":"")+'" data-id="mid" data-index="2" data-value="3"></div>\n            <div class="ez-ptz-speed-progress-line-dot '+(7===_this.speed?"ez-ptz-speed-active":"")+'" data-id="fast" data-index="3" data-value="7"></div>\n          </div>\n          <div class="ez-ptz-speed-progress-points">\n            <div class="ez-ptz-speed-progress-points-slow">\n            '+_this.locale.PTZ_SLOW+'\n            </div>\n            <div class="ez-ptz-speed-progress-points-mid">\n            '+_this.locale.PTZ_MID+'\n            </div>\n            <div class="ez-ptz-speed-progress-points-fast">\n              '+_this.locale.PTZ_FAST+"\n            </div>\n          </div>\n        </div>\n    ",_this._$wrapper.appendChild(_this._$speedContainer),_this._$btnContainer=document.createElement("div"),_this._$btnContainer.classList.add("ez-ptz-btn-container"),_this._$btnContainer.innerHTML='\n        <div class="ez-ptz-btn-zoom" title="'+_this.locale.DEVICE_ZOOM+'" style="user-select: none;">\n          <div class="ez-ptz-btn-zoom-add" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M563.2 198.4c179.2 0 326.4 147.2 326.4 326.4s-147.2 326.4-326.4 326.4S230.4 704 230.4 524.8s147.2-326.4 332.8-326.4z m0 64c-147.2 0-262.4 115.2-262.4 262.4s115.2 262.4 262.4 262.4 262.4-115.2 262.4-262.4S704 262.4 563.2 262.4z" fill="#ffffff"></path>\n              <path d="M691.2 556.8H428.8c-19.2 0-32-12.8-32-32s12.8-32 32-32h262.4c19.2 0 32 12.8 32 32s-12.8 32-32 32z" fill="#ffffff">\n              </path>\n              <path d="M556.8 691.2c-19.2 0-32-12.8-32-32V396.8c0-19.2 12.8-32 32-32s32 12.8 32 32v262.4c0 19.2-12.8 32-32 32z" fill="#ffffff"></path>\n            </svg>\n          </div>\n          <div class="ez-ptz-btn-zoom-sub" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M569.6 838.4c-172.8 0-307.2-140.8-307.2-307.2s140.8-307.2 307.2-307.2 307.2 140.8 307.2 307.2-140.8 307.2-307.2 307.2z m0-64c134.4 0 249.6-108.8 249.6-249.6S704 281.6 569.6 281.6 320 396.8 320 531.2s108.8 243.2 249.6 243.2z" fill="#ffffff"></path>\n              <path d="M691.2 563.2H448c-19.2 0-32-12.8-32-32s12.8-38.4 32-38.4h249.6c19.2 0 32 12.8 32 32s-19.2 38.4-38.4 38.4z" fill="#ffffff"></path>\n            </svg>\n          </div>\n        </div>\n        <div class="ez-ptz-btn-focal" title="'+_this.locale.DEVICE_FOCUS+'" style="user-select: none;">\n          <div class="ez-ptz-btn-focal-add" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M646.4 825.6H320c-44.8 0-83.2-38.4-83.2-83.2V409.6c0-44.8 38.4-83.2 83.2-83.2h326.4c44.8 0 83.2 38.4 83.2 83.2v326.4c0 51.2-38.4 89.6-83.2 89.6zM320 390.4c-12.8 0-19.2 6.4-19.2 19.2v326.4c0 12.8 6.4 19.2 19.2 19.2h326.4c12.8 0 19.2-6.4 19.2-19.2V409.6c0-12.8-6.4-19.2-19.2-19.2H320z" fill="#ffffff"></path>\n              <path d="M396.8 358.4V281.6c0-25.6 25.6-51.2 51.2-51.2h326.4c25.6 0 51.2 25.6 51.2 51.2v326.4c0 25.6-25.6 51.2-51.2 51.2H704l-6.4-268.8" fill="#ffffff"></path>\n            </svg>\n          </div>\n          <div class="ez-ptz-btn-focal-sub" style="user-select: none;">\n            <svg viewBox="0 0 1088 1024" version="1.1" width="20" height="20">\n              <path d="M320 358.4h326.4c25.6 0 51.2 25.6 51.2 51.2v326.4c0 25.6-25.6 51.2-51.2 51.2H320c-25.6 0-51.2-25.6-51.2-51.2V409.6c0-25.6 25.6-51.2 51.2-51.2z" fill="#ffffff"></path>\n              <path d="M774.4 697.6H704c-19.2 0-32-12.8-32-32s12.8-32 32-32h70.4c12.8 0 19.2-6.4 19.2-19.2V281.6c0-12.8-6.4-19.2-19.2-19.2H448c-12.8 0-19.2 6.4-19.2 19.2v70.4c0 19.2-12.8 32-32 32s-32-12.8-32-25.6V281.6c0-44.8 38.4-83.2 83.2-83.2h326.4c44.8 0 83.2 38.4 83.2 83.2v326.4c0 51.2-38.4 89.6-83.2 89.6z" fill="#ffffff"></path>\n            </svg>\n          </div>\n        </div>\n      ',_this._$wrapper.appendChild(_this._$btnContainer),container.appendChild(_this._$wrapper),_this._$directionCircleContainer.onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"start");},_this._$directionCircleContainer.onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"stop");},_this._$directionCircleContainer.ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"start");},_this._$directionCircleContainer.ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handlePtzTouch(e,"stop");},_this._onSwitchSpeed=function(e){var list=Array.from(_this._$speedContainer.querySelectorAll(".ez-ptz-speed-progress-line-dot"));if(list.includes(e.target)&&!e.target.classList.contains("ez-ptz-speed-active")){list.forEach(function(item){item===e.target?item.classList.add("ez-ptz-speed-active"):item.classList.remove("ez-ptz-speed-active");});var value=e.target.getAttribute("data-value"),index=e.target.getAttribute("data-index");_this.speed=+value,null==_this.options.onSpeedChange||_this.options.onSpeedChange.call(_this.options,+index);}},_this._$speedContainer.onmouseup=_this._onSwitchSpeed,_this._isMobile&&(_this._$speedContainer.ontouchend=_this._onSwitchSpeed),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").onmousedown=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").onmouseup=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","stop");}),_this._isMobile&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-add").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-zoom-sub").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("zoom","sub","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-add").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","add","stop");}),_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub")&&(_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").ontouchstart=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","start");},_this._$btnContainer.querySelector(".ez-ptz-btn-focal-sub").ontouchend=function(e){e.preventDefault(),e.stopPropagation(),_this._handleBtnTouch("focal","sub","stop");})),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$n(subClass,superClass);}(Ptz,BasePtz);var _proto=Ptz.prototype;return _proto.destroy=function(){this._clearTimer&&(clearTimeout(this._clearTimer),this._clearTimer=null),this._$directionCircleContainer&&(this._$directionCircleContainer.remove(),this._$directionCircleContainer=null),this._$speedContainer&&(this._onSwitchSpeed=null,this._$speedContainer.remove(),this._$speedContainer=null),this._$btnContainer&&(this._$btnContainer.remove(),this._$btnContainer=null),this._$wrapper&&(this._$wrapper.remove(),this._$wrapper=null),BasePtz.prototype.destroy.call(this);},_proto._handlePtzTouch=function(e,type){var _this_options_token_deviceToken,_this_options_token,_this_options_env,_this_options_token_deviceToken1,_this_options_token1,_this=this;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token.deviceToken)?void 0:_this_options_token_deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");this._ptzQueue||(this._ptzQueue=Promise.resolve());var container=this._$directionCircleContainer.getBoundingClientRect(),containerCenterX=container.left+(this._$directionCircleContainer.clientWidth+2)/2,containerCenterY=container.top+(this._$directionCircleContainer.clientHeight+2)/2,eventX=e.x||e.changedTouches[0].clientX,eventY=e.y||e.changedTouches[0].clientY,direction=0,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken1=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken1.video),backDeg=0;function getAreaId(x,y){var rad=Math.atan2(y,x);rad<0&&(rad+=2*Math.PI);var deg=rad*(180/Math.PI)-225-12.5;return deg<0&&(deg+=360),Math.floor(deg/45)+1}var _this_options_env1,left=eventX-containerCenterX,top=eventY-containerCenterY;if(this.isRotate)switch(getAreaId(left,top)){case 1:direction=2,backDeg=90;break;case 2:direction=4,backDeg=135;break;case 3:direction=0,backDeg=180;break;case 4:direction=6,backDeg=225;break;case 5:direction=3,backDeg=270;break;case 6:direction=7,backDeg=315;break;case 7:direction=1,backDeg=0;break;case 8:direction=5,backDeg=45;}else switch(getAreaId(left,top)){case 1:direction=0,backDeg=180;break;case 2:direction=6,backDeg=225;break;case 3:direction=3,backDeg=270;break;case 4:direction=7,backDeg=315;break;case 5:direction=1,backDeg=0;break;case 6:direction=5,backDeg=45;break;case 7:direction=2,backDeg=90;break;case 8:direction=4,backDeg=135;}(this._clearTimer&&(clearTimeout(this._clearTimer),this._clearTimer=null),this._$directionCircleContainer.style.cssText="start"===type?"background-image:linear-gradient("+backDeg+"deg, #4277FF 0%, rgba(100,143,252,0.00) 30%)":"","stop"===type)&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop");var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{areaId:getAreaId(left,top),direction:direction,backDeg:backDeg,isRotate:this.isRotate,speed:this.speed,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed",this.speed+""),data.append("direction",direction+""),data.append("accessToken",token),this._ptzQueue=this._ptzQueue.then(function(){return _async_to_generator$5(function(){var _this;return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return _this=this,[4,fetch(url,{method:"POST",body:data}).then(function(response){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,response.json()];case 1:return [2,_state.sent()]}})})()}).then(function(rt){var _rt_result;null==operationResultCb||operationResultCb(rt);var code=rt.code||(null==rt||null==(_rt_result=rt.result)?void 0:_rt_result.code);return [6e4,60001,60002,60003,60004,60005,60006,10002].includes(+code)&&(_this._$directionCircleContainer.style.cssText="background-image:linear-gradient("+backDeg+"deg, #f45656 0%, rgba(100,143,252,0.00) 30%)"),rt}).catch(function(err){}).finally(function(){operationResultCb=null,"stop"===type&&(_this._clearTimer=setTimeout(function(){_this._$directionCircleContainer.style.cssText="";},1e3));})];case 1:return [2,_state.sent()]}})}).call(_this)}),"stop"===type&&(this._ptzQueue=this._ptzQueue.finally(function(){}));},_proto._handleBtnTouch=function(btn,option,type){var _this_options_token,_this_options_env,_this_options_token_deviceToken,_this_options_token1,_this=this;if(!this.options.accessToken&&!(null==(_this_options_token=this.options.token)?void 0:_this_options_token.deviceToken.video))throw new Error("Ptz accessToken or token.deviceToken.video is required");this._ptzOperation||(this._ptzOperation=Promise.resolve());var direction=8;direction="zoom"===btn?"add"===option?8:9:"add"===option?10:11;var _this_options_env1,url=(null==(_this_options_env=this.options.env)?void 0:_this_options_env.domain)+"/api/lapp/device/ptz/start",token=this.options.accessToken||(null==(_this_options_token1=this.options.token)||null==(_this_options_token_deviceToken=_this_options_token1.deviceToken)?void 0:_this_options_token_deviceToken.video);"stop"===type&&(url=(null==(_this_options_env1=this.options.env)?void 0:_this_options_env1.domain)+"/api/lapp/device/ptz/stop");var operationResultCb=null==this.options.onDirection?void 0:this.options.onDirection.call(this.options,{btn:btn,option:option,type:type}),data=new FormData;data.append("deviceSerial",this.options.deviceSerial+""),data.append("channelNo",this.options.channelNo+""),data.append("speed",this.speed+""),data.append("direction",direction+""),data.append("accessToken",token),this._ptzOperation=this._ptzOperation.then(function(){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,fetch(url,{method:"POST",body:data}).then(function(response){return _async_to_generator$5(function(){return _ts_generator$5(this,function(_state){switch(_state.label){case 0:return [4,response.json()];case 1:return [2,_state.sent()]}})})()}).then(function(rt){return null==operationResultCb||operationResultCb(rt),rt}).catch(function(err){}).finally(function(){operationResultCb=null;})];case 1:return [2,_state.sent()]}})})()}),"stop"===type&&(this._ptzOperation=this._ptzOperation.finally(function(){_this._ptzOperation=null;}));},_create_class$e(Ptz,[{key:"isRotate",get:function(){return this._isRotate},set:function(isRotate){this._isRotate=isRotate;}}]),Ptz}(BasePtz);
 
 	function _defineProperties$4(target, props) {
 	    for(var i = 0; i < props.length; i++){
@@ -7493,12 +7548,12 @@
 	        Object.defineProperty(target, descriptor.key, descriptor);
 	    }
 	}
-	function _create_class$a(Constructor, protoProps, staticProps) {
+	function _create_class$d(Constructor, protoProps, staticProps) {
 	    if (protoProps) _defineProperties$4(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$j() {
-	    _extends$j = Object.assign || function(target) {
+	function _extends$l() {
+	    _extends$l = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7509,9 +7564,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$j.apply(this, arguments);
+	    return _extends$l.apply(this, arguments);
 	}
-	function _inherits$i(subClass, superClass) {
+	function _inherits$j(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7522,23 +7577,23 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$k(subClass, superClass);
+	    if (superClass) _set_prototype_of$m(subClass, superClass);
 	}
-	function _set_prototype_of$k(o, p) {
-	    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$m(o, p) {
+	    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$k(o, p);
+	    return _set_prototype_of$m(o, p);
 	}
 	/**
 	 * 云台控件
 	 * @category Control
 	 */ var Ptz = /*#__PURE__*/ function(Control) {
-	    _inherits$i(Ptz, Control);
+	    _inherits$j(Ptz, Control);
 	    function Ptz(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$j({}, options, {
+	        _this = Control.call(this, _extends$l({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'ptz'
@@ -7581,7 +7636,7 @@
 	            this.$turntable.classList.add("" + PREFIX_CLASS + "-ptz-turntable");
 	            this.$panel.appendChild(this.$turntable);
 	            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-	            this._ptzControl = new Ptz$1(this.$turntable, _extends$j({}, this._options, {
+	            this._ptzControl = new Ptz$1(this.$turntable, _extends$l({}, this._options, {
 	                onSpeedChange: this._onSpeedChange.bind(this),
 	                onDirection: this._onDirection.bind(this)
 	            }));
@@ -7590,7 +7645,7 @@
 	    };
 	    _proto.renderMobileExtend = function renderMobileExtend($container) {
 	        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-	        if (!this._ptzControl1) this._ptzControl1 = new MobilePtz($container, _extends$j({}, this._options, {
+	        if (!this._ptzControl1) this._ptzControl1 = new MobilePtz($container, _extends$l({}, this._options, {
 	            onSpeedChange: this._onSpeedChange.bind(this),
 	            onDirection: this._onDirection.bind(this)
 	        }));
@@ -7604,7 +7659,7 @@
 	        }
 	    };
 	    _proto._onSpeedChange = function _onSpeedChange(speed) {
-	        this.emit(EVENTS.control.ptzSpeedChange, speed);
+	        this.emit(EVENTS$2.control.ptzSpeedChange, speed);
 	        this._options.onSpeedChange == null ? void 0 : this._options.onSpeedChange.call(this._options, speed);
 	    };
 	    _proto._onDirection = function _onDirection(requestData) {
@@ -7613,7 +7668,7 @@
 	            var _responseResult_result;
 	            var code = +(responseResult.code || (responseResult == null ? void 0 : (_responseResult_result = responseResult.result) == null ? void 0 : _responseResult_result.code));
 	            if (requestData.type === 'start' && code !== 200) {
-	                _this.emit(EVENTS.control.ptzError, {
+	                _this.emit(EVENTS$2.control.ptzError, {
 	                    code: code,
 	                    // prettier-ignore
 	                    localeKey: requestData.btn === 'zoom' && code === 60000 ? 'NOT_SUPPORT_DEVICE_ZOOM' : requestData.btn === 'focal' && code === 60006 ? 'NOT_SUPPORT_FOCUS' : '38' + code,
@@ -7635,7 +7690,7 @@
 	    _proto.reset = function reset(hide) {
 	        this.active = false;
 	    };
-	    _create_class$a(Ptz, [
+	    _create_class$d(Ptz, [
 	        {
 	            key: "isRotated",
 	            get: function get() {
@@ -7689,12 +7744,12 @@
 	        Object.defineProperty(target, descriptor.key, descriptor);
 	    }
 	}
-	function _create_class$9(Constructor, protoProps, staticProps) {
+	function _create_class$c(Constructor, protoProps, staticProps) {
 	    if (protoProps) _defineProperties$3(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$i() {
-	    _extends$i = Object.assign || function(target) {
+	function _extends$k() {
+	    _extends$k = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7705,9 +7760,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$i.apply(this, arguments);
+	    return _extends$k.apply(this, arguments);
 	}
-	function _inherits$h(subClass, superClass) {
+	function _inherits$i(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7718,14 +7773,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$j(subClass, superClass);
+	    if (superClass) _set_prototype_of$l(subClass, superClass);
 	}
-	function _set_prototype_of$j(o, p) {
-	    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$l(o, p) {
+	    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$j(o, p);
+	    return _set_prototype_of$l(o, p);
 	}
 	var RECORD_DEFAULT_OPTIONS = {
 	    maxDuration: 3600
@@ -7739,10 +7794,10 @@
 	 *  2. 录制时间很短可能会因为浏览器的限制或没有I帧而无法生成有效的视频文件
 	 * @category Control
 	 */ var Record = /*#__PURE__*/ function(Control) {
-	    _inherits$h(Record, Control);
+	    _inherits$i(Record, Control);
 	    function Record(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$i({}, options, {
+	        _this = Control.call(this, _extends$k({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'record'
@@ -7812,7 +7867,7 @@
 	        this.active = !this.active;
 	        Control.prototype._onControlClick.call(this, e);
 	    };
-	    _create_class$9(Record, [
+	    _create_class$c(Record, [
 	        {
 	            key: "active",
 	            get: /**
@@ -7833,7 +7888,7 @@
 	                    } else {
 	                        this._destroyTimer();
 	                    }
-	                    this.emit(EVENTS.control.recordingChange, this._active);
+	                    this.emit(EVENTS$2.control.recordingChange, this._active);
 	                }
 	            }
 	        }
@@ -7879,12 +7934,12 @@
 	        Object.defineProperty(target, descriptor.key, descriptor);
 	    }
 	}
-	function _create_class$8(Constructor, protoProps, staticProps) {
+	function _create_class$b(Constructor, protoProps, staticProps) {
 	    if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
 	    return Constructor;
 	}
-	function _extends$h() {
-	    _extends$h = Object.assign || function(target) {
+	function _extends$j() {
+	    _extends$j = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -7895,9 +7950,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$h.apply(this, arguments);
+	    return _extends$j.apply(this, arguments);
 	}
-	function _inherits$g(subClass, superClass) {
+	function _inherits$h(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -7908,14 +7963,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$i(subClass, superClass);
+	    if (superClass) _set_prototype_of$k(subClass, superClass);
 	}
-	function _set_prototype_of$i(o, p) {
-	    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$k(o, p) {
+	    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$i(o, p);
+	    return _set_prototype_of$k(o, p);
 	}
 	function _ts_generator$4(thisArg, body) {
 	    var f, y, t, _ = {
@@ -8017,23 +8072,23 @@
 	 *
 	 * @category Control
 	 */ var Talk = /*#__PURE__*/ function(Control) {
-	    _inherits$g(Talk, Control);
+	    _inherits$h(Talk, Control);
 	    function Talk(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$h({}, options, {
+	        _this = Control.call(this, _extends$j({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'talk'
 	        })) || this, _this._value = 0;
 	        _this._options = options;
 	        _this._render();
-	        _this.on(EVENTS.talkingChange, function(talking) {
+	        _this.on(EVENTS$2.talkingChange, function(talking) {
 	            if (_this.active !== talking) {
 	                _this.active = talking;
 	                _this._render();
 	            }
 	        });
-	        _this.on(EVENTS.talkVolumeChange, function(value) {
+	        _this.on(EVENTS$2.talkVolumeChange, function(value) {
 	            var _this__options_onChange, _this__options;
 	            _this.value = value;
 	            (_this__options = _this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, value);
@@ -8054,7 +8109,7 @@
 	            this._value = 0;
 	            this.active = false;
 	            this._render();
-	            this.emit(EVENTS.control.talkingChange, false);
+	            this.emit(EVENTS$2.control.talkingChange, false);
 	            Control.prototype.reset.call(this, hide);
 	        }
 	    };
@@ -8076,7 +8131,7 @@
 	            return _ts_generator$4(this, function(_state) {
 	                _superprop_get__onControlClick().call(_this, e);
 	                this.active = !this.active;
-	                this.emit(EVENTS.control.talkingChange, this.active);
+	                this.emit(EVENTS$2.control.talkingChange, this.active);
 	                this._render();
 	                return [
 	                    2
@@ -8084,7 +8139,7 @@
 	            });
 	        }).call(this);
 	    };
-	    _create_class$8(Talk, [
+	    _create_class$b(Talk, [
 	        {
 	            key: "value",
 	            get: /**
@@ -8153,8 +8208,8 @@
 	        });
 	    };
 	}
-	function _extends$g() {
-	    _extends$g = Object.assign || function(target) {
+	function _extends$i() {
+	    _extends$i = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -8165,9 +8220,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$g.apply(this, arguments);
+	    return _extends$i.apply(this, arguments);
 	}
-	function _inherits$f(subClass, superClass) {
+	function _inherits$g(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -8178,14 +8233,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$h(subClass, superClass);
+	    if (superClass) _set_prototype_of$j(subClass, superClass);
 	}
-	function _set_prototype_of$h(o, p) {
-	    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$j(o, p) {
+	    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$h(o, p);
+	    return _set_prototype_of$j(o, p);
 	}
 	function _ts_generator$3(thisArg, body) {
 	    var f, y, t, _ = {
@@ -8285,17 +8340,17 @@
 	 *
 	 * @category Control
 	 */ var Broadcast = /*#__PURE__*/ function(Control) {
-	    _inherits$f(Broadcast, Control);
+	    _inherits$g(Broadcast, Control);
 	    function Broadcast(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$g({}, options, {
+	        _this = Control.call(this, _extends$i({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'broadcast'
 	        })) || this;
 	        _this._options = options;
 	        _this._render();
-	        _this.on(EVENTS.broadcastChange, function(active) {
+	        _this.on(EVENTS$2.broadcastChange, function(active) {
 	            if (_this.active !== active) {
 	                _this.active = active;
 	                _this._render();
@@ -8319,7 +8374,7 @@
 	        if (this.active) {
 	            this.active = false;
 	            this._render();
-	            this.emit(EVENTS.control.broadcastChange, false);
+	            this.emit(EVENTS$2.control.broadcastChange, false);
 	            Control.prototype.reset.call(this, hide);
 	        }
 	    };
@@ -8342,7 +8397,7 @@
 	            return _ts_generator$3(this, function(_state) {
 	                _superprop_get__onControlClick().call(_this, e);
 	                this.active = !this.active;
-	                this.emit(EVENTS.control.broadcastChange, this.active);
+	                this.emit(EVENTS$2.control.broadcastChange, this.active);
 	                (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, this.active);
 	                this._render();
 	                return [
@@ -8383,8 +8438,8 @@
 	        });
 	    };
 	}
-	function _extends$f() {
-	    _extends$f = Object.assign || function(target) {
+	function _extends$h() {
+	    _extends$h = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -8395,9 +8450,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$f.apply(this, arguments);
+	    return _extends$h.apply(this, arguments);
 	}
-	function _inherits$e(subClass, superClass) {
+	function _inherits$f(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -8408,14 +8463,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$g(subClass, superClass);
+	    if (superClass) _set_prototype_of$i(subClass, superClass);
 	}
-	function _set_prototype_of$g(o, p) {
-	    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$i(o, p) {
+	    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$g(o, p);
+	    return _set_prototype_of$i(o, p);
 	}
 	function _ts_generator$2(thisArg, body) {
 	    var f, y, t, _ = {
@@ -8515,17 +8570,17 @@
 	 *
 	 * @category Control
 	 */ var AIChat = /*#__PURE__*/ function(Control) {
-	    _inherits$e(AIChat, Control);
+	    _inherits$f(AIChat, Control);
 	    function AIChat(options) {
 	        var _this;
-	        _this = Control.call(this, _extends$f({}, options, {
+	        _this = Control.call(this, _extends$h({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'aichat'
 	        })) || this;
 	        _this._options = options;
 	        _this._render();
-	        _this.on(EVENTS.aichatChange, function(active) {
+	        _this.on(EVENTS$2.aichatChange, function(active) {
 	            if (_this.active !== active) {
 	                _this.active = active;
 	                _this._render();
@@ -8549,7 +8604,7 @@
 	        if (this.active) {
 	            this.active = false;
 	            this._render();
-	            this.emit(EVENTS.control.aichatChange, false);
+	            this.emit(EVENTS$2.control.aichatChange, false);
 	            Control.prototype.reset.call(this, hide);
 	        }
 	    };
@@ -8572,7 +8627,7 @@
 	            return _ts_generator$2(this, function(_state) {
 	                _superprop_get__onControlClick().call(_this, e);
 	                this.active = !this.active;
-	                this.emit(EVENTS.control.aichatChange, this.active);
+	                this.emit(EVENTS$2.control.aichatChange, this.active);
 	                (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, this.active);
 	                this._render();
 	                return [
@@ -8584,8 +8639,8 @@
 	    return AIChat;
 	}(Control);
 
-	function _extends$e() {
-	    _extends$e = Object.assign || function(target) {
+	function _extends$g() {
+	    _extends$g = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -8596,9 +8651,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$e.apply(this, arguments);
+	    return _extends$g.apply(this, arguments);
 	}
-	function _inherits$d(subClass, superClass) {
+	function _inherits$e(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -8609,14 +8664,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$f(subClass, superClass);
+	    if (superClass) _set_prototype_of$h(subClass, superClass);
 	}
-	function _set_prototype_of$f(o, p) {
-	    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$h(o, p) {
+	    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$f(o, p);
+	    return _set_prototype_of$h(o, p);
 	}
 	/**
 	 * 直播按钮控件
@@ -8625,11 +8680,11 @@
 	 *
 	 * @category Control
 	 */ var Live = /*#__PURE__*/ function(Control) {
-	    _inherits$d(Live, Control);
+	    _inherits$e(Live, Control);
 	    function Live(options) {
 	        var _this;
 	        var _this___options_props1;
-	        _this = Control.call(this, _extends$e({}, options, {
+	        _this = Control.call(this, _extends$g({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'live'
@@ -8673,14 +8728,14 @@
 	            return;
 	        }
 	        this.active = true;
-	        this.emit(EVENTS.control.liveChange);
+	        this.emit(EVENTS$2.control.liveChange);
 	        (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options);
 	    };
 	    return Live;
 	}(Control);
 
-	function _extends$d() {
-	    _extends$d = Object.assign || function(target) {
+	function _extends$f() {
+	    _extends$f = Object.assign || function(target) {
 	        for(var i = 1; i < arguments.length; i++){
 	            var source = arguments[i];
 	            for(var key in source){
@@ -8691,9 +8746,9 @@
 	        }
 	        return target;
 	    };
-	    return _extends$d.apply(this, arguments);
+	    return _extends$f.apply(this, arguments);
 	}
-	function _inherits$c(subClass, superClass) {
+	function _inherits$d(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
 	        throw new TypeError("Super expression must either be null or a function");
 	    }
@@ -8704,14 +8759,14 @@
 	            configurable: true
 	        }
 	    });
-	    if (superClass) _set_prototype_of$e(subClass, superClass);
+	    if (superClass) _set_prototype_of$g(subClass, superClass);
 	}
-	function _set_prototype_of$e(o, p) {
-	    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	function _set_prototype_of$g(o, p) {
+	    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
 	        o.__proto__ = p;
 	        return o;
 	    };
-	    return _set_prototype_of$e(o, p);
+	    return _set_prototype_of$g(o, p);
 	}
 	/**
 	 * 回放下拉控件
@@ -8720,11 +8775,11 @@
 	 *
 	 * @category Control
 	 */ var RecDropdown = /*#__PURE__*/ function(Control) {
-	    _inherits$c(RecDropdown, Control);
+	    _inherits$d(RecDropdown, Control);
 	    function RecDropdown(options) {
 	        var _this;
 	        var _options_props, _this___options_props1;
-	        _this = Control.call(this, _extends$d({}, options, {
+	        _this = Control.call(this, _extends$f({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
 	            classNameSuffix: 'rec-dropdown'
@@ -8804,7 +8859,7 @@
 	                _this._activeOption(type);
 	                // 设置自身为激活状态
 	                _this.active = true;
-	                _this.emit(EVENTS.control.recDropdownChange, type);
+	                _this.emit(EVENTS$2.control.recDropdownChange, type);
 	                (_this__options = _this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, type);
 	                _this._picker.open = false;
 	            }
@@ -8841,6 +8896,528 @@
 	    // picker 自行处理 click/hover，这里不额外处理
 	    };
 	    return RecDropdown;
+	}(Control);
+
+	var eventemitter3 = {exports: {}};
+
+	var hasRequiredEventemitter3;
+
+	function requireEventemitter3 () {
+		if (hasRequiredEventemitter3) return eventemitter3.exports;
+		hasRequiredEventemitter3 = 1;
+		(function (module) {
+
+			var has = Object.prototype.hasOwnProperty
+			  , prefix = '~';
+
+			/**
+			 * Constructor to create a storage for our `EE` objects.
+			 * An `Events` instance is a plain object whose properties are event names.
+			 *
+			 * @constructor
+			 * @private
+			 */
+			function Events() {}
+
+			//
+			// We try to not inherit from `Object.prototype`. In some engines creating an
+			// instance in this way is faster than calling `Object.create(null)` directly.
+			// If `Object.create(null)` is not supported we prefix the event names with a
+			// character to make sure that the built-in object properties are not
+			// overridden or used as an attack vector.
+			//
+			if (Object.create) {
+			  Events.prototype = Object.create(null);
+
+			  //
+			  // This hack is needed because the `__proto__` property is still inherited in
+			  // some old browsers like Android 4, iPhone 5.1, Opera 11 and Safari 5.
+			  //
+			  if (!new Events().__proto__) prefix = false;
+			}
+
+			/**
+			 * Representation of a single event listener.
+			 *
+			 * @param {Function} fn The listener function.
+			 * @param {*} context The context to invoke the listener with.
+			 * @param {Boolean} [once=false] Specify if the listener is a one-time listener.
+			 * @constructor
+			 * @private
+			 */
+			function EE(fn, context, once) {
+			  this.fn = fn;
+			  this.context = context;
+			  this.once = once || false;
+			}
+
+			/**
+			 * Add a listener for a given event.
+			 *
+			 * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+			 * @param {(String|Symbol)} event The event name.
+			 * @param {Function} fn The listener function.
+			 * @param {*} context The context to invoke the listener with.
+			 * @param {Boolean} once Specify if the listener is a one-time listener.
+			 * @returns {EventEmitter}
+			 * @private
+			 */
+			function addListener(emitter, event, fn, context, once) {
+			  if (typeof fn !== 'function') {
+			    throw new TypeError('The listener must be a function');
+			  }
+
+			  var listener = new EE(fn, context || emitter, once)
+			    , evt = prefix ? prefix + event : event;
+
+			  if (!emitter._events[evt]) emitter._events[evt] = listener, emitter._eventsCount++;
+			  else if (!emitter._events[evt].fn) emitter._events[evt].push(listener);
+			  else emitter._events[evt] = [emitter._events[evt], listener];
+
+			  return emitter;
+			}
+
+			/**
+			 * Clear event by name.
+			 *
+			 * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+			 * @param {(String|Symbol)} evt The Event name.
+			 * @private
+			 */
+			function clearEvent(emitter, evt) {
+			  if (--emitter._eventsCount === 0) emitter._events = new Events();
+			  else delete emitter._events[evt];
+			}
+
+			/**
+			 * Minimal `EventEmitter` interface that is molded against the Node.js
+			 * `EventEmitter` interface.
+			 *
+			 * @constructor
+			 * @public
+			 */
+			function EventEmitter() {
+			  this._events = new Events();
+			  this._eventsCount = 0;
+			}
+
+			/**
+			 * Return an array listing the events for which the emitter has registered
+			 * listeners.
+			 *
+			 * @returns {Array}
+			 * @public
+			 */
+			EventEmitter.prototype.eventNames = function eventNames() {
+			  var names = []
+			    , events
+			    , name;
+
+			  if (this._eventsCount === 0) return names;
+
+			  for (name in (events = this._events)) {
+			    if (has.call(events, name)) names.push(prefix ? name.slice(1) : name);
+			  }
+
+			  if (Object.getOwnPropertySymbols) {
+			    return names.concat(Object.getOwnPropertySymbols(events));
+			  }
+
+			  return names;
+			};
+
+			/**
+			 * Return the listeners registered for a given event.
+			 *
+			 * @param {(String|Symbol)} event The event name.
+			 * @returns {Array} The registered listeners.
+			 * @public
+			 */
+			EventEmitter.prototype.listeners = function listeners(event) {
+			  var evt = prefix ? prefix + event : event
+			    , handlers = this._events[evt];
+
+			  if (!handlers) return [];
+			  if (handlers.fn) return [handlers.fn];
+
+			  for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
+			    ee[i] = handlers[i].fn;
+			  }
+
+			  return ee;
+			};
+
+			/**
+			 * Return the number of listeners listening to a given event.
+			 *
+			 * @param {(String|Symbol)} event The event name.
+			 * @returns {Number} The number of listeners.
+			 * @public
+			 */
+			EventEmitter.prototype.listenerCount = function listenerCount(event) {
+			  var evt = prefix ? prefix + event : event
+			    , listeners = this._events[evt];
+
+			  if (!listeners) return 0;
+			  if (listeners.fn) return 1;
+			  return listeners.length;
+			};
+
+			/**
+			 * Calls each of the listeners registered for a given event.
+			 *
+			 * @param {(String|Symbol)} event The event name.
+			 * @returns {Boolean} `true` if the event had listeners, else `false`.
+			 * @public
+			 */
+			EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
+			  var evt = prefix ? prefix + event : event;
+
+			  if (!this._events[evt]) return false;
+
+			  var listeners = this._events[evt]
+			    , len = arguments.length
+			    , args
+			    , i;
+
+			  if (listeners.fn) {
+			    if (listeners.once) this.removeListener(event, listeners.fn, undefined, true);
+
+			    switch (len) {
+			      case 1: return listeners.fn.call(listeners.context), true;
+			      case 2: return listeners.fn.call(listeners.context, a1), true;
+			      case 3: return listeners.fn.call(listeners.context, a1, a2), true;
+			      case 4: return listeners.fn.call(listeners.context, a1, a2, a3), true;
+			      case 5: return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
+			      case 6: return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
+			    }
+
+			    for (i = 1, args = new Array(len -1); i < len; i++) {
+			      args[i - 1] = arguments[i];
+			    }
+
+			    listeners.fn.apply(listeners.context, args);
+			  } else {
+			    var length = listeners.length
+			      , j;
+
+			    for (i = 0; i < length; i++) {
+			      if (listeners[i].once) this.removeListener(event, listeners[i].fn, undefined, true);
+
+			      switch (len) {
+			        case 1: listeners[i].fn.call(listeners[i].context); break;
+			        case 2: listeners[i].fn.call(listeners[i].context, a1); break;
+			        case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
+			        case 4: listeners[i].fn.call(listeners[i].context, a1, a2, a3); break;
+			        default:
+			          if (!args) for (j = 1, args = new Array(len -1); j < len; j++) {
+			            args[j - 1] = arguments[j];
+			          }
+
+			          listeners[i].fn.apply(listeners[i].context, args);
+			      }
+			    }
+			  }
+
+			  return true;
+			};
+
+			/**
+			 * Add a listener for a given event.
+			 *
+			 * @param {(String|Symbol)} event The event name.
+			 * @param {Function} fn The listener function.
+			 * @param {*} [context=this] The context to invoke the listener with.
+			 * @returns {EventEmitter} `this`.
+			 * @public
+			 */
+			EventEmitter.prototype.on = function on(event, fn, context) {
+			  return addListener(this, event, fn, context, false);
+			};
+
+			/**
+			 * Add a one-time listener for a given event.
+			 *
+			 * @param {(String|Symbol)} event The event name.
+			 * @param {Function} fn The listener function.
+			 * @param {*} [context=this] The context to invoke the listener with.
+			 * @returns {EventEmitter} `this`.
+			 * @public
+			 */
+			EventEmitter.prototype.once = function once(event, fn, context) {
+			  return addListener(this, event, fn, context, true);
+			};
+
+			/**
+			 * Remove the listeners of a given event.
+			 *
+			 * @param {(String|Symbol)} event The event name.
+			 * @param {Function} fn Only remove the listeners that match this function.
+			 * @param {*} context Only remove the listeners that have this context.
+			 * @param {Boolean} once Only remove one-time listeners.
+			 * @returns {EventEmitter} `this`.
+			 * @public
+			 */
+			EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
+			  var evt = prefix ? prefix + event : event;
+
+			  if (!this._events[evt]) return this;
+			  if (!fn) {
+			    clearEvent(this, evt);
+			    return this;
+			  }
+
+			  var listeners = this._events[evt];
+
+			  if (listeners.fn) {
+			    if (
+			      listeners.fn === fn &&
+			      (!once || listeners.once) &&
+			      (!context || listeners.context === context)
+			    ) {
+			      clearEvent(this, evt);
+			    }
+			  } else {
+			    for (var i = 0, events = [], length = listeners.length; i < length; i++) {
+			      if (
+			        listeners[i].fn !== fn ||
+			        (once && !listeners[i].once) ||
+			        (context && listeners[i].context !== context)
+			      ) {
+			        events.push(listeners[i]);
+			      }
+			    }
+
+			    //
+			    // Reset the array, or remove it completely if we have no more listeners.
+			    //
+			    if (events.length) this._events[evt] = events.length === 1 ? events[0] : events;
+			    else clearEvent(this, evt);
+			  }
+
+			  return this;
+			};
+
+			/**
+			 * Remove all listeners, or those of the specified event.
+			 *
+			 * @param {(String|Symbol)} [event] The event name.
+			 * @returns {EventEmitter} `this`.
+			 * @public
+			 */
+			EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
+			  var evt;
+
+			  if (event) {
+			    evt = prefix ? prefix + event : event;
+			    if (this._events[evt]) clearEvent(this, evt);
+			  } else {
+			    this._events = new Events();
+			    this._eventsCount = 0;
+			  }
+
+			  return this;
+			};
+
+			//
+			// Alias methods names because people roll like that.
+			//
+			EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+			EventEmitter.prototype.addListener = EventEmitter.prototype.on;
+
+			//
+			// Expose the prefix.
+			//
+			EventEmitter.prefixed = prefix;
+
+			//
+			// Allow `EventEmitter` to be imported as module namespace.
+			//
+			EventEmitter.EventEmitter = EventEmitter;
+
+			//
+			// Expose the module.
+			//
+			{
+			  module.exports = EventEmitter;
+			} 
+		} (eventemitter3));
+		return eventemitter3.exports;
+	}
+
+	var eventemitter3Exports = requireEventemitter3();
+	var EventEmitter = /*@__PURE__*/getDefaultExportFromCjs(eventemitter3Exports);
+
+	/*
+	* @ezuikit/control-modal v0.0.1-beta.7
+	* Copyright (c) 2026-07-03 Ezviz-OpenBiz
+	* Released under the MIT License.
+	*/
+	function _array_like_to_array$2(arr,len){(null==len||len>arr.length)&&(len=arr.length);for(var i=0,arr2=new Array(len);i<len;i++)arr2[i]=arr[i];return arr2}function _create_class$a(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _create_for_of_iterator_helper_loose$2(o,allowArrayLike){var it="undefined"!=typeof Symbol&&o[Symbol.iterator]||o["@@iterator"];if(it)return (it=it.call(o)).next.bind(it);if(Array.isArray(o)||(it=function(o,minLen){if(o){if("string"==typeof o)return _array_like_to_array$2(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);return "Object"===n&&o.constructor&&(n=o.constructor.name),"Map"===n||"Set"===n?Array.from(n):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?_array_like_to_array$2(o,minLen):void 0}}(o))||allowArrayLike){it&&(o=it);var i=0;return function(){return i>=o.length?{done:true}:{done:false,value:o[i++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var ModalProvider=function(){function ModalProvider(){this._instances=new Set,this._zIndexCounter=1e3;}var _proto=ModalProvider.prototype;return _proto.register=function(modal,minZIndex){this._instances.add(modal);var base=Math.max(this._zIndexCounter,minZIndex||1e3);return this._zIndexCounter=base+2,base},_proto.unregister=function(modal){this._instances.delete(modal);},_proto.bringToTop=function(){var base=this._zIndexCounter;return this._zIndexCounter+=2,base},_proto.getInstances=function(){return Array.from(this._instances)},_proto.destroyAll=function(){for(var _step,_iterator=_create_for_of_iterator_helper_loose$2(this.getInstances());!(_step=_iterator()).done;){var modal=_step.value;modal._destroyed||modal.destroy();}},ModalProvider.getInstance=function(){return ModalProvider._instance||(ModalProvider._instance=new ModalProvider),ModalProvider._instance},ModalProvider.resetInstance=function(){ModalProvider._instance&&(ModalProvider._instance._instances.clear(),ModalProvider._instance._zIndexCounter=1e3,ModalProvider._instance=null);},_create_class$a(ModalProvider,[{key:"count",get:function(){return this._instances.size}}]),ModalProvider}();ModalProvider._instance=null;var EVENTS$1={open:"open",close:"close",dragStart:"dragStart",dragging:"dragging",dragEnd:"dragEnd"},_$MODAL_LOCALES$_={zh:{close:"关闭"},en:{close:"Close"}},__$MODAL_DEFAULT_OPTIONS$__={width:420,position:"center",draggable:true,showMask:true,maskClosable:true,showHeader:true,showClose:true,closeOnEscape:true,open:false,zIndex:1e3,language:"zh"};var Modal=function(){function Modal(container,options){this._$mask=null,this._$header=null,this._$title=null,this._$close=null,this._visible=false,this._dragging=false,this._dragOffset={x:0,y:0},this._destroyed=false,this._dragBounds={maxLeft:0,maxTop:0},this._dragPoint=null,this._dragRafId=null,this._pos={x:0,y:0},this.options=deepmerge(__$MODAL_DEFAULT_OPTIONS$__,null!=options?options:{},{clone:false}),this._eventEmitter=new EventEmitter,this._i18n=new I18n$1(deepmerge(_$MODAL_LOCALES$_,this.options.locales||{},{clone:false}),{defaultLocale:this.options.language||"zh"}),this._container=this._resolveContainer(container),this._baseZIndex=ModalProvider.getInstance().register(this,this.options.zIndex),this._onPointerMove=this._onPointerMove.bind(this),this._onPointerUp=this._onPointerUp.bind(this),this._onDragFrame=this._onDragFrame.bind(this),this._onHeaderPointerDown=this._onHeaderPointerDown.bind(this),this._onCloseClick=this._onCloseClick.bind(this),this._onMaskClick=this._onMaskClick.bind(this),this._onKeydown=this._onKeydown.bind(this),this._onWindowResize=this._onWindowResize.bind(this),this._onModalPointerDown=this._onModalPointerDown.bind(this),this._onWrapDblClick=this._onWrapDblClick.bind(this),this._render(),this._bindEvents(),this.options.open&&this.open();}var _proto=Modal.prototype;return _proto.open=function(){this._destroyed||this._visible||(this._visible=true,this._$mask&&this._$mask.classList.remove("emodal-hidden"),this._$wrap.classList.remove("emodal-hidden"),this._applyInitialPosition(),window.addEventListener("resize",this._onWindowResize),this.options.closeOnEscape&&document.addEventListener("keydown",this._onKeydown),this._eventEmitter.emit(EVENTS$1.open),null==this.options.onOpen||this.options.onOpen.call(this.options));},_proto.close=function(){!this._destroyed&&this._visible&&(this._visible=false,this._$mask&&this._$mask.classList.add("emodal-hidden"),this._$wrap.classList.add("emodal-hidden"),this._stopDragging(),window.removeEventListener("resize",this._onWindowResize),document.removeEventListener("keydown",this._onKeydown),this._eventEmitter.emit(EVENTS$1.close),null==this.options.onClose||this.options.onClose.call(this.options));},_proto.isVisible=function(){return this._visible},_proto.bringToTop=function(){this._destroyed||(this._baseZIndex=ModalProvider.getInstance().bringToTop(),this._$mask&&(this._$mask.style.zIndex=""+this._baseZIndex),this._$wrap.style.zIndex=""+(this._baseZIndex+1));},_proto.setTitle=function(title){this.options.title=title,this._$title&&this._mount(this._$title,title);},_proto.setContent=function(content){this.options.content=content,this._mount(this._$body,content);},_proto.updateOptions=function(options){this.options=deepmerge(this.options,options,{clone:false}),(options.language||options.locales)&&(this._i18n=new I18n$1(deepmerge(_$MODAL_LOCALES$_,this.options.locales||{},{clone:false}),{defaultLocale:this.options.language||"zh"})),this._stopDragging();var wasVisible=this._visible;this._teardownDom(),this._render(),this._bindEvents(),wasVisible&&(this._visible=false,this.open());},_proto.on=function(event,callback){this._eventEmitter.on(event,callback);},_proto.off=function(event,callback){this._eventEmitter.off(event,callback);},_proto.setPosition=function(left,top,bounds){var _ref=bounds||this._bounds(),maxLeft=_ref.maxLeft,maxTop=_ref.maxTop,x=Math.max(0,Math.min(left,maxLeft)),y=Math.max(0,Math.min(top,maxTop));return this._setTranslate(x,y),{x:x,y:y}},_proto.destroy=function(){this._destroyed||(this._stopDragging(),window.removeEventListener("resize",this._onWindowResize),document.removeEventListener("keydown",this._onKeydown),this._teardownDom(),this._eventEmitter.removeAllListeners(),this._destroyed=true,ModalProvider.getInstance().unregister(this));},_proto._resolveContainer=function(container){return "string"==typeof container?document.querySelector(container)||document.body:container||document.body},_proto._toSize=function(value){return null==value||""===value?null:"number"==typeof value?value+"px":value},_proto._render=function(){this.options.showMask&&(this._$mask=document.createElement("div"),this._$mask.className="emodal-mask emodal-hidden",this._$mask.style.zIndex=""+this._baseZIndex,this._container.appendChild(this._$mask)),this._$wrap=document.createElement("div"),this._$wrap.className="emodal-wrap emodal-hidden",this.options.draggable&&this._$wrap.classList.add("emodal-draggable"),this.options.className&&this._$wrap.classList.add(this.options.className),this._$wrap.style.zIndex=""+(this._baseZIndex+1);var w=this._toSize(this.options.width);w&&(this._$wrap.style.width=w);var h=this._toSize(this.options.height);h&&(this._$wrap.style.height=h),this.options.showHeader?(this._$header=document.createElement("div"),this._$header.className="emodal-header",this._$title=document.createElement("div"),this._$title.className="emodal-title",void 0!==this.options.title&&this._mount(this._$title,this.options.title),this._$header.appendChild(this._$title),this.options.showClose&&(this._$close=document.createElement("button"),this._$close.type="button",this._$close.className="emodal-close",this._$close.setAttribute("aria-label",String(this._i18n.t("close"))),this._$close.innerHTML='<svg viewBox="0 0 24 24" fill="none" width="1em" height="1em" stroke="currentColor" focusable="false" aria-hidden="true">\n  <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,0.707114,-0.707114,0.707099,6.34277,6.34326)" />\n  <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,-0.707114,0.707114,0.707099,6.34277,17.6567)" />\n</svg>',this._$header.appendChild(this._$close)),this._$wrap.appendChild(this._$header)):(this._$header=null,this._$title=null,this._$close=null),this._$body=document.createElement("div"),this._$body.className="emodal-body",void 0!==this.options.content&&this._mount(this._$body,this.options.content),this._$wrap.appendChild(this._$body),this._container.appendChild(this._$wrap);},_proto._mount=function(target,content){var left,right;left=content,(null!=(right=HTMLElement)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)?(target.innerHTML="",target.appendChild(content)):target.innerHTML=null!=content?content:"";},_proto._teardownDom=function(){var _this__$mask;this._$wrap.parentNode&&this._$wrap.parentNode.removeChild(this._$wrap),(null==(_this__$mask=this._$mask)?void 0:_this__$mask.parentNode)&&this._$mask.parentNode.removeChild(this._$mask),this._$mask=null,this._$header=null,this._$title=null,this._$close=null;},_proto._bindEvents=function(){var _this__$close,_this__$mask,_this__$mask1;(null==(_this__$close=this._$close)||_this__$close.addEventListener("click",this._onCloseClick),this.options.showMask&&this.options.maskClosable)&&(null==(_this__$mask1=this._$mask)||_this__$mask1.addEventListener("click",this._onMaskClick));this.options.draggable&&this._$header&&(this._$header.addEventListener("mousedown",this._onHeaderPointerDown),this._$header.addEventListener("touchstart",this._onHeaderPointerDown,{passive:false})),this._$wrap.addEventListener("pointerdown",this._onModalPointerDown),this._$wrap.addEventListener("dblclick",this._onWrapDblClick),null==(_this__$mask=this._$mask)||_this__$mask.addEventListener("pointerdown",this._onModalPointerDown);},_proto._onCloseClick=function(e){e.stopPropagation(),this.close();},_proto._onMaskClick=function(){this.close();},_proto._onModalPointerDown=function(){this.bringToTop();},_proto._onWrapDblClick=function(e){e.stopPropagation();},_proto._onKeydown=function(e){"Escape"!==e.key&&"Esc"!==e.key||this.close();},_proto._onWindowResize=function(){if(this._dragging)return this._dragBounds=this._bounds(),void this.setPosition(this._pos.x,this._pos.y,this._dragBounds);this.setPosition(this._pos.x,this._pos.y);},_proto._getPoint=function(e){if("touches"in e){var t=e.touches[0]||e.changedTouches[0];return {x:t.clientX,y:t.clientY}}return {x:e.clientX,y:e.clientY}},_proto._onHeaderPointerDown=function(e){if(this.options.draggable){var target=e.target;if(!(this._$close&&(target===this._$close||this._$close.contains(target))||"button"in e&&0!==e.button)){var point=this._getPoint(e),rect=this._$wrap.getBoundingClientRect();this._dragOffset={x:point.x-rect.left,y:point.y-rect.top},this._dragBounds=this._bounds(),this._dragging=true,this._$wrap.style.willChange="transform",document.body.classList.add("emodal-dragging"),document.addEventListener("mousemove",this._onPointerMove),document.addEventListener("mouseup",this._onPointerUp),document.addEventListener("touchmove",this._onPointerMove,{passive:false}),document.addEventListener("touchend",this._onPointerUp),document.addEventListener("touchcancel",this._onPointerUp),this._eventEmitter.emit(EVENTS$1.dragStart);}}},_proto._onPointerMove=function(e){this._dragging&&(e.cancelable&&e.preventDefault(),this._dragPoint=this._getPoint(e),null===this._dragRafId&&(this._dragRafId=requestAnimationFrame(this._onDragFrame)));},_proto._onDragFrame=function(){if(this._dragRafId=null,this._dragging&&this._dragPoint){var left=this._dragPoint.x-this._dragOffset.x,top=this._dragPoint.y-this._dragOffset.y,_this__dragBounds=this._dragBounds,maxLeft=_this__dragBounds.maxLeft,maxTop=_this__dragBounds.maxTop,x=Math.max(0,Math.min(left,maxLeft)),y=Math.max(0,Math.min(top,maxTop));this._setTranslate(x,y),this._eventEmitter.emit(EVENTS$1.dragging,{x:x,y:y});}},_proto._onPointerUp=function(){this._dragging&&(this._stopDragging(),this._eventEmitter.emit(EVENTS$1.dragEnd,{left:this._pos.x,top:this._pos.y}));},_proto._stopDragging=function(){null!==this._dragRafId&&(cancelAnimationFrame(this._dragRafId),this._dragRafId=null),this._dragPoint=null,this._dragging?(this._dragging=false,this._$wrap&&(this._$wrap.style.willChange=""),document.body.classList.remove("emodal-dragging"),document.removeEventListener("mousemove",this._onPointerMove),document.removeEventListener("mouseup",this._onPointerUp),document.removeEventListener("touchmove",this._onPointerMove),document.removeEventListener("touchend",this._onPointerUp),document.removeEventListener("touchcancel",this._onPointerUp)):document.body.classList.remove("emodal-dragging");},_proto._bounds=function(){var vw=document.documentElement.clientWidth,vh=document.documentElement.clientHeight,w=this._$wrap.offsetWidth,h=this._$wrap.offsetHeight;return {maxLeft:Math.max(0,vw-w),maxTop:Math.max(0,vh-h)}},_proto._setTranslate=function(x,y){this._pos={x:x,y:y},this._$wrap.style.transform="translate3d("+x+"px, "+y+"px, 0)";},_proto._center=function(){var vw=document.documentElement.clientWidth,vh=document.documentElement.clientHeight,w=this._$wrap.offsetWidth,h=this._$wrap.offsetHeight;this.setPosition((vw-w)/2,(vh-h)/2);},_proto._applyInitialPosition=function(){var obj,position=this.options.position;position&&"object"==(void 0===position?"undefined":(obj=position)&&"undefined"!=typeof Symbol&&obj.constructor===Symbol?"symbol":typeof obj)?this.setPosition(position.x,position.y):this._center();},Modal}();Modal.VERSION="0.0.1-beta.7",Modal.EVENTS=EVENTS$1;
+
+	/*
+	* @ezuikit/control-virtual-scroll v0.0.1-beta.3
+	* Copyright (c) 2026-07-03 Ezviz-OpenBiz
+	* Released under the MIT License.
+	*/
+	var EVENTS={render:"render",scroll:"scroll",reachTop:"reachTop",reachBottom:"reachBottom"},DefaultOptions={itemHeight:40,buffer:5,smooth:true};function _create_class$9(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}var _OVERWRITE_MERGE_={clone:false,arrayMerge:function(_dest,src){return src}},VirtualScroll=function(){function VirtualScroll(container,options){this._active=new Map,this._pool=[],this._heights=[],this._prefix=[],this._prefixDirty=false,this._containerHeight=0,this._startIndex=-1,this._endIndex=-1,this._ticking=false,this._destroyed=false,this._resizeObserver=null,this._eventEmitter=new EventEmitter,this.options=deepmerge(DefaultOptions,null!=options?options:{},_OVERWRITE_MERGE_),this._wrapper=this._resolveContainer(null!=container?container:this.options.container),this._onScroll=this._onScroll.bind(this),this._onResize=this._onResize.bind(this),this._wrapper.classList.add("evscroll-wrapper"),"static"===getComputedStyle(this._wrapper).position&&(this._wrapper.style.position="relative"),this._wrapper.style.overflowY="auto",this._$content=document.createElement("div"),this._$content.className="evscroll-content",this._$viewport=document.createElement("div"),this._$viewport.className="evscroll-viewport",this._$content.appendChild(this._$viewport),this._wrapper.appendChild(this._$content),this._containerHeight=this._wrapper.clientHeight,this._wrapper.addEventListener("scroll",this._onScroll,{passive:true}),this._setupResizeObserver(),this._initHeights(),this._syncContentHeight(),this._compute(true);}var _proto=VirtualScroll.prototype;return _proto.getTotalCount=function(){return this.options.data?this.options.data.length:this.options.total||0},_proto.getCurrentRange=function(){return {startIndex:this._startIndex,endIndex:this._endIndex}},_proto.scrollToIndex=function(index,smooth){var total=this.getTotalCount();if(index<0||index>=total)return  false;var top=this._offsetOf(index),useSmooth=void 0===smooth?this.options.smooth:smooth;return "function"==typeof this._wrapper.scrollTo?this._wrapper.scrollTo({top:top,behavior:useSmooth?"smooth":"auto"}):this._wrapper.scrollTop=top,true},_proto.scrollToTop=function(smooth){this.scrollToIndex(0,smooth);},_proto.scrollToBottom=function(smooth){var total=this.getTotalCount();total>0&&this.scrollToIndex(total-1,smooth);},_proto.setData=function(data){this.options.data=data,this.refresh();},_proto.setTotal=function(total){this.options.total=total,this.options.data=void 0,this.refresh();},_proto.refresh=function(){this._reset(),this._initHeights(),this._syncContentHeight(),this._compute(true);},_proto.updateOptions=function(options){this.options=deepmerge(this.options,options,_OVERWRITE_MERGE_),this.refresh();},_proto.on=function(event,callback){this._eventEmitter.on(event,callback);},_proto.off=function(event,callback){this._eventEmitter.off(event,callback);},_proto.destroy=function(){this._destroyed||(this._wrapper.removeEventListener("scroll",this._onScroll),this._resizeObserver?(this._resizeObserver.disconnect(),this._resizeObserver=null):window.removeEventListener("resize",this._onResize),this._reset(),this._$content.parentNode===this._wrapper&&this._wrapper.removeChild(this._$content),this._wrapper.classList.remove("evscroll-wrapper"),this._eventEmitter.removeAllListeners(),this._destroyed=true);},_proto._resolveContainer=function(container){var el="string"==typeof container?document.querySelector(container):container;if(!el)throw new Error("[VirtualScroll] container not found: "+String(container));return el},_proto._estimated=function(){var _this_options_estimatedItemHeight,ih=this.options.itemHeight;return null!=(_this_options_estimatedItemHeight=this.options.estimatedItemHeight)?_this_options_estimatedItemHeight:"number"==typeof ih&&ih>0?ih:DefaultOptions.itemHeight},_proto._baseHeightAt=function(index){var ih=this.options.itemHeight;if("function"==typeof ih){var h=ih(index,this.options.data?this.options.data[index]:void 0);return h>0?h:this._estimated()}return this._estimated()},_proto._initHeights=function(){if(!this._variable)return this._heights=[],this._prefix=[],void(this._prefixDirty=false);for(var total=this.getTotalCount(),heights=new Array(total),i=0;i<total;i++)heights[i]=this._baseHeightAt(i);this._heights=heights,this._prefixDirty=true,this._ensurePrefix();},_proto._ensurePrefix=function(){if(this._variable){var total=this.getTotalCount();if(this._prefixDirty||this._prefix.length!==total+1){var prefix=new Array(total+1);prefix[0]=0;for(var i=0;i<total;i++)prefix[i+1]=prefix[i]+(this._heights[i]||0);this._prefix=prefix,this._prefixDirty=false;}}},_proto._offsetOf=function(index){if(this._variable){this._ensurePrefix();var i=Math.max(0,Math.min(index,this.getTotalCount()));return this._prefix[i]||0}return index*this._fixedHeight},_proto._heightOf=function(index){return this._variable?this._heights[index]||0:this._fixedHeight},_proto._totalHeight=function(){return this._variable?(this._ensurePrefix(),this._prefix[this.getTotalCount()]||0):this.getTotalCount()*this._fixedHeight},_proto._findStartIndex=function(scrollTop){var total=this.getTotalCount();if(0===total)return 0;if(!this._variable)return Math.min(total-1,Math.max(0,Math.floor(scrollTop/this._fixedHeight)));this._ensurePrefix();for(var lo=0,hi=total;lo<hi;){var mid=lo+hi+1>>1;this._prefix[mid]<=scrollTop?lo=mid:hi=mid-1;}return Math.min(lo,total-1)},_proto._syncContentHeight=function(){this._$content.style.height=this._totalHeight()+"px";},_proto._onScroll=function(){var _this=this;this._eventEmitter.emit(EVENTS.scroll,this._wrapper.scrollTop),null==this.options.onScroll||this.options.onScroll.call(this.options,this._wrapper.scrollTop),this._ticking||(this._ticking=true,requestAnimationFrame(function(){_this._compute(false),_this._ticking=false;}));},_proto._setupResizeObserver=function(){var _this=this;"undefined"!=typeof ResizeObserver?(this._resizeObserver=new ResizeObserver(function(){return _this._onResize()}),this._resizeObserver.observe(this._wrapper)):window.addEventListener("resize",this._onResize);},_proto._onResize=function(){var h=this._wrapper.clientHeight;h!==this._containerHeight&&(this._containerHeight=h,this._compute(true));},_proto._compute=function(force){if(!this._destroyed){var total=this.getTotalCount();if((0===total||0===this._containerHeight)&&(this._containerHeight=this._wrapper.clientHeight,0===total))return this._reset(),void(this._$content.style.height="0px");var start,end,scrollTop=this._wrapper.scrollTop,buffer=this._buffer;if(this._variable)this._ensurePrefix(),start=Math.max(0,this._findStartIndex(scrollTop)-buffer),end=Math.min(total-1,this._findStartIndex(scrollTop+this._containerHeight)+buffer);else {var itemHeight=this._fixedHeight,rawStart=Math.floor(scrollTop/itemHeight);start=Math.max(0,rawStart-buffer);var capacity=Math.ceil(this._containerHeight/itemHeight);end=Math.min(total-1,rawStart+capacity-1+buffer);}if(force||start!==this._startIndex||end!==this._endIndex){if(this._startIndex=start,this._endIndex=end,this._updateRange(start,end),this._dynamic&&this._measureAndAdjust()){var st=this._wrapper.scrollTop,s2=Math.max(0,this._findStartIndex(st)-buffer),e2=Math.min(total-1,this._findStartIndex(st+this._containerHeight)+buffer);s2===start&&e2===end||(this._startIndex=s2,this._endIndex=e2,this._updateRange(s2,e2),start=s2,end=e2);}var range={startIndex:start,endIndex:end};this._eventEmitter.emit(EVENTS.render,range),null==this.options.onRender||this.options.onRender.call(this.options,range),0===start&&this._eventEmitter.emit(EVENTS.reachTop),end===total-1&&this._eventEmitter.emit(EVENTS.reachBottom);}}},_proto._measureAndAdjust=function(){var _this=this,changed=false;if(this._active.forEach(function(el,idx){var h=el.offsetHeight;h>0&&Math.abs(h-(_this._heights[idx]||0))>.5&&(_this._heights[idx]=h,changed=true);}),!changed)return  false;var anchorIdx=this._startIndex>=0?this._startIndex:0,gap=this._wrapper.scrollTop-this._offsetOf(anchorIdx);this._prefixDirty=true,this._ensurePrefix(),this._$content.style.height=this._totalHeight()+"px",this._repositionActive();var newScrollTop=this._offsetOf(anchorIdx)+gap;return newScrollTop>=0&&Math.abs(newScrollTop-this._wrapper.scrollTop)>.5&&(this._wrapper.scrollTop=newScrollTop),true},_proto._repositionActive=function(){var _this=this;this._active.forEach(function(el,idx){el.style.top=_this._offsetOf(idx)+"px";});},_proto._updateRange=function(start,end){var _this=this,toRecycle=[];this._active.forEach(function(_el,idx){(idx<start||idx>end)&&toRecycle.push(idx);}),toRecycle.forEach(function(idx){var el=_this._active.get(idx);el&&(el.style.display="none",_this._pool.push(el)),_this._active.delete(idx);});for(var i=start;i<=end;i++)if(!this._active.has(i)){var el=this._pool.pop()||this._createItemEl();el.style.display="",el.style.top=this._offsetOf(i)+"px",el.style.height=this._dynamic?"":this._heightOf(i)+"px",el.setAttribute("data-index",String(i)),this._fillItem(el,i),el.parentNode!==this._$viewport&&this._$viewport.appendChild(el),this._active.set(i,el);}},_proto._createItemEl=function(){var el=document.createElement("div");return el.className="evscroll-item",el},_proto._fillItem=function(el,index){var left,right,item=this.options.data?this.options.data[index]:void 0,content=this.options.renderItem(index,item);left=content,(null!=(right=HTMLElement)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)?el.replaceChildren(content):el.innerHTML=null!=content?content:"";},_proto._reset=function(){this._active.clear(),this._pool=[],this._$viewport.replaceChildren(),this._startIndex=-1,this._endIndex=-1;},_create_class$9(VirtualScroll,[{key:"_dynamic",get:function(){return !!this.options.dynamicHeight}},{key:"_variable",get:function(){return this._dynamic||"function"==typeof this.options.itemHeight}},{key:"_fixedHeight",get:function(){var ih=this.options.itemHeight;return "number"==typeof ih&&ih>0?ih:DefaultOptions.itemHeight}},{key:"_buffer",get:function(){var _this_options_buffer;return null!=(_this_options_buffer=this.options.buffer)?_this_options_buffer:DefaultOptions.buffer}}]),VirtualScroll}();VirtualScroll.VERSION="0.0.1-beta.3",VirtualScroll.EVENTS=EVENTS;
+
+	/*
+	* @ezuikit/control-rec-list-modal v0.0.1-beta.5
+	* Copyright (c) 2026-07-03 Ezviz-OpenBiz
+	* Released under the MIT License.
+	*/
+	var __$IMAGE_LAZY_LOADER_DEFAULT_OPTIONS$__$1={targets:[],root:null,rootMargin:"0px",threshold:.1,loadingClass:"ez-lazy-image-loading",loadedClass:"ez-lazy-image-loaded",loadedErrorClass:"ez-lazy-image-error",dwell:200,onLoadError:function(){}},ImageLazyLoader$1=function(){function ImageLazyLoader(options){ void 0===options&&(options={}),this._pendingTimers=new Map,this.options=Object.assign({},__$IMAGE_LAZY_LOADER_DEFAULT_OPTIONS$__$1,options),this._observer=null,this._init();}var _proto=ImageLazyLoader.prototype;return _proto._init=function(){var _this=this;ImageLazyLoader.isSupported&&(this._observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){var target=entry.target;if(entry.isIntersecting){if(_this._pendingTimers.has(target))return;var timer=setTimeout(function(){var _this__observer;_this._pendingTimers.delete(target),_this._loadImage(target),null==(_this__observer=_this._observer)||_this__observer.unobserve(target);},_this.options.dwell);_this._pendingTimers.set(target,timer);}else {var timer1=_this._pendingTimers.get(target);void 0!==timer1&&(clearTimeout(timer1),_this._pendingTimers.delete(target));}});},this.options)),this.addImages(this.options.targets);},_proto._loadImage=function(img){var _img_classList,_img_classList1,_img_classList2,_this=this;if(img&&!(null==(_img_classList=img.classList)?void 0:_img_classList.contains(this.options.loadingClass))&&!(null==(_img_classList1=img.classList)?void 0:_img_classList1.contains(this.options.loadedClass))&&!(null==(_img_classList2=img.classList)?void 0:_img_classList2.contains(this.options.loadedErrorClass))&&img.hasAttribute("data-src")){var _this1=this;img.classList.add(this.options.loadingClass);var tempImg=new Image;tempImg.onload=function(){img.src=img.dataset.src,img.classList.remove(_this.options.loadingClass),img.classList.add(_this.options.loadedClass),img.dispatchEvent(new Event("lazyloaded"));},tempImg.onerror=function(){img.classList.remove(_this.options.loadingClass),img.classList.add(_this.options.loadedErrorClass),null==_this1.options.onLoadError||_this1.options.onLoadError.call(_this1.options,img);},tempImg.src=img.dataset.src;}},_proto.addImages=function(targets){var _this=this;(null==targets?void 0:targets.length)&&targets.forEach(function(target){var _this__observer;(null==target?void 0:target.hasAttribute("data-src"))&&(ImageLazyLoader.isSupported&&_this._observer?null==(_this__observer=_this._observer)||_this__observer.observe(target):_this._loadImage(target));});},_proto.destroy=function(){this._pendingTimers.forEach(function(timer){return clearTimeout(timer)}),this._pendingTimers.clear(),this._observer&&(this._observer.disconnect(),this._observer=null);},ImageLazyLoader}();function _create_class$1$2(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}ImageLazyLoader$1.isSupported="IntersectionObserver"in window;var _PREFIX_$1="ez-rec-list-modal-checkbox",Checkbox=function(){function Checkbox(options){var _options_checked,_options_disabled,_options_label,_options_size;void 0===options&&(options={}),this._$label=null,this._destroyed=false,this.options={checked:null!=(_options_checked=options.checked)&&_options_checked,disabled:null!=(_options_disabled=options.disabled)&&_options_disabled,label:null!=(_options_label=options.label)?_options_label:"",size:null!=(_options_size=options.size)?_options_size:16,onChange:options.onChange},this._onChange=this._onChange.bind(this),this._$root=document.createElement("label"),this._$root.className=_PREFIX_$1,this._$root.style.setProperty("--ez-rec-list-modal-checkbox-size",this.options.size+"px"),this._$input=document.createElement("input"),this._$input.type="checkbox",this._$input.className=_PREFIX_$1+"-input",this._$input.checked=this.options.checked,this._$input.disabled=this.options.disabled,this._$input.addEventListener("change",this._onChange),this._$root.appendChild(this._$input),this._$box=document.createElement("span"),this._$box.className=_PREFIX_$1+"-box",this._$box.innerHTML='<span class="'+_PREFIX_$1+'-check"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.4 6.4 11.3 12.5 4.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>',this._$root.appendChild(this._$box),this.options.label&&(this._$label=document.createElement("span"),this._$label.className=_PREFIX_$1+"-label",this._$label.textContent=this.options.label,this._$root.appendChild(this._$label)),this._syncState();}var _proto=Checkbox.prototype;return _proto.setChecked=function(checked,emit){ void 0===emit&&(emit=false),this._$input.checked!==checked&&(this._$input.checked=checked,this._syncState(),emit&&(null==this.options.onChange||this.options.onChange.call(this.options,checked)));},_proto.setDisabled=function(disabled){this.options.disabled=disabled,this._$input.disabled=disabled,this._syncState();},_proto.setLabel=function(label){this.options.label=label,label?(this._$label||(this._$label=document.createElement("span"),this._$label.className=_PREFIX_$1+"-label",this._$root.appendChild(this._$label)),this._$label.textContent=label):this._$label&&(this._$label.remove(),this._$label=null);},_proto.destroy=function(){this._destroyed||(this._destroyed=true,this._$input.removeEventListener("change",this._onChange),this._$root.remove());},_proto._onChange=function(){this._syncState(),null==this.options.onChange||this.options.onChange.call(this.options,this._$input.checked);},_proto._syncState=function(){this._$root.classList.toggle(_PREFIX_$1+"-checked",this._$input.checked),this._$root.classList.toggle(_PREFIX_$1+"-disabled",this.options.disabled);},_create_class$1$2(Checkbox,[{key:"el",get:function(){return this._$root}},{key:"checked",get:function(){return this._$input.checked}}]),Checkbox}(),_$REC_EVENT_ICONS$__playing='<svg viewBox="0 0 16 16" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="playing">\n    <rect x="1.5" y="7" width="3" height="7.5" rx="1.5"/>\n    <rect x="6.5" y="3" width="3" height="11.5" rx="1.5"/>\n    <rect x="11" y="5.5" width="3" height="9" rx="1.5"/>\n  </svg>',_$REC_EVENT_ICONS$__humanDetection='<svg viewBox="0 0 16 16" fill="none" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="humanDetection">\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.42689 10.122L5.78846 9.81738C5.5102 9.68459 5.33301 9.4037 5.33301 9.09537V6.6667C5.33301 6.22487 5.69118 5.8667 6.13301 5.8667H9.86634C10.3082 5.8667 10.6663 6.22487 10.6663 6.6667V9.10694C10.6663 9.40926 10.4959 9.68576 10.2258 9.82162L9.62858 10.122H6.42689Z" fill="currentColor"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M8.00039 2.1333C8.88405 2.1333 9.60039 2.84965 9.60039 3.7333C9.60039 4.61696 8.88405 5.3333 8.00039 5.3333C7.11674 5.3333 6.40039 4.61696 6.40039 3.7333C6.40039 2.84965 7.11674 2.1333 8.00039 2.1333Z" fill="currentColor"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M8.80039 9.06689C9.24222 9.06689 9.60039 9.42507 9.60039 9.8669V13.0669C9.60039 13.5087 9.24222 13.8669 8.80039 13.8669H7.20039C6.75856 13.8669 6.40039 13.5087 6.40039 13.0669V9.8669C6.40039 9.42507 6.75856 9.06689 7.20039 9.06689H8.80039Z" fill="currentColor"/>\n    <path d="M4.26628 2.6665H2.93294C2.19694 2.6665 1.59961 3.26325 1.59961 3.99984V5.33317" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M1.59961 10.6665V11.9998C1.59961 12.7358 2.19694 13.3332 2.93294 13.3332H4.26628" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M11.7334 13.3332H13.0667C13.8033 13.3332 14.4001 12.7358 14.4001 11.9998V10.6665" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M14.4001 5.33317V3.99984C14.4001 3.26325 13.8033 2.6665 13.0667 2.6665H11.7334" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>\n  </svg>',_$REC_EVENT_ICONS$__vehicleDetection='<svg viewBox="0 0 16 16" fill="none" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="vehicleDetection">\n    <path d="M14.2522 6.62695L12.6147 7.25195" stroke="currentColor" stroke-width="0.9375" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M3.39233 7.25L1.74854 6.625" stroke="currentColor" stroke-width="0.9375" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M12.6116 7.25L12.0872 4.7425C11.9354 4.01875 11.2972 3.5 10.5572 3.5H5.50722C4.7816 3.5 4.15098 4 3.98598 4.70687L3.3916 7.25" stroke="currentColor" stroke-width="0.9375" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M12.375 7.25098C13.4106 7.25098 14.25 8.09035 14.25 9.12598V12.1523C14.247 12.3407 11.125 11.9375 11.125 11.9375H4.875C4.875 11.9375 1.7522 12.4275 1.75 12.2822V9.12598C1.75 8.09035 2.58938 7.25098 3.625 7.25098H12.375ZM4.09375 9.28125L4.03027 9.28516C3.80148 9.3162 3.625 9.51269 3.625 9.75C3.625 10.0089 3.83487 10.2188 4.09375 10.2188H5.65625L5.71973 10.2148C5.94852 10.1838 6.125 9.98731 6.125 9.75C6.125 9.49112 5.91513 9.28125 5.65625 9.28125H4.09375ZM10.2803 9.28516C10.0515 9.3162 9.875 9.51269 9.875 9.75C9.875 10.0089 10.0849 10.2188 10.3438 10.2188H11.9062L11.9697 10.2148C12.1985 10.1838 12.375 9.98731 12.375 9.75C12.375 9.49112 12.1651 9.28125 11.9062 9.28125H10.3438L10.2803 9.28516Z" fill="currentColor"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M14.25 9.125C14.25 8.08938 13.4106 7.25 12.375 7.25H3.625C2.58938 7.25 1.75 8.08938 1.75 9.125V12.0373H14.25V9.125V9.125Z" stroke="currentColor" stroke-width="0.9375" stroke-linecap="round" stroke-linejoin="round"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M4.5625 13.4998C5.08 13.4998 5.5 13.0798 5.5 12.5623V11.9373L2.375 11.875V12.7185C2.375 13.1498 2.725 13.4998 3.15625 13.4998H4.5625Z" fill="currentColor" stroke="currentColor" stroke-width="0.9375" stroke-linecap="round" stroke-linejoin="round"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.6877 13.4998C13.2052 13.4998 13.6252 13.0798 13.6252 12.5623V11.9373L10.5002 11.875V12.7185C10.5002 13.1498 10.8502 13.4998 11.2815 13.4998H12.6877Z" fill="currentColor" stroke="currentColor" stroke-width="0.9375" stroke-linecap="round" stroke-linejoin="round"/>\n  </svg>',_$REC_EVENT_ICONS$__picture='\n    <svg viewBox="0 0 19.1613 19.4583" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="picture">\n        <path d="M15.3276 2.63477L3.83173 2.63477C2.70848 2.63477 1.79541 3.55027 1.79541 4.68419L1.79541 14.7737C1.79541 15.9076 2.70848 16.8231 3.83173 16.8231L15.3276 16.8231C16.4504 16.8231 17.364 15.9074 17.364 14.7737L17.364 4.68419C17.364 3.55027 16.4509 2.63477 15.3276 2.63477ZM3.83247 3.851L15.3284 3.851C15.7936 3.851 16.1671 4.22551 16.1671 4.68429L16.1671 14.7738C16.1671 15.2323 15.7932 15.6071 15.3284 15.6071L3.83247 15.6071C3.36725 15.6071 2.99373 15.2326 2.99373 14.7738L2.99373 12.2622L6.7356 9.56381L6.78139 9.53916C6.84532 9.51493 6.91856 9.52524 6.9742 9.56947L13.2644 14.5698L13.3381 14.62C13.5918 14.7666 13.9197 14.7063 14.105 14.4658C14.3089 14.2014 14.263 13.8192 14.0026 13.6122L7.71239 8.61184L7.60526 8.5346C7.12945 8.22451 6.51026 8.23473 6.04222 8.57224L2.99373 10.7706L2.99373 4.68429C2.99373 4.22551 3.36725 3.851 3.83247 3.851ZM10.5794 7.29679C10.5794 6.06542 11.5624 5.0672 12.7749 5.0672C13.9875 5.0672 14.9705 6.06542 14.9705 7.29679C14.9705 8.52817 13.9875 9.52639 12.7749 9.52639C11.5624 9.52639 10.5794 8.52817 10.5794 7.29679ZM13.7722 7.2967C13.7722 6.73699 13.3254 6.28325 12.7742 6.28325C12.223 6.28325 11.7762 6.73699 11.7762 7.2967C11.7762 7.85642 12.223 8.31015 12.7742 8.31015C13.3254 8.31015 13.7722 7.85642 13.7722 7.2967Z" fill-rule="evenodd"/>\n    </svg>\n    ',_$REC_LIST_MODAL_LOCALES$_={zh:{title:"录像片段",empty:"暂无录像",eventFilter:"事件片段"},en:{title:"Recordings",empty:"No recordings",eventFilter:"Event"}};function _create_class$8(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends$e(){return _extends$e=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$e.apply(this,arguments)}function _set_prototype_of$f(o,p){return _set_prototype_of$f=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$f(o,p)}var _PREFIX_="ez-rec-list-modal",_ICON_EVENT_='<svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M11.5 1.5H4.5a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-11a1 1 0 0 0-1-1Zm0 1.1v10.8h-7V2.6h7ZM6 5.2h4v-1H6v1Zm0 2.3h4v-1H6v1Zm0 2.3h2.7v-1H6v1Z"/></svg>',_REC_EVENT_ICONS_={1:_ICON_EVENT_,2:_ICON_EVENT_,3:_$REC_EVENT_ICONS$__humanDetection,4:'<svg viewBox="0 0 16 16" fill="none" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="faceDetection">\n    <path d="M4.26628 2.66602H2.93294C2.19694 2.66602 1.59961 3.26276 1.59961 3.99935V5.33268" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M1.59961 10.666V11.9993C1.59961 12.7353 2.19694 13.3327 2.93294 13.3327H4.26628" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M11.7334 13.3327H13.0667C13.8033 13.3327 14.4001 12.7353 14.4001 11.9993V10.666" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>\n    <path d="M14.4001 5.33268V3.99935C14.4001 3.26276 13.8033 2.66602 13.0667 2.66602H11.7334" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M4.26636 8.53273C4.26636 8.53273 3.74805 8.7145 3.74805 9.32262C3.74805 9.93074 4.12968 10.4493 4.62191 10.4493C4.73317 10.9272 5.97651 13.0867 8.08858 13.0867C10.0905 13.0867 11.5552 10.3969 11.5552 10.3969C11.5552 10.3969 12.2716 10.1395 12.2518 9.32262C12.2325 8.69788 11.7965 8.53273 11.7965 8.53273C11.7965 8.53273 12.1055 5.56552 9.99785 4.3185C7.89022 3.07148 6.36571 4.5319 6.36571 4.5319C6.36571 4.5319 4.11766 4.87602 4.2222 7.69628" fill="currentColor"/>\n  </svg>',5:_$REC_EVENT_ICONS$__vehicleDetection,6:'<svg viewBox="0 0 16 16" fill="none" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="petDetection">\n    <path d="M10.134 2.66309C11.9012 2.66316 13.3341 4.09615 13.3342 5.86328V10.6641C13.334 12.4311 11.9011 13.8632 10.134 13.8633H5.86743C4.10029 13.8633 2.6675 12.4311 2.66724 10.6641V5.86328C2.66739 4.09611 4.10022 2.66309 5.86743 2.66309H10.134ZM7.97583 7.95312C7.5222 7.95327 7.15454 8.32075 7.15454 8.77441C7.15459 9.07899 7.32174 9.34112 7.56763 9.4834C7.5526 9.52337 7.54321 9.56694 7.54321 9.6123C7.54296 10.2798 6.9996 10.8223 6.33228 10.8223C6.13114 10.8224 5.96802 10.9863 5.96802 11.1875C5.96822 11.3882 6.13127 11.5516 6.33228 11.5518C7.0251 11.5518 7.63284 11.185 7.97583 10.6367C8.31908 11.1851 8.92713 11.5518 9.62036 11.5518C9.82129 11.5516 9.98442 11.3881 9.98462 11.1875C9.98462 10.9864 9.8214 10.8225 9.62036 10.8223C8.95273 10.8223 8.4087 10.2798 8.40845 9.6123C8.40845 9.56694 8.39906 9.52337 8.38403 9.4834C8.63004 9.34115 8.79805 9.07907 8.7981 8.77441C8.7981 8.32066 8.42989 7.95312 7.97583 7.95312ZM5.06665 5.87207C4.62483 5.87226 4.26685 6.23032 4.26685 6.67188C4.26708 7.11353 4.62497 7.47149 5.06665 7.47168C5.50818 7.47168 5.86622 7.11365 5.86646 6.67188C5.86646 6.2302 5.50832 5.87207 5.06665 5.87207ZM10.9338 5.87207C10.492 5.87226 10.134 6.23032 10.134 6.67188C10.1343 7.11353 10.4922 7.47149 10.9338 7.47168C11.3754 7.47168 11.7334 7.11365 11.7336 6.67188C11.7336 6.2302 11.3755 5.87207 10.9338 5.87207Z" fill="currentColor"/>\n    <path d="M12.8 4.08984C12.9449 4.28499 13.0671 4.49562 13.1633 4.71777L15.1584 8.09668C15.4833 8.64759 15.5543 9.28148 15.3577 9.88086C15.1613 10.4797 14.7204 10.9735 14.1174 11.2705C13.8537 11.4002 13.4576 11.4741 13.1633 11.5137C13.0759 11.7889 12.9522 12.0484 12.8 12.2891V4.08984Z" fill="currentColor" fill-opacity="0.6"/>\n    <path d="M3.19946 12.4372C3.05452 12.242 2.93249 12.0315 2.83618 11.8093L0.841064 8.43039C0.51612 7.87943 0.44519 7.24568 0.641846 6.64621C0.838188 6.04713 1.27893 5.5536 1.88208 5.25656C2.14581 5.12684 2.54188 5.05303 2.83618 5.0134C2.92354 4.73812 3.04729 4.47872 3.19946 4.23801L3.19946 12.4372Z" fill="currentColor" fill-opacity="0.6"/>\n  </svg>',ALRAM:_ICON_EVENT_,TIMIING:_ICON_EVENT_,CAR:_$REC_EVENT_ICONS$__vehicleDetection,HD:_$REC_EVENT_ICONS$__humanDetection},_$REC_LIST_MODAL_DEFAULT_OPTIONS$_={width:260,height:490,buffer:5,startTimeFormat:"HH:mm",groupTitleFormat:"HH:00",showEventFilter:true,showCardTypeIcon:true,eventFilterChecked:false},RecListModal=function(Modal){function RecListModal(container,options){var _this,_ref,_ref1,_ref2,_ref3,_ref4,_ref5,_ref6,_ref7,_ref8,_ref9;(_this=Modal.call(this,container,RecListModal._mergeModalOptions(options))||this)._$titleWrap=null,_this._eventCheckbox=null,_this._virtualScroll=null,_this._lazyLoader=null,_this._rows=[],_this._sortedSections=[],_this._eventOnly=false,_this._vsInited=false,_this._recordDestroyed=false,_this._activeIndex=-1,_this._userInteracting=false,_this._userScrollTimer=null;var def=_$REC_LIST_MODAL_DEFAULT_OPTIONS$_;return _this._recI18n=new I18n$1(deepmerge(_$REC_LIST_MODAL_LOCALES$_,_this.options.locales||{},{clone:false}),{defaultLocale:_this.options.language||"zh"}),_this.recordOptions={sections:null!=(_ref=null==options?void 0:options.sections)?_ref:[],buffer:null!=(_ref1=null==options?void 0:options.buffer)?_ref1:def.buffer,coverQuery:null!=(_ref2=null==options?void 0:options.coverQuery)?_ref2:"",startTimeFormat:null!=(_ref3=null==options?void 0:options.startTimeFormat)?_ref3:def.startTimeFormat,groupTitleFormat:null!=(_ref4=null==options?void 0:options.groupTitleFormat)?_ref4:def.groupTitleFormat,emptyText:null!=(_ref5=null==options?void 0:options.emptyText)?_ref5:String(_this._recI18n.t("empty")),showEventFilter:null!=(_ref6=null==options?void 0:options.showEventFilter)?_ref6:def.showEventFilter,eventFilterText:null!=(_ref7=null==options?void 0:options.eventFilterText)?_ref7:String(_this._recI18n.t("eventFilter")),eventFilterChecked:null!=(_ref8=null==options?void 0:options.eventFilterChecked)?_ref8:def.eventFilterChecked,showCardTypeIcon:null!=(_ref9=null==options?void 0:options.showCardTypeIcon)?_ref9:def.showCardTypeIcon,isEvent:null==options?void 0:options.isEvent,renderCardIcon:null==options?void 0:options.renderCardIcon,onCardClick:null==options?void 0:options.onCardClick},_this._eventOnly=_this.recordOptions.eventFilterChecked,_this._activeTime="number"==typeof(null==options?void 0:options.activeTime)?options.activeTime:void 0,_this._titleText="string"==typeof(null==options?void 0:options.title)?options.title:String(_this._recI18n.t("title")),_this.setTitle(_this._buildHeaderTitle()),_this._$listRoot=document.createElement("div"),_this._$listRoot.className=_PREFIX_+"-list",_this._$empty=document.createElement("div"),_this._$empty.className=_PREFIX_+"-empty",_this._$empty.textContent=_this.recordOptions.emptyText,_this._$empty.style.display="none",_this._$listRoot.appendChild(_this._$empty),_this.setContent(_this._$listRoot),_this._onListClick=_this._onListClick.bind(_this),_this._onUserScroll=_this._onUserScroll.bind(_this),_this._$listRoot.addEventListener("click",_this._onListClick),_this._buildRows(),_this.isVisible()&&_this._ensureVirtualScroll(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$f(subClass,superClass);}(RecListModal,Modal);var _proto=RecListModal.prototype;return _proto.open=function(){Modal.prototype.open.call(this),this._$listRoot&&(this._ensureVirtualScroll(),this._userInteracting=false,this._userScrollTimer&&(clearTimeout(this._userScrollTimer),this._userScrollTimer=null),this._scrollToActive(true));},_proto.setSections=function(sections){this.recordOptions.sections=sections||[],this._buildRows(),this._virtualScroll?this._virtualScroll.setData(this._rows):this.isVisible()&&this._ensureVirtualScroll(),this._toggleEmpty();},_proto.setActiveTime=function(time){this._activeTime="number"==typeof time?time:void 0,this._refreshActiveState(),this._scrollToActive();},_proto.showEventFilter=function(show){var _this=this;if(this.recordOptions.showEventFilter=show,show){var _this__$titleWrap;if(this._eventCheckbox)return;var checkbox=new Checkbox({label:this.recordOptions.eventFilterText,checked:this._eventOnly,onChange:function(checked){return _this._onEventFilterChange(checked)}});checkbox.el.addEventListener("mousedown",function(e){return e.stopPropagation()}),checkbox.el.addEventListener("touchstart",function(e){return e.stopPropagation()}),null==(_this__$titleWrap=this._$titleWrap)||_this__$titleWrap.appendChild(checkbox.el),this._eventCheckbox=checkbox;}else {if(!this._eventCheckbox)return;this._eventCheckbox.destroy(),this._eventCheckbox=null;}},_proto.destroy=function(){var _this__eventCheckbox,_this__virtualScroll,_this__lazyLoader;this._recordDestroyed||(this._recordDestroyed=true,null==(_this__eventCheckbox=this._eventCheckbox)||_this__eventCheckbox.destroy(),this._eventCheckbox=null,this._userScrollTimer&&(clearTimeout(this._userScrollTimer),this._userScrollTimer=null),this._$listRoot.removeEventListener("click",this._onListClick),this._$listRoot.removeEventListener("wheel",this._onUserScroll),this._$listRoot.removeEventListener("touchmove",this._onUserScroll),null==(_this__virtualScroll=this._virtualScroll)||_this__virtualScroll.destroy(),this._virtualScroll=null,null==(_this__lazyLoader=this._lazyLoader)||_this__lazyLoader.destroy(),this._lazyLoader=null),Modal.prototype.destroy.call(this);},_proto._rowHeight=function(row){return row&&"header"===row.type?28:this._cardRowHeight},_proto._buildHeaderTitle=function(){var _this=this,wrap=document.createElement("div");wrap.className=_PREFIX_+"-title",this._$titleWrap=wrap;var text=document.createElement("span");if(text.className=_PREFIX_+"-title-text",text.textContent=this._titleText,wrap.appendChild(text),this.recordOptions.showEventFilter){var checkbox=new Checkbox({label:this.recordOptions.eventFilterText,checked:this._eventOnly,onChange:function(checked){return _this._onEventFilterChange(checked)}});checkbox.el.addEventListener("mousedown",function(e){return e.stopPropagation()}),checkbox.el.addEventListener("touchstart",function(e){return e.stopPropagation()}),wrap.appendChild(checkbox.el),this._eventCheckbox=checkbox;}return wrap},_proto._onEventFilterChange=function(checked){var _this__virtualScroll;this._eventOnly=checked,this._buildRows(),null==(_this__virtualScroll=this._virtualScroll)||_this__virtualScroll.setData(this._rows),this._toggleEmpty();},_proto._ensureVirtualScroll=function(){var _this__virtualScroll,_this=this;this._recordDestroyed||(this._toggleEmpty(),this._vsInited?(null==(_this__virtualScroll=this._virtualScroll)||_this__virtualScroll.refresh(),this._observeVisibleImages()):(this._vsInited=true,this._lazyLoader=new ImageLazyLoader$1({root:this._$listRoot}),this._virtualScroll=new VirtualScroll(this._$listRoot,{data:this._rows,itemHeight:function(_index,row){return _this._rowHeight(row)},buffer:this.recordOptions.buffer,renderItem:function(index,item){return _this._renderRow(index,item)},onRender:function(){return _this._observeVisibleImages()}}),this._observeVisibleImages(),this._$listRoot.addEventListener("wheel",this._onUserScroll,{passive:true}),this._$listRoot.addEventListener("touchmove",this._onUserScroll,{passive:true}),this._scrollToActive(true)));},_proto._toggleEmpty=function(){this._$empty&&(this._$empty.style.display=0===this._rows.length?"":"none");},_proto._isEvent=function(section){return "function"==typeof this.recordOptions.isEvent?this.recordOptions.isEvent(section):!!_REC_EVENT_ICONS_[section.EVENT_TYPE]},_proto._buildRows=function(){var _this=this;this._activeIndex=-1;var sorted=(this.recordOptions.sections||[]).filter(function(s){return s&&"number"==typeof s.startTime&&"number"==typeof s.endTime}).filter(function(s){return !_this._eventOnly||_this._isEvent(s)}).slice().reverse();this._sortedSections=sorted;for(var rows=[],groups=new Map,i=0;i<sorted.length;i++){var section=sorted[i],key=distExports$4.DateTime.format(section.startTime,"YYYY-MM-DD HH"),bucket=groups.get(key);bucket||(bucket=[],groups.set(key,bucket)),bucket.push({section:section,index:i});}groups.forEach(function(bucket){rows.push({type:"header",title:distExports$4.DateTime.format(bucket[0].section.startTime,_this.recordOptions.groupTitleFormat),count:bucket.length});for(var i=0;i<bucket.length;i+=2)rows.push({type:"cards",items:bucket.slice(i,i+2)});}),this._rows=rows;},_proto._renderRow=function(_index,row){var _this=this;if(!row)return "";if("header"===row.type)return '<div class="'+_PREFIX_+'-group">\n        <span class="'+_PREFIX_+'-group-title">'+this._escape(row.title)+"</span>\n      </div>";var cards=row.items.map(function(it){return _this._renderCard(it.section,it.index)}).join("");return '<div class="'+_PREFIX_+'-row">'+cards+"</div>"},_proto._renderCard=function(section,index){var start,end,_DateTime_toDate,_DateTime_toDate1,secondNum,second,minute,startText=distExports$4.DateTime.format(section.startTime,this.recordOptions.startTimeFormat),durationText=(start=section.startTime,end=section.endTime,secondNum=Math.floor((null==(_DateTime_toDate=distExports$4.DateTime.toDate(end))?void 0:_DateTime_toDate.getTime())-(null==(_DateTime_toDate1=distExports$4.DateTime.toDate(start))?void 0:_DateTime_toDate1.getTime()))/1e3,second=secondNum%60,((minute=Math.floor(secondNum/60))>0?distExports$4.DateTime.fillZero(minute)+"'":"0'")+distExports$4.DateTime.fillZero(second)+"''"),cover=section.coverPic?""+section.coverPic+this.recordOptions.coverQuery:"",media=cover?'<img class="'+_PREFIX_+'-card-img ez-lazy-image" data-src="'+this._setImageScr(this._escape(cover))+'" alt="" />':'<div class="'+_PREFIX_+'-card-placeholder">'+_$REC_EVENT_ICONS$__picture+"</div>",icon=this._renderCardIcon(section),activeCls=this._isActive(section)?" "+_PREFIX_+"-card-active":"";return '<div class="'+_PREFIX_+"-card"+activeCls+'" data-card-index="'+index+'">\n      <div class="'+_PREFIX_+'-card-thumb">\n        '+media+'\n        <span class="'+_PREFIX_+'-card-start">'+this._escape(startText)+'</span>\n        <span class="'+_PREFIX_+'-card-duration">'+this._escape(durationText)+'</span>\n        <span class="'+_PREFIX_+'-card-playing">'+_$REC_EVENT_ICONS$__playing+"</span>\n        "+icon+"\n      </div>\n    </div>"},_proto._isActive=function(section){var t=this._activeTime;return "number"==typeof t&&t>=section.startTime&&t<=section.endTime},_proto._refreshActiveState=function(){var _this=this;this._$listRoot.querySelectorAll("."+_PREFIX_+"-card").forEach(function(card){var idx=Number(card.getAttribute("data-card-index")),section=_this._sortedSections[idx];card.classList.toggle(_PREFIX_+"-card-active",!!section&&_this._isActive(section));});},_proto._findActiveIndex=function(){if("number"!=typeof this._activeTime)return  -1;for(var i=0;i<this._sortedSections.length;i++)if(this._isActive(this._sortedSections[i]))return i;return  -1},_proto._rowIndexOfSection=function(sectionIndex){for(var i=0;i<this._rows.length;i++){var row=this._rows[i];if("cards"===row.type&&row.items.some(function(it){return it.index===sectionIndex}))return i}return  -1},_proto._scrollToActive=function(force){ void 0===force&&(force=false);var idx=this._findActiveIndex();if((force||idx!==this._activeIndex)&&(this._activeIndex=idx,!(idx<0||!this._virtualScroll||!force&&this._userInteracting))){var rowIndex=this._rowIndexOfSection(idx);rowIndex>=0&&this._virtualScroll.scrollToIndex(rowIndex,true);}},_proto._onUserScroll=function(){var _this=this;this._userInteracting=true,this._userScrollTimer&&clearTimeout(this._userScrollTimer),this._userScrollTimer=setTimeout(function(){_this._userInteracting=false,_this._userScrollTimer=null;},3e3);},_proto._renderCardIcon=function(section){if(!this.recordOptions.showCardTypeIcon)return "";var inner="function"==typeof this.recordOptions.renderCardIcon?this.recordOptions.renderCardIcon(section):_REC_EVENT_ICONS_[section.EVENT_TYPE];return inner?'<span class="'+_PREFIX_+'-card-icon">'+inner+"</span>":""},_proto._observeVisibleImages=function(){if(this._lazyLoader){var imgs=this._$listRoot.querySelectorAll("img[data-src]");imgs.length&&this._lazyLoader.addImages(Array.from(imgs));}},_proto._onListClick=function(e){var onCardClick=this.recordOptions.onCardClick;if(onCardClick){var target=e.target,card=null==target?void 0:target.closest("."+_PREFIX_+"-card");if(card){var idx=Number(card.getAttribute("data-card-index")),section=this._sortedSections[idx];section&&onCardClick(section,idx,this._sortedSections);}}},_proto._escape=function(text){return String(text).replace(/[&<>"']/g,function(ch){switch(ch){case "&":return "&amp;";case "<":return "&lt;";case ">":return "&gt;";case '"':return "&quot;";default:return "&#39;"}})},_proto._setImageScr=function(src){if(src){var query="x=200&"+(this.options.coverQuery||"");return src+(src.includes("?")?"&":"?")+query}return ""},RecListModal._mergeModalOptions=function(options){var _ref,_ref1;return _extends$e({},options,{width:null!=(_ref=null==options?void 0:options.width)?_ref:_$REC_LIST_MODAL_DEFAULT_OPTIONS$_.width,height:null!=(_ref1=null==options?void 0:options.height)?_ref1:_$REC_LIST_MODAL_DEFAULT_OPTIONS$_.height,content:"",title:""})},_create_class$8(RecListModal,[{key:"_cardRowHeight",get:function(){return 70}}]),RecListModal}(Modal);RecListModal.VERSION="0.0.1-beta.5";
+
+	function _extends$d() {
+	    _extends$d = Object.assign || function(target) {
+	        for(var i = 1; i < arguments.length; i++){
+	            var source = arguments[i];
+	            for(var key in source){
+	                if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                    target[key] = source[key];
+	                }
+	            }
+	        }
+	        return target;
+	    };
+	    return _extends$d.apply(this, arguments);
+	}
+	function _inherits$c(subClass, superClass) {
+	    if (typeof superClass !== "function" && superClass !== null) {
+	        throw new TypeError("Super expression must either be null or a function");
+	    }
+	    subClass.prototype = Object.create(superClass && superClass.prototype, {
+	        constructor: {
+	            value: subClass,
+	            writable: true,
+	            configurable: true
+	        }
+	    });
+	    if (superClass) _set_prototype_of$e(subClass, superClass);
+	}
+	function _set_prototype_of$e(o, p) {
+	    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+	        o.__proto__ = p;
+	        return o;
+	    };
+	    return _set_prototype_of$e(o, p);
+	}
+	/**
+	 * 录像列表按钮控件
+	 *
+	 * 点击切换录像列表面板的展示/隐藏状态
+	 *
+	 * @category Control
+	 */ var RecList = /*#__PURE__*/ function(Control) {
+	    _inherits$c(RecList, Control);
+	    function RecList(options) {
+	        var _this;
+	        var _this__options_props, _this__options, _this_locale;
+	        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+	        _this = Control.call(this, _extends$d({}, options, {
+	            tagName: 'span',
+	            controlType: 'button',
+	            classNameSuffix: 'rec-list'
+	        })) || this, _this._panelOpen = false, _this.records = [];
+	        _this._options = options;
+	        _this.records = ((_this__options = _this._options) == null ? void 0 : (_this__options_props = _this__options.props) == null ? void 0 : _this__options_props.recordList) || [];
+	        _this._render();
+	        _this._modal = new RecListModal(_this._options.rootContainer, _extends$d({
+	            showMask: false,
+	            title: (_this_locale = _this.locale) == null ? void 0 : _this_locale.BTN_REC_LIST_TITLE
+	        }, options, {
+	            onCardClick: function(section, index, sections) {
+	                _this.emit(EVENTS$2.control.recListCardClick, section, index, sections);
+	            },
+	            onClose: function() {
+	                var _this__options_onClose, _this__options;
+	                _this._panelOpen = false;
+	                _this.active = false;
+	                _this.emit(EVENTS$2.control.recListChange, false);
+	                (_this__options = _this._options) == null ? void 0 : (_this__options_onClose = _this__options.onClose) == null ? void 0 : _this__options_onClose.call(_this__options);
+	            }
+	        }));
+	        _this.on(EVENTS$2.setAllDayRecTimes, function(records) {
+	            var // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	            _this__modal, _this__modal1;
+	            _this.disabled = records.length === 0;
+	            _this.records = records;
+	            (_this__modal = _this._modal) == null ? void 0 : _this__modal.setSections(records);
+	            var _this__options_showEventFilter;
+	            (_this__modal1 = _this._modal) == null ? void 0 : _this__modal1.showEventFilter((_this__options_showEventFilter = _this._options.showEventFilter) != null ? _this__options_showEventFilter : true);
+	        });
+	        _this.on(EVENTS$2.getOSDTime, function(time) {
+	            if (time) {
+	                var _this__modal_setActiveTime, _this__modal;
+	                var _currentTime = time;
+	                (_this__modal = _this._modal) == null ? void 0 : (_this__modal_setActiveTime = _this__modal.setActiveTime) == null ? void 0 : _this__modal_setActiveTime.call(_this__modal, _currentTime);
+	            }
+	        });
+	        _this.on("TimeLine.onSectionIconClick", function(result) {
+	            var // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	            _this__modal, _this__modal1, // this._options.rootContainer
+	            _this__modal2, _this__modal3, _this__modal4;
+	            var list = _this.records.slice(result.index || 0, result.index + result.count);
+	            var $rootContainer = _this._options.rootContainer;
+	            var width = $rootContainer.clientWidth;
+	            var rect = $rootContainer.getBoundingClientRect();
+	            (_this__modal = _this._modal) == null ? void 0 : _this__modal.setSections(list);
+	            (_this__modal1 = _this._modal) == null ? void 0 : _this__modal1.showEventFilter(false);
+	            (_this__modal2 = _this._modal) == null ? void 0 : _this__modal2.open();
+	            if (!((_this__modal3 = _this._modal) == null ? void 0 : _this__modal3.isVisible)) (_this__modal4 = _this._modal) == null ? void 0 : _this__modal4.setPosition(width + rect.x, rect.y);
+	        });
+	        _this.on(EVENTS$2.recListChange, function(open) {
+	            _this._panelOpen = open;
+	            _this.active = open;
+	        });
+	        return _this;
+	    }
+	    var _proto = RecList.prototype;
+	    _proto._render = function _render() {
+	        var _this_locale;
+	        this.$container.innerHTML = IconComponents.recList({
+	            title: ((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_REC_LIST_TITLE) || '录像列表'
+	        });
+	    };
+	    /**
+	   * 销毁
+	   */ _proto.destroy = function destroy() {
+	        if (this._panelOpen) {
+	            this.emit(EVENTS$2.control.recListChange, false);
+	        }
+	        this.emit(EVENTS$2.control.recListDestroy);
+	        if (this._modal) {
+	            this._modal.destroy();
+	            this._modal = null;
+	        }
+	        Control.prototype.destroy.call(this);
+	    };
+	    /**
+	   * 点击 Control 会触发
+	   */ _proto._onControlClick = function _onControlClick(e) {
+	        Control.prototype._onControlClick.call(this, e);
+	        this._panelOpen = !this._panelOpen;
+	        this.active = this._panelOpen;
+	        if (this.active) {
+	            var // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	            _this__modal, _this__modal1, // this._options.rootContainer
+	            _this__modal2, _this__modal3, _this__modal4;
+	            var $rootContainer = this._options.rootContainer;
+	            var width = $rootContainer.clientWidth;
+	            var rect = $rootContainer.getBoundingClientRect();
+	            (_this__modal = this._modal) == null ? void 0 : _this__modal.setSections(this.records);
+	            var _this__options_showEventFilter;
+	            (_this__modal1 = this._modal) == null ? void 0 : _this__modal1.showEventFilter((_this__options_showEventFilter = this._options.showEventFilter) != null ? _this__options_showEventFilter : true);
+	            (_this__modal2 = this._modal) == null ? void 0 : _this__modal2.open();
+	            if (!((_this__modal3 = this._modal) == null ? void 0 : _this__modal3.isVisible)) (_this__modal4 = this._modal) == null ? void 0 : _this__modal4.setPosition(width + rect.x, rect.y);
+	        } else {
+	            var _this__modal5;
+	            (_this__modal5 = this._modal) == null ? void 0 : _this__modal5.close();
+	        }
+	        this.emit(EVENTS$2.control.recListChange, this._panelOpen);
+	    };
+	    return RecList;
 	}(Control);
 
 	function _extends$c() {
@@ -8894,7 +9471,7 @@
 	        })) || this, _this._panelOpen = false;
 	        _this._options = options;
 	        _this._render();
-	        _this.on(EVENTS.alarmMessageChange, function(open) {
+	        _this.on(EVENTS$2.alarmMessageChange, function(open) {
 	            _this._panelOpen = open;
 	        });
 	        return _this;
@@ -8910,7 +9487,7 @@
 	   * 销毁
 	   */ _proto.destroy = function destroy() {
 	        if (this._panelOpen) {
-	            this.emit(EVENTS.control.alarmMessageChange, false);
+	            this.emit(EVENTS$2.control.alarmMessageChange, false);
 	        }
 	        Control.prototype.destroy.call(this);
 	    };
@@ -8920,7 +9497,7 @@
 	        var _this__options_onChange, _this__options;
 	        Control.prototype._onControlClick.call(this, e);
 	        this._panelOpen = !this._panelOpen;
-	        this.emit(EVENTS.control.alarmMessageChange, this._panelOpen);
+	        this.emit(EVENTS$2.control.alarmMessageChange, this._panelOpen);
 	        (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, this._panelOpen);
 	    };
 	    return AlarmMessage;
@@ -9349,23 +9926,23 @@
 	                var _options_onChange;
 	                options == null ? void 0 : (_options_onChange = options.onChange) == null ? void 0 : _options_onChange.call(options, value, item);
 	                if (value === 'auto') {
-	                    _assert_this_initialized$1(_this).emit(EVENTS.control.definitionChange, 'auto', _assert_this_initialized$1(_this)._level);
+	                    _assert_this_initialized$1(_this).emit(EVENTS$2.control.definitionChange, 'auto', _assert_this_initialized$1(_this)._level);
 	                } else {
 	                    _assert_this_initialized$1(_this)._level = value;
-	                    _assert_this_initialized$1(_this).emit(EVENTS.control.definitionChange, value, item);
+	                    _assert_this_initialized$1(_this).emit(EVENTS$2.control.definitionChange, value, item);
 	                }
 	            },
 	            onOpenChange: function(open, value, item) {
 	                var _options_onOpenChange;
 	                options == null ? void 0 : (_options_onOpenChange = options.onOpenChange) == null ? void 0 : _options_onOpenChange.call(options, open, value, item);
-	                _assert_this_initialized$1(_this).emit(EVENTS.control.definitionPanelOpenChange, open, value, item);
+	                _assert_this_initialized$1(_this).emit(EVENTS$2.control.definitionPanelOpenChange, open, value, item);
 	            }
 	        })) || this, _this._level = '';
 	        _this.options = options || {};
-	        _this.on(EVENTS.setVideoLevelList, function(list) {
+	        _this.on(EVENTS$2.setVideoLevelList, function(list) {
 	            Select.prototype.updateOptions.call(_assert_this_initialized$1(_this), __filter(list, _this.locale));
 	        });
-	        _this.on(EVENTS.currentVideoLevel, function(item, realLevel) {
+	        _this.on(EVENTS$2.currentVideoLevel, function(item, realLevel) {
 	            var l = (typeof item === "undefined" ? "undefined" : _type_of(item)) === 'object' ? item.level : item;
 	            _this._level = realLevel + '';
 	            if (l === 'auto') {
@@ -9475,20 +10052,20 @@
 	                var _options_onChange;
 	                value = +value;
 	                options == null ? void 0 : (_options_onChange = options.onChange) == null ? void 0 : _options_onChange.call(options, value, item);
-	                _assert_this_initialized(_this).emit(EVENTS.control.speedChange, value, item);
+	                _assert_this_initialized(_this).emit(EVENTS$2.control.speedChange, value, item);
 	            },
 	            onOpenChange: function(open, value, item) {
 	                var _options_onOpenChange;
 	                value = +value;
 	                options == null ? void 0 : (_options_onOpenChange = options.onOpenChange) == null ? void 0 : _options_onOpenChange.call(options, open, value, item);
-	                _assert_this_initialized(_this).emit(EVENTS.control.speedPanelOpenChange, open, value, item);
+	                _assert_this_initialized(_this).emit(EVENTS$2.control.speedPanelOpenChange, open, value, item);
 	            }
 	        })) || this;
 	        _this._filterSpeedList(options.list, options.props.recType);
-	        _this.on(EVENTS.speedChange, function(speed) {
+	        _this.on(EVENTS$2.speedChange, function(speed) {
 	            if (_this.value !== speed + '') _this.value = speed + '';
 	        });
-	        _this.on(EVENTS.control.recTypeChange, function(type) {
+	        _this.on(EVENTS$2.control.recTypeChange, function(type) {
 	            _this._filterSpeedList(options.list, type);
 	        });
 	        return _this;
@@ -9580,7 +10157,7 @@
 	        _this._value = distExports$4.DateTime.format(((_this_options_props = _this.options.props) == null ? void 0 : (_this_options_props_urlInfo = _this_options_props.urlInfo) == null ? void 0 : (_this_options_props_urlInfo_searchParams = _this_options_props_urlInfo.searchParams) == null ? void 0 : _this_options_props_urlInfo_searchParams.begin) || new Date(), 'YYYY-MM-DD');
 	        _this._render();
 	        // 日期上的点
-	        _this.on(EVENTS.control.dateMonthChange, function(dates) {
+	        _this.on(EVENTS$2.control.dateMonthChange, function(dates) {
 	            var _this_datePicker_updateBadges, _this_datePicker;
 	            (_this_datePicker = _this.datePicker) == null ? void 0 : (_this_datePicker_updateBadges = _this_datePicker.updateBadges) == null ? void 0 : _this_datePicker_updateBadges.call(_this_datePicker, dates);
 	        });
@@ -9625,7 +10202,7 @@
 	                if (date && _this._value !== distExports$4.DateTime.format(date, 'YYYY-MM-DD') && isMobile1) {
 	                    _this._value = distExports$4.DateTime.format(date, 'YYYY-MM-DD');
 	                    _this.options.onOk == null ? void 0 : _this.options.onOk.call(_this.options, date);
-	                    _this.emit(EVENTS.control.dateChange, date);
+	                    _this.emit(EVENTS$2.control.dateChange, date);
 	                    if (date && _this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value")) {
 	                        _this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value").innerHTML = _this._getDateStr();
 	                    }
@@ -9635,12 +10212,12 @@
 	                if (date && _this._value !== distExports$4.DateTime.format(date, 'YYYY-MM-DD') && !isMobile1 && mode === 'date') {
 	                    _this._value = distExports$4.DateTime.format(date, 'YYYY-MM-DD');
 	                    _this.options.onChange == null ? void 0 : _this.options.onChange.call(_this.options, date);
-	                    _this.emit(EVENTS.control.dateChange, date);
+	                    _this.emit(EVENTS$2.control.dateChange, date);
 	                }
 	            },
 	            onOpenChange: function(open) {
 	                _this.options.onPanelChange == null ? void 0 : _this.options.onPanelChange.call(_this.options, open, _this.datePicker.current);
-	                _this.emit(EVENTS.control.datePanelOpenChange, open, _this.datePicker.current);
+	                _this.emit(EVENTS$2.control.datePanelOpenChange, open, _this.datePicker.current);
 	            }
 	        }));
 	    };
@@ -9776,12 +10353,12 @@
 	                if (time && _this._value !== time) {
 	                    _this._value = time;
 	                    _this.options.onChange == null ? void 0 : _this.options.onChange.call(_this.options, time, _times);
-	                    _this.emit(EVENTS.control.timeChange, time);
+	                    _this.emit(EVENTS$2.control.timeChange, time);
 	                }
 	            },
 	            onOpenChange: function(open) {
 	                _this.options.onPanelChange == null ? void 0 : _this.options.onPanelChange.call(_this.options, open, _this.timePicker.current);
-	                _this.emit(EVENTS.control.timePanelOpenChange, open, _this.timePicker.current);
+	                _this.emit(EVENTS$2.control.timePanelOpenChange, open, _this.timePicker.current);
 	            }
 	        }));
 	    };
@@ -10369,11 +10946,11 @@
 	var DragScroll = /*@__PURE__*/getDefaultExportFromCjs(distExports);
 
 	/*
-	* @ezuikit/control-time-line v2.1.0-beta.3
-	* Copyright (c) 2026-06-26 Ezviz-OpenBiz
+	* @ezuikit/control-time-line v2.1.0-beta.5
+	* Copyright (c) 2026-07-03 Ezviz-OpenBiz
 	* Released under the MIT License.
 	*/
-	var _$TIMELINE_LOCALES$_={zh:{title:"包含{{len}}段录像",foldTitle:"{{len}}个录像"},en:{title:"Includes {{len}} {{unit}}",foldTitle:"{{len}} {{unit}}"}};function _create_class$2(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}var _$BASE_TIME_LINE_DEFAULT_OPTIONS$_={current:new Date,language:"zh",timeSections:[],readOnly:false,className:"",timeWidth:0,width:"100%",timePointColor:"#FFF",timeTextColor:"#FFF",timeScaleColor:"#FFF",timeSectionColor:"rgba(24, 144, 255, 0.5)",timeAxisBgColor:"#000",currentTimeBgColor:"#648FFC",currentTimeColor:"#FFFFFF",hoverTipBgColor:"rgba(0, 0, 0, 0.75)",hoverTipColor:"#FFFFFF",hoverLineColor:"rgba(255, 255, 255, 0.8)",opBtnBorderColor:"rgba(153, 153, 153, 1)",opBtnActiveColor:"rgba(54, 159, 255, 1)",opBtnDisabledBorderColor:"rgba(222, 222, 222, 1)",pickerHeaderColor:"rgba(44, 44, 44, 1)",pickerCloseColor:"#20262c",pickerCloseActiveColor:"rgba(240, 87, 87, 1)",pickerItemTitleColor:"rgba(102, 102, 102, 1)",coverFoldPlaceholderBackColor:"#cccccc",coverFoldPlaceholderFrontColor:"#ededed",coverFoldOverlayColor:"rgba(0, 0, 0, 0.3)",itemCoverPlaceholderStartColor:"rgb(183, 195, 207)",itemCoverPlaceholderEndColor:"rgb(212, 209, 209)",timeTextFontSize:12,timeTextFontFamily:"serif",scaleLineWidth:1,onChange:function(){},onDragStart:function(){},onDragging:function(){},onDragEnd:function(){},onDestroy:function(){}},BaseTimeLine=function(){function BaseTimeLine(container,options){if(this._current=new Date,this._readOnly=false,this._width=0,this._height=0,this._destroyed=false,this._timeWidth=0,this._timeSections=[],this.$container=container,!container)throw new Error("container is required");var left,right;this.options=deepmerge(_$BASE_TIME_LINE_DEFAULT_OPTIONS$_,options,{clone:false}),this.options.timeSections&&Array.isArray(this.options.timeSections)&&(this._timeSections=this.options.timeSections),this.options.readOnly&&(this.readOnly=this.options.readOnly),this.options.className&&this.$container.classList.add(this.options.className),this.$container.style.position="relative",this.options.current&&(left=this.options.current,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)?this._current=this.options.current||new Date:this._current=new Date,this.i18n=new I18n(deepmerge(_$TIMELINE_LOCALES$_,this.options.locales||{},{clone:false}),{defaultLocale:this.options.language||"zh"}),this._timeWidth=this.options.timeWidth||0,this._resize(this.options.width||"100%",this.options.height);}var _proto=BaseTimeLine.prototype;return _proto.setReadOnly=function(readOnly){this.readOnly=readOnly;},_proto.update=function(current){this._current=current;},_proto.updateTimeSections=function(timeSections){timeSections&&Array.isArray(timeSections)&&(this._timeSections=timeSections);},_proto.resize=function(width,height){this._resize(width,height);},_proto._resize=function(width,height){var cssText="";/^\d+(\.\d+)?$/.test(width+"")?cssText+="width: "+width+"px;":width&&(cssText+="width: "+width+";"),/^\d+(\.\d+)?$/.test(height+"")?cssText+="height: "+height+"px;":height&&(cssText+="height: "+height+";"),this.$container&&(this.$container.style.cssText+=cssText),this._width=Math.floor(this.$container.clientWidth),this._height=Math.floor(this.$container.clientHeight);},_proto.setTimeWidth=function(timeWidth){[0,1,2,3,4,5].includes(timeWidth)&&(this._timeWidth=timeWidth);},_proto.destroy=function(){this._current=null,null==this.options.onDestroy||this.options.onDestroy.call(this.options),this._timeSections=[],this._readOnly=false,this._destroyed=true;},_create_class$2(BaseTimeLine,[{key:"current",get:function(){return this._current},set:function(current){this._current=current;}},{key:"readOnly",get:function(){return this._readOnly},set:function(readOnly){this._readOnly!==readOnly&&(this._readOnly=readOnly,this.$container.style.cursor=readOnly?"not-allowed":"pointer");}},{key:"timeSections",get:function(){return this._timeSections}},{key:"width",get:function(){return this._width}},{key:"height",get:function(){return this._height}},{key:"timeWidth",get:function(){return this._timeWidth}}]),BaseTimeLine}();BaseTimeLine.LOCALES=_$TIMELINE_LOCALES$_;var TimeLineUtil=function(){function TimeLineUtil(){}return TimeLineUtil.timeToSecond=function(time){var e=time.split(":");return 60*Number(e[0])*60+60*Number(e[1])+(Number(e[2])||0)},TimeLineUtil.minuteToTime=function(minute){var hour=Math.floor(minute/60),m=minute%60;return (hour>9?hour:"0"+hour)+":"+(m>9?m:"0"+m)},TimeLineUtil.timeToMinute=function(time){var e=time.split(":");return 60*Number(e[0])+Number(e[1])},TimeLineUtil.tranTimeToString=function(start,end){var _DateTime_toDate,_DateTime_toDate1,secondNum=Math.floor((null==(_DateTime_toDate=distExports$4.DateTime.toDate(end))?void 0:_DateTime_toDate.getTime())-(null==(_DateTime_toDate1=distExports$4.DateTime.toDate(start))?void 0:_DateTime_toDate1.getTime()))/1e3,second=secondNum%60,minute=Math.floor(secondNum/60);return (minute>0?distExports$4.DateTime.fillZero(minute)+"'":"0'")+distExports$4.DateTime.fillZero(second)+"''"},TimeLineUtil}(),_$TIMELINE_ICONS$__tip='<svg viewBox="0 0 57 24" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="tip">\n        <path class="ez-time-line-icon-tip" fill-rule="evenodd" d="m4,0l44,0c2.2091,0 4,1.7909 4,4l0,3.8218l4.9399,3.3572c0.5839,0.3968 0.5839,1.2574 0,1.6542l-4.9399,3.3572l0,3.8096c0,2.2091 -1.7909,4 -4,4l-44,0c-2.2091,0 -4,-1.7909 -4,-4l0,-16c0,-2.2091 1.7909,-4 4,-4z"/>\n  </svg>',_$TIMELINE_ICONS$__plus='\n  <svg viewBox="0 0 16 16" stroke="currentColor" fill="none" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="plus">\n    <path d="M0 0L10.6667 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0,1,-1,0,8,2.66663)"/>\n    <path d="M2.66669 8L13.3334 8" stroke-linecap="round" stroke-width="1.5"/>\n  </svg>\n  ',_$TIMELINE_ICONS$__minus='\n    <svg viewBox="0 0 16 16" stroke="currentColor" fill="none" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="minus">\n      <path d="M2.66669 8L13.3334 8" stroke-linecap="round" stroke-width="1.5"/>\n    </svg>\n  ',_$TIMELINE_ICONS$__close='\n    <svg viewBox="0 0 24 24" fill="none" width="1em" height="1em" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="close">\n\t    <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,0.707114,-0.707114,0.707099,6.34277,6.34326)" />\n\t\t  <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,-0.707114,0.707114,0.707099,6.34277,17.6567)" />\n    </svg>\n  ',_$TIMELINE_ICONS$__pause='<svg viewBox="0 0 20 20" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="pause">\n\t\t  <path d="M9.43914 2.47881L13.4688 8.4912C14.3594 9.81998 13.4071 11.6047 11.8074 11.6047L3.74811 11.6047C2.14849 11.6047 1.19616 9.81998 2.08675 8.4912L6.11641 2.47881C6.90863 1.2968 8.64693 1.2968 9.43914 2.47881Z" fill-rule="evenodd" transform="matrix(0,1,-1,0,16.5781,2.22229)" />\n    </svg>\n  ',_$TIMELINE_ICONS$__picture='\n    <svg viewBox="0 0 19.1613 19.4583" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="picture">\n        <path d="M15.3276 2.63477L3.83173 2.63477C2.70848 2.63477 1.79541 3.55027 1.79541 4.68419L1.79541 14.7737C1.79541 15.9076 2.70848 16.8231 3.83173 16.8231L15.3276 16.8231C16.4504 16.8231 17.364 15.9074 17.364 14.7737L17.364 4.68419C17.364 3.55027 16.4509 2.63477 15.3276 2.63477ZM3.83247 3.851L15.3284 3.851C15.7936 3.851 16.1671 4.22551 16.1671 4.68429L16.1671 14.7738C16.1671 15.2323 15.7932 15.6071 15.3284 15.6071L3.83247 15.6071C3.36725 15.6071 2.99373 15.2326 2.99373 14.7738L2.99373 12.2622L6.7356 9.56381L6.78139 9.53916C6.84532 9.51493 6.91856 9.52524 6.9742 9.56947L13.2644 14.5698L13.3381 14.62C13.5918 14.7666 13.9197 14.7063 14.105 14.4658C14.3089 14.2014 14.263 13.8192 14.0026 13.6122L7.71239 8.61184L7.60526 8.5346C7.12945 8.22451 6.51026 8.23473 6.04222 8.57224L2.99373 10.7706L2.99373 4.68429C2.99373 4.22551 3.36725 3.851 3.83247 3.851ZM10.5794 7.29679C10.5794 6.06542 11.5624 5.0672 12.7749 5.0672C13.9875 5.0672 14.9705 6.06542 14.9705 7.29679C14.9705 8.52817 13.9875 9.52639 12.7749 9.52639C11.5624 9.52639 10.5794 8.52817 10.5794 7.29679ZM13.7722 7.2967C13.7722 6.73699 13.3254 6.28325 12.7742 6.28325C12.223 6.28325 11.7762 6.73699 11.7762 7.2967C11.7762 7.85642 12.223 8.31015 12.7742 8.31015C13.3254 8.31015 13.7722 7.85642 13.7722 7.2967Z" fill-rule="evenodd"/>\n    </svg>\n    ',TIME_WIDTH=[[1,10,10,"单位 1秒"],[60,20,5,"单位 1分钟"],[600,20,6,"单位 10分钟"],[3600,30,6,"单位 1小时"],[14400,40,2,"单位 4小时"],[43200,80,2,"单位 12小时"]],MOBILE_TIME_WIDTH=[[1,10,10,"单位 1分钟"],[10,20,5,"单位 10分钟"],[30,20,6,"单位 30分钟"],[60,30,6,"单位 1小时"],[120,40,2,"单位 2小时"],[240,80,2,"单位 4小时"]],__$IMAGE_LAZY_LOADER_DEFAULT_OPTIONS$__={targets:[],root:null,rootMargin:"0px",threshold:.1,loadingClass:"ez-lazy-image-loading",loadedClass:"ez-lazy-image-loaded",loadedErrorClass:"ez-lazy-image-error",onLoadError:function(){}},ImageLazyLoader=function(){function ImageLazyLoader(options){ void 0===options&&(options={}),this.options=Object.assign({},__$IMAGE_LAZY_LOADER_DEFAULT_OPTIONS$__,options),this._observer=null,this._init();}var _proto=ImageLazyLoader.prototype;return _proto._init=function(){var _this=this;ImageLazyLoader.isSupported&&(this._observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){var _this__observer;entry.isIntersecting&&(_this._loadImage(entry.target),null==(_this__observer=_this._observer)||_this__observer.unobserve(entry.target));});},this.options)),this.addImages(this.options.targets);},_proto._loadImage=function(img){var _img_classList,_img_classList1,_img_classList2,_this=this;if(img&&!(null==(_img_classList=img.classList)?void 0:_img_classList.contains(this.options.loadingClass))&&!(null==(_img_classList1=img.classList)?void 0:_img_classList1.contains(this.options.loadedClass))&&!(null==(_img_classList2=img.classList)?void 0:_img_classList2.contains(this.options.loadedErrorClass))&&img.hasAttribute("data-src")){var _this1=this;img.classList.add(this.options.loadingClass);var tempImg=new Image;tempImg.onload=function(){img.src=img.dataset.src,img.classList.remove(_this.options.loadingClass),img.classList.add(_this.options.loadedClass),img.dispatchEvent(new Event("lazyloaded"));},tempImg.onerror=function(e){img.classList.remove(_this.options.loadingClass),img.classList.add(_this.options.loadedErrorClass),null==_this1.options.onLoadError||_this1.options.onLoadError.call(_this1.options,img);},tempImg.src=img.dataset.src;}},_proto.addImages=function(targets){var _this=this;(null==targets?void 0:targets.length)&&targets.forEach(function(target){var _this__observer;(null==target?void 0:target.hasAttribute("data-src"))&&(ImageLazyLoader.isSupported&&_this._observer?null==(_this__observer=_this._observer)||_this__observer.observe(target):_this._loadImage(target));});},_proto.destroy=function(){this._observer&&(this._observer.disconnect(),this._observer=null);},ImageLazyLoader}();function _create_class$1(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends$1$1(){return _extends$1$1=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$1$1.apply(this,arguments)}function _set_prototype_of$1$1(o,p){return _set_prototype_of$1$1=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1$1(o,p)}ImageLazyLoader.isSupported="IntersectionObserver"in window;var _$MOBILE_TIME_LINE_DEFAULT_OPTIONS$_=Object.assign({},_$BASE_TIME_LINE_DEFAULT_OPTIONS$_,{height:400,width:"100%",timeWidth:0,readOnly:false,timePointColor:"#648FFC",timeTextColor:"#666666",timeScaleColor:"transparent",timeSectionColor:"#369FFF",timeAxisBgColor:"#BDCDFF",currentTimeBgColor:"#648FFC",currentTimeColor:"#FFFFFF",showTimeWidthBtn:true,showCoverFold:true}),MobileTimeLine=function(BaseTimeLine){function MobileTimeLine(container,options){var _this;return (_this=BaseTimeLine.call(this,container,deepmerge(_$MOBILE_TIME_LINE_DEFAULT_OPTIONS$_,options,{clone:false}))||this)._isTouchStart=false,_this._dragScroll=null,_this._moveStartX=0,_this._moveStartY=0,_this._imageLazyLoader=null,_this._imageLazyLoaderPicker=null,_this.state={start:"00:00:00",end:"24:00:00",current:null,timeArr:[],availTimeLine:[],index:0},_this._onImageError=_this._onImageError.bind(_this),_this._plusClick=_this._plusClick.bind(_this),_this._minusClick=_this._minusClick.bind(_this),_this._onPickerClose=_this._onPickerClose.bind(_this),_this._onClickItem=_this._onClickItem.bind(_this),_this._onClickCoverFold=_this._onClickCoverFold.bind(_this),_this._imageLazyLoader=new ImageLazyLoader({root:_this.$container,onLoadError:function(img){null==_this._onImageError||_this._onImageError.call(_this,img);}}),_this._render(),_this.options.timeSections&&Array.isArray(_this.options.timeSections)&&_this.updateTimeSections(_this.options.timeSections),_this._applyCssVars(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1$1(subClass,superClass);}(MobileTimeLine,BaseTimeLine);var _proto=MobileTimeLine.prototype;return _proto._applyCssVars=function(){var opts,_this=this,vars=(opts=this.options,{"--ez-time-line-axis-border-color":String(opts.timeAxisBgColor),"--ez-time-line-section-color":String(opts.timeSectionColor),"--ez-time-line-text-color":String(opts.timeTextColor),"--ez-time-line-point-color":String(opts.timePointColor),"--ez-time-line-current-bg":String(opts.currentTimeBgColor),"--ez-time-line-current-color":String(opts.currentTimeColor),"--ez-time-line-op-btn-border":String(opts.opBtnBorderColor),"--ez-time-line-op-btn-active":String(opts.opBtnActiveColor),"--ez-time-line-op-btn-disabled-border":String(opts.opBtnDisabledBorderColor),"--ez-time-line-picker-header":String(opts.pickerHeaderColor),"--ez-time-line-picker-close":String(opts.pickerCloseColor),"--ez-time-line-picker-close-active":String(opts.pickerCloseActiveColor),"--ez-time-line-picker-item-title":String(opts.pickerItemTitleColor),"--ez-time-line-cover-fold-placeholder-back":String(opts.coverFoldPlaceholderBackColor),"--ez-time-line-cover-fold-placeholder-front":String(opts.coverFoldPlaceholderFrontColor),"--ez-time-line-cover-fold-overlay":String(opts.coverFoldOverlayColor),"--ez-time-line-item-cover-placeholder-start":String(opts.itemCoverPlaceholderStartColor),"--ez-time-line-item-cover-placeholder-end":String(opts.itemCoverPlaceholderEndColor),"--ez-time-line-hover-tip-bg":String(opts.hoverTipBgColor),"--ez-time-line-hover-tip-color":String(opts.hoverTipColor)});Object.entries(vars).forEach(function(param){var name=param[0],value=param[1];return _this.$container.style.setProperty(name,value)});},_proto.setReadOnly=function(readOnly){BaseTimeLine.prototype.setReadOnly.call(this,readOnly),this._dragScroll&&(this._dragScroll.readonly=readOnly);},_proto.setTimeWidth=function(timeWidth){MOBILE_TIME_WIDTH[timeWidth]&&(BaseTimeLine.prototype.setTimeWidth.call(this,timeWidth),this._matchTimeDot());},_proto.updateTimeSections=function(timeSections,defaultIndex){BaseTimeLine.prototype.updateTimeSections.call(this,timeSections);var list=timeSections.map(function(record){return _extends$1$1({},record,{startTime:distExports$4.DateTime.format(record.startTime,"HH:mm:ss"),endTime:distExports$4.DateTime.format(record.endTime,"HH:mm:ss")})});if(list.length>0){ void 0===defaultIndex&&(defaultIndex=list.length-1);var current=this.state.current;this._setState({availTimeLine:list,start:list[defaultIndex].startTime,end:list[defaultIndex].endTime,current:null===current?list[defaultIndex].startTime:current}),this._matchTimeDot();}else this._setState({availTimeLine:[],current:distExports$4.DateTime.format(this.current||(new Date).getTime(),"HH:mm:ss")}),this._matchTimeDot();},_proto.update=function(time){var _this__dragScroll;time&&!(null==(_this__dragScroll=this._dragScroll)?void 0:_this__dragScroll.isDragging)&&(this._setState({current:distExports$4.DateTime.format(time,"HH:mm:ss")}),this._currentOffsetH());},_proto.destroy=function(){var _this__dragScroll;if(this._scrollTimer&&(clearInterval(this._scrollTimer),this._scrollTimer=null),this._$currentTime)try{this.$container.removeChild(this._$currentTime),this._$currentTime=null;}catch(error){}if(this._$itemContainer&&this._$itemList)try{this._$itemContainer.removeChild(this._$itemList),this._$itemList=null;}catch(error){}if(this._$itemContainer)try{this.$container.removeChild(this._$itemContainer),this._$itemContainer=null;}catch(error){}if(this._$op)try{this.$container.removeChild(this._$op),this._$op=null;}catch(error){}this._picker&&(this._picker.destroy(),this._picker=null),this._imageLazyLoader&&(this._imageLazyLoader.destroy(),this._imageLazyLoader=null),this._imageLazyLoaderPicker&&(this._imageLazyLoaderPicker.destroy(),this._imageLazyLoaderPicker=null),this._removeEventListener(),null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.destroy(),this._dragScroll=null,BaseTimeLine.prototype.destroy.call(this);},_proto._setState=function(obj){var _this=this;Object.keys(obj).forEach(function(key){var _this__dragScroll,_this_timeSections_;"current"===key&&obj[key]?(_this._setCurrentDOM(obj[key]),_this.state.current===obj[key]||(null==(_this__dragScroll=_this._dragScroll)?void 0:_this__dragScroll.isDragging)||(_this.state[key]=obj[key],_this.current=new Date(distExports$4.DateTime.format((null==(_this_timeSections_=_this.timeSections[0])?void 0:_this_timeSections_.endTime)||(new Date).getTime(),"YYYY-MM-DD")+"T"+obj[key]),null==_this.options.onChange||_this.options.onChange.call(_this.options,_this.current))):_this.state[key]=obj[key];});},_proto._setCurrentDOM=function(time){this._$currentTime&&(this._$currentTime.querySelector(".ez-time-line-current-value").innerHTML=time);},_proto._matchTimeDot=function(){for(var scaleWidth=this._scaleWidth,timeArr=[],minute=TimeLineUtil.timeToMinute("24:00:00"),i=minute=Math.floor(minute/scaleWidth)*scaleWidth;i>=0;){var marginTop=0,marginBottom=0;i==minute&&(marginTop=70),0==i&&(marginBottom=this.$container.clientHeight-70);var time=TimeLineUtil.minuteToTime(i);timeArr.push({id:i,current:time,label:"a"+i,marginTop:marginTop,marginBottom:marginBottom,recArr:[],coverArr:this._filterTimeSectionsByTime(time)}),i-=scaleWidth;}this._setState({timeArr:timeArr}),this._matchRecTimeDot();},_proto._matchRecTimeDot=function(){var _this_state=this.state,availTimeLine=_this_state.availTimeLine,timeArr=_this_state.timeArr,scaleWidth=this._scaleWidth,len=availTimeLine.length;if(0===len)for(var j=0;j<timeArr.length;j++)timeArr[j].recArr=[];else {for(var k=0;k<timeArr.length;k++)timeArr[k].recArr=[];for(var i=0;i<len;i++){var stAvailPercent,etAvailPercent,temp=availTimeLine[i],st=TimeLineUtil.timeToSecond(temp.startTime),et=TimeLineUtil.timeToSecond(temp.endTime),stMinute=Math.floor(st/(60*scaleWidth))*scaleWidth;stAvailPercent=(st-60*stMinute)/scaleWidth;var etMinute=Math.floor(et/(60*scaleWidth))*scaleWidth;etAvailPercent=(et-60*etMinute)/scaleWidth;for(var j1=0;j1<timeArr.length;j1++)if(timeArr[j1].id==stMinute&&timeArr[j1].id==etMinute){var height=etAvailPercent-stAvailPercent,top=60-etAvailPercent;timeArr[j1].recArr.push({height:height,top:top});}else timeArr[j1].id==stMinute?timeArr[j1].recArr.push({height:60-stAvailPercent,top:0}):timeArr[j1].id==etMinute?timeArr[j1].recArr.push({height:etAvailPercent,top:60-etAvailPercent}):timeArr[j1].id>stMinute&&timeArr[j1].id<etMinute&&timeArr[j1].recArr.push({height:60,top:0});}}this._setState({timeArr:timeArr}),this._renderDateLine();},_proto._renderDateLine=function(){var _this=this,timeArr=this.state.timeArr,container=this._$itemList;container.innerHTML="",timeArr.forEach(function(item,index){var _this__imageLazyLoader,timeItemDOM=document.createElement("div");timeItemDOM.setAttribute("class","ez-time-line-time-scale-area"),item.marginTop&&(timeItemDOM.style.cssText+="margin-top: "+item.marginTop+"px;"),item.marginBottom&&(timeItemDOM.style.cssText+="margin-bottom: "+item.marginBottom+"px;"),timeItemDOM.style.cssText+="border-right-color: "+String(_this.options.timeAxisBgColor)+";",timeItemDOM.setAttribute("data-time",item.current),timeItemDOM.setAttribute("data-index",index+""),document.createElement("div").setAttribute("class","ez-time-line-scale");var timeItemHtml="";item.coverArr.length&&_this.options.showCoverFold&&(timeItemHtml+='\n            <div class="ez-time-line-time-cover-fold '+(item.coverArr.length>1?"ez-time-line-time-cover-fold-multiple":"")+'"\n            data-start="'+item.current+'">\n              '+(item.coverArr.length>1?'<div class="ez-time-line-cover-fold-placeholder" style="color: #FFF"></div>':"")+'\n              <div class="ez-time-line-time-cover-fold-img">\n                <img data-src="'+_this._setImageScr(item.coverArr[0].coverPic)+'" class="ez-time-line-img"/>\n                <span class="ez-time-line-time-cover-fold-len">\n                '+(item.coverArr.length>1?_this.i18n.t("foldTitle",{len:item.coverArr.length,unit:"videos"}):""+distExports$4.DateTime.format(item.coverArr[0].startTime,"HH:mm"))+"\n                </span>\n                "+(1===item.coverArr.length?'<span class="ez-time-line-time-cover-fold-time">'+TimeLineUtil.tranTimeToString(item.coverArr[0].startTime,item.coverArr[0].endTime)+"</span>":"")+'\n                <span class="ez-time-line-time-cover-fold-pause">'+_$TIMELINE_ICONS$__pause+"</span>\n              </div>\n            </div>"),item.recArr.forEach(function(i){timeItemHtml+='<div class="ez-time-line-time-unavail"\n                              style="height: '+i.height+"px;background-color:"+String(_this.options.timeSectionColor)+"; top: "+i.top+'px">\n                        </div>';}),timeItemHtml+="<div id="+item.label+' class="ez-time-line-time-label" style="color: '+String(_this.options.timeTextColor)+'">'+item.current+"</div>",timeItemDOM.innerHTML=timeItemHtml,container.appendChild(timeItemDOM),item.coverArr.length&&_this.options.showCoverFold&&(null==(_this__imageLazyLoader=_this._imageLazyLoader)||_this__imageLazyLoader.addImages(container.querySelectorAll("img.ez-time-line-img")||[]));}),this._currentOffsetH();},_proto._currentOffsetH=function(){var current=this.state.current;if(current){var _this__dragScroll,y=(86400-TimeLineUtil.timeToSecond(current)||0)/this._scaleWidth;null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.scrollToY(y+60,false);}},_proto._render=function(){var _this=this;if(this._$currentTime=document.createElement("div"),this._$currentTime.classList.add("ez-time-line-current"),this._$currentTime.innerHTML='<div class="ez-time-line-current-content" style="color: '+String(this.options.currentTimeBgColor)+'">\n      <span class="ez-time-line-current-tip">'+_$TIMELINE_ICONS$__tip+'</span>\n      <span class="ez-time-line-current-tip-line" style="background-color: '+String(this.options.timePointColor)+';"></span>\n      <div class="ez-time-line-current-value" style="color: '+String(this.options.currentTimeColor)+'">00:00:00</div>\n    </div>',this.$container.appendChild(this._$currentTime),this._$itemContainer=document.createElement("div"),this._$itemContainer.classList.add("ez-time-line-container"),this.$container.appendChild(this._$itemContainer),this._dragScroll=new DragScroll(this._$itemContainer,{hideScrollbar:true,onChange:function(state){var result=_this._offsetYToTime(state.y);result[1]!==_this.state.current&&_this._setCurrentDOM(result[0]>=86400?"23:59:59":result[1]);},onDragStart:function(e){_this._moveStartX=e.clientX,_this._moveStartY=e.clientY,null==_this.options.onDragStart||_this.options.onDragStart.call(_this.options,_this.state.current);},onDragging:function(){null==_this.options.onDragging||_this.options.onDragging.call(_this.options,_this.state.current);},onDragEnd:function(){var _this__dragScroll,result=_this._offsetYToTime(null==(_this__dragScroll=_this._dragScroll)?void 0:_this__dragScroll.currentY);result[1]!==_this.state.current&&_this._setState({current:result[0]>=86400?"23:59:59":result[1]}),null==_this.options.onDragEnd||_this.options.onDragEnd.call(_this.options,_this.state.current);}}),/\d/.test(this.options.height))this._$itemContainer.style.cssText+="height: "+this.options.height+"px";else if("string"==typeof this.options.height)this._$itemContainer.style.cssText+="height: "+this.options.height;else {var height=this.$container.clientHeight;this._$itemContainer.style.cssText+="height: "+height+"px";}this._$itemList=document.createElement("div"),this._$itemList.classList.add("ez-time-line-item"),this._dragScroll.$content.appendChild(this._$itemList),this.options.showTimeWidthBtn&&(this._$op=document.createElement("div"),this._$op.classList.add("ez-time-line-op"),this._$op.innerHTML='<span class="ez-time-line-op-wrapper"><span class="ez-time-line-icon-plus">'+_$TIMELINE_ICONS$__plus+'</span> <span class="ez-time-line-icon-minus">'+_$TIMELINE_ICONS$__minus+"</span></span>",this.$container.appendChild(this._$op)),this.options.showCoverFold&&(this._picker=new Picker(null,{isMobile:true,wrapClassName:"ez-time-line-picker",onOpenChange:function(isOpen){var _this_options_onPickerOpenChange,_this_options;null==(_this_options=_this.options)||null==(_this_options_onPickerOpenChange=_this_options.onPickerOpenChange)||_this_options_onPickerOpenChange.call(_this_options,isOpen);}}),this._imageLazyLoaderPicker=new ImageLazyLoader({root:this._picker.$body,onLoadError:function(img){null==_this._onImageError||_this._onImageError.call(_this,img);}})),this._addEventListener();},_proto._addEventListener=function(){var _this__$op_querySelector,_this__$op_querySelector1;this.options.showTimeWidthBtn&&this._$op&&(null==(_this__$op_querySelector=this._$op.querySelector(".ez-time-line-icon-plus"))||_this__$op_querySelector.addEventListener("click",this._plusClick,false),null==(_this__$op_querySelector1=this._$op.querySelector(".ez-time-line-icon-minus"))||_this__$op_querySelector1.addEventListener("click",this._minusClick,false));this._matchTimeDot(),this._picker&&(this._delegatePickerClose=delegate(this._picker.$body,".ez-time-line-picker-close","click",this._onPickerClose,false),this._delegateItemContent=delegate(this._picker.$body,".ez-time-line-picker-item-content","click",this._onClickItem,false),this._delegateCoverFold=delegate(this._$itemList,".ez-time-line-time-cover-fold","click",this._onClickCoverFold,false));},_proto._removeEventListener=function(){var _this__$op_querySelector,_this__$op_querySelector1,_this__picker_$body_querySelector,_this__picker_$body;this.options.showTimeWidthBtn&&this._$op&&(null==(_this__$op_querySelector=this._$op.querySelector(".ez-time-line-icon-plus"))||_this__$op_querySelector.removeEventListener("click",this._plusClick),null==(_this__$op_querySelector1=this._$op.querySelector(".ez-time-line-icon-minus"))||_this__$op_querySelector1.removeEventListener("click",this._minusClick));this._picker&&(null==(_this__picker_$body=this._picker.$body)||null==(_this__picker_$body_querySelector=_this__picker_$body.querySelector(".ez-time-line-picker-close"))||_this__picker_$body_querySelector.removeEventListener("click",this._onPickerClose),this._delegateItemContent&&(this._delegateItemContent.forEach(function(delegation){delegation.destroy();}),this._delegateItemContent=null),this._delegatePickerClose&&(this._delegatePickerClose.forEach(function(delegation){delegation.destroy();}),this._delegatePickerClose=null),this._delegateCoverFold&&(this._delegateCoverFold.forEach(function(delegation){delegation.destroy();}),this._delegateCoverFold=null));},_proto._plusClick=function(){var timeWidth=this.timeWidth+1;timeWidth>0&&timeWidth<MOBILE_TIME_WIDTH.length&&this.setTimeWidth(timeWidth);},_proto._minusClick=function(){var timeWidth=this.timeWidth-1;timeWidth>=0&&timeWidth<MOBILE_TIME_WIDTH.length&&this.setTimeWidth(Math.floor(timeWidth));},_proto._timeSectionsToGroupsByHour=function(list){var obj={};return list.forEach(function(item,index){var hour=distExports$4.DateTime.format(item.startTime,"HH");obj[+hour]?obj[+hour].push(_extends$1$1({},item,{_index:index})):obj[+hour]=[_extends$1$1({},item,{_index:index})];}),obj},_proto._filterTimeSectionsByTime=function(start){if(!start)return [];var startSecond=TimeLineUtil.timeToSecond(start+":00"),endSecond=TimeLineUtil.timeToSecond(start+":00")+60*this._scaleWidth;return this.timeSections.filter(function(item){var _$start=TimeLineUtil.timeToSecond(distExports$4.DateTime.format(item.startTime,"HH:mm:ss"));return _$start>=startSecond&&_$start<endSecond})},_proto._renderPickerContent=function(start){var _this__picker_innerHTML,_this__picker,_this__picker1,_this__picker2,_this__imageLazyLoaderPicker,_this=this,list=this._filterTimeSectionsByTime(start),hourGroups=this._timeSectionsToGroupsByHour(list);(null==(_this__picker=this._picker)||null==(_this__picker_innerHTML=_this__picker.innerHTML)||_this__picker_innerHTML.call(_this__picker,'<div class="ez-time-line-picker-container">\n        <div class="ez-time-line-picker-header">\n          <span class="ez-time-line-picker-close">'+_$TIMELINE_ICONS$__close+"</span>\n          "+this.i18n.t("title",{len:list.length,unit:list.length>1?"videos":"video"})+'\n        </div>\n        <div class="ez-time-line-picker-content">\n          <div class="ez-time-line-picker-list">\n             '+Object.keys(hourGroups).reverse().map(function(key){return '<div class="ez-time-line-picker-item">\n                  <div class="ez-time-line-picker-item-title">'+key+':00</div>\n                  <div class="ez-time-line-picker-item-list">\n                    '+hourGroups[key].reverse().map(function(item){return '<div class="ez-time-line-picker-item-content"\n                                      data-start="'+distExports$4.DateTime.format(item.startTime,"YYYYMMDDTHHmmssZ")+'"\n                                      data-end="'+distExports$4.DateTime.format(item.endTime,"YYYYMMDDTHHmmssZ")+'"\n                                      data-index="'+item._index+'">\n                                    <span class="ez-time-line-picker-item-time">'+distExports$4.DateTime.format(item.startTime,"HH:mm")+'</span>\n                                    <span class="ez-time-line-picker-item-duration">\n                                      '+TimeLineUtil.tranTimeToString(item.startTime,item.endTime)+'\n                                    </span>\n                                  <img class="ez-time-line-picker-item-cover" data-src="'+_this._setImageScr(item.coverPic)+'"/>\n                                </div>'}).join("")+"\n                  </div>\n              </div>"}).join("")+"\n          </div>\n          </div>\n        </div>\n      </div>"),null==(_this__picker1=this._picker)?void 0:_this__picker1.$body)&&(null==(_this__imageLazyLoaderPicker=this._imageLazyLoaderPicker)||_this__imageLazyLoaderPicker.addImages((null==(_this__picker2=this._picker)?void 0:_this__picker2.$body.querySelectorAll("img"))||[]));},_proto._onImageError=function(img){if(!img.hasAttribute("data-error")){var _img_parentNode,placeholder=document.createElement("div");placeholder.classList.add("ez-time-line-item-cover-placeholder"),placeholder.innerHTML=""+_$TIMELINE_ICONS$__picture,null==(_img_parentNode=img.parentNode)||_img_parentNode.appendChild(placeholder),img.setAttribute("data-error","true"),img.remove();}},_proto._onPickerClose=function(){this._picker&&(this._picker.open=false);},_proto._onClickItem=function(e){var _e_delegateTarget_getAttribute,_e_delegateTarget,index=null==(_e_delegateTarget=e.delegateTarget)||null==(_e_delegateTarget_getAttribute=_e_delegateTarget.getAttribute)?void 0:_e_delegateTarget_getAttribute.call(_e_delegateTarget,"data-index");this._picker&&(this._picker.open=false),null==this.options.onPickerSelect||this.options.onPickerSelect.call(this.options,this.timeSections[+index]);},_proto._onClickCoverFold=function(e){var _e_delegateTarget_parentElement_getAttribute,_e_delegateTarget_parentElement,_e_delegateTarget;e.preventDefault();var time=null==(_e_delegateTarget=e.delegateTarget)||null==(_e_delegateTarget_parentElement=_e_delegateTarget.parentElement)||null==(_e_delegateTarget_parentElement_getAttribute=_e_delegateTarget_parentElement.getAttribute)?void 0:_e_delegateTarget_parentElement_getAttribute.call(_e_delegateTarget_parentElement,"data-time"),moveX=Math.abs(this._moveStartX-e.clientX),moveY=Math.abs(this._moveStartY-e.clientY);this._picker&&time&&!(moveX>=1||moveY>=1)&&(this._renderPickerContent(time),this._picker.open=true);},_proto._setImageScr=function(src){if(src){var query="x=200&"+(this.options.coverQuery||"");return src+(src.includes("?")?"&":"?")+query}return ""},_proto._offsetYToTime=function(offsetY){var _this__dragScroll,y=offsetY;offsetY<60&&(y=60,null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.scrollToY(y));var second=86400-Math.floor((y-60)*this._scaleWidth);return [second,distExports$4.DateTime.fillZero(Math.floor(second/3600))+":"+distExports$4.DateTime.fillZero(Math.floor(second%3600/60))+":"+distExports$4.DateTime.fillZero(second%60)]},_create_class$1(MobileTimeLine,[{key:"_scaleWidth",get:function(){return (MOBILE_TIME_WIDTH[this.timeWidth]||MOBILE_TIME_WIDTH[0])[0]}}]),MobileTimeLine}(BaseTimeLine);function isOverlap(a_start,a_end,b_start,b_end){return Math.max(a_start,b_start)<=Math.min(a_end,b_end)}function _extends$5(){return _extends$5=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$5.apply(this,arguments)}function getTouchDistance(touches){var touch1=touches[0],touch2=touches[1],dx=touch2.clientX-touch1.clientX,dy=touch2.clientY-touch1.clientY;return Math.sqrt(dx*dx+dy*dy)}function _create_class$3(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$6(o,p){return _set_prototype_of$6=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$6(o,p)}var _$TIMELINE_DEFAULT_OPTIONS$_={height:36,dpr:window.devicePixelRatio||2,readOnly:false,scaleOffsetTop:4,showYearMonthDay:true,showHoverTip:true,hoverTipPlacement:"follow",enabledClickToSeek:true},TimeLine=function(BaseTimeLine){function TimeLine(container,options){var _this;return (_this=BaseTimeLine.call(this,container,deepmerge(_$TIMELINE_DEFAULT_OPTIONS$_,options,{clone:true}))||this)._$canvas=null,_this._ctx=null,_this._timeWidthArray=TIME_WIDTH[0],_this._centerPositionX=0,_this._isMouseDown=false,_this._mousePosition=0,_this._oldTime=null,_this._isOver=false,_this._moved=false,_this._lastTouchDist=0,_this._$hoverTip=null,_this._hoverRafId=null,_this._hoverX=0,_this._hoverY=0,_this._hoverActive=false,_this._hoverLineX=0,_this._dragMoved=false,_this._containerRect=null,_this._drawRafId=null,_this.$container=container,_this._mousemoveFun=_this._mousemoveFun.bind(_this),_this._mouseoverFun=_this._mouseoverFun.bind(_this),_this._mouseleaveFun=_this._mouseleaveFun.bind(_this),_this._mousedownFun=_this._mousedownFun.bind(_this),_this._mouseUpFun=_this._mouseUpFun.bind(_this),_this._mousewheelFun=_this._mousewheelFun.bind(_this),_this._containerWheelFun=_this._containerWheelFun.bind(_this),_this._touchstartFun=_this._touchstartFun.bind(_this),_this._touchmoveFun=_this._touchmoveFun.bind(_this),_this._touchendFun=_this._touchendFun.bind(_this),_this._clickFun=_this._clickFun.bind(_this),_this._init(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$6(subClass,superClass);}(TimeLine,BaseTimeLine);var _proto=TimeLine.prototype;return _proto._init=function(){this._$canvas=document.createElement("canvas"),this._ctx=this._$canvas.getContext("2d"),this.readOnly||(this._$canvas.style.cursor="pointer"),this.$container.appendChild(this._$canvas),this.resize(this.width,this.height),this._update({current:this.current,timeWidth:this.timeWidth,timeSections:this.timeSections}),this._initHoverTip(),this._applyHoverTipVars(),this._addEventListener();},_proto.resize=function(width,height){BaseTimeLine.prototype.resize.call(this,width,height),this._$canvas&&width&&(this._$canvas.width=this.width*this.options.dpr,this._$canvas.style.width=this.width+"px"),this._$canvas&&height&&(this._$canvas.height=this.height*this.options.dpr,this._$canvas.style.height=this.height+"px"),this._containerRect=null,this._draw();},_proto.setTimeWidth=function(timeWidth){this._update({timeWidth:timeWidth});},_proto.updateTimeSections=function(timeSections){this._update({timeSections:timeSections});},_proto.update=function(time){time&&!this._isMouseDown&&this._update({current:distExports$4.DateTime.toDate(time)});},_proto._update=function(options){var left,right,_this__$canvas;(void 0===options&&(options={}),(null==options?void 0:options.current)&&(left=options.current,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)&&(this.current=options.current),(null==options?void 0:options.timeSections)&&BaseTimeLine.prototype.updateTimeSections.call(this,function(timeSections){if(0===timeSections.length)return timeSections;for(var normalized=timeSections.map(function(item){var startTime=item.startTime,endTime=item.endTime;return 10===(startTime+"").length&&(startTime*=1e3),10===(endTime+"").length&&(endTime*=1e3),_extends$5({},item,{startTime:startTime,endTime:endTime})}),merged=[normalized[0]],i=1;i<normalized.length;i++){var prev=merged[merged.length-1],curr=normalized[i];prev.endTime>=curr.startTime?prev.endTime=Math.max(prev.endTime,curr.endTime):merged.push(curr);}return merged}(options.timeSections)),"number"==typeof(null==options?void 0:options.timeWidth)&&(null==options?void 0:options.timeWidth)<TIME_WIDTH.length&&(BaseTimeLine.prototype.setTimeWidth.call(this,options.timeWidth),this._timeWidthArray=TIME_WIDTH[Math.floor(this.timeWidth)]),"number"==typeof(null==options?void 0:options.timeWidth)&&this._timeWidthArray)&&(this._timeWidthArray[3]&&(null==(_this__$canvas=this._$canvas)||_this__$canvas.setAttribute("data-title",this._timeWidthArray[3])));this._draw(),this._hoverActive&&this._$hoverTip&&!this._isMouseDown&&this._showHoverTip(this._hoverX,this._hoverY);},_proto.setReadOnly=function(readOnly){BaseTimeLine.prototype.setReadOnly.call(this,readOnly),this._$canvas&&(this._$canvas.style.cursor=readOnly?"not-allowed":"pointer");},_proto.destroy=function(){this._removeEventListener(),this._hideHoverTip(),null!=this._drawRafId&&(cancelAnimationFrame(this._drawRafId),this._drawRafId=null),this._$hoverTip&&this._$hoverTip.remove(),this._$hoverTip=null,this._$canvas&&this._$canvas.remove(),this._$canvas=null,this._ctx=null,this._containerRect=null,BaseTimeLine.prototype.destroy.call(this);},_proto._initHoverTip=function(){if(this.options.showHoverTip){var tip=document.createElement("div");tip.className="ez-time-line-hover-tip",this.$container.appendChild(tip),this._$hoverTip=tip,this._applyHoverTipVars();}},_proto._applyHoverTipVars=function(){this.$container.style.setProperty("--ez-time-line-hover-tip-bg",String(this.options.hoverTipBgColor)),this.$container.style.setProperty("--ez-time-line-hover-tip-color",String(this.options.hoverTipColor));},_proto._hoverTimeAt=function(x){var seconds=(x-this.width/2)/this._curScaleSpacing*this._timeWidthArray[0];return new Date(this.current.getTime()+Math.round(1e3*seconds))},_proto._localDayStartSec=function(sec){var d=new Date(1e3*sec);return d.setHours(0,0,0,0),Math.floor(d.getTime()/1e3)},_proto._getContainerRect=function(){return this._containerRect||(this._containerRect=this.$container.getBoundingClientRect()),this._containerRect},_proto._scheduleDraw=function(){var _this=this;null==this._drawRafId&&(this._drawRafId=requestAnimationFrame(function(){_this._drawRafId=null,_this._draw();}));},_proto._formatHoverTime=function(date){if("function"==typeof this.options.renderHoverTip)return this.options.renderHoverTip(date);var fmt=this.options.hoverTipFormat||"yyyy-MM-dd HH:mm:ss";return distExports$4.DateTime.format(date,fmt)},_proto._showHoverTip=function(x,y){var _this=this;this._$hoverTip&&(this._hoverX=x,this._hoverY=y,null==this._hoverRafId&&(this._hoverRafId=requestAnimationFrame(function(){_this._hoverRafId=null,_this._renderHoverTip();})));},_proto._renderHoverTip=function(){var tip=this._$hoverTip;if(tip){var width=this.width,tx=Math.max(0,Math.min(this._hoverX,width)),date=this._hoverTimeAt(tx),content=this._formatHoverTime(date);"function"==typeof this.options.renderHoverTip?tip.innerHTML=content:tip.textContent=content,tip.style.display="inline-flex",tip.style.opacity="1";var left,top,tipW=tip.offsetWidth;if("top"===this.options.hoverTipPlacement)(left=this._hoverX-tipW/2)+tipW>width&&(left=width-tipW),left<0&&(left=0),top=-tip.offsetHeight-2;else {(left=this._hoverX+14)+tipW>width&&(left=this._hoverX-14-tipW),left<0&&(left=0),top=this._hoverY+16;}tip.style.left=left+"px",tip.style.top=top+"px";}},_proto._hideHoverTip=function(){null!=this._hoverRafId&&(cancelAnimationFrame(this._hoverRafId),this._hoverRafId=null),this._$hoverTip&&(this._$hoverTip.style.display="none",this._$hoverTip.style.opacity="0");},_proto._draw=function(){this._ctx&&(this._ctx.fillStyle=this.options.timeAxisBgColor,this._ctx.fillRect(0,0,this.width*this.options.dpr,this.height*this.options.dpr)),this._drawSections(),this._drawScale(),this._drawHoverLine();},_proto._drawHoverLine=function(){if(this._hoverActive&&!this._isMouseDown&&this._ctx){var dpr=this.options.dpr,x=Math.max(0,Math.min(this._hoverLineX,this.width))*dpr,lineWidth=this.options.scaleLineWidth*dpr;this._drawSolidLine(x,0,x,this.height*dpr,lineWidth,this.options.hoverLineColor);}},_proto._drawScale=function(){var lineWidth=this.options.scaleLineWidth*this.options.dpr;this._centerPositionX=parseInt(this.width*this.options.dpr/2+"");for(var centerPosition={x:this.width*this.options.dpr/2,y:this.height*this.options.dpr},curScaleTime=Math.floor(this.current.getTime()/1e3),offsetSecond=(curScaleTime-this._localDayStartSec(curScaleTime))%this._timeWidthArray[0],padding=this.height*this.options.dpr/20,spacing=this._curScaleSpacing*this.options.dpr,rightLastScaleTimeX=Math.floor(this._centerPositionX+(this._timeWidthArray[0]-offsetSecond)/this._timeWidthArray[0]*spacing),leftLastScaleTime=curScaleTime-offsetSecond,rightLastScaleTime=leftLastScaleTime+this._timeWidthArray[0],x=rightLastScaleTimeX-spacing;x>0;x-=spacing){0===(leftLastScaleTime-this._localDayStartSec(leftLastScaleTime))%(this._timeWidthArray[0]*this._timeWidthArray[2])?(this._drawSolidLine(x,padding,x,padding+(this.options.scaleOffsetTop+4)*this.options.dpr,lineWidth),this._drawTextString(distExports$4.DateTime.format(new Date(1e3*leftLastScaleTime),"YYYY-MM-DD HH:mm:ss"),x,padding+(this.options.scaleOffsetTop+4+4)*this.options.dpr,"center")):this._drawSolidLine(x,padding,x,padding+this.options.scaleOffsetTop*this.options.dpr,lineWidth),leftLastScaleTime-=this._timeWidthArray[0];}for(var x1=rightLastScaleTimeX;x1<=this.width*this.options.dpr;x1+=spacing){0===(rightLastScaleTime-this._localDayStartSec(rightLastScaleTime))%(this._timeWidthArray[0]*this._timeWidthArray[2])?(this._drawSolidLine(x1,padding,x1,padding+(this.options.scaleOffsetTop+4)*this.options.dpr,lineWidth),this._drawTextString(distExports$4.DateTime.format(new Date(1e3*rightLastScaleTime),"YYYY-MM-DD HH:mm:ss"),x1,padding+(this.options.scaleOffsetTop+4+4)*this.options.dpr,"center")):this._drawSolidLine(x1,padding,x1,padding+this.options.scaleOffsetTop*this.options.dpr,lineWidth),rightLastScaleTime+=this._timeWidthArray[0];}this._drawCenterIndicator(centerPosition.x,centerPosition.y);},_proto._drawCenterIndicator=function(centerX,totalHeight){if(this._ctx){var dpr=this.options.dpr,lineW=2*dpr,triH=3*dpr,baseW=6*dpr,baseH=5*dpr,x=centerX;this._ctx.save(),this._ctx.fillStyle=this.options.timePointColor,this._ctx.fillRect(x-lineW/2,0,lineW,totalHeight),this._ctx.beginPath(),this._ctx.moveTo(x-baseW/2,0),this._ctx.lineTo(x+baseW/2,0),this._ctx.lineTo(x+baseW/2,baseH),this._ctx.lineTo(x,baseH+triH),this._ctx.lineTo(x-baseW/2,baseH),this._ctx.closePath(),this._ctx.fill(),this._ctx.beginPath(),this._ctx.moveTo(x-baseW/2,totalHeight),this._ctx.lineTo(x+baseW/2,totalHeight),this._ctx.lineTo(x+baseW/2,totalHeight-baseH),this._ctx.lineTo(x,totalHeight-baseH-triH),this._ctx.lineTo(x-baseW/2,totalHeight-baseH),this._ctx.closePath(),this._ctx.fill(),this._ctx.restore();}},_proto._drawSolidLine=function(startX,startY,endX,endY,lineWidth,color){this._ctx&&(this._ctx.save(),this._ctx.strokeStyle=null!=color?color:this.options.timeScaleColor,this._ctx.lineWidth=lineWidth,this._ctx.beginPath(),this._ctx.moveTo(startX,startY),this._ctx.lineTo(endX,endY),this._ctx.stroke(),this._ctx.restore());},_proto._drawTextString=function(text,x,y,align){if(this._ctx){var timeTexts=text.split(" ");this._ctx.font=(opts=this.options,dpr=this.options.dpr,(null!=(_opts_timeTextFontSize=opts.timeTextFontSize)?_opts_timeTextFontSize:12)*(dpr||1)+"px "+(null!=(_opts_timeTextFontFamily=opts.timeTextFontFamily)?_opts_timeTextFontFamily:"serif")),this._ctx.fillStyle=this.options.timeTextColor,this._ctx.textAlign=align||"left",this._timeWidthArray[0]%60==0&&(timeTexts[1]=timeTexts[1].replace(/:00$/,"")),this._ctx.fillText(timeTexts[1],x,y+8*this.options.dpr),!this.options.showYearMonthDay||"00:00:00"!==timeTexts[1]&&"00:00"!==timeTexts[1]&&this._timeWidthArray[0]*this._timeWidthArray[2]!==86400||(this._ctx.textAlign=align||"left",this._ctx.fillText(timeTexts[0],x,y+18*this.options.dpr));}var opts,dpr,_opts_timeTextFontSize,_opts_timeTextFontFamily;},_proto._drawSections=function(){for(var timeArr=this.timeSections||[],dpr=this.options.dpr,_ref=this.options.timeSectionOffset||[],tmp=_ref[0],offsetTopPx=void 0===tmp?0:tmp,tmp1=_ref[1],offsetTop=offsetTopPx*dpr,offsetBottom=(void 0===tmp1?0:tmp1)*dpr,sectionHeight=this.height*dpr-offsetTop-offsetBottom,i=0;i<timeArr.length;i++){var position=this._findPosition(timeArr[i]);this._ctx&&isOverlap(0,this.width*this.options.dpr,position.x1,position.x2)&&(this._ctx.fillStyle=this.options.timeSectionColor,this._ctx.fillRect(position.x1,offsetTop,position.x2-position.x1,sectionHeight));}},_proto._findPosition=function(item){var x1=(parseInt((item.startTime-this.current.getTime())/1e3+"",10)/this._timeWidthArray[0]*this._curScaleSpacing+this.width/2)*this.options.dpr;return {x1:x1,x2:x1+parseInt((item.endTime-item.startTime)/1e3+"",10)/this._timeWidthArray[0]*this._curScaleSpacing*this.options.dpr}},_proto._addEventListener=function(){this._$canvas&&(this._$canvas.addEventListener("mousemove",this._mousemoveFun),this._$canvas.addEventListener("mouseover",this._mouseoverFun),this._$canvas.addEventListener("mouseleave",this._mouseleaveFun),this._$canvas.addEventListener("mousedown",this._mousedownFun),this._$canvas.addEventListener("mouseup",this._mouseUpFun),this._$canvas.addEventListener("click",this._clickFun),this._$canvas.addEventListener("wheel",this._mousewheelFun),this.$container.addEventListener("wheel",this._containerWheelFun,{passive:false}),this._$canvas.addEventListener("touchstart",this._touchstartFun,{passive:false}),this._$canvas.addEventListener("touchmove",this._touchmoveFun,{passive:false}),this._$canvas.addEventListener("touchend",this._touchendFun,{passive:false}));},_proto._removeEventListener=function(){this._$canvas&&(this._$canvas.removeEventListener("mousemove",this._mousemoveFun),this._$canvas.removeEventListener("mouseover",this._mouseoverFun),this._$canvas.removeEventListener("mouseleave",this._mouseleaveFun),this._$canvas.removeEventListener("mousedown",this._mousedownFun),this._$canvas.removeEventListener("mouseup",this._mouseUpFun),this._$canvas.removeEventListener("click",this._clickFun),this._$canvas.removeEventListener("wheel",this._mousewheelFun),this.$container.removeEventListener("wheel",this._containerWheelFun),this._$canvas.removeEventListener("touchstart",this._touchstartFun),this._$canvas.removeEventListener("touchmove",this._touchmoveFun),this._$canvas.removeEventListener("touchend",this._touchendFun));},_proto._mousedownFun=function(e){this.readOnly||(this._isMouseDown=true,this._mousePosition=e.pageX,this._oldTime=this.current,this._dragMoved=false,this._hideHoverTip(),this._hoverActive=false,null==this.options.onDragStart||this.options.onDragStart.call(this.options,this.current));},_proto._mouseoverFun=function(){this.readOnly||(this._isOver=true,this._containerRect=this.$container.getBoundingClientRect());},_proto._mouseleaveFun=function(e){this.readOnly||(this._isOver=false,this._containerRect=null,this._hideHoverTip(),this._hoverActive=false,this._draw(),this._moveEndOrTouchEndFun(e));},_proto._containerWheelFun=function(e){e.preventDefault();},_proto._mouseUpFun=function(e){this._moveEndOrTouchEndFun(e);},_proto._clickFun=function(e){if(!this.readOnly&&this.options.enabledClickToSeek)if(this._dragMoved)this._dragMoved=false;else {var rect=this._getContainerRect(),x=e.clientX-rect.left,date=this._hoverTimeAt(x);this._update({current:date}),null==this.options.onClickSeek||this.options.onClickSeek.call(this.options,date);}},_proto._mousemoveFun=function(e){if(!this.readOnly)if(this._isMouseDown&&this._isOver)this._moveUpdateFun(e.pageX);else {var left=parseInt(this.$container.offsetLeft+"",10);this._mousePosition=e.pageX-left;var rect=this._getContainerRect();this._hoverActive=true,this._hoverLineX=e.clientX-rect.left,this._scheduleDraw(),this._showHoverTip(e.clientX-rect.left,e.clientY-rect.top);}},_proto._mousewheelFun=function(e){e.preventDefault();},_proto._touchstartFun=function(e){if(!this.readOnly)if(this._oldTime=this.current,this._isOver=true,1===e.touches.length){var touch=e.touches[0];this._isMouseDown=true,this._mousePosition=touch.clientX;}else 2===e.touches.length&&(this._lastTouchDist=getTouchDistance(e.touches));},_proto._touchmoveFun=function(e){if(e.preventDefault(),e.stopPropagation(),!this.readOnly)if(1===e.touches.length){var touch=e.touches[0];this._moveUpdateFun(touch.clientX);}else 2===e.touches.length&&(this._lastTouchDist=getTouchDistance(e.touches));},_proto._touchendFun=function(e){this.readOnly||this._moveEndOrTouchEndFun(e);},_proto._moveEndOrTouchEndFun=function(e){e.preventDefault(),this.readOnly||this._isMouseDown&&(this._isMouseDown=false,this._moved&&(this._moved=false,this._update({current:this.current}),this._oldTime=this.current,null==this.options.onDragEnd||this.options.onDragEnd.call(this.options,this.current,this._isOver)),this._isOver&&Math.abs(this._mousePosition-(e.pageX||0))>5&&(null==this.options.onChange||this.options.onChange.call(this.options,this.current)),this._mousePosition=0,this._lastTouchDist=0);},_proto._moveUpdateFun=function(x){var mouseOffset=this._mousePosition-x;if(0!==mouseOffset){if(this._oldTime){var currentTime=this._oldTime.getTime()+1e3*parseInt(mouseOffset/this._curScaleSpacing*this._timeWidthArray[0]+"",10);this._update({current:new Date(currentTime)}),null==this.options.onDragging||this.options.onDragging.call(this.options,new Date(currentTime));}this._moved=true,this._dragMoved=true;}},_create_class$3(TimeLine,[{key:"_curScaleSpacing",get:function(){var _this__timeWidthArray,_this__timeWidthArray1;return Math.floor((null==(_this__timeWidthArray=this._timeWidthArray)?void 0:_this__timeWidthArray[1])-(null==(_this__timeWidthArray1=this._timeWidthArray)?void 0:_this__timeWidthArray1[1])*+(this.timeWidth%1/2).toFixed(2))}}]),TimeLine}(BaseTimeLine);TimeLine.TIME_WIDTH=TIME_WIDTH;
+	var _$TIMELINE_LOCALES$_={zh:{title:"包含{{len}}段录像",foldTitle:"{{len}}个录像"},en:{title:"Includes {{len}} {{unit}}",foldTitle:"{{len}} {{unit}}"}};function _create_class$2(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}var _$BASE_TIME_LINE_DEFAULT_OPTIONS$_={current:new Date,language:"zh",timeSections:[],readOnly:false,className:"",timeWidth:0,width:"100%",timePointColor:"#FFF",timeTextColor:"#FFF",timeScaleColor:"#FFF",timeSectionColor:"rgba(24, 144, 255, 0.5)",timeAxisBgColor:"#000",currentTimeBgColor:"#648FFC",currentTimeColor:"#FFFFFF",hoverTipBgColor:"rgba(0, 0, 0, 0.75)",hoverTipColor:"#FFFFFF",hoverLineColor:"rgba(255, 255, 255, 0.8)",opBtnBorderColor:"rgba(153, 153, 153, 1)",opBtnActiveColor:"rgba(54, 159, 255, 1)",opBtnDisabledBorderColor:"rgba(222, 222, 222, 1)",pickerHeaderColor:"rgba(44, 44, 44, 1)",pickerCloseColor:"#20262c",pickerCloseActiveColor:"rgba(240, 87, 87, 1)",pickerItemTitleColor:"rgba(102, 102, 102, 1)",coverFoldPlaceholderBackColor:"#cccccc",coverFoldPlaceholderFrontColor:"#ededed",coverFoldOverlayColor:"rgba(0, 0, 0, 0.3)",itemCoverPlaceholderStartColor:"rgb(183, 195, 207)",itemCoverPlaceholderEndColor:"rgb(212, 209, 209)",timeTextFontSize:12,timeTextFontFamily:"serif",scaleLineWidth:1,onChange:function(){},onDragStart:function(){},onDragging:function(){},onDragEnd:function(){},onDestroy:function(){}},BaseTimeLine=function(){function BaseTimeLine(container,options){if(this._current=new Date,this._readOnly=false,this._width=0,this._height=0,this._destroyed=false,this._timeWidth=0,this._timeSections=[],this.$container=container,!container)throw new Error("container is required");var left,right;this.options=deepmerge(_$BASE_TIME_LINE_DEFAULT_OPTIONS$_,options,{clone:false}),this.options.timeSections&&Array.isArray(this.options.timeSections)&&(this._timeSections=this.options.timeSections),this.options.readOnly&&(this.readOnly=this.options.readOnly),this.options.className&&this.$container.classList.add(this.options.className),this.$container.style.position="relative",this.options.current&&(left=this.options.current,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)?this._current=this.options.current||new Date:this._current=new Date,this.i18n=new I18n(deepmerge(_$TIMELINE_LOCALES$_,this.options.locales||{},{clone:false}),{defaultLocale:this.options.language||"zh"}),this._timeWidth=this.options.timeWidth||0,this._resize(this.options.width||"100%",this.options.height);}var _proto=BaseTimeLine.prototype;return _proto.setReadOnly=function(readOnly){this.readOnly=readOnly;},_proto.update=function(current){this._current=current;},_proto.updateTimeSections=function(timeSections){timeSections&&Array.isArray(timeSections)&&(this._timeSections=timeSections);},_proto.resize=function(width,height){this._resize(width,height);},_proto._resize=function(width,height){var cssText="";/^\d+(\.\d+)?$/.test(width+"")?cssText+="width: "+width+"px;":width&&(cssText+="width: "+width+";"),/^\d+(\.\d+)?$/.test(height+"")?cssText+="height: "+height+"px;":height&&(cssText+="height: "+height+";"),this.$container&&(this.$container.style.cssText+=cssText),this._width=Math.floor(this.$container.clientWidth),this._height=Math.floor(this.$container.clientHeight);},_proto.setTimeWidth=function(timeWidth){[0,1,2,3,4,5].includes(timeWidth)&&(this._timeWidth=timeWidth);},_proto.destroy=function(){this._current=null,null==this.options.onDestroy||this.options.onDestroy.call(this.options),this._timeSections=[],this._readOnly=false,this._destroyed=true;},_create_class$2(BaseTimeLine,[{key:"current",get:function(){return this._current},set:function(current){this._current=current;}},{key:"readOnly",get:function(){return this._readOnly},set:function(readOnly){this._readOnly!==readOnly&&(this._readOnly=readOnly,this.$container.style.cursor=readOnly?"not-allowed":"pointer");}},{key:"timeSections",get:function(){return this._timeSections}},{key:"width",get:function(){return this._width}},{key:"height",get:function(){return this._height}},{key:"timeWidth",get:function(){return this._timeWidth}}]),BaseTimeLine}();BaseTimeLine.LOCALES=_$TIMELINE_LOCALES$_;var TimeLineUtil=function(){function TimeLineUtil(){}return TimeLineUtil.timeToSecond=function(time){var e=time.split(":");return 60*Number(e[0])*60+60*Number(e[1])+(Number(e[2])||0)},TimeLineUtil.minuteToTime=function(minute){var hour=Math.floor(minute/60),m=minute%60;return (hour>9?hour:"0"+hour)+":"+(m>9?m:"0"+m)},TimeLineUtil.timeToMinute=function(time){var e=time.split(":");return 60*Number(e[0])+Number(e[1])},TimeLineUtil.tranTimeToString=function(start,end){var _DateTime_toDate,_DateTime_toDate1,secondNum=Math.floor((null==(_DateTime_toDate=distExports$4.DateTime.toDate(end))?void 0:_DateTime_toDate.getTime())-(null==(_DateTime_toDate1=distExports$4.DateTime.toDate(start))?void 0:_DateTime_toDate1.getTime()))/1e3,second=secondNum%60,minute=Math.floor(secondNum/60);return (minute>0?distExports$4.DateTime.fillZero(minute)+"'":"0'")+distExports$4.DateTime.fillZero(second)+"''"},TimeLineUtil}(),_$TIMELINE_ICONS$__tip='<svg viewBox="0 0 57 24" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="tip">\n        <path class="ez-time-line-icon-tip" fill-rule="evenodd" d="m4,0l44,0c2.2091,0 4,1.7909 4,4l0,3.8218l4.9399,3.3572c0.5839,0.3968 0.5839,1.2574 0,1.6542l-4.9399,3.3572l0,3.8096c0,2.2091 -1.7909,4 -4,4l-44,0c-2.2091,0 -4,-1.7909 -4,-4l0,-16c0,-2.2091 1.7909,-4 4,-4z"/>\n  </svg>',_$TIMELINE_ICONS$__plus='\n  <svg viewBox="0 0 16 16" stroke="currentColor" fill="none" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="plus">\n    <path d="M0 0L10.6667 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0,1,-1,0,8,2.66663)"/>\n    <path d="M2.66669 8L13.3334 8" stroke-linecap="round" stroke-width="1.5"/>\n  </svg>\n  ',_$TIMELINE_ICONS$__minus='\n    <svg viewBox="0 0 16 16" stroke="currentColor" fill="none" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="minus">\n      <path d="M2.66669 8L13.3334 8" stroke-linecap="round" stroke-width="1.5"/>\n    </svg>\n  ',_$TIMELINE_ICONS$__close='\n    <svg viewBox="0 0 24 24" fill="none" width="1em" height="1em" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="close">\n\t    <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,0.707114,-0.707114,0.707099,6.34277,6.34326)" />\n\t\t  <path d="M0 0L15.9998 0" stroke-linecap="round" stroke-width="1.5" transform="matrix(0.707099,-0.707114,0.707114,0.707099,6.34277,17.6567)" />\n    </svg>\n  ',_$TIMELINE_ICONS$__pause='<svg viewBox="0 0 20 20" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="pause">\n\t\t  <path d="M9.43914 2.47881L13.4688 8.4912C14.3594 9.81998 13.4071 11.6047 11.8074 11.6047L3.74811 11.6047C2.14849 11.6047 1.19616 9.81998 2.08675 8.4912L6.11641 2.47881C6.90863 1.2968 8.64693 1.2968 9.43914 2.47881Z" fill-rule="evenodd" transform="matrix(0,1,-1,0,16.5781,2.22229)" />\n    </svg>\n  ',_$TIMELINE_ICONS$__picture='\n    <svg viewBox="0 0 19.1613 19.4583" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="picture">\n        <path d="M15.3276 2.63477L3.83173 2.63477C2.70848 2.63477 1.79541 3.55027 1.79541 4.68419L1.79541 14.7737C1.79541 15.9076 2.70848 16.8231 3.83173 16.8231L15.3276 16.8231C16.4504 16.8231 17.364 15.9074 17.364 14.7737L17.364 4.68419C17.364 3.55027 16.4509 2.63477 15.3276 2.63477ZM3.83247 3.851L15.3284 3.851C15.7936 3.851 16.1671 4.22551 16.1671 4.68429L16.1671 14.7738C16.1671 15.2323 15.7932 15.6071 15.3284 15.6071L3.83247 15.6071C3.36725 15.6071 2.99373 15.2326 2.99373 14.7738L2.99373 12.2622L6.7356 9.56381L6.78139 9.53916C6.84532 9.51493 6.91856 9.52524 6.9742 9.56947L13.2644 14.5698L13.3381 14.62C13.5918 14.7666 13.9197 14.7063 14.105 14.4658C14.3089 14.2014 14.263 13.8192 14.0026 13.6122L7.71239 8.61184L7.60526 8.5346C7.12945 8.22451 6.51026 8.23473 6.04222 8.57224L2.99373 10.7706L2.99373 4.68429C2.99373 4.22551 3.36725 3.851 3.83247 3.851ZM10.5794 7.29679C10.5794 6.06542 11.5624 5.0672 12.7749 5.0672C13.9875 5.0672 14.9705 6.06542 14.9705 7.29679C14.9705 8.52817 13.9875 9.52639 12.7749 9.52639C11.5624 9.52639 10.5794 8.52817 10.5794 7.29679ZM13.7722 7.2967C13.7722 6.73699 13.3254 6.28325 12.7742 6.28325C12.223 6.28325 11.7762 6.73699 11.7762 7.2967C11.7762 7.85642 12.223 8.31015 12.7742 8.31015C13.3254 8.31015 13.7722 7.85642 13.7722 7.2967Z" fill-rule="evenodd"/>\n    </svg>\n    ',_$TIMELINE_ICONS$__event='\n    <svg viewBox="0 0 20 20" fill="currentColor" width="1em" height="1em" focusable="false" aria-hidden="true" data-icon="event">\n      <path d="M14.074 2.91669C15.4547 2.91669 16.574 4.03597 16.574 5.41669V15.8334C16.574 17.2141 15.4547 18.3334 14.074 18.3334H5.32968C3.94897 18.3334 2.82968 17.2141 2.82968 15.8334V5.41669C2.82968 4.03597 3.94897 2.91669 5.32968 2.91669H14.074ZM5.32968 4.16669C4.63933 4.16669 4.07968 4.72633 4.07968 5.41669V15.8334C4.07968 16.5237 4.63933 17.0834 5.32968 17.0834H14.074C14.7644 17.0834 15.324 16.5237 15.324 15.8334V5.41669C15.324 4.72633 14.7644 4.16669 14.074 4.16669H5.32968Z"/>\n      <path d="M11.7228 8.54169C12.068 8.54169 12.3478 8.82151 12.3478 9.16669C12.3478 9.51186 12.068 9.79169 11.7228 9.79169H6.56897C6.22379 9.79169 5.94397 9.51186 5.94397 9.16669C5.94397 8.82151 6.22379 8.54169 6.56897 8.54169H11.7228Z"/>\n      <path d="M9.14659 11.875C9.49165 11.8751 9.77159 12.1549 9.77159 12.5C9.77159 12.8451 9.49165 13.1249 9.14659 13.125H6.56927C6.2241 13.125 5.94427 12.8452 5.94427 12.5C5.94427 12.1548 6.2241 11.875 6.56927 11.875H9.14659Z"/>\n      <path d="M7.09341 4.46613C7.09341 4.8113 6.81359 5.09113 6.46841 5.09113C6.12324 5.09113 5.84341 4.8113 5.84341 4.46613V2.47394C5.84341 2.12876 6.12324 1.84894 6.46841 1.84894C6.81359 1.84894 7.09341 2.12876 7.09341 2.47394V4.46613Z"/>\n      <path d="M13.5607 4.46613C13.5607 4.8113 13.2809 5.09113 12.9357 5.09113C12.5905 5.09113 12.3107 4.8113 12.3107 4.46613V2.47394C12.3107 2.12876 12.5905 1.84894 12.9357 1.84894C13.2809 1.84894 13.5607 2.12876 13.5607 2.47394V4.46613Z"/>\n    </svg>\n    ',TIME_WIDTH=[[1,10,10,"单位 1秒"],[60,20,5,"单位 1分钟"],[600,20,6,"单位 10分钟"],[3600,30,6,"单位 1小时"],[14400,40,2,"单位 4小时"],[43200,80,2,"单位 12小时"]],MOBILE_TIME_WIDTH=[[1,10,10,"单位 1分钟"],[10,20,5,"单位 10分钟"],[30,20,6,"单位 30分钟"],[60,30,6,"单位 1小时"],[120,40,2,"单位 2小时"],[240,80,2,"单位 4小时"]],__$IMAGE_LAZY_LOADER_DEFAULT_OPTIONS$__={targets:[],root:null,rootMargin:"0px",threshold:.1,loadingClass:"ez-lazy-image-loading",loadedClass:"ez-lazy-image-loaded",loadedErrorClass:"ez-lazy-image-error",onLoadError:function(){}},ImageLazyLoader=function(){function ImageLazyLoader(options){ void 0===options&&(options={}),this.options=Object.assign({},__$IMAGE_LAZY_LOADER_DEFAULT_OPTIONS$__,options),this._observer=null,this._init();}var _proto=ImageLazyLoader.prototype;return _proto._init=function(){var _this=this;ImageLazyLoader.isSupported&&(this._observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){var _this__observer;entry.isIntersecting&&(_this._loadImage(entry.target),null==(_this__observer=_this._observer)||_this__observer.unobserve(entry.target));});},this.options)),this.addImages(this.options.targets);},_proto._loadImage=function(img){var _img_classList,_img_classList1,_img_classList2,_this=this;if(img&&!(null==(_img_classList=img.classList)?void 0:_img_classList.contains(this.options.loadingClass))&&!(null==(_img_classList1=img.classList)?void 0:_img_classList1.contains(this.options.loadedClass))&&!(null==(_img_classList2=img.classList)?void 0:_img_classList2.contains(this.options.loadedErrorClass))&&img.hasAttribute("data-src")){var _this1=this;img.classList.add(this.options.loadingClass);var tempImg=new Image;tempImg.onload=function(){img.src=img.dataset.src,img.classList.remove(_this.options.loadingClass),img.classList.add(_this.options.loadedClass),img.dispatchEvent(new Event("lazyloaded"));},tempImg.onerror=function(e){img.classList.remove(_this.options.loadingClass),img.classList.add(_this.options.loadedErrorClass),null==_this1.options.onLoadError||_this1.options.onLoadError.call(_this1.options,img);},tempImg.src=img.dataset.src;}},_proto.addImages=function(targets){var _this=this;(null==targets?void 0:targets.length)&&targets.forEach(function(target){var _this__observer;(null==target?void 0:target.hasAttribute("data-src"))&&(ImageLazyLoader.isSupported&&_this._observer?null==(_this__observer=_this._observer)||_this__observer.observe(target):_this._loadImage(target));});},_proto.destroy=function(){this._observer&&(this._observer.disconnect(),this._observer=null);},ImageLazyLoader}();function _create_class$1(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _extends$1$1(){return _extends$1$1=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$1$1.apply(this,arguments)}function _set_prototype_of$1$1(o,p){return _set_prototype_of$1$1=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$1$1(o,p)}ImageLazyLoader.isSupported="IntersectionObserver"in window;var _$MOBILE_TIME_LINE_DEFAULT_OPTIONS$_=Object.assign({},_$BASE_TIME_LINE_DEFAULT_OPTIONS$_,{height:400,width:"100%",timeWidth:0,readOnly:false,timePointColor:"#648FFC",timeTextColor:"#666666",timeScaleColor:"transparent",timeSectionColor:"#369FFF",timeAxisBgColor:"#BDCDFF",currentTimeBgColor:"#648FFC",currentTimeColor:"#FFFFFF",showTimeWidthBtn:true,showCoverFold:true}),MobileTimeLine=function(BaseTimeLine){function MobileTimeLine(container,options){var _this;return (_this=BaseTimeLine.call(this,container,deepmerge(_$MOBILE_TIME_LINE_DEFAULT_OPTIONS$_,options,{clone:false}))||this)._isTouchStart=false,_this._dragScroll=null,_this._moveStartX=0,_this._moveStartY=0,_this._imageLazyLoader=null,_this._imageLazyLoaderPicker=null,_this.state={start:"00:00:00",end:"24:00:00",current:null,timeArr:[],availTimeLine:[],index:0},_this._onImageError=_this._onImageError.bind(_this),_this._plusClick=_this._plusClick.bind(_this),_this._minusClick=_this._minusClick.bind(_this),_this._onPickerClose=_this._onPickerClose.bind(_this),_this._onClickItem=_this._onClickItem.bind(_this),_this._onClickCoverFold=_this._onClickCoverFold.bind(_this),_this._imageLazyLoader=new ImageLazyLoader({root:_this.$container,onLoadError:function(img){null==_this._onImageError||_this._onImageError.call(_this,img);}}),_this._render(),_this.options.timeSections&&Array.isArray(_this.options.timeSections)&&_this.updateTimeSections(_this.options.timeSections),_this._applyCssVars(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$1$1(subClass,superClass);}(MobileTimeLine,BaseTimeLine);var _proto=MobileTimeLine.prototype;return _proto._applyCssVars=function(){var opts,_this=this,vars=(opts=this.options,{"--ez-time-line-axis-border-color":String(opts.timeAxisBgColor),"--ez-time-line-section-color":String(opts.timeSectionColor),"--ez-time-line-text-color":String(opts.timeTextColor),"--ez-time-line-point-color":String(opts.timePointColor),"--ez-time-line-current-bg":String(opts.currentTimeBgColor),"--ez-time-line-current-color":String(opts.currentTimeColor),"--ez-time-line-op-btn-border":String(opts.opBtnBorderColor),"--ez-time-line-op-btn-active":String(opts.opBtnActiveColor),"--ez-time-line-op-btn-disabled-border":String(opts.opBtnDisabledBorderColor),"--ez-time-line-picker-header":String(opts.pickerHeaderColor),"--ez-time-line-picker-close":String(opts.pickerCloseColor),"--ez-time-line-picker-close-active":String(opts.pickerCloseActiveColor),"--ez-time-line-picker-item-title":String(opts.pickerItemTitleColor),"--ez-time-line-cover-fold-placeholder-back":String(opts.coverFoldPlaceholderBackColor),"--ez-time-line-cover-fold-placeholder-front":String(opts.coverFoldPlaceholderFrontColor),"--ez-time-line-cover-fold-overlay":String(opts.coverFoldOverlayColor),"--ez-time-line-item-cover-placeholder-start":String(opts.itemCoverPlaceholderStartColor),"--ez-time-line-item-cover-placeholder-end":String(opts.itemCoverPlaceholderEndColor),"--ez-time-line-hover-tip-bg":String(opts.hoverTipBgColor),"--ez-time-line-hover-tip-color":String(opts.hoverTipColor)});Object.entries(vars).forEach(function(param){var name=param[0],value=param[1];return _this.$container.style.setProperty(name,value)});},_proto.setReadOnly=function(readOnly){BaseTimeLine.prototype.setReadOnly.call(this,readOnly),this._dragScroll&&(this._dragScroll.readonly=readOnly);},_proto.setTimeWidth=function(timeWidth){MOBILE_TIME_WIDTH[timeWidth]&&(BaseTimeLine.prototype.setTimeWidth.call(this,timeWidth),this._matchTimeDot());},_proto.updateTimeSections=function(timeSections,defaultIndex){BaseTimeLine.prototype.updateTimeSections.call(this,timeSections);var list=timeSections.map(function(record){return _extends$1$1({},record,{startTime:distExports$4.DateTime.format(record.startTime,"HH:mm:ss"),endTime:distExports$4.DateTime.format(record.endTime,"HH:mm:ss")})});if(list.length>0){ void 0===defaultIndex&&(defaultIndex=list.length-1);var current=this.state.current;this._setState({availTimeLine:list,start:list[defaultIndex].startTime,end:list[defaultIndex].endTime,current:null===current?list[defaultIndex].startTime:current}),this._matchTimeDot();}else this._setState({availTimeLine:[],current:distExports$4.DateTime.format(this.current||(new Date).getTime(),"HH:mm:ss")}),this._matchTimeDot();},_proto.update=function(time){var _this__dragScroll;time&&!(null==(_this__dragScroll=this._dragScroll)?void 0:_this__dragScroll.isDragging)&&(this._setState({current:distExports$4.DateTime.format(time,"HH:mm:ss")}),this._currentOffsetH());},_proto.destroy=function(){var _this__dragScroll;if(this._scrollTimer&&(clearInterval(this._scrollTimer),this._scrollTimer=null),this._$currentTime)try{this.$container.removeChild(this._$currentTime),this._$currentTime=null;}catch(error){}if(this._$itemContainer&&this._$itemList)try{this._$itemContainer.removeChild(this._$itemList),this._$itemList=null;}catch(error){}if(this._$itemContainer)try{this.$container.removeChild(this._$itemContainer),this._$itemContainer=null;}catch(error){}if(this._$op)try{this.$container.removeChild(this._$op),this._$op=null;}catch(error){}this._picker&&(this._picker.destroy(),this._picker=null),this._imageLazyLoader&&(this._imageLazyLoader.destroy(),this._imageLazyLoader=null),this._imageLazyLoaderPicker&&(this._imageLazyLoaderPicker.destroy(),this._imageLazyLoaderPicker=null),this._removeEventListener(),null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.destroy(),this._dragScroll=null,BaseTimeLine.prototype.destroy.call(this);},_proto._setState=function(obj){var _this=this;Object.keys(obj).forEach(function(key){var _this__dragScroll,_this_timeSections_;"current"===key&&obj[key]?(_this._setCurrentDOM(obj[key]),_this.state.current===obj[key]||(null==(_this__dragScroll=_this._dragScroll)?void 0:_this__dragScroll.isDragging)||(_this.state[key]=obj[key],_this.current=new Date(distExports$4.DateTime.format((null==(_this_timeSections_=_this.timeSections[0])?void 0:_this_timeSections_.endTime)||(new Date).getTime(),"YYYY-MM-DD")+"T"+obj[key]),null==_this.options.onChange||_this.options.onChange.call(_this.options,_this.current))):_this.state[key]=obj[key];});},_proto._setCurrentDOM=function(time){this._$currentTime&&(this._$currentTime.querySelector(".ez-time-line-current-value").innerHTML=time);},_proto._matchTimeDot=function(){for(var scaleWidth=this._scaleWidth,timeArr=[],minute=TimeLineUtil.timeToMinute("24:00:00"),i=minute=Math.floor(minute/scaleWidth)*scaleWidth;i>=0;){var marginTop=0,marginBottom=0;i==minute&&(marginTop=70),0==i&&(marginBottom=this.$container.clientHeight-70);var time=TimeLineUtil.minuteToTime(i);timeArr.push({id:i,current:time,label:"a"+i,marginTop:marginTop,marginBottom:marginBottom,recArr:[],coverArr:this._filterTimeSectionsByTime(time)}),i-=scaleWidth;}this._setState({timeArr:timeArr}),this._matchRecTimeDot();},_proto._matchRecTimeDot=function(){var _this_state=this.state,availTimeLine=_this_state.availTimeLine,timeArr=_this_state.timeArr,scaleWidth=this._scaleWidth,len=availTimeLine.length;if(0===len)for(var j=0;j<timeArr.length;j++)timeArr[j].recArr=[];else {for(var k=0;k<timeArr.length;k++)timeArr[k].recArr=[];for(var i=0;i<len;i++){var stAvailPercent,etAvailPercent,temp=availTimeLine[i],st=TimeLineUtil.timeToSecond(temp.startTime),et=TimeLineUtil.timeToSecond(temp.endTime),stMinute=Math.floor(st/(60*scaleWidth))*scaleWidth;stAvailPercent=(st-60*stMinute)/scaleWidth;var etMinute=Math.floor(et/(60*scaleWidth))*scaleWidth;etAvailPercent=(et-60*etMinute)/scaleWidth;for(var j1=0;j1<timeArr.length;j1++)if(timeArr[j1].id==stMinute&&timeArr[j1].id==etMinute){var height=etAvailPercent-stAvailPercent,top=60-etAvailPercent;timeArr[j1].recArr.push({height:height,top:top});}else timeArr[j1].id==stMinute?timeArr[j1].recArr.push({height:60-stAvailPercent,top:0}):timeArr[j1].id==etMinute?timeArr[j1].recArr.push({height:etAvailPercent,top:60-etAvailPercent}):timeArr[j1].id>stMinute&&timeArr[j1].id<etMinute&&timeArr[j1].recArr.push({height:60,top:0});}}this._setState({timeArr:timeArr}),this._renderDateLine();},_proto._renderDateLine=function(){var _this=this,timeArr=this.state.timeArr,container=this._$itemList;container.innerHTML="",timeArr.forEach(function(item,index){var _this__imageLazyLoader,timeItemDOM=document.createElement("div");timeItemDOM.setAttribute("class","ez-time-line-time-scale-area"),item.marginTop&&(timeItemDOM.style.cssText+="margin-top: "+item.marginTop+"px;"),item.marginBottom&&(timeItemDOM.style.cssText+="margin-bottom: "+item.marginBottom+"px;"),timeItemDOM.style.cssText+="border-right-color: "+String(_this.options.timeAxisBgColor)+";",timeItemDOM.setAttribute("data-time",item.current),timeItemDOM.setAttribute("data-index",index+""),document.createElement("div").setAttribute("class","ez-time-line-scale");var timeItemHtml="";item.coverArr.length&&_this.options.showCoverFold&&(timeItemHtml+='\n            <div class="ez-time-line-time-cover-fold '+(item.coverArr.length>1?"ez-time-line-time-cover-fold-multiple":"")+'"\n            data-start="'+item.current+'">\n              '+(item.coverArr.length>1?'<div class="ez-time-line-cover-fold-placeholder" style="color: #FFF"></div>':"")+'\n              <div class="ez-time-line-time-cover-fold-img">\n                <img data-src="'+_this._setImageScr(item.coverArr[0].coverPic)+'" class="ez-time-line-img"/>\n                <span class="ez-time-line-time-cover-fold-len">\n                '+(item.coverArr.length>1?_this.i18n.t("foldTitle",{len:item.coverArr.length,unit:"videos"}):""+distExports$4.DateTime.format(item.coverArr[0].startTime,"HH:mm"))+"\n                </span>\n                "+(1===item.coverArr.length?'<span class="ez-time-line-time-cover-fold-time">'+TimeLineUtil.tranTimeToString(item.coverArr[0].startTime,item.coverArr[0].endTime)+"</span>":"")+'\n                <span class="ez-time-line-time-cover-fold-pause">'+_$TIMELINE_ICONS$__pause+"</span>\n              </div>\n            </div>"),item.recArr.forEach(function(i){timeItemHtml+='<div class="ez-time-line-time-unavail"\n                              style="height: '+i.height+"px;background-color:"+String(_this.options.timeSectionColor)+"; top: "+i.top+'px">\n                        </div>';}),timeItemHtml+="<div id="+item.label+' class="ez-time-line-time-label" style="color: '+String(_this.options.timeTextColor)+'">'+item.current+"</div>",timeItemDOM.innerHTML=timeItemHtml,container.appendChild(timeItemDOM),item.coverArr.length&&_this.options.showCoverFold&&(null==(_this__imageLazyLoader=_this._imageLazyLoader)||_this__imageLazyLoader.addImages(container.querySelectorAll("img.ez-time-line-img")||[]));}),this._currentOffsetH();},_proto._currentOffsetH=function(){var current=this.state.current;if(current){var _this__dragScroll,y=(86400-TimeLineUtil.timeToSecond(current)||0)/this._scaleWidth;null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.scrollToY(y+60,false);}},_proto._render=function(){var _this=this;if(this._$currentTime=document.createElement("div"),this._$currentTime.classList.add("ez-time-line-current"),this._$currentTime.innerHTML='<div class="ez-time-line-current-content" style="color: '+String(this.options.currentTimeBgColor)+'">\n      <span class="ez-time-line-current-tip">'+_$TIMELINE_ICONS$__tip+'</span>\n      <span class="ez-time-line-current-tip-line" style="background-color: '+String(this.options.timePointColor)+';"></span>\n      <div class="ez-time-line-current-value" style="color: '+String(this.options.currentTimeColor)+'">00:00:00</div>\n    </div>',this.$container.appendChild(this._$currentTime),this._$itemContainer=document.createElement("div"),this._$itemContainer.classList.add("ez-time-line-container"),this.$container.appendChild(this._$itemContainer),this._dragScroll=new DragScroll(this._$itemContainer,{hideScrollbar:true,onChange:function(state){var result=_this._offsetYToTime(state.y);result[1]!==_this.state.current&&_this._setCurrentDOM(result[0]>=86400?"23:59:59":result[1]);},onDragStart:function(e){_this._moveStartX=e.clientX,_this._moveStartY=e.clientY,null==_this.options.onDragStart||_this.options.onDragStart.call(_this.options,_this.state.current);},onDragging:function(){null==_this.options.onDragging||_this.options.onDragging.call(_this.options,_this.state.current);},onDragEnd:function(){var _this__dragScroll,result=_this._offsetYToTime(null==(_this__dragScroll=_this._dragScroll)?void 0:_this__dragScroll.currentY);result[1]!==_this.state.current&&_this._setState({current:result[0]>=86400?"23:59:59":result[1]}),null==_this.options.onDragEnd||_this.options.onDragEnd.call(_this.options,_this.state.current);}}),/\d/.test(this.options.height))this._$itemContainer.style.cssText+="height: "+this.options.height+"px";else if("string"==typeof this.options.height)this._$itemContainer.style.cssText+="height: "+this.options.height;else {var height=this.$container.clientHeight;this._$itemContainer.style.cssText+="height: "+height+"px";}this._$itemList=document.createElement("div"),this._$itemList.classList.add("ez-time-line-item"),this._dragScroll.$content.appendChild(this._$itemList),this.options.showTimeWidthBtn&&(this._$op=document.createElement("div"),this._$op.classList.add("ez-time-line-op"),this._$op.innerHTML='<span class="ez-time-line-op-wrapper"><span class="ez-time-line-icon-plus">'+_$TIMELINE_ICONS$__plus+'</span> <span class="ez-time-line-icon-minus">'+_$TIMELINE_ICONS$__minus+"</span></span>",this.$container.appendChild(this._$op)),this.options.showCoverFold&&(this._picker=new Picker(null,{isMobile:true,wrapClassName:"ez-time-line-picker",onOpenChange:function(isOpen){var _this_options_onPickerOpenChange,_this_options;null==(_this_options=_this.options)||null==(_this_options_onPickerOpenChange=_this_options.onPickerOpenChange)||_this_options_onPickerOpenChange.call(_this_options,isOpen);}}),this._imageLazyLoaderPicker=new ImageLazyLoader({root:this._picker.$body,onLoadError:function(img){null==_this._onImageError||_this._onImageError.call(_this,img);}})),this._addEventListener();},_proto._addEventListener=function(){var _this__$op_querySelector,_this__$op_querySelector1;this.options.showTimeWidthBtn&&this._$op&&(null==(_this__$op_querySelector=this._$op.querySelector(".ez-time-line-icon-plus"))||_this__$op_querySelector.addEventListener("click",this._plusClick,false),null==(_this__$op_querySelector1=this._$op.querySelector(".ez-time-line-icon-minus"))||_this__$op_querySelector1.addEventListener("click",this._minusClick,false));this._matchTimeDot(),this._picker&&(this._delegatePickerClose=delegate(this._picker.$body,".ez-time-line-picker-close","click",this._onPickerClose,false),this._delegateItemContent=delegate(this._picker.$body,".ez-time-line-picker-item-content","click",this._onClickItem,false),this._delegateCoverFold=delegate(this._$itemList,".ez-time-line-time-cover-fold","click",this._onClickCoverFold,false));},_proto._removeEventListener=function(){var _this__$op_querySelector,_this__$op_querySelector1,_this__picker_$body_querySelector,_this__picker_$body;this.options.showTimeWidthBtn&&this._$op&&(null==(_this__$op_querySelector=this._$op.querySelector(".ez-time-line-icon-plus"))||_this__$op_querySelector.removeEventListener("click",this._plusClick),null==(_this__$op_querySelector1=this._$op.querySelector(".ez-time-line-icon-minus"))||_this__$op_querySelector1.removeEventListener("click",this._minusClick));this._picker&&(null==(_this__picker_$body=this._picker.$body)||null==(_this__picker_$body_querySelector=_this__picker_$body.querySelector(".ez-time-line-picker-close"))||_this__picker_$body_querySelector.removeEventListener("click",this._onPickerClose),this._delegateItemContent&&(this._delegateItemContent.forEach(function(delegation){delegation.destroy();}),this._delegateItemContent=null),this._delegatePickerClose&&(this._delegatePickerClose.forEach(function(delegation){delegation.destroy();}),this._delegatePickerClose=null),this._delegateCoverFold&&(this._delegateCoverFold.forEach(function(delegation){delegation.destroy();}),this._delegateCoverFold=null));},_proto._plusClick=function(){var timeWidth=this.timeWidth+1;timeWidth>0&&timeWidth<MOBILE_TIME_WIDTH.length&&this.setTimeWidth(timeWidth);},_proto._minusClick=function(){var timeWidth=this.timeWidth-1;timeWidth>=0&&timeWidth<MOBILE_TIME_WIDTH.length&&this.setTimeWidth(Math.floor(timeWidth));},_proto._timeSectionsToGroupsByHour=function(list){var obj={};return list.forEach(function(item,index){var hour=distExports$4.DateTime.format(item.startTime,"HH");obj[+hour]?obj[+hour].push(_extends$1$1({},item,{_index:index})):obj[+hour]=[_extends$1$1({},item,{_index:index})];}),obj},_proto._filterTimeSectionsByTime=function(start){if(!start)return [];var startSecond=TimeLineUtil.timeToSecond(start+":00"),endSecond=TimeLineUtil.timeToSecond(start+":00")+60*this._scaleWidth;return this.timeSections.filter(function(item){var _$start=TimeLineUtil.timeToSecond(distExports$4.DateTime.format(item.startTime,"HH:mm:ss"));return _$start>=startSecond&&_$start<endSecond})},_proto._renderPickerContent=function(start){var _this__picker_innerHTML,_this__picker,_this__picker1,_this__picker2,_this__imageLazyLoaderPicker,_this=this,list=this._filterTimeSectionsByTime(start),hourGroups=this._timeSectionsToGroupsByHour(list);(null==(_this__picker=this._picker)||null==(_this__picker_innerHTML=_this__picker.innerHTML)||_this__picker_innerHTML.call(_this__picker,'<div class="ez-time-line-picker-container">\n        <div class="ez-time-line-picker-header">\n          <span class="ez-time-line-picker-close">'+_$TIMELINE_ICONS$__close+"</span>\n          "+this.i18n.t("title",{len:list.length,unit:list.length>1?"videos":"video"})+'\n        </div>\n        <div class="ez-time-line-picker-content">\n          <div class="ez-time-line-picker-list">\n             '+Object.keys(hourGroups).reverse().map(function(key){return '<div class="ez-time-line-picker-item">\n                  <div class="ez-time-line-picker-item-title">'+key+':00</div>\n                  <div class="ez-time-line-picker-item-list">\n                    '+hourGroups[key].reverse().map(function(item){return '<div class="ez-time-line-picker-item-content"\n                                      data-start="'+distExports$4.DateTime.format(item.startTime,"YYYYMMDDTHHmmssZ")+'"\n                                      data-end="'+distExports$4.DateTime.format(item.endTime,"YYYYMMDDTHHmmssZ")+'"\n                                      data-index="'+item._index+'">\n                                    <span class="ez-time-line-picker-item-time">'+distExports$4.DateTime.format(item.startTime,"HH:mm")+'</span>\n                                    <span class="ez-time-line-picker-item-duration">\n                                      '+TimeLineUtil.tranTimeToString(item.startTime,item.endTime)+'\n                                    </span>\n                                  <img class="ez-time-line-picker-item-cover" data-src="'+_this._setImageScr(item.coverPic)+'"/>\n                                </div>'}).join("")+"\n                  </div>\n              </div>"}).join("")+"\n          </div>\n          </div>\n        </div>\n      </div>"),null==(_this__picker1=this._picker)?void 0:_this__picker1.$body)&&(null==(_this__imageLazyLoaderPicker=this._imageLazyLoaderPicker)||_this__imageLazyLoaderPicker.addImages((null==(_this__picker2=this._picker)?void 0:_this__picker2.$body.querySelectorAll("img"))||[]));},_proto._onImageError=function(img){if(!img.hasAttribute("data-error")){var _img_parentNode,placeholder=document.createElement("div");placeholder.classList.add("ez-time-line-item-cover-placeholder"),placeholder.innerHTML=""+_$TIMELINE_ICONS$__picture,null==(_img_parentNode=img.parentNode)||_img_parentNode.appendChild(placeholder),img.setAttribute("data-error","true"),img.remove();}},_proto._onPickerClose=function(){this._picker&&(this._picker.open=false);},_proto._onClickItem=function(e){var _e_delegateTarget_getAttribute,_e_delegateTarget,index=null==(_e_delegateTarget=e.delegateTarget)||null==(_e_delegateTarget_getAttribute=_e_delegateTarget.getAttribute)?void 0:_e_delegateTarget_getAttribute.call(_e_delegateTarget,"data-index");this._picker&&(this._picker.open=false),null==this.options.onPickerSelect||this.options.onPickerSelect.call(this.options,this.timeSections[+index]);},_proto._onClickCoverFold=function(e){var _e_delegateTarget_parentElement_getAttribute,_e_delegateTarget_parentElement,_e_delegateTarget;e.preventDefault();var time=null==(_e_delegateTarget=e.delegateTarget)||null==(_e_delegateTarget_parentElement=_e_delegateTarget.parentElement)||null==(_e_delegateTarget_parentElement_getAttribute=_e_delegateTarget_parentElement.getAttribute)?void 0:_e_delegateTarget_parentElement_getAttribute.call(_e_delegateTarget_parentElement,"data-time"),moveX=Math.abs(this._moveStartX-e.clientX),moveY=Math.abs(this._moveStartY-e.clientY);this._picker&&time&&!(moveX>=1||moveY>=1)&&(this._renderPickerContent(time),this._picker.open=true);},_proto._setImageScr=function(src){if(src){var query="x=200&"+(this.options.coverQuery||"");return src+(src.includes("?")?"&":"?")+query}return ""},_proto._offsetYToTime=function(offsetY){var _this__dragScroll,y=offsetY;offsetY<60&&(y=60,null==(_this__dragScroll=this._dragScroll)||_this__dragScroll.scrollToY(y));var second=86400-Math.floor((y-60)*this._scaleWidth);return [second,distExports$4.DateTime.fillZero(Math.floor(second/3600))+":"+distExports$4.DateTime.fillZero(Math.floor(second%3600/60))+":"+distExports$4.DateTime.fillZero(second%60)]},_create_class$1(MobileTimeLine,[{key:"_scaleWidth",get:function(){return (MOBILE_TIME_WIDTH[this.timeWidth]||MOBILE_TIME_WIDTH[0])[0]}}]),MobileTimeLine}(BaseTimeLine);function isOverlap(a_start,a_end,b_start,b_end){return Math.max(a_start,b_start)<=Math.min(a_end,b_end)}function _extends$5(){return _extends$5=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source)Object.prototype.hasOwnProperty.call(source,key)&&(target[key]=source[key]);}return target},_extends$5.apply(this,arguments)}function getTouchDistance(touches){var touch1=touches[0],touch2=touches[1],dx=touch2.clientX-touch1.clientX,dy=touch2.clientY-touch1.clientY;return Math.sqrt(dx*dx+dy*dy)}function _create_class$3(Constructor,protoProps,staticProps){return protoProps&&function(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false,descriptor.configurable=true,"value"in descriptor&&(descriptor.writable=true),Object.defineProperty(target,descriptor.key,descriptor);}}(Constructor.prototype,protoProps),Constructor}function _set_prototype_of$6(o,p){return _set_prototype_of$6=Object.setPrototypeOf||function(o,p){return o.__proto__=p,o},_set_prototype_of$6(o,p)}var _REC_EVENT_KEYS_=[1,2,3,4,5,6,"ALRAM","TIMIING","CAR","HD"],_$TIMELINE_DEFAULT_OPTIONS$_={height:36,dpr:window.devicePixelRatio||2,readOnly:false,scaleOffsetTop:4,showYearMonthDay:true,showHoverTip:true,hoverTipPlacement:"follow",enabledClickToSeek:true,showSectionIcon:true,sectionIconColor:"#FFFFFF",sectionIconSize:14,showSectionCount:true,sectionCountColor:"#FFFFFF",sectionCountBgColor:"#FF4D4F"},TimeLine=function(BaseTimeLine){function TimeLine(container,options){var _this;return (_this=BaseTimeLine.call(this,container,deepmerge(_$TIMELINE_DEFAULT_OPTIONS$_,options,{clone:true}))||this)._$canvas=null,_this._ctx=null,_this._timeWidthArray=TIME_WIDTH[0],_this._centerPositionX=0,_this._isMouseDown=false,_this._mousePosition=0,_this._oldTime=null,_this._isOver=false,_this._moved=false,_this._lastTouchDist=0,_this._$hoverTip=null,_this._hoverRafId=null,_this._hoverX=0,_this._hoverY=0,_this._hoverActive=false,_this._hoverLineX=0,_this._dragMoved=false,_this._containerRect=null,_this._drawRafId=null,_this._$sectionIconLayer=null,_this._sectionIconPool=[],_this.$container=container,_this._mousemoveFun=_this._mousemoveFun.bind(_this),_this._mouseoverFun=_this._mouseoverFun.bind(_this),_this._mouseleaveFun=_this._mouseleaveFun.bind(_this),_this._mousedownFun=_this._mousedownFun.bind(_this),_this._mouseUpFun=_this._mouseUpFun.bind(_this),_this._mousewheelFun=_this._mousewheelFun.bind(_this),_this._containerWheelFun=_this._containerWheelFun.bind(_this),_this._touchstartFun=_this._touchstartFun.bind(_this),_this._touchmoveFun=_this._touchmoveFun.bind(_this),_this._touchendFun=_this._touchendFun.bind(_this),_this._clickFun=_this._clickFun.bind(_this),_this._init(),_this}!function(subClass,superClass){if("function"!=typeof superClass&&null!==superClass)throw new TypeError("Super expression must either be null or a function");subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}}),superClass&&_set_prototype_of$6(subClass,superClass);}(TimeLine,BaseTimeLine);var _proto=TimeLine.prototype;return _proto._init=function(){this._$canvas=document.createElement("canvas"),this._ctx=this._$canvas.getContext("2d"),this.readOnly||(this._$canvas.style.cursor="pointer"),this.$container.appendChild(this._$canvas),this.resize(this.width,this.height),this._initSectionIconLayer(),this._update({current:this.current,timeWidth:this.timeWidth,timeSections:this.timeSections}),this._initHoverTip(),this._applyHoverTipVars(),this._addEventListener();},_proto.resize=function(width,height){BaseTimeLine.prototype.resize.call(this,width,height),this._$canvas&&width&&(this._$canvas.width=this.width*this.options.dpr,this._$canvas.style.width=this.width+"px"),this._$canvas&&height&&(this._$canvas.height=this.height*this.options.dpr,this._$canvas.style.height=this.height+"px"),this._$sectionIconLayer&&(this._$sectionIconLayer.style.width=this.width+"px",this._$sectionIconLayer.style.height=this.height+"px"),this._containerRect=null,this._draw();},_proto.setTimeWidth=function(timeWidth){this._update({timeWidth:timeWidth});},_proto.updateTimeSections=function(timeSections){this._update({timeSections:timeSections});},_proto.update=function(time){time&&!this._isMouseDown&&this._update({current:distExports$4.DateTime.toDate(time)});},_proto._update=function(options){var left,right,_this__$canvas;(void 0===options&&(options={}),(null==options?void 0:options.current)&&(left=options.current,null!=(right=Date)&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?right[Symbol.hasInstance](left):left instanceof right)&&(this.current=options.current),(null==options?void 0:options.timeSections)&&BaseTimeLine.prototype.updateTimeSections.call(this,function(timeSections){if(0===timeSections.length)return timeSections;for(var normalized=timeSections.map(function(item){var startTime=item.startTime,endTime=item.endTime;return 10===(startTime+"").length&&(startTime*=1e3),10===(endTime+"").length&&(endTime*=1e3),_extends$5({},item,{startTime:startTime,endTime:endTime})}),merged=[normalized[0]],i=1;i<normalized.length;i++){var prev=merged[merged.length-1],curr=normalized[i];prev.endTime>=curr.startTime?prev.endTime=Math.max(prev.endTime,curr.endTime):merged.push(curr);}return merged}(options.timeSections)),"number"==typeof(null==options?void 0:options.timeWidth)&&(null==options?void 0:options.timeWidth)<TIME_WIDTH.length&&(BaseTimeLine.prototype.setTimeWidth.call(this,options.timeWidth),this._timeWidthArray=TIME_WIDTH[Math.floor(this.timeWidth)]),"number"==typeof(null==options?void 0:options.timeWidth)&&this._timeWidthArray)&&(this._timeWidthArray[3]&&(null==(_this__$canvas=this._$canvas)||_this__$canvas.setAttribute("data-title",this._timeWidthArray[3])));this._draw(),this._hoverActive&&this._$hoverTip&&!this._isMouseDown&&this._showHoverTip(this._hoverX,this._hoverY);},_proto.setReadOnly=function(readOnly){BaseTimeLine.prototype.setReadOnly.call(this,readOnly),this._$canvas&&(this._$canvas.style.cursor=readOnly?"not-allowed":"pointer");},_proto.destroy=function(){this._removeEventListener(),this._hideHoverTip(),null!=this._drawRafId&&(cancelAnimationFrame(this._drawRafId),this._drawRafId=null),this._$hoverTip&&this._$hoverTip.remove(),this._$hoverTip=null,this._$sectionIconLayer&&this._$sectionIconLayer.remove(),this._$sectionIconLayer=null,this._sectionIconPool=[],this._$canvas&&this._$canvas.remove(),this._$canvas=null,this._ctx=null,this._containerRect=null,BaseTimeLine.prototype.destroy.call(this);},_proto._initSectionIconLayer=function(){var _this=this;if(this.options.showSectionIcon){var layer=document.createElement("div");layer.className="ez-time-line-section-icon-layer",layer.style.width=this.width+"px",layer.style.height=this.height+"px",this.$container.appendChild(layer),this._$sectionIconLayer=layer,delegate(layer,".ez-time-line-section-icon","click",function(event){event.stopImmediatePropagation(),event.stopPropagation(),event.preventDefault();var el=event.delegateTarget,startTime=Number(el.dataset.start),count=Number(el.dataset.count),index=Number(el.dataset.index);Number.isNaN(startTime)||null==_this.options.onSectionIconClick||_this.options.onSectionIconClick.call(_this.options,{startTime:startTime,count:Number.isNaN(count)?0:count,index:Number.isNaN(index)?-1:index});});}},_proto._isEventSection=function(section){var type=section.EVENT_TYPE;return void 0!==type&&_REC_EVENT_KEYS_.includes(type)},_proto._collectSectionIcons=function(offsetTop,sectionHeight){var _this_options_sectionIconSize,_this=this,renders=[];if(!this.options.showSectionIcon)return renders;var timeArr=this.timeSections||[],intervalSec=this._timeWidthArray[0];if(!intervalSec)return renders;for(var intervalMs=1e3*intervalSec,buckets=new Map,i=0;i<timeArr.length;i++){var section=timeArr[i];if(section&&"number"==typeof section.startTime&&this._isEventSection(section)){var idx=Math.floor(section.startTime/intervalMs),bucket=buckets.get(idx);bucket?(bucket.count+=1,section.startTime<bucket.startTime&&(bucket.startTime=section.startTime,bucket.index=i)):buckets.set(idx,{count:1,startTime:section.startTime,index:i});}}var dpr=this.options.dpr,iconSizePx=null!=(_this_options_sectionIconSize=this.options.sectionIconSize)?_this_options_sectionIconSize:14,sectionHeightPx=sectionHeight/dpr,offsetTopCss=offsetTop/dpr,size=Math.min(iconSizePx,sectionHeightPx),canvasWidthDpr=this.width*dpr;return buckets.forEach(function(bucket,idx){var bucketStart=idx*intervalMs,position=_this._findPosition({startTime:bucketStart,endTime:bucketStart+intervalMs});if(isOverlap(0,canvasWidthDpr,position.x1,position.x2)){var bucketWidthPx=(position.x2-position.x1)/dpr;renders.push({left:position.x1/dpr+(bucketWidthPx-size)/2,top:offsetTopCss+(sectionHeightPx-size)/2,size:size,count:bucket.count,startTime:bucket.startTime,index:bucket.index});}}),renders},_proto._createSectionIconEl=function(){var _this_options_sectionIconColor,_this_options_sectionCountColor,_this_options_sectionCountBgColor,span=document.createElement("span");span.className="ez-time-line-section-icon",span.style.color=null!=(_this_options_sectionIconColor=this.options.sectionIconColor)?_this_options_sectionIconColor:"#FFFFFF",span.innerHTML=_$TIMELINE_ICONS$__event;var count=document.createElement("span");return count.className="ez-time-line-section-icon-count",count.style.color=null!=(_this_options_sectionCountColor=this.options.sectionCountColor)?_this_options_sectionCountColor:"#FFFFFF",count.style.backgroundColor=null!=(_this_options_sectionCountBgColor=this.options.sectionCountBgColor)?_this_options_sectionCountBgColor:"#FF4D4F",count.style.display="none",span.appendChild(count),span},_proto._renderSectionIcons=function(renders){var layer=this._$sectionIconLayer;if(layer&&this.options.showSectionIcon){for(var pool=this._sectionIconPool,showCount=this.options.showSectionCount,i=0;i<renders.length;i++){var r=renders[i],el=pool[i];el||(el=this._createSectionIconEl(),layer.appendChild(el),pool.push(el)),el.style.display="",el.style.left=r.left+"px",el.style.bottom="0px",el.dataset.start=String(r.startTime),el.dataset.count=String(r.count),el.dataset.index=String(r.index);var countEl=el.lastElementChild;showCount&&r.count>0?(countEl.textContent=r.count>99?"99+":String(r.count),countEl.style.display=""):countEl.style.display="none";}for(;i<pool.length;i++)pool[i].style.display="none";}},_proto._initHoverTip=function(){if(this.options.showHoverTip){var tip=document.createElement("div");tip.className="ez-time-line-hover-tip",this.$container.appendChild(tip),this._$hoverTip=tip,this._applyHoverTipVars();}},_proto._applyHoverTipVars=function(){this.$container.style.setProperty("--ez-time-line-hover-tip-bg",String(this.options.hoverTipBgColor)),this.$container.style.setProperty("--ez-time-line-hover-tip-color",String(this.options.hoverTipColor));},_proto._hoverTimeAt=function(x){var seconds=(x-this.width/2)/this._curScaleSpacing*this._timeWidthArray[0];return new Date(this.current.getTime()+Math.round(1e3*seconds))},_proto._localDayStartSec=function(sec){var d=new Date(1e3*sec);return d.setHours(0,0,0,0),Math.floor(d.getTime()/1e3)},_proto._getContainerRect=function(){return this._containerRect||(this._containerRect=this.$container.getBoundingClientRect()),this._containerRect},_proto._scheduleDraw=function(){var _this=this;null==this._drawRafId&&(this._drawRafId=requestAnimationFrame(function(){_this._drawRafId=null,_this._draw();}));},_proto._formatHoverTime=function(date){if("function"==typeof this.options.renderHoverTip)return this.options.renderHoverTip(date);var fmt=this.options.hoverTipFormat||"yyyy-MM-dd HH:mm:ss";return distExports$4.DateTime.format(date,fmt)},_proto._showHoverTip=function(x,y){var _this=this;this._$hoverTip&&(this._hoverX=x,this._hoverY=y,null==this._hoverRafId&&(this._hoverRafId=requestAnimationFrame(function(){_this._hoverRafId=null,_this._renderHoverTip();})));},_proto._renderHoverTip=function(){var tip=this._$hoverTip;if(tip){var width=this.width,tx=Math.max(0,Math.min(this._hoverX,width)),date=this._hoverTimeAt(tx),content=this._formatHoverTime(date);"function"==typeof this.options.renderHoverTip?tip.innerHTML=content:tip.textContent=content,tip.style.display="inline-flex",tip.style.opacity="1";var left,top,tipW=tip.offsetWidth;if("top"===this.options.hoverTipPlacement)(left=this._hoverX-tipW/2)+tipW>width&&(left=width-tipW),left<0&&(left=0),top=-tip.offsetHeight-2;else {(left=this._hoverX+14)+tipW>width&&(left=this._hoverX-14-tipW),left<0&&(left=0),top=this._hoverY+16;}tip.style.left=left+"px",tip.style.top=top+"px";}},_proto._hideHoverTip=function(){null!=this._hoverRafId&&(cancelAnimationFrame(this._hoverRafId),this._hoverRafId=null),this._$hoverTip&&(this._$hoverTip.style.display="none",this._$hoverTip.style.opacity="0");},_proto._draw=function(){this._ctx&&(this._ctx.fillStyle=this.options.timeAxisBgColor,this._ctx.fillRect(0,0,this.width*this.options.dpr,this.height*this.options.dpr)),this._drawSections(),this._drawScale(),this._drawHoverLine();},_proto._drawHoverLine=function(){if(this._hoverActive&&!this._isMouseDown&&this._ctx){var dpr=this.options.dpr,x=Math.max(0,Math.min(this._hoverLineX,this.width))*dpr,lineWidth=this.options.scaleLineWidth*dpr;this._drawSolidLine(x,0,x,this.height*dpr,lineWidth,this.options.hoverLineColor);}},_proto._drawScale=function(){var lineWidth=this.options.scaleLineWidth*this.options.dpr;this._centerPositionX=parseInt(this.width*this.options.dpr/2+"");for(var centerPosition={x:this.width*this.options.dpr/2,y:this.height*this.options.dpr},curScaleTime=Math.floor(this.current.getTime()/1e3),offsetSecond=(curScaleTime-this._localDayStartSec(curScaleTime))%this._timeWidthArray[0],padding=this.height*this.options.dpr/20,spacing=this._curScaleSpacing*this.options.dpr,rightLastScaleTimeX=Math.floor(this._centerPositionX+(this._timeWidthArray[0]-offsetSecond)/this._timeWidthArray[0]*spacing),leftLastScaleTime=curScaleTime-offsetSecond,rightLastScaleTime=leftLastScaleTime+this._timeWidthArray[0],x=rightLastScaleTimeX-spacing;x>0;x-=spacing){0===(leftLastScaleTime-this._localDayStartSec(leftLastScaleTime))%(this._timeWidthArray[0]*this._timeWidthArray[2])?(this._drawSolidLine(x,padding,x,padding+(this.options.scaleOffsetTop+4)*this.options.dpr,lineWidth),this._drawTextString(distExports$4.DateTime.format(new Date(1e3*leftLastScaleTime),"YYYY-MM-DD HH:mm:ss"),x,padding+(this.options.scaleOffsetTop+4+4)*this.options.dpr,"center")):this._drawSolidLine(x,padding,x,padding+this.options.scaleOffsetTop*this.options.dpr,lineWidth),leftLastScaleTime-=this._timeWidthArray[0];}for(var x1=rightLastScaleTimeX;x1<=this.width*this.options.dpr;x1+=spacing){0===(rightLastScaleTime-this._localDayStartSec(rightLastScaleTime))%(this._timeWidthArray[0]*this._timeWidthArray[2])?(this._drawSolidLine(x1,padding,x1,padding+(this.options.scaleOffsetTop+4)*this.options.dpr,lineWidth),this._drawTextString(distExports$4.DateTime.format(new Date(1e3*rightLastScaleTime),"YYYY-MM-DD HH:mm:ss"),x1,padding+(this.options.scaleOffsetTop+4+4)*this.options.dpr,"center")):this._drawSolidLine(x1,padding,x1,padding+this.options.scaleOffsetTop*this.options.dpr,lineWidth),rightLastScaleTime+=this._timeWidthArray[0];}this._drawCenterIndicator(centerPosition.x,centerPosition.y);},_proto._drawCenterIndicator=function(centerX,totalHeight){if(this._ctx){var dpr=this.options.dpr,lineW=2*dpr,triH=3*dpr,baseW=6*dpr,baseH=5*dpr,x=centerX;this._ctx.save(),this._ctx.fillStyle=this.options.timePointColor,this._ctx.fillRect(x-lineW/2,0,lineW,totalHeight),this._ctx.beginPath(),this._ctx.moveTo(x-baseW/2,0),this._ctx.lineTo(x+baseW/2,0),this._ctx.lineTo(x+baseW/2,baseH),this._ctx.lineTo(x,baseH+triH),this._ctx.lineTo(x-baseW/2,baseH),this._ctx.closePath(),this._ctx.fill(),this._ctx.beginPath(),this._ctx.moveTo(x-baseW/2,totalHeight),this._ctx.lineTo(x+baseW/2,totalHeight),this._ctx.lineTo(x+baseW/2,totalHeight-baseH),this._ctx.lineTo(x,totalHeight-baseH-triH),this._ctx.lineTo(x-baseW/2,totalHeight-baseH),this._ctx.closePath(),this._ctx.fill(),this._ctx.restore();}},_proto._drawSolidLine=function(startX,startY,endX,endY,lineWidth,color){this._ctx&&(this._ctx.save(),this._ctx.strokeStyle=null!=color?color:this.options.timeScaleColor,this._ctx.lineWidth=lineWidth,this._ctx.beginPath(),this._ctx.moveTo(startX,startY),this._ctx.lineTo(endX,endY),this._ctx.stroke(),this._ctx.restore());},_proto._drawTextString=function(text,x,y,align){if(this._ctx){var timeTexts=text.split(" ");this._ctx.font=(opts=this.options,dpr=this.options.dpr,(null!=(_opts_timeTextFontSize=opts.timeTextFontSize)?_opts_timeTextFontSize:12)*(dpr||1)+"px "+(null!=(_opts_timeTextFontFamily=opts.timeTextFontFamily)?_opts_timeTextFontFamily:"serif")),this._ctx.fillStyle=this.options.timeTextColor,this._ctx.textAlign=align||"left",this._timeWidthArray[0]%60==0&&(timeTexts[1]=timeTexts[1].replace(/:00$/,"")),this._ctx.fillText(timeTexts[1],x,y+8*this.options.dpr),!this.options.showYearMonthDay||"00:00:00"!==timeTexts[1]&&"00:00"!==timeTexts[1]&&this._timeWidthArray[0]*this._timeWidthArray[2]!==86400||(this._ctx.textAlign=align||"left",this._ctx.fillText(timeTexts[0],x,y+18*this.options.dpr));}var opts,dpr,_opts_timeTextFontSize,_opts_timeTextFontFamily;},_proto._drawSections=function(){for(var timeArr=this.timeSections||[],dpr=this.options.dpr,_ref=this.options.timeSectionOffset||[],tmp=_ref[0],offsetTopPx=void 0===tmp?0:tmp,tmp1=_ref[1],offsetTop=offsetTopPx*dpr,offsetBottom=(void 0===tmp1?0:tmp1)*dpr,sectionHeight=this.height*dpr-offsetTop-offsetBottom,i=0;i<timeArr.length;i++){var position=this._findPosition(timeArr[i]);this._ctx&&isOverlap(0,this.width*this.options.dpr,position.x1,position.x2)&&(this._ctx.fillStyle=this.options.timeSectionColor,this._ctx.fillRect(position.x1,offsetTop,position.x2-position.x1,sectionHeight));}this._renderSectionIcons(this._collectSectionIcons(offsetTop,sectionHeight));},_proto._findPosition=function(item){var x1=(parseInt((item.startTime-this.current.getTime())/1e3+"",10)/this._timeWidthArray[0]*this._curScaleSpacing+this.width/2)*this.options.dpr;return {x1:x1,x2:x1+parseInt((item.endTime-item.startTime)/1e3+"",10)/this._timeWidthArray[0]*this._curScaleSpacing*this.options.dpr}},_proto._addEventListener=function(){this._$canvas&&(this._$canvas.addEventListener("mousemove",this._mousemoveFun),this._$canvas.addEventListener("mouseover",this._mouseoverFun),this._$canvas.addEventListener("mouseleave",this._mouseleaveFun),this._$canvas.addEventListener("mousedown",this._mousedownFun),this._$canvas.addEventListener("mouseup",this._mouseUpFun),this._$canvas.addEventListener("click",this._clickFun),this._$canvas.addEventListener("wheel",this._mousewheelFun),this.$container.addEventListener("wheel",this._containerWheelFun,{passive:false}),this._$canvas.addEventListener("touchstart",this._touchstartFun,{passive:false}),this._$canvas.addEventListener("touchmove",this._touchmoveFun,{passive:false}),this._$canvas.addEventListener("touchend",this._touchendFun,{passive:false}));},_proto._removeEventListener=function(){this._$canvas&&(this._$canvas.removeEventListener("mousemove",this._mousemoveFun),this._$canvas.removeEventListener("mouseover",this._mouseoverFun),this._$canvas.removeEventListener("mouseleave",this._mouseleaveFun),this._$canvas.removeEventListener("mousedown",this._mousedownFun),this._$canvas.removeEventListener("mouseup",this._mouseUpFun),this._$canvas.removeEventListener("click",this._clickFun),this._$canvas.removeEventListener("wheel",this._mousewheelFun),this.$container.removeEventListener("wheel",this._containerWheelFun),this._$canvas.removeEventListener("touchstart",this._touchstartFun),this._$canvas.removeEventListener("touchmove",this._touchmoveFun),this._$canvas.removeEventListener("touchend",this._touchendFun));},_proto._mousedownFun=function(e){this.readOnly||(this._isMouseDown=true,this._mousePosition=e.pageX,this._oldTime=this.current,this._dragMoved=false,this._hideHoverTip(),this._hoverActive=false,null==this.options.onDragStart||this.options.onDragStart.call(this.options,this.current));},_proto._mouseoverFun=function(){this.readOnly||(this._isOver=true,this._containerRect=this.$container.getBoundingClientRect());},_proto._mouseleaveFun=function(e){this.readOnly||(this._isOver=false,this._containerRect=null,this._hideHoverTip(),this._hoverActive=false,this._draw(),this._moveEndOrTouchEndFun(e));},_proto._containerWheelFun=function(e){e.target===this._$canvas&&e.preventDefault();},_proto._mouseUpFun=function(e){this._moveEndOrTouchEndFun(e);},_proto._clickFun=function(e){if(!this.readOnly&&this.options.enabledClickToSeek)if(this._dragMoved)this._dragMoved=false;else {var rect=this._getContainerRect(),x=e.clientX-rect.left,date=this._hoverTimeAt(x);this._update({current:date}),null==this.options.onClickSeek||this.options.onClickSeek.call(this.options,date);}},_proto._mousemoveFun=function(e){if(!this.readOnly)if(this._isMouseDown&&this._isOver)this._moveUpdateFun(e.pageX);else {var left=parseInt(this.$container.offsetLeft+"",10);this._mousePosition=e.pageX-left;var rect=this._getContainerRect();this._hoverActive=true,this._hoverLineX=e.clientX-rect.left,this._scheduleDraw(),this._showHoverTip(e.clientX-rect.left,e.clientY-rect.top);}},_proto._mousewheelFun=function(e){e.preventDefault();},_proto._touchstartFun=function(e){if(!this.readOnly)if(this._oldTime=this.current,this._isOver=true,1===e.touches.length){var touch=e.touches[0];this._isMouseDown=true,this._mousePosition=touch.clientX;}else 2===e.touches.length&&(this._lastTouchDist=getTouchDistance(e.touches));},_proto._touchmoveFun=function(e){if(e.preventDefault(),e.stopPropagation(),!this.readOnly)if(1===e.touches.length){var touch=e.touches[0];this._moveUpdateFun(touch.clientX);}else 2===e.touches.length&&(this._lastTouchDist=getTouchDistance(e.touches));},_proto._touchendFun=function(e){this.readOnly||this._moveEndOrTouchEndFun(e);},_proto._moveEndOrTouchEndFun=function(e){e.preventDefault(),this.readOnly||this._isMouseDown&&(this._isMouseDown=false,this._moved&&(this._moved=false,this._update({current:this.current}),this._oldTime=this.current,null==this.options.onDragEnd||this.options.onDragEnd.call(this.options,this.current,this._isOver)),this._isOver&&Math.abs(this._mousePosition-(e.pageX||0))>5&&(null==this.options.onChange||this.options.onChange.call(this.options,this.current)),this._mousePosition=0,this._lastTouchDist=0);},_proto._moveUpdateFun=function(x){var mouseOffset=this._mousePosition-x;if(0!==mouseOffset){if(this._oldTime){var currentTime=this._oldTime.getTime()+1e3*parseInt(mouseOffset/this._curScaleSpacing*this._timeWidthArray[0]+"",10);this._update({current:new Date(currentTime)}),null==this.options.onDragging||this.options.onDragging.call(this.options,new Date(currentTime));}this._moved=true,this._dragMoved=true;}},_create_class$3(TimeLine,[{key:"_curScaleSpacing",get:function(){var _this__timeWidthArray,_this__timeWidthArray1;return Math.floor((null==(_this__timeWidthArray=this._timeWidthArray)?void 0:_this__timeWidthArray[1])-(null==(_this__timeWidthArray1=this._timeWidthArray)?void 0:_this__timeWidthArray1[1])*+(this.timeWidth%1/2).toFixed(2))}}]),TimeLine}(BaseTimeLine);TimeLine.TIME_WIDTH=TIME_WIDTH;
 
 	function _extends$4() {
 	    _extends$4 = Object.assign || function(target) {
@@ -10432,13 +11009,13 @@
 	        });
 	        _this.records = ((_this__options = _this._options) == null ? void 0 : (_this__options_props = _this__options.props) == null ? void 0 : _this__options_props.recordList) || [];
 	        _this._render();
-	        _this.on(EVENTS.setAllDayRecTimes, function(records) {
+	        _this.on(EVENTS$2.setAllDayRecTimes, function(records) {
 	            var // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 	            _this_timeLineUtil_updateTimeSections, _this_timeLineUtil;
 	            _this.records = records;
 	            (_this_timeLineUtil = _this.timeLineUtil) == null ? void 0 : (_this_timeLineUtil_updateTimeSections = _this_timeLineUtil.updateTimeSections) == null ? void 0 : _this_timeLineUtil_updateTimeSections.call(_this_timeLineUtil, records);
 	        });
-	        _this.on(EVENTS.getOSDTime, function(time) {
+	        _this.on(EVENTS$2.getOSDTime, function(time) {
 	            if (time) {
 	                var // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 	                _this_timeLineUtil_update, _this_timeLineUtil;
@@ -10464,17 +11041,17 @@
 	            onClickSeek: function(date) {
 	                if (date == null ? void 0 : date.getTime()) {
 	                    _this._options.onClickSeek == null ? void 0 : _this._options.onClickSeek.call(_this._options, date);
-	                    _this.emit(EVENTS.control.timeLineChange, date);
+	                    _this.emit(EVENTS$2.control.timeLineChange, date);
 	                }
 	            },
 	            onChange: function(date) {
 	                if (_this._currentTime !== (date == null ? void 0 : date.getTime())) {
 	                    _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, date);
-	                    _this.emit(EVENTS.control.timeLineChange, date);
+	                    _this.emit(EVENTS$2.control.timeLineChange, date);
 	                }
 	            },
 	            onPickerOpenChange: function(open) {
-	                _this.emit(EVENTS.control.timeLinePanelOpenChange, open);
+	                _this.emit(EVENTS$2.control.timeLinePanelOpenChange, open);
 	            },
 	            // 2025-10-27 仅移动端支持
 	            onPickerSelect: function(item) {
@@ -10484,9 +11061,12 @@
 	                    else if ((item.startTime + '').length === 13) date = new Date(item.startTime);
 	                    else date = new Date(item.startTime);
 	                    _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, date);
-	                    _this.emit(EVENTS.control.timeLineChange, date);
+	                    _this.emit(EVENTS$2.control.timeLineChange, date);
 	                } catch (error) {
 	                }
+	            },
+	            onSectionIconClick: function(result) {
+	                _this.emit("TimeLine.onSectionIconClick", result);
 	            }
 	        });
 	        if (distExports$4.isMobile()) {
@@ -10639,6 +11219,7 @@
 	    aiChat: AIChat,
 	    live: Live,
 	    recDropdown: RecDropdown,
+	    recList: RecList,
 	    alarmMessage: AlarmMessage,
 	    zoom: Zoom$1,
 	    definition: Definition,
@@ -10733,10 +11314,10 @@
 	            (_this_$popupContainer = this.$popupContainer) == null ? void 0 : (_this_$popupContainer_remove = _this_$popupContainer.remove) == null ? void 0 : _this_$popupContainer_remove.call(_this_$popupContainer);
 	            this.$popupContainer = null;
 	        }
-	        this.emit(EVENTS.theme.recFooterDestroy);
+	        this.emit(EVENTS$2.theme.recFooterDestroy);
 	    };
 	    return RecFooter;
-	}(EventEmitter);
+	}(EventEmitter$1);
 
 	function _inherits$2(subClass, superClass) {
 	    if (typeof superClass !== "function" && superClass !== null) {
@@ -10806,10 +11387,10 @@
 	    _proto.destroy = function destroy() {
 	        var _this_$container;
 	        (_this_$container = this.$container) == null ? void 0 : _this_$container.remove();
-	        this.emit(EVENTS.theme.mobileExtendDestroy);
+	        this.emit(EVENTS$2.theme.mobileExtendDestroy);
 	    };
 	    return MobileExtend;
-	}(EventEmitter);
+	}(EventEmitter$1);
 
 	function _extends$2() {
 	    _extends$2 = Object.assign || function(target) {
@@ -10944,7 +11525,7 @@
 	                    clearTimeout(_this._timer3);
 	                    _this._timer3 = null;
 	                }
-	                _this.emit(EVENTS.control.play, true, 'pause');
+	                _this.emit(EVENTS$2.control.play, true, 'pause');
 	            }, 250);
 	        }
 	    };
@@ -10963,7 +11544,7 @@
 	        theme._interactiveResult = null;
 	    }
 	    if (hasControls) {
-	        theme.emit(EVENTS.control.beforeUnmountControls);
+	        theme.emit(EVENTS$2.control.beforeUnmountControls);
 	    }
 	    // unmounted Controls
 	    if (Object.keys(theme.controls).length > 0) {
@@ -11016,7 +11597,7 @@
 	        theme._onPauseTimingFunc = null;
 	    }
 	    if (hasControls) {
-	        theme.emit(EVENTS.control.unmountedControls);
+	        theme.emit(EVENTS$2.control.unmountedControls);
 	    }
 	};
 
@@ -11208,7 +11789,9 @@
 	            var _theme_options_mobileExtendOptions, // 在移动端支持扩展和窗口区域渲染
 	            _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions1;
 	            if (((((_theme_options_mobileExtendOptions = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions.controls) || []).includes(item.iconId) && item.iconId !== "ptz" || ((_theme_options_mobileExtendOptions1 = theme.options.mobileExtendOptions) == null ? void 0 : (_theme_options_mobileExtendOptions_controls = _theme_options_mobileExtendOptions1.controls) == null ? void 0 : _theme_options_mobileExtendOptions_controls.includes('rec')) && REC_GROUP.includes(item.iconId) // 移动端模式下，不渲染在header 中控件， 需要移动到mobileExtend中
-	            ) && Utils.isMobile) {
+	            ) && Utils.isMobile || [
+	                "recList"
+	            ].includes(item.iconId) && Utils.isMobile) {
 	                continue;
 	            }
 	            if (REC_GROUP.includes(item.iconId) && theme._header) {
@@ -11330,7 +11913,7 @@
 	                        }));
 	                    }
 	                    theme.controls = {}; // 防止为 null
-	                    theme.emit(EVENTS.control.beforeMountControls);
+	                    theme.emit(EVENTS$2.control.beforeMountControls);
 	                    filterThemeData = _filterControls(themeData);
 	                    theme._themeData = filterThemeData;
 	                    if (filterThemeData.poster) {
@@ -11377,7 +11960,7 @@
 	                            // 监听鼠标移动 , header 和 footer 的交互和动画
 	                            // prettier-ignore
 	                            theme._interactiveResult = interactiveHF(theme.$container, ((themeData == null ? void 0 : themeData.autoFocus) || 3) * 1000, function(open) {
-	                                theme.emit(EVENTS.control.controlsBarOpenChange, open);
+	                                theme.emit(EVENTS$2.control.controlsBarOpenChange, open);
 	                            });
 	                            // 当移动端 picker 控件打开时需要关闭动画（定时器）
 	                            // 暂停 header footer 的动画(定时器)
@@ -11481,7 +12064,7 @@
 	                            }
 	                        }
 	                    }
-	                    theme.emit(EVENTS.control.mountedControls);
+	                    theme.emit(EVENTS$2.control.mountedControls);
 	                    if (!theme.playing) theme._disabled(true);
 	                    // 同步 loading 状态（修复：_loadingControl 创建前设置的 loading=true 不生效的问题）
 	                    if (theme._loading && theme._loadingControl) {
@@ -11498,7 +12081,8 @@
 	var _renderTimeLine = function(theme, container, props) {
 	    if (props === void 0) props = {};
 	    if (!theme.controls.timeLineControl && theme.options.timeLineOptions !== null) {
-	        var _theme_urlInfo, _theme_options;
+	        var _theme_urlInfo, _theme_options, _theme_options1, _this, _theme_options2;
+	        var _showSectionIcon;
 	        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 	        theme.controls.timeLineControl = new Controls['timeLine'](_extends$1({
 	            getPopupContainer: function() {
@@ -11508,6 +12092,7 @@
 	            locales: theme.i18n.translations,
 	            coverQuery: ((_theme_urlInfo = theme.urlInfo) == null ? void 0 : _theme_urlInfo.validateCode) ? "decodekey=" + theme.urlInfo.validateCode : ''
 	        }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["timeLineOptions"]) || {}, {
+	            showSectionIcon: ((_theme_options1 = theme.options) == null ? void 0 : _theme_options1["recListOptions"]) !== null ? (_showSectionIcon = (_this = ((_theme_options2 = theme.options) == null ? void 0 : _theme_options2["timeLineOptions"]) || {}) == null ? void 0 : _this.showSectionIcon) != null ? _showSectionIcon : true : true,
 	            props: props
 	        }));
 	    }
@@ -11837,7 +12422,7 @@
 	   */ _this._footerMoreControl = null, /** 头部控件 @since 0.0.1 @private */ _this._header = null, /** 低部控件 @since 0.0.1 @private */ _this._footer = null, /** 回放底部时间轴 @since 0.0.1 @private */ _this._recFooter = null, /**
 	   * 移动端扩展容器, 扩展的控件渲染在指定容器以外， 仅只用端适用， 为了可以放置大的控件和方便开发接入
 	   * @private
-	   */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, /** 是否播放中 @private */ _this._playing = false, /** 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /** 清晰度列表 */ _this.videoLevelList = [], /** 回放片段列表 */ _this.recordList = [], /** 窗口尺寸变化时，设置窗口超出隐藏，防止出现滚动条 */ _this._resizeOverflowTimer = null, // /**
+	   */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, /** 是否播放中 @private */ _this._playing = false, /** @private 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /** 清晰度列表 */ _this.videoLevelList = [], /** 回放片段列表 */ _this.recordList = [], /** 窗口尺寸变化时，设置窗口超出隐藏，防止出现滚动条 */ _this._resizeOverflowTimer = null, // /**
 	        //  * 记录回放的月份
 	        //  *
 	        //  * key: {序列号}_{通道号}_{rec | cloud | cloudRecord}   比如：BC7799091_1_rec  BC7799091_1_cloud BC7799091_1_cloudRecord
@@ -11862,7 +12447,7 @@
 	            }
 	        }
 	        _this._getRecType(_this.options.url);
-	        _bindEventLogger(_this, EVENTS);
+	        _bindEventLogger(_this, EVENTS$2);
 	        options.onInitializing == null ? void 0 : options.onInitializing.call(options, _this); // 在初始化时，执行回调 支持 i18n logger
 	        if (_this.options.autoPlay) {
 	            _this.playing = true;
@@ -11875,8 +12460,8 @@
 	            },
 	            scaleMode: _this.scaleMode
 	        });
-	        _this.contentControl.on(EVENTS.control.contentRerender, function(info) {
-	            _this.emit(EVENTS.control.contentRerender, info);
+	        _this.contentControl.on(EVENTS$2.control.contentRerender, function(info) {
+	            _this.emit(EVENTS$2.control.contentRerender, info);
 	        });
 	        //  zoom utils
 	        __zoom(_this, _this.contentControl.$content, _extends({}, _this.options.zoomOptions || {}, {
@@ -12013,7 +12598,7 @@
 	   * @returns {void}
 	   */ _proto.changeTheme = function changeTheme(themeData) {
 	        this._renderTheme(themeData);
-	        this.emit == null ? void 0 : this.emit.call(this, EVENTS.changeTheme, themeData);
+	        this.emit == null ? void 0 : this.emit.call(this, EVENTS$2.changeTheme, themeData);
 	    };
 	    /**
 	   * 设置封面(仅设置，不会默认展示出来)
@@ -12037,7 +12622,7 @@
 	        if (options === void 0) options = {};
 	        var _this_logger, _this;
 	        (_this_logger = this.logger) == null ? void 0 : _this_logger.setOptions(options);
-	        (_this = this) == null ? void 0 : _this.emit(EVENTS.setLoggerOptions, options);
+	        (_this = this) == null ? void 0 : _this.emit(EVENTS$2.setLoggerOptions, options);
 	    };
 	    /**
 	   * 设置视频画面缩放模式
@@ -12091,7 +12676,7 @@
 	            // 防止多次销毁
 	            return;
 	        }
-	        this.emit(EVENTS.theme.beforeDestroy);
+	        this.emit(EVENTS$2.theme.beforeDestroy);
 	        this._removeEventListener();
 	        _unmountedControls(this);
 	        (_this_contentControl = this.contentControl) == null ? void 0 : _this_contentControl.destroy();
@@ -12112,7 +12697,7 @@
 	        if (this.i18n) this.i18n = null;
 	        this.recType = '';
 	        this.recMonth = []; // 清空数据
-	        this.emit(EVENTS.theme.destroyed);
+	        this.emit(EVENTS$2.theme.destroyed);
 	        this.removeAllListeners();
 	        if (this.logger) this.logger = null;
 	        // 销毁后，将 destroyed 设置为 true
@@ -12244,12 +12829,12 @@
 	            // 全屏变化
 	            onChange: function(info) {
 	                if (info.isCurrentFullscreen) {
-	                    _this.emit(EVENTS.fullscreen);
+	                    _this.emit(EVENTS$2.fullscreen);
 	                } else if (_this._isCurrentFullscreen) {
-	                    _this.emit(EVENTS.exitFullscreen);
+	                    _this.emit(EVENTS$2.exitFullscreen);
 	                }
 	                _this._isCurrentFullscreen = info.isCurrentFullscreen;
-	                _this.emit(EVENTS.fullscreenChange, _extends({}, info, {
+	                _this.emit(EVENTS$2.fullscreenChange, _extends({}, info, {
 	                    orientationAngle: _this._orientationAngle
 	                }));
 	                _this._isRotated();
@@ -12284,7 +12869,7 @@
 	                }
 	                if (_this.orientationAngle !== orientation.angle) {
 	                    // 屏幕方向变换
-	                    _this.emit(EVENTS.orientationChange, orientation.angle);
+	                    _this.emit(EVENTS$2.orientationChange, orientation.angle);
 	                }
 	                _this._orientationAngle = orientation.angle;
 	                // 旋转过后获取可视内容区的高宽 （防止 window resize（已知 iPad Chrome 有这个问题） 可能获取的最终值不对， 需要旋转完成后再次获取一次）
@@ -12421,7 +13006,7 @@
 	                        ],
 	                        wrapClassName: "" + PREFIX_CLASS + "-header-more",
 	                        onOpenChange: function(open) {
-	                            _this.emit(EVENTS.control.headerMorePanelOpenChange, open);
+	                            _this.emit(EVENTS$2.control.headerMorePanelOpenChange, open);
 	                        }
 	                    });
 	                    (_this_controls1 = this.controls) == null ? void 0 : (_this_controls_recControl = _this_controls1.recControl) == null ? void 0 : _this_controls_recControl.resetPopupContainer(this._headerMoreControl.$panel);
@@ -12476,7 +13061,7 @@
 	                        ],
 	                        wrapClassName: "" + PREFIX_CLASS + "-footer-more",
 	                        onOpenChange: function(open) {
-	                            _this.emit(EVENTS.control.footerMorePanelOpenChange, open);
+	                            _this.emit(EVENTS$2.control.footerMorePanelOpenChange, open);
 	                        }
 	                    });
 	                }
@@ -12761,11 +13346,11 @@
 	                        });
 	                        this._disabled(true);
 	                    }
-	                    this.emit(EVENTS.play, playing);
+	                    this.emit(EVENTS$2.play, playing);
 	                    if ((_this_controls = this.controls) == null ? void 0 : _this_controls.playControl) {
 	                        if (this.controls.playControl.playing !== playing) {
 	                            var _this_controls1;
-	                            (_this_controls1 = this.controls) == null ? void 0 : _this_controls1.playControl.emit(EVENTS.play, playing);
+	                            (_this_controls1 = this.controls) == null ? void 0 : _this_controls1.playControl.emit(EVENTS$2.play, playing);
 	                        }
 	                    }
 	                    (_this__pauseControl = this._pauseControl) == null ? void 0 : (_this__pauseControl_show = _this__pauseControl.show) == null ? void 0 : _this__pauseControl_show.call(_this__pauseControl, playing);
@@ -12809,7 +13394,7 @@
 	                    (_this__loadingControl1 = this._loadingControl) == null ? void 0 : _this__loadingControl1.hide();
 	                }
 	                if (this._loading !== loading) {
-	                    this.emit(EVENTS.loading, loading);
+	                    this.emit(EVENTS$2.loading, loading);
 	                }
 	            }
 	        },
@@ -12831,14 +13416,14 @@
 	                    if (this._volume !== volume) {
 	                        var _this_controls;
 	                        this._volume = volume;
-	                        this.emit(EVENTS.volumechange, volume, this._muted);
+	                        this.emit(EVENTS$2.volumechange, volume, this._muted);
 	                        // prettier-ignore
 	                        if ((_this_controls = this.controls) == null ? void 0 : _this_controls.volumeControl) {
 	                            var _this_controls_volumeControl, _this_controls1;
 	                            // 防止多次触发
 	                            if (((_this_controls1 = this.controls) == null ? void 0 : (_this_controls_volumeControl = _this_controls1.volumeControl) == null ? void 0 : _this_controls_volumeControl.volume) !== volume) {
 	                                // prettier-ignore
-	                                this.controls.volumeControl.emit(EVENTS.volumechange, volume, this._muted);
+	                                this.controls.volumeControl.emit(EVENTS$2.volumechange, volume, this._muted);
 	                            }
 	                        }
 	                    }
@@ -12864,14 +13449,14 @@
 	                if (this._muted !== muted) {
 	                    var _this_controls;
 	                    this._muted = muted;
-	                    this.emit(EVENTS.volumechange, this._volume, this._muted);
+	                    this.emit(EVENTS$2.volumechange, this._volume, this._muted);
 	                    // 防止多次触发
 	                    // prettier-ignore
 	                    if ((_this_controls = this.controls) == null ? void 0 : _this_controls.volumeControl) {
 	                        var _this_controls_volumeControl, _this_controls1;
 	                        if (((_this_controls1 = this.controls) == null ? void 0 : (_this_controls_volumeControl = _this_controls1.volumeControl) == null ? void 0 : _this_controls_volumeControl.muted) !== muted) {
 	                            // prettier-ignore
-	                            this.controls.volumeControl.emit(EVENTS.volumechange, this._volume, muted);
+	                            this.controls.volumeControl.emit(EVENTS$2.volumechange, this._volume, muted);
 	                        }
 	                    }
 	                }
@@ -12889,7 +13474,7 @@
 	   */ function set(zooming) {
 	                if (this._zooming !== zooming) {
 	                    this._zooming = zooming;
-	                    this.emit(EVENTS.zoomingChange, zooming);
+	                    this.emit(EVENTS$2.zoomingChange, zooming);
 	                    if (this.zoomUtil) {
 	                        if (zooming) {
 	                            var _this_zoomUtil_setUpEventListeners, _this_zoomUtil, _this_zoomUtil_setAllowZoom, _this_zoomUtil1;
@@ -12973,7 +13558,7 @@
 	                if (zoom !== this._zoom) {
 	                    var _this_zoomUtil_setZoom, _this_zoomUtil, _this;
 	                    this._zoom = zoom;
-	                    this.emit(EVENTS.zoomChange, zoom);
+	                    this.emit(EVENTS$2.zoomChange, zoom);
 	                    (_this = this) == null ? void 0 : (_this_zoomUtil = _this.zoomUtil) == null ? void 0 : (_this_zoomUtil_setZoom = _this_zoomUtil.setZoom) == null ? void 0 : _this_zoomUtil_setZoom.call(_this_zoomUtil, zoom);
 	                }
 	            }
@@ -12997,7 +13582,7 @@
 	                speed = +speed;
 	                if (speed !== this._speed) {
 	                    this._speed = speed;
-	                    this.emit(EVENTS.speedChange, speed);
+	                    this.emit(EVENTS$2.speedChange, speed);
 	                }
 	            }
 	        },
@@ -13105,14 +13690,14 @@
 	        }
 	    ]);
 	    return Theme;
-	}(EventEmitter);
+	}(EventEmitter$1);
 	/** 所有私有流的模板 @since 0.0.1 */ Theme.TEMPLATES = TEMPLATES;
-	/** 事件名称 @since 0.0.1 */ Theme.EVENTS = EVENTS;
+	/** 事件名称 @since 0.0.1 */ Theme.EVENTS = EVENTS$2;
 	/** 语言包 @since 0.0.1 */ Theme.LOCALES = {
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.0-beta.2';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.0-beta.3';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 

@@ -11,9 +11,12 @@ dependencies:
   '@ezuikit/control-ptz':
     specifier: ^1.0.0-beta.5
     version: 1.0.0-beta.5
+  '@ezuikit/control-rec-list-modal':
+    specifier: 0.0.1-beta.5
+    version: 0.0.1-beta.5
   '@ezuikit/control-time-line':
-    specifier: 2.1.0-beta.2
-    version: 2.1.0-beta.2
+    specifier: 2.1.0-beta.5
+    version: 2.1.0-beta.5
   '@ezuikit/control-zoom':
     specifier: ^1.0.0-beta.3
     version: 1.0.0-beta.3
@@ -57,6 +60,14 @@ packages:
       deepmerge: 4.3.1
     dev: false
 
+  /@ezuikit/control-modal@0.0.1-beta.7:
+    resolution: {integrity: sha512-GvKyzw2W41NOkygFNa0J30ebfziah2sbROlwUKmjWaf7J//KGyr13K/gg4RkZGB93FbfZov0tnfvmLzFmF7Pog==}
+    dependencies:
+      '@ezuikit/utils-i18n': 2.0.1
+      deepmerge: 4.3.1
+      eventemitter3: 5.0.1
+    dev: false
+
   /@ezuikit/control-ptz@1.0.0-beta.5:
     resolution: {integrity: sha512-tiV/7EqkaYDtVXx+9kS6VTfI9+jzTwlIOKh1gLbAETv0Y5J/u4C5ItLss9XSxgp/EF6OnHCu2zpuN/FLxnwfrQ==}
     dependencies:
@@ -64,8 +75,18 @@ packages:
       deepmerge: 4.3.1
     dev: false
 
-  /@ezuikit/control-time-line@2.1.0-beta.2:
-    resolution: {integrity: sha512-n/HDHrgGJlqH7rh7aUwX+RQbB5QJjeeTGAfthDNqhliKoQIu9ZxMabcWZL02Pad6LN/9xSq3iNpcV0lh2QfNtA==}
+  /@ezuikit/control-rec-list-modal@0.0.1-beta.5:
+    resolution: {integrity: sha512-PpVIKvw8eVkBuEU8+FkcDBY7vGN6K0QHvbU9FCQXqVvaduDfIbT4zFkrV6ZoafCEJ8h3uA9ws7c9fZ33dqSPzg==}
+    dependencies:
+      '@ezuikit/control-modal': 0.0.1-beta.7
+      '@ezuikit/control-virtual-scroll': 0.0.1-beta.3
+      '@ezuikit/utils-i18n': 2.0.1
+      '@ezuikit/utils-tools': 2.0.3
+      deepmerge: 4.3.1
+    dev: false
+
+  /@ezuikit/control-time-line@2.1.0-beta.5:
+    resolution: {integrity: sha512-UjEFT/IfRdFnKARGqeEsLAxuaRETNyFlGZx9rREY9FY72+xOcVd+066Y+A1kRW3mMraABCn9lprQG1w+RQXeVA==}
     dependencies:
       '@ezuikit/utils-i18n': 2.0.0
       '@ezuikit/utils-tools': 2.0.3
@@ -73,6 +94,13 @@ packages:
       '@skax/drag-scroll': 1.1.2
       '@skax/picker': 1.1.8
       deepmerge: 4.3.1
+    dev: false
+
+  /@ezuikit/control-virtual-scroll@0.0.1-beta.3:
+    resolution: {integrity: sha512-cxQFOHCiWDkn921bAYPGTa7L17aiuSUjDUDUrs99PmmDyrvIEPa54sVdEQlo/ylBW8/RCJX72qWNyuONG8vprA==}
+    dependencies:
+      deepmerge: 4.3.1
+      eventemitter3: 5.0.1
     dev: false
 
   /@ezuikit/control-zoom@1.0.0-beta.3:
