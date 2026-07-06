@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.0-beta.3
-* Copyright (c) 2026-07-03 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.0-beta.4
+* Copyright (c) 2026-07-06 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -4672,13 +4672,13 @@ function debounce(func, wait) {
             theme.emit(EVENTS.control.timeLineDestroy);
         });
         // this.emit("TimeLine.onSectionIconClick", result)
-        theme.controls.timeLineControl.on("TimeLine.onSectionIconClick", function(result) {
+        theme.controls.timeLineControl.on('TimeLine.onSectionIconClick', function(result) {
             var _theme_controls;
             if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.recListControl) {
                 var _theme_controls_recListControl, _theme_controls1;
-                (_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_recListControl = _theme_controls1.recListControl) == null ? void 0 : _theme_controls_recListControl.emit("TimeLine.onSectionIconClick", result);
+                (_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_recListControl = _theme_controls1.recListControl) == null ? void 0 : _theme_controls_recListControl.emit('TimeLine.onSectionIconClick', result);
             }
-            theme.emit("TimeLine.onSectionIconClick", result);
+            theme.emit('TimeLine.onSectionIconClick', result);
         });
     }
     // 日历控件
@@ -7452,6 +7452,8 @@ function _set_prototype_of$c(o, p) {
             showMask: false,
             title: (_this_locale = _this.locale) == null ? void 0 : _this_locale.BTN_REC_LIST_TITLE
         }, options, {
+            showEventFilter: false,
+            showCardTypeIcon: false,
             onCardClick: function(section, index, sections) {
                 _this.emit(EVENTS.control.recListCardClick, section, index, sections);
             },
@@ -7465,12 +7467,11 @@ function _set_prototype_of$c(o, p) {
         }));
         _this.on(EVENTS.setAllDayRecTimes, function(records) {
             var // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            _this__modal, _this__modal1;
+            _this__modal;
             _this.disabled = records.length === 0;
             _this.records = records;
             (_this__modal = _this._modal) == null ? void 0 : _this__modal.setSections(records);
-            var _this__options_showEventFilter;
-            (_this__modal1 = _this._modal) == null ? void 0 : _this__modal1.showEventFilter((_this__options_showEventFilter = _this._options.showEventFilter) != null ? _this__options_showEventFilter : true);
+        // this._modal?.showEventFilter(this._options.showEventFilter ?? true);
         });
         _this.on(EVENTS.getOSDTime, function(time) {
             if (time) {
@@ -7479,18 +7480,18 @@ function _set_prototype_of$c(o, p) {
                 (_this__modal = _this._modal) == null ? void 0 : (_this__modal_setActiveTime = _this__modal.setActiveTime) == null ? void 0 : _this__modal_setActiveTime.call(_this__modal, _currentTime);
             }
         });
-        _this.on("TimeLine.onSectionIconClick", function(result) {
+        _this.on('TimeLine.onSectionIconClick', function(result) {
             var // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            _this__modal, _this__modal1, // this._options.rootContainer
-            _this__modal2, _this__modal3, _this__modal4;
+            _this__modal, // this._modal?.showEventFilter(false);
+            // this._options.rootContainer
+            _this__modal1, _this__modal2;
             var list = _this.records.slice(result.index || 0, result.index + result.count);
             var $rootContainer = _this._options.rootContainer;
             var width = $rootContainer.clientWidth;
             var rect = $rootContainer.getBoundingClientRect();
             (_this__modal = _this._modal) == null ? void 0 : _this__modal.setSections(list);
-            (_this__modal1 = _this._modal) == null ? void 0 : _this__modal1.showEventFilter(false);
-            (_this__modal2 = _this._modal) == null ? void 0 : _this__modal2.open();
-            if (!((_this__modal3 = _this._modal) == null ? void 0 : _this__modal3.isVisible)) (_this__modal4 = _this._modal) == null ? void 0 : _this__modal4.setPosition(width + rect.x, rect.y);
+            (_this__modal1 = _this._modal) == null ? void 0 : _this__modal1.open();
+            (_this__modal2 = _this._modal) == null ? void 0 : _this__modal2.setPosition(width + rect.x, rect.y);
         });
         _this.on(EVENTS.recListChange, function(open) {
             _this._panelOpen = open;
@@ -7526,19 +7527,18 @@ function _set_prototype_of$c(o, p) {
         this.active = this._panelOpen;
         if (this.active) {
             var // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            _this__modal, _this__modal1, // this._options.rootContainer
-            _this__modal2, _this__modal3, _this__modal4;
+            _this__modal, // this._options.rootContainer
+            _this__modal1, _this__modal2;
             var $rootContainer = this._options.rootContainer;
             var width = $rootContainer.clientWidth;
             var rect = $rootContainer.getBoundingClientRect();
             (_this__modal = this._modal) == null ? void 0 : _this__modal.setSections(this.records);
-            var _this__options_showEventFilter;
-            (_this__modal1 = this._modal) == null ? void 0 : _this__modal1.showEventFilter((_this__options_showEventFilter = this._options.showEventFilter) != null ? _this__options_showEventFilter : true);
-            (_this__modal2 = this._modal) == null ? void 0 : _this__modal2.open();
-            if (!((_this__modal3 = this._modal) == null ? void 0 : _this__modal3.isVisible)) (_this__modal4 = this._modal) == null ? void 0 : _this__modal4.setPosition(width + rect.x, rect.y);
+            // this._modal?.showEventFilter(this._options.showEventFilter ?? true);
+            (_this__modal1 = this._modal) == null ? void 0 : _this__modal1.open();
+            (_this__modal2 = this._modal) == null ? void 0 : _this__modal2.setPosition(width + rect.x, rect.y);
         } else {
-            var _this__modal5;
-            (_this__modal5 = this._modal) == null ? void 0 : _this__modal5.close();
+            var _this__modal3;
+            (_this__modal3 = this._modal) == null ? void 0 : _this__modal3.close();
         }
         this.emit(EVENTS.control.recListChange, this._panelOpen);
     };
@@ -8635,7 +8635,7 @@ function _set_prototype_of$5(o, p) {
                 }
             },
             onSectionIconClick: function(result) {
-                _this.emit("TimeLine.onSectionIconClick", result);
+                _this.emit('TimeLine.onSectionIconClick', result);
             }
         });
         if (isMobile()) {
@@ -11266,6 +11266,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.0-beta.3';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.0-beta.4';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
