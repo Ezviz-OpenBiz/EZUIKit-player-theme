@@ -1,5 +1,5 @@
 /*
-* @ezuikit/player-theme v3.1.0-beta.4
+* @ezuikit/player-theme v3.1.0-beta.5
 * Copyright (c) 2026-07-06 Ezviz-OpenBiz
 * Released under the MIT License.
 */
@@ -7456,6 +7456,7 @@ function _set_prototype_of$c(o, p) {
         }, options, {
             showEventFilter: false,
             showCardTypeIcon: false,
+            sections: [],
             onCardClick: function(section, index, sections) {
                 _this.emit(EVENTS.control.recListCardClick, section, index, sections);
             },
@@ -8609,6 +8610,7 @@ function _set_prototype_of$5(o, p) {
             showCoverFold: (_this__options_showCoverFold = this._options.showCoverFold) != null ? _this__options_showCoverFold : true,
             hoverTipPlacement: 'top'
         }, this._options || {}, {
+            showSectionIcon: false,
             onClickSeek: function(date) {
                 if (date == null ? void 0 : date.getTime()) {
                     _this._options.onClickSeek == null ? void 0 : _this._options.onClickSeek.call(_this._options, date);
@@ -11268,7 +11270,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.0-beta.4';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.0-beta.5';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;
