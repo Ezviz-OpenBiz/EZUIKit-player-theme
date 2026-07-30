@@ -8,7 +8,7 @@ on:
 
 permissions:
   id-token: write # Required for OIDC
-  contents: read
+  contents: write
 # 任务，定义个changelog 的任务
 jobs:
   changelog:
@@ -99,7 +99,7 @@ jobs:
       # 打包 dist 为自定义压缩包
       - name: Create release archive
         run: |
-          PKG_NAME=$(node -p "require('./package.json').name.name.replace('@ezuikit/', '')")
+          PKG_NAME=$(node -p "require('./package.json').name.replace('@ezuikit/', '')")
           VERSION=$(node -p "require('./package.json').version")
           ARCHIVE_NAME="${PKG_NAME}-${VERSION}"
 
