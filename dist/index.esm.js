@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.0-beta.5
-* Copyright (c) 2026-07-06 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.1-beta.1
+* Copyright (c) 2026-07-30 11:17:11 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -952,7 +952,11 @@ var MESSAGE_DEFAULT_OPTIONS = {};
         if (duration === void 0) duration = 2;
         this._toast(msg, 'warn', duration);
     };
-    _proto.toastError = function toastError(msg, duration) {
+    /**
+   * toast 错误消息（渲染在 rootContainer 上的浮层）
+   * @param {string} msg 消息内容
+   * @param {number} duration 自动关闭延时，单位秒， 默认 2s 后关闭
+   */ _proto.toastError = function toastError(msg, duration) {
         if (duration === void 0) duration = 2;
         this._toast(msg, 'error', duration);
     };
@@ -1792,7 +1796,7 @@ var VOLUME_DEFAULT_OPTIONS = {
             tagName: 'span',
             classNameSuffix: 'volume',
             controlType: 'button'
-        })) || this, _this._muted = false, _this._volume = 0, /** 用来记录静音前的音量 */ _this._lastVolume = 0, _this._progress = null;
+        })) || this, _this._muted = false, _this._volume = 0, /** 用来记录静音前的音量 */ _this._lastVolume = 0, /** 音量进度条实例 @private */ _this._progress = null;
         _this._options = deepmerge(VOLUME_DEFAULT_OPTIONS, options, {
             clone: false
         });
@@ -2494,7 +2498,7 @@ function _set_prototype_of$s(o, p) {
             tagName: 'span',
             classNameSuffix: 'fullscreen',
             controlType: 'button'
-        }, options)) || this, _this.isCurrentFullscreen = false;
+        }, options)) || this, /** 当前是否处于全屏状态 */ _this.isCurrentFullscreen = false;
         _this.options = options;
         _this.isCurrentFullscreen = !!((_options_props = options.props) == null ? void 0 : _options_props.isCurrentFullscreen);
         _this._$rootContainer = (_this_options = _this.options) == null ? void 0 : _this_options.rootContainer;
@@ -2610,14 +2614,19 @@ function _set_prototype_of$r(o, p) {
         return _this;
     }
     var _proto = Rec.prototype;
-    _proto.destroy = function destroy() {
+    /**
+   * 销毁
+   */ _proto.destroy = function destroy() {
         var _this__delegation;
         this.$container.removeEventListener('dblclick', this._onDBlClick);
         (_this__delegation = this._delegation) == null ? void 0 : _this__delegation.destroy();
         this._delegation = null;
         Control.prototype.destroy.call(this);
     };
-    _proto.addRecType = function addRecType(id) {
+    /**
+   * 添加回放类型图标
+   * @param {string} id 回放类型 'rec' | 'cloudRec' | 'cloudRecord'
+   */ _proto.addRecType = function addRecType(id) {
         var spanIcon = '';
         switch(id){
             case 'rec':
@@ -5119,7 +5128,12 @@ function _ts_generator$6(thisArg, body) {
         };
     }
 }
-function getThemeDataByTemplate(theme, id) {
+/**
+ * 获取开放平台轻应用模板数据
+ * @param theme
+ * @param id 开放平台轻应用模板id （https://open.ys7.com/console/ezuikit/template.html）
+ * @returns
+ */ function getThemeDataByTemplate(theme, id) {
     return _async_to_generator$6(function() {
         var _theme_options_token_httpToken, _theme_options_token, url;
         return _ts_generator$6(this, function(_state) {
@@ -5428,7 +5442,8 @@ function _filterLeftRightControls(btnList) {
 }
 /**
  * 获取主题数据 (主题优先级： template > themeDate)
- * @param data
+ * @param theme 主题实例
+ * @param data 主题数据或模板id(萤石开放平台轻应用32位模板字符串)或模板名称
  * @returns
  */ function getThemeData(theme, data) {
     return _async_to_generator$5(function() {
@@ -9720,6 +9735,97 @@ var _renderRecType = function(theme, container, recType, props) {
     if ((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1['recControl']) ((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2['recControl']).addRecType(recType);
 };
 
+/**
+ * 布局溢出（More 收纳）与响应式尺寸分档的**纯函数**模块。
+ *
+ * @remarks
+ * 这些函数只做「计算 / 判定」，不含任何 DOM 副作用，因此可以在没有布局引擎的环境（如 jsdom）
+ * 中被完整单元测试。`theme.ts` 中的命令式外壳（读取 `clientWidth`、增删 class、创建 More、
+ * 搬移控件）负责副作用，具体的判定逻辑全部下沉到这里。
+ */ /**
+ * 一次 classList 变更集合：需要添加与需要移除的类名。
+ */ /**
+ * 根据尺寸计算某一维度（宽或高）需要增删的响应式档位类名。
+ *
+ * 档位规则：
+ * - `(280, 375]` → medium
+ * - `(200, 280]` → small
+ * - `<= 200` → mini
+ * - 其它（> 375）→ 无档位（移除全部）
+ *
+ * @param size 尺寸（px）
+ * @param axis `'width'` 或 `'height'`
+ * @param prefix 类名前缀（如 `ezplayer`）
+ */ function computeDimensionClasses(size, axis, prefix) {
+    var medium = prefix + "-medium-" + axis;
+    var small = prefix + "-small-" + axis;
+    var mini = prefix + "-mini-" + axis;
+    var add = [];
+    var remove = [];
+    if (size > 280 && size <= 375) {
+        add.push(medium);
+        remove.push(small, mini);
+    } else if (size > 200 && size <= 280) {
+        add.push(small);
+        remove.push(medium, mini);
+    } else {
+        if (size <= 200) {
+            add.push(mini);
+        } else {
+            remove.push(mini);
+        }
+        remove.push(small, medium);
+    }
+    return {
+        add: add,
+        remove: remove
+    };
+}
+/**
+ * 计算宽、高两个维度的响应式档位类名增删集合。
+ * @param width 容器宽度（px）
+ * @param height 容器高度（px）
+ * @param prefix 类名前缀
+ */ function computeSizeClasses(width, height, prefix) {
+    var w = computeDimensionClasses(width, 'width', prefix);
+    var h = computeDimensionClasses(height, 'height', prefix);
+    return {
+        add: [].concat(w.add, h.add),
+        remove: [].concat(w.remove, h.remove)
+    };
+}
+/**
+ * header 左右控件宽度之和 + 30 是否超过容器宽度 —— 超过则需要显示 More。
+ */ function shouldShowHeaderMore(width, leftWidth, rightWidth) {
+    return leftWidth + rightWidth + 30 > width;
+}
+/**
+ * header 剩余空间是否 > 100 —— 足够则可以移除 More，把控件放回工具栏。
+ */ function shouldRemoveHeaderMore(width, leftWidth, rightWidth) {
+    return width - leftWidth - rightWidth > 100;
+}
+/**
+ * footer 剩余空间是否 < 16 —— 不足则需要把控件收拢进 More。
+ */ function shouldCollapseFooter(width, leftWidth, rightWidth) {
+    return width - leftWidth - rightWidth < 16;
+}
+/**
+ * footer 从 More 中释放控件时的展开阈值。
+ *
+ * 基准为 50；当 More 中已有控件时，加上首个控件宽度（保持与历史实现一致的运算与兜底：
+ * `50 + firstItemWidth || 0`）。
+ * @param firstItemWidth More 列表中第一个控件的宽度；未提供表示 More 为空。
+ */ function computeFooterExpandOffset(firstItemWidth) {
+    var base = 50;
+    if (firstItemWidth === undefined) return base;
+    return base + firstItemWidth || 0;
+}
+/**
+ * footer 剩余空间是否足够把一个控件从 More 释放回工具栏。
+ */ function shouldExpandFooter(width, leftWidth, rightWidth, offset) {
+    return width - leftWidth - rightWidth > offset;
+}
+
 /* eslint-disable @typescript-eslint/no-non-null-assertion */ function _array_like_to_array(arr, len) {
     if (len == null || len > arr.length) len = arr.length;
     for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
@@ -9973,7 +10079,7 @@ var THEME_DEFAULT_OPTIONS = {
     _inherits(Theme, EventEmitter);
     function Theme(options) {
         var _this;
-        var _this_options_volumeOptions, _this_options_volumeOptions1, _this_options_speedOptions, _this_options, _this_options1, _this_options2, _this_options3;
+        var _this_options_volumeOptions, _this_options_volumeOptions1, _this_options_speedOptions, _this_options, _this_options1;
         _this = EventEmitter.call(this) || this, /** 播放器配置项 */ _this.options = THEME_DEFAULT_OPTIONS, _this.staticPath = '', /** 所有控件列表, 所有控件名称规则（`${iconId}Control`）， 如音量控件 this.controls["volumeControl"]  @since 0.0.1 */ _this.controls = {}, /**
    * @since 0.0.1
    * @private
@@ -10053,16 +10159,31 @@ var THEME_DEFAULT_OPTIONS = {
         _this._headerMoreControlShow = debounce(_this._headerMoreControlShow.bind(_this), 200);
         _this._footerMoreControlShow = debounce(_this._footerMoreControlShow.bind(_this), 200);
         _this.destroyed = false;
-        var _this_options_template, _ref3;
-        // 标准流暂时仅支持 TEMPLATES 中的配置， 多余的的展示不生效（如电子放大是不支持的等等）， 待版本更新才能支持
-        // prettier-ignore
-        _this._renderTheme(// hls 不支持自定义
-        options.type === 'hls' || options.type === 'ezhls' ? hlsLiveTemplate : // flv mp4 支持自定义 themeData
-        [
+        // 标准流暂时仅支持 TEMPLATES 中的配置，多余的展示不生效（如电子放大等），待版本更新后才能支持。
+        //
+        // 下面根据播放类型决定初始渲染使用的「主题数据 / 模板」，规则如下：
+        // 关键点：themeData 只要不是 undefined（即便显式传入 null）就以它为准，
+        //        仅当未传（undefined）时才回退到对应的标准模板；
+        //        因此 themeData: null 表示「不展示主题」，而非回退到默认模板。
+        var themeData = (_this_options = _this.options) == null ? void 0 : _this_options.themeData; // IThemeData | null | undefined
+        var template = (_this_options1 = _this.options) == null ? void 0 : _this_options1.template; //  ThemeTemplateType | string | undefined
+        var initialThemeData;
+        if (options.type === 'hls' || options.type === 'ezhls') {
+            // hls / ezhls：@3.1.1 起支持自定义 themeData，但不支持标准提供的模板；未传时回退 hlsLiveTemplate
+            // FIXME: 部分控件在 hls 下不生效，开发者需自行斟酌
+            initialThemeData = themeData !== undefined ? themeData : hlsLiveTemplate;
+        } else if ([
             'flv',
             'mp4'
-        ].includes(options.type) ? ((_this_options = _this.options) == null ? void 0 : _this_options.themeData) !== undefined ? (_this_options1 = _this.options) == null ? void 0 : _this_options1.themeData : LiveTemplate // 标准流仅支持  null 和 LiveTemplate (支持自定义 2026-01-19)
-         : (_ref3 = (_this_options_template = (_this_options2 = _this.options) == null ? void 0 : _this_options2.template) != null ? _this_options_template : (_this_options3 = _this.options) == null ? void 0 : _this_options3.themeData) != null ? _ref3 : null);
+        ].includes(options.type)) {
+            // flv / mp4：支持自定义 themeData，未传时回退到标准直播模板 LiveTemplate（2026-01-19 起支持自定义）
+            initialThemeData = themeData !== undefined ? themeData : LiveTemplate;
+        } else {
+            var _ref3;
+            // 其余类型（如 ezopen 私有流）：template 优先级高于 themeData，二者都未设置时为 null
+            initialThemeData = (_ref3 = template != null ? template : themeData) != null ? _ref3 : null;
+        }
+        _this._renderTheme(initialThemeData);
         _this._addEventListener();
         _themeEventemitter(_this);
         return _this;
@@ -10457,6 +10578,7 @@ var THEME_DEFAULT_OPTIONS = {
         this._mobileInnerWidthHeight();
         window.addEventListener('resize', this._throttleMobileInnerWidthHeight);
         // ------------------------------  resize observer ----------------------------
+        // istanbul ignore next -- jsdom has no layout engine; clientWidth/height-driven resize bucketing is not exercisable in unit tests
         // prettier-ignore
         this._cleanUpResizeObserver = Utils.resizeObserver(this.$container, throttle(function() {
             var // 窗口尺寸变化时，设置窗口超出隐藏，防止出现滚动条
@@ -10465,40 +10587,14 @@ var THEME_DEFAULT_OPTIONS = {
             // 这里不要使用 $containerWarp.getBoundingClientRect() 获取宽和高  因为会出现小数导致两次(设置后的值和设置后再次获取的值)的宽高不一致 (因为缩放后取整设置，再次获取还有可能是带小数的然后取整 对比两次不一致，一般在屏幕缩放百分比变化和浏览器页面缩放时出现)，致使一直触发 resize 事件
             var width = Math.floor(_this.$container.clientWidth);
             var height = Math.floor(_this.$container.clientHeight);
-            if (width > 280 && width <= 375) {
-                _this.$container.classList.add("" + PREFIX_CLASS + "-medium-width");
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-width");
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
-            } else if (width > 200 && width <= 280) {
-                _this.$container.classList.add("" + PREFIX_CLASS + "-small-width");
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-width");
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
-            } else {
-                if (width <= 200) {
-                    _this.$container.classList.add("" + PREFIX_CLASS + "-mini-width");
-                } else {
-                    _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-width");
-                }
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-width");
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-width");
-            }
-            if (height > 280 && height <= 375) {
-                _this.$container.classList.add("" + PREFIX_CLASS + "-medium-height");
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-height");
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
-            } else if (height > 200 && height <= 280) {
-                _this.$container.classList.add("" + PREFIX_CLASS + "-small-height");
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-height");
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
-            } else {
-                if (height <= 200) {
-                    _this.$container.classList.add("" + PREFIX_CLASS + "-mini-height");
-                } else {
-                    _this.$container.classList.remove("" + PREFIX_CLASS + "-mini-height");
-                }
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-small-height");
-                _this.$container.classList.remove("" + PREFIX_CLASS + "-medium-height");
-            }
+            // 响应式档位类名（纯逻辑见 ./Theme/overflow computeSizeClasses）
+            var sizeClasses = computeSizeClasses(width, height, PREFIX_CLASS);
+            sizeClasses.add.forEach(function(c) {
+                return _this.$container.classList.add(c);
+            });
+            sizeClasses.remove.forEach(function(c) {
+                return _this.$container.classList.remove(c);
+            });
             //
             if (_this.width !== width || _this.height !== height) {
                 var _this_controls;
@@ -10544,7 +10640,7 @@ var THEME_DEFAULT_OPTIONS = {
     /**
    * 窗口尺寸变化判断头部是否需要隐藏控件展示在更多中
    * 尺寸变化结束时 进行判断，为了节省开销
-   */ _proto._headerMoreControlShow = function _headerMoreControlShow() {
+   */ /* istanbul ignore next -- jsdom has no layout engine; clientWidth-driven header overflow (More) logic is not exercisable in unit tests */ _proto._headerMoreControlShow = function _headerMoreControlShow() {
         var _this = this;
         if (this._header) {
             var _this__header_$left, _this__header, _this__header_$right, _this__header1;
@@ -10555,7 +10651,7 @@ var THEME_DEFAULT_OPTIONS = {
             var rightWidth = ((_this__header1 = this._header) == null ? void 0 : (_this__header_$right = _this__header1.$right) == null ? void 0 : _this__header_$right.clientWidth) || 0;
             // 当header 中 left 和 right 宽度之和大于 header 宽度，则 header more 显示
             // 如果 header more 存在，则偏移量量宽度为 150，否则为 100, 因为隐藏多个控件时 right 会变短
-            var showHeaderMore = leftWidth + rightWidth + 30 > this._width;
+            var showHeaderMore = shouldShowHeaderMore(this._width, leftWidth, rightWidth);
             if (showHeaderMore) {
                 var _this_controls;
                 if (!this._headerMoreControl && ((_this_controls = this.controls) == null ? void 0 : _this_controls.recControl)) {
@@ -10583,7 +10679,7 @@ var THEME_DEFAULT_OPTIONS = {
                     (_this_controls1 = this.controls) == null ? void 0 : (_this_controls_recControl = _this_controls1.recControl) == null ? void 0 : _this_controls_recControl.resetPopupContainer(this._headerMoreControl.$panel);
                 }
                 this.emit(Theme.EVENTS.control.headerMoreShowControlsChange, showHeaderMore);
-            } else if (this._width - leftWidth - rightWidth > 100) {
+            } else if (shouldRemoveHeaderMore(this._width, leftWidth, rightWidth)) {
                 var _this_controls2;
                 //
                 if (this._headerMoreControl && ((_this_controls2 = this.controls) == null ? void 0 : _this_controls2.recControl)) {
@@ -10603,7 +10699,7 @@ var THEME_DEFAULT_OPTIONS = {
    */ _proto._footerMoreControlShow = function _footerMoreControlShow() {
         this._displayMore();
     };
-    _proto._displayMore = function _displayMore() {
+    /* istanbul ignore next -- jsdom has no layout engine; clientWidth-driven footer overflow (More) logic is not exercisable in unit tests */ _proto._displayMore = function _displayMore() {
         var _this = this;
         if (this._footer) {
             var _this__footer_$left, _this__footer_$right;
@@ -10611,7 +10707,7 @@ var THEME_DEFAULT_OPTIONS = {
             var leftWidth = ((_this__footer_$left = this._footer.$left) == null ? void 0 : _this__footer_$left.clientWidth) || 0;
             var rightWidth = ((_this__footer_$right = this._footer.$right) == null ? void 0 : _this__footer_$right.clientWidth) || 0;
             // 当footer 中 left 和 right 宽度之和大于 footer 宽度，则 footer more 显示
-            var collapseControl = this._width - leftWidth - rightWidth < 16; // 收拢控件到 More 中
+            var collapseControl = shouldCollapseFooter(this._width, leftWidth, rightWidth); // 收拢控件到 More 中
             if (collapseControl) {
                 var _this__footer, _this__themeData_footer, _this__themeData, _this__footerMoreControl_list, _this__footerMoreControl, _this__footerMoreControl_list1, _this__footerMoreControl1;
                 if (!this._footerMoreControl && ((_this__footer = this._footer) == null ? void 0 : _this__footer.$right)) {
@@ -10691,28 +10787,23 @@ var THEME_DEFAULT_OPTIONS = {
                     this._displayMore();
                 }
             } else {
-                var _this__footerMoreControl_list2, _this__footerMoreControl5, _this__footerMoreControl_list3, _this__footerMoreControl6;
-                var offset = 50;
-                // if (this._footerMoreControl?.list?.length && this._footerMoreControl?.list?.length > 2) {
-                //   offset = 16;
-                // }
-                if ((_this__footerMoreControl5 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list2 = _this__footerMoreControl5.list) == null ? void 0 : _this__footerMoreControl_list2.length) {
-                    offset = offset + this._footerMoreControl.list[0].width || 0;
-                }
-                if (((_this__footerMoreControl6 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list3 = _this__footerMoreControl6.list) == null ? void 0 : _this__footerMoreControl_list3.length) && this._width - leftWidth - rightWidth > offset) {
-                    var _this__footerMoreControl7, _this__footerMoreControl_list4, _this__footerMoreControl8, _this__footerMoreControl_list5, _this__footerMoreControl9;
+                var _this__footerMoreControl_list2, _this__footerMoreControl4, _this__footerMoreControl_list3, _this__footerMoreControl5;
+                // 展开阈值（纯逻辑见 ./Theme/overflow computeFooterExpandOffset）
+                var offset = computeFooterExpandOffset(((_this__footerMoreControl4 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list2 = _this__footerMoreControl4.list) == null ? void 0 : _this__footerMoreControl_list2.length) ? this._footerMoreControl.list[0].width : undefined);
+                if (((_this__footerMoreControl5 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list3 = _this__footerMoreControl5.list) == null ? void 0 : _this__footerMoreControl_list3.length) && shouldExpandFooter(this._width, leftWidth, rightWidth, offset)) {
+                    var _this__footerMoreControl6, _this__footerMoreControl_list4, _this__footerMoreControl7, _this__footerMoreControl_list5, _this__footerMoreControl8;
                     // 110 是为了保住个别控件的宽度超出已知的值， 如英文下 按钮的宽度
                     // 从 More 中一次移除一个控件到 header/footer 中
                     //
-                    var item2 = (_this__footerMoreControl7 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl7.list.shift();
+                    var item2 = (_this__footerMoreControl6 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl6.list.shift();
                     if (item2) {
-                        var _this__footerMoreControl10;
+                        var _this__footerMoreControl9;
                         if (item2.part === 'left') {
                             var _item_control_resetPopupContainer, _item_control;
                             (_item_control = item2.control) == null ? void 0 : (_item_control_resetPopupContainer = _item_control.resetPopupContainer) == null ? void 0 : _item_control_resetPopupContainer.call(_item_control, this._footer.$left, 'append');
                         } else if (item2.part === 'right') {
-                            var _this__footerMoreControl_list6, _this__footerMoreControl11;
-                            if (((_this__footerMoreControl11 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list6 = _this__footerMoreControl11.list) == null ? void 0 : _this__footerMoreControl_list6.length) === 0) {
+                            var _this__footerMoreControl_list6, _this__footerMoreControl10;
+                            if (((_this__footerMoreControl10 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list6 = _this__footerMoreControl10.list) == null ? void 0 : _this__footerMoreControl_list6.length) === 0) {
                                 var _item_control_resetPopupContainer1, _item_control1;
                                 (_item_control1 = item2.control) == null ? void 0 : (_item_control_resetPopupContainer1 = _item_control1.resetPopupContainer) == null ? void 0 : _item_control_resetPopupContainer1.call(_item_control1, this._footer.$right, 'append');
                             } else {
@@ -10720,14 +10811,14 @@ var THEME_DEFAULT_OPTIONS = {
                                 (_item_control2 = item2.control) == null ? void 0 : (_item_control_resetPopupContainer2 = _item_control2.resetPopupContainer) == null ? void 0 : _item_control_resetPopupContainer2.call(_item_control2, this._footer.$right, 'before', this._footerMoreControl.$container);
                             }
                         }
-                        (_this__footerMoreControl10 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl10.remove(item2.control);
+                        (_this__footerMoreControl9 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl9.remove(item2.control);
                     }
-                    if (((_this__footerMoreControl8 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list4 = _this__footerMoreControl8.list) == null ? void 0 : _this__footerMoreControl_list4.length) === 1) {
-                        var _this__footerMoreControl12, _this__footerMoreControl_destroy, _this__footerMoreControl13;
+                    if (((_this__footerMoreControl7 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list4 = _this__footerMoreControl7.list) == null ? void 0 : _this__footerMoreControl_list4.length) === 1) {
+                        var _this__footerMoreControl11, _this__footerMoreControl_destroy, _this__footerMoreControl12;
                         // 最后一个， 移除 More
-                        var item11 = (_this__footerMoreControl12 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl12.list.shift();
+                        var item11 = (_this__footerMoreControl11 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl11.list.shift();
                         if (item11) {
-                            var _this__footerMoreControl14;
+                            var _this__footerMoreControl13;
                             if (item11.part === 'left') {
                                 var _item1_control_resetPopupContainer, _item1_control;
                                 (_item1_control = item11.control) == null ? void 0 : (_item1_control_resetPopupContainer = _item1_control.resetPopupContainer) == null ? void 0 : _item1_control_resetPopupContainer.call(_item1_control, this._footer.$left, 'append');
@@ -10735,13 +10826,13 @@ var THEME_DEFAULT_OPTIONS = {
                                 var _item1_control_resetPopupContainer1, _item1_control1;
                                 (_item1_control1 = item11.control) == null ? void 0 : (_item1_control_resetPopupContainer1 = _item1_control1.resetPopupContainer) == null ? void 0 : _item1_control_resetPopupContainer1.call(_item1_control1, this._footer.$right, 'append');
                             }
-                            (_this__footerMoreControl14 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl14.remove(item11.control);
+                            (_this__footerMoreControl13 = this._footerMoreControl) == null ? void 0 : _this__footerMoreControl13.remove(item11.control);
                         }
-                        (_this__footerMoreControl13 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_destroy = _this__footerMoreControl13.destroy) == null ? void 0 : _this__footerMoreControl_destroy.call(_this__footerMoreControl13);
+                        (_this__footerMoreControl12 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_destroy = _this__footerMoreControl12.destroy) == null ? void 0 : _this__footerMoreControl_destroy.call(_this__footerMoreControl12);
                         this._footerMoreControl = null;
                     }
                     // prettier-ignore
-                    this.emit(Theme.EVENTS.control.footerMoreShowControlsChange, !!this._footerMoreControl, (_this__footerMoreControl9 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list5 = _this__footerMoreControl9.list) == null ? void 0 : _this__footerMoreControl_list5.map(function(item) {
+                    this.emit(Theme.EVENTS.control.footerMoreShowControlsChange, !!this._footerMoreControl, (_this__footerMoreControl8 = this._footerMoreControl) == null ? void 0 : (_this__footerMoreControl_list5 = _this__footerMoreControl8.list) == null ? void 0 : _this__footerMoreControl_list5.map(function(item) {
                         return item.key;
                     }));
                     this._displayMore();
@@ -11268,6 +11359,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.0-beta.5';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.1-beta.1';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
