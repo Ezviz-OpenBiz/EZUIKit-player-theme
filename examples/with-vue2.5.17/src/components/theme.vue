@@ -24,6 +24,7 @@ export default {
         language: 'zh',
         sdkType: 'base',
         template: 'pcRec',
+        height: 400,
         url: 'ezopen://open.ys7.com/BC7799091/1.cloud.rec',
         accessToken: 'at.83jbbwt02uf2e3z439l15j26a6tt0nii-2rvibsbk7l-1ui9xu3-hf5osf52z',
         // template: '9645e76e94cb4c3ba200b7cbd1dd11c6',

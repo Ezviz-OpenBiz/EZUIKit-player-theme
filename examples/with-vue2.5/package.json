@@ -11,8 +11,8 @@
   "dependencies": {
     "vue": "^2.5.17",
     "vue-router": "^3.6.5",
-    "@ezuikit/control-time-line": "2.0.0-beta.4",
-    "@ezuikit/player-theme": "3.0.0-beta.4"
+    "@ezuikit/control-time-line": "2.1.0",
+    "@ezuikit/player-theme": "3.1.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.1",
