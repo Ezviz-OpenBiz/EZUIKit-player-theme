@@ -1,13 +1,13 @@
 /*
-* @ezuikit/player-theme v3.1.1-beta.2
-* Copyright (c) 2026-07-30 01:56:43 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.1
+* Copyright (c) 2026-08-03 10:44:57 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
 import Picker from '@skax/picker';
 import delegate from '@skax/delegate';
 import deepmerge from 'deepmerge';
-import { isMobile, DateTime, parseEzopenUrl } from '@ezuikit/utils-tools';
+import { isMobile, DateTime, parseEzopenUrl, isHttp } from '@ezuikit/utils-tools';
 import screenfull from 'screenfull';
 import I18n from '@ezuikit/utils-i18n';
 import Logger from '@ezuikit/utils-logger';
@@ -10908,6 +10908,18 @@ var THEME_DEFAULT_OPTIONS = {
                     return 'rec';
                 }
             }
+        } else if (isHttp(url) && url.includes("/openpb/llhls/")) {
+            // 萤石 ll-hls 回放
+            if (url.includes("rec=cloud")) {
+                // 云存储
+                this.recType = 'cloudRec';
+                return 'cloudRec';
+            } else if (url.includes("rec=local")) {
+                // 本地存储
+                this.recType = 'rec';
+                return 'rec';
+            }
+        // 不支持云录制
         }
         this.recType = '';
         return '';
@@ -11359,6 +11371,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.1-beta.2';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.1';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };

@@ -6,29 +6,29 @@ settings:
 
 dependencies:
   '@ezuikit/control-date-picker':
-    specifier: 2.1.0-beta.1
-    version: 2.1.0-beta.1
+    specifier: 2.1.1
+    version: 2.1.1
   '@ezuikit/control-ptz':
-    specifier: ^1.0.0-beta.5
-    version: 1.0.0-beta.5
+    specifier: 1.0.0
+    version: 1.0.0
   '@ezuikit/control-rec-list-modal':
-    specifier: 0.0.1-beta.6
-    version: 0.0.1-beta.6
+    specifier: 0.0.1
+    version: 0.0.1
   '@ezuikit/control-time-line':
-    specifier: 2.1.0-beta.8
-    version: 2.1.0-beta.8
+    specifier: 2.1.0
+    version: 2.1.0
   '@ezuikit/control-zoom':
-    specifier: ^1.0.0-beta.3
-    version: 1.0.0-beta.3
+    specifier: 1.0.0-beta.4
+    version: 1.0.0-beta.4
   '@ezuikit/utils-i18n':
-    specifier: 2.0.1
+    specifier: ^2.0.1
     version: 2.0.1
   '@ezuikit/utils-logger':
-    specifier: 2.0.1
+    specifier: ^2.0.1
     version: 2.0.1
   '@ezuikit/utils-tools':
-    specifier: 2.0.3
-    version: 2.0.3
+    specifier: ^2.0.6
+    version: 2.0.6
   '@juggle/resize-observer':
     specifier: ^3.4.0
     version: 3.4.0
@@ -50,11 +50,11 @@ dependencies:
 
 packages:
 
-  /@ezuikit/control-date-picker@2.1.0-beta.1:
-    resolution: {integrity: sha512-cA0JY0FoPW5i+w1jVM2qnVkKC4q2oZ9ydEmGAw8fyxvfohHS3MJNRjCqcH6scbvTQx9I4U1lahvsdK3fPKJSLQ==}
+  /@ezuikit/control-date-picker@2.1.1:
+    resolution: {integrity: sha512-gahPkxzpxNRuWLjjoE5IImQbO9MRC8k/v5CwLMofrxzMowzx0f8YqqAlQR7mZ6uW/gfHBoCezMvABLBKODRiww==}
     dependencies:
-      '@ezuikit/utils-i18n': 2.0.0
-      '@ezuikit/utils-tools': 2.0.3
+      '@ezuikit/utils-i18n': 2.0.1
+      '@ezuikit/utils-tools': 2.0.6
       '@skax/delegate': 4.0.2
       '@skax/picker': 1.1.8
       deepmerge: 4.3.1
@@ -68,28 +68,28 @@ packages:
       eventemitter3: 5.0.1
     dev: false
 
-  /@ezuikit/control-ptz@1.0.0-beta.5:
-    resolution: {integrity: sha512-tiV/7EqkaYDtVXx+9kS6VTfI9+jzTwlIOKh1gLbAETv0Y5J/u4C5ItLss9XSxgp/EF6OnHCu2zpuN/FLxnwfrQ==}
+  /@ezuikit/control-ptz@1.0.0:
+    resolution: {integrity: sha512-4N0NX3ocJxVVqyVbYwwJXhh8HIJFudBuZHmhXPShpLFS1SbO3Ej/GhYNVsPUNG7JdoiL31Bn6M3pbkbP05JBCQ==}
     dependencies:
-      '@ezuikit/utils-tools': 2.0.3
+      '@ezuikit/utils-tools': 2.0.6
       deepmerge: 4.3.1
     dev: false
 
-  /@ezuikit/control-rec-list-modal@0.0.1-beta.6:
-    resolution: {integrity: sha512-dZ4c6NyF1RxjoLUecWfPrLZXGSHBVRF50F7tGwPLanA3wGjinA2sJWGHAIsyJwX6mhNiMdRvdixA3hzgl+xJXA==}
+  /@ezuikit/control-rec-list-modal@0.0.1:
+    resolution: {integrity: sha512-uqA5arV5kcdLcsZwe74hcd5UIbPeM/ZASDi1bqm7uqVVpMl4Igy7W+xDc/OQxzrvXzmk6VXabx98zh9al2qYYA==}
     dependencies:
       '@ezuikit/control-modal': 0.0.1
       '@ezuikit/control-virtual-scroll': 0.0.1
       '@ezuikit/utils-i18n': 2.0.1
-      '@ezuikit/utils-tools': 2.0.3
+      '@ezuikit/utils-tools': 2.0.6
       deepmerge: 4.3.1
     dev: false
 
-  /@ezuikit/control-time-line@2.1.0-beta.8:
-    resolution: {integrity: sha512-q5TsE0EoW1n4SbxefkFjsmykLzWu5PkzhcVUXBRVPA5aL3AIwA6d3Vj2gii0/1ouGJ5IFwBIaIS0rIp1qKK3XQ==}
+  /@ezuikit/control-time-line@2.1.0:
+    resolution: {integrity: sha512-hUk9VF+R4tozbJ5O8yFEhSTI1iHLyild+Uli+E7uag0LIfaSYSNY1dqps4TiXWwTzet3lfn2mYYq8jZGVd1kKw==}
     dependencies:
-      '@ezuikit/utils-i18n': 2.0.0
-      '@ezuikit/utils-tools': 2.0.3
+      '@ezuikit/utils-i18n': 2.0.1
+      '@ezuikit/utils-tools': 2.0.6
       '@skax/delegate': 4.0.2
       '@skax/drag-scroll': 1.1.2
       '@skax/picker': 1.1.8
@@ -103,14 +103,8 @@ packages:
       eventemitter3: 5.0.1
     dev: false
 
-  /@ezuikit/control-zoom@1.0.0-beta.3:
-    resolution: {integrity: sha512-FzTgPYAzGUjw6kRdzBWzjk0SpGnFJbXtF5nTLq18dvH3KYoN/xH8SpI67O9cENR5VFzZZQzb3hU8j81oMtPXug==}
-    dev: false
-
-  /@ezuikit/utils-i18n@2.0.0:
-    resolution: {integrity: sha512-gMkfdwFTRk3bAkUVWRGPyEsQl4aIImBpQp732aSSHA75LFPi1MmdaB2Xf34OeC+4v+Anpbt75vviCpUrKPMKlQ==}
-    dependencies:
-      deepmerge: 4.3.1
+  /@ezuikit/control-zoom@1.0.0-beta.4:
+    resolution: {integrity: sha512-MG+weJeYSeh86LyZWFseUSWw9VCkyKFIE0V58Nee1+NCIuctbTd9fBmtAexX8xHEiApHKDwfQmwc+xlUZgTb6Q==}
     dev: false
 
   /@ezuikit/utils-i18n@2.0.1:
@@ -123,8 +117,8 @@ packages:
     resolution: {integrity: sha512-AeLLR9ZQJkSJFfCicpkVBcnOE4zyQMp4W4997sTEGyF3k3I8Upkfn4Cye2A44MIphdw6eytKlaJp6H4joSafQw==}
     dev: false
 
-  /@ezuikit/utils-tools@2.0.3:
-    resolution: {integrity: sha512-YvUGDU1ikjSc5YjQLh6kQWGBOpqkOczb3HiocWm7FOk9grW6IAGd3RbRu0e+XyWT20nefcEpbIhRwOYsTejjnA==}
+  /@ezuikit/utils-tools@2.0.6:
+    resolution: {integrity: sha512-1XUk8IY28FpspjzgbbVEfcsRiwKx9l5ltjOYw9RYh3BK2XAKv2B2N+79RCQ1qfmjLVsHLx2H8xTwSJECSWcnqg==}
     dev: false
 
   /@juggle/resize-observer@3.4.0:
