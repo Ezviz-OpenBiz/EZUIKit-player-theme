@@ -4,6 +4,7 @@ import I18n, { I18nTranslation } from '@ezuikit/utils-i18n';
 import { LoggerCls, LoggerOptions } from '@ezuikit/utils-logger';
 import { BasePtzOptions } from '@ezuikit/control-ptz';
 import { RecListModalOptions } from '@ezuikit/control-rec-list-modal';
+import * as _ezuikit_utils_tools from '@ezuikit/utils-tools';
 import Zoom from '@ezuikit/control-zoom';
 import { TimeLineTimeSection } from '@ezuikit/control-time-line';
 import { TimePickerOptions } from '@ezuikit/control-date-picker';
@@ -17,7 +18,7 @@ declare const THEME_SCALE_MODE_TYPE: {
     /** 视频画面做等比缩放后,完全填充canvas区域,画面不被拉伸,没有黑边,但画面显示不全 */
     readonly fullAuto: 2;
 };
-declare const THEME_PROPS: readonly ["width", "height", "playing", "volume", "muted", "loading", "recType", "isCurrentFullscreen", "orientationAngle", "zooming", "zoom", "recording", "recordList", "speed", "urlInfo", "videoLevelList", "videoLevel", "recMonth"];
+declare const THEME_PROPS: readonly ["width", "height", "playing", "volume", "muted", "loading", "recType", "isCurrentFullscreen", "orientationAngle", "zooming", "zoom", "recording", "recordList", "speed", "urlInfo", "videoLevelList", "videoLevel", "recMonth", "url"];
 /**
  *
  * 事件名
@@ -1491,9 +1492,10 @@ declare class Theme extends EventEmitter {
         readonly audioInfo: "audioInfo";
         readonly videoInfo: "videoInfo";
         readonly firstFrameDisplay: "firstFrameDisplay";
-        readonly fullscreen: "fullscreen";
+        readonly fullscreen: "fullscreen"; /** 所有私有流的模板 @since 0.0.1 */
         readonly exitFullscreen: "exitFullscreen";
         readonly fullscreenChange: "fullscreenChange";
+        /** 播放器配置项 */
         readonly resize: "resize";
         readonly orientationChange: "orientationChange";
         readonly audioCodecUnsupported: "audioCodecUnsupported";
@@ -1503,7 +1505,7 @@ declare class Theme extends EventEmitter {
         readonly speedChange: "speedChange";
         readonly recordingChange: "recordingChange";
         readonly talkingChange: "talkingChange";
-        readonly talkVolumeChange: "talkVolumeChange";
+        readonly talkVolumeChange: "talkVolumeChange"; /** 封面控件 @since 0.0.1 @private */
         readonly broadcastChange: "broadcastChange";
         readonly aichatChange: "aichatChange";
         readonly liveChange: "liveChange";
@@ -1520,9 +1522,9 @@ declare class Theme extends EventEmitter {
         readonly getOSDTime: "getOSDTime";
         readonly control: {
             readonly play: "Control.play";
-            readonly playDestroy: "Control.playDestroy"; /**  @since 0.0.1 @private */
+            readonly playDestroy: "Control.playDestroy";
             readonly capturePicture: "Control.capturePicture";
-            readonly capturePictureResult: "Control.capturePictureResult";
+            readonly capturePictureResult: "Control.capturePictureResult"; /**  @since 0.0.1 @private */
             readonly capturePictureDestroy: "Control.capturePictureDestroy";
             readonly volumechange: "Control.volumechange";
             readonly volumePanelOpenChange: "Control.volumePanelOpenChange";
@@ -1531,7 +1533,6 @@ declare class Theme extends EventEmitter {
             readonly headerMoreShowControlsChange: "Control.headerMoreShowControlsChange";
             readonly headerMorePanelOpenChange: "Control.headerMorePanelOpenChange";
             readonly footerMoreShowControlsChange: "Control.footerMoreShowControlsChange";
-            /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */
             readonly footerMorePanelOpenChange: "Control.footerMorePanelOpenChange";
             readonly deviceDestroy: "Control.deviceDestroy";
             readonly recTypeChange: "Control.recTypeChange";
@@ -1541,6 +1542,9 @@ declare class Theme extends EventEmitter {
             readonly definitionPanelOpenChange: "Control.definitionPanelOpenChange";
             readonly definitionDestroy: "Control.definitionDestroy";
             readonly speedChange: "Control.speedChange";
+            /**
+             * 录像回放的月份列表 @private
+             */
             readonly speedPanelOpenChange: "Control.speedPanelOpenChange";
             readonly speedDestroy: "Control.speedDestroy";
             readonly ptzPanelOpenChange: "Control.ptzPanelOpenChange";
@@ -1595,7 +1599,9 @@ declare class Theme extends EventEmitter {
             readonly mobileExtendDestroy: "Theme.mobileExtendDestroy";
             readonly recFooterDestroy: "Theme.recFooterDestroy";
         };
-        readonly message: "message";
+        readonly message: "message"; /**
+         * url 信息 播放地址信息
+         */
     };
     /** 语言包 @since 0.0.1 */
     static LOCALES: {
@@ -1700,6 +1706,7 @@ declare class Theme extends EventEmitter {
             397007: string;
             399000: string;
             399001: string;
+            /** 移动端竖屏, 全屏情况下不展示扩张，放置在 footer 中 */
             399002: string;
             399016: string;
             399048: string;
@@ -1764,6 +1771,7 @@ declare class Theme extends EventEmitter {
             CHANGE_VIDEO_LEVEL: string;
             CHANGE_VIDEO_LEVEL_FAIL: string;
             GET_VIDEO_LEVEL_LIST: string;
+            /** 消息提示控件 @since 0.0.1 @private */
             PLEASE_INPUT_RIGHT_VIDEO_LEVEL: string;
             VIDEO_LEVEL_NOT_SUPPORT: string;
             VIDEO_LEVEL_AUTO: string;
@@ -1786,17 +1794,18 @@ declare class Theme extends EventEmitter {
             BTN_AICHAT: string;
             BTN_LIVE: string;
             BTN_REC_DROPDOWN: string;
-            BTN_ALARM_MESSAGE: string; /** 低部控件 @since 0.0.1 @private */
+            BTN_ALARM_MESSAGE: string;
             REC_DROPDOWN_CLOUD_REC: string;
-            REC_DROPDOWN_CLOUD_RECORD: string; /** 回放底部时间轴 @since 0.0.1 @private */
+            REC_DROPDOWN_CLOUD_RECORD: string;
             REC_DROPDOWN_LOCAL_REC: string;
-            BTN_ZOOM: string;
-            BTN_3D_ZOOM: string; /**
+            BTN_ZOOM: string; /** 回放底部时间轴 @since 0.0.1 @private */
+            BTN_3D_ZOOM: string;
+            BTN_PTZ: string;
+            BTN_GLOBAL_FULLSCREEN: string;
+            /**
              * 移动端扩展容器, 扩展的控件渲染在指定容器以外， 仅只用端适用， 为了可以放置大的控件和方便开发接入
              * @private
              */
-            BTN_PTZ: string;
-            BTN_GLOBAL_FULLSCREEN: string;
             BTN_EXIT_GLOBAL_FULLSCREEN: string;
             BTN_FULLSCREEN: string;
             BTN_EXIR_FULLSCREEN: string;
@@ -1814,13 +1823,14 @@ declare class Theme extends EventEmitter {
             CAPTURE_FAILED: string;
             START_RECORD_SUCCESS: string;
             START_RECORD_FAILED: string;
-            STOP_RECORD_SUCCESS: string;
+            STOP_RECORD_SUCCESS: string; /**  resizeObserver 监听销毁 */
             STOP_RECORD_FAILED: string;
             RECORD_TIPS: string;
             RECORDS: string;
             OPEN_SOUND: string;
             CLOSE_SOUND: string;
             SOUND_OPENED: string;
+            /** 容器的宽 */
             ZOOM: string;
             START_ZOOM: string;
             CLOSE_ZOOM: string;
@@ -1829,10 +1839,11 @@ declare class Theme extends EventEmitter {
             ZOOM_ADD_MAX: string;
             ZOOM_SUB_MIN: string;
             ZOOM_LIMIT_MAX: string;
-            ZOOM_LIMIT_MIN: string; /** @private 加载中 */
+            ZOOM_LIMIT_MIN: string;
             ZOOM_NOT_ENABLED: string;
-            '3D_ZOOM': string; /** 音量 */
-            '3D_ZOOM_DISABLE': string; /** 静音 */
+            '3D_ZOOM': string;
+            /** @private 加载中 */
+            '3D_ZOOM_DISABLE': string;
             '3D_ZOOM_FAILED': string;
             START_3D_ZOOM: string;
             CLOSE_3D_ZOOM: string;
@@ -1840,38 +1851,36 @@ declare class Theme extends EventEmitter {
             '3D_ZOOM_ACTIVED': string;
             '3D_ZOOM_NOT_ACTIVED': string;
             '3D_ZOOM_CLOSED': string;
-            CHANGE_ZOOM_TYPE: string; /** 自定清晰度 @private */
+            CHANGE_ZOOM_TYPE: string;
             FULLSCREEN: string;
-            FULLSCREEN_EXIT: string;
+            FULLSCREEN_EXIT: string; /** 自定清晰度 @private */
             GET_WEB_FULLSCREEN_STATUS: string;
             WEB_FULLSCREEN: string;
             WEB_FULLSCREEN_EXIT: string;
+            /** 回放片段列表 */
             DESTROY: string;
             GET_CAPACITY: string;
             GET_PTZ_STATUS: string;
             GET_PTZ_STATUS_FAILED: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
             MOBILE_HIDE_PTZ: string;
             OPTION_PTZ_FAILED: string;
             MOBILE_PTZ_TIPS: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
             PTZ_FAST: string;
             PTZ_MID: string;
             PTZ_SLOW: string;
             PTZ_SPEED: string;
             DEVICE_ZOOM: string;
             DEVICE_FOCUS: string;
+            /**
+             * 录像回放的月份列表 @private
+             */
             NOT_SUPPORT_DEVICE_ZOOM: string;
             NOT_SUPPORT_FOCUS: string;
             MIRROR: string;
             MIRROR_TYPE_ERROR: string;
             CHANGE_FEC_TYPE: string;
             DEVICE_NOT_SUPPORT: string;
-            TYPE_NOT_SUPPORT: string; /** 播放地址信息 */
+            TYPE_NOT_SUPPORT: string; /** 销毁标识  @readonly */
             FEC_SUPPORT_VERSION: string;
             NO_CANVAS_ID: string;
             SET_FEC_PARAMS: string;
@@ -1930,7 +1939,7 @@ declare class Theme extends EventEmitter {
             395558: string;
             395560: string;
             395561: string;
-            395562: string; /** 事件名称 @since 0.0.1 */
+            395562: string;
             395563: string;
             395564: string;
             395566: string;
@@ -1941,7 +1950,8 @@ declare class Theme extends EventEmitter {
             395601: string;
             395602: string;
             395610: string;
-            395620: string; /** 封面控件 @since 0.0.1 @private */
+            /** 暂停控件 @since 0.0.1 @private */
+            395620: string;
             395701: string;
             395702: string;
             395703: string;
@@ -1957,14 +1967,14 @@ declare class Theme extends EventEmitter {
             396108: string;
             396109: string;
             396110: string;
-            /**  resizeObserver 监听销毁 */
             396501: string;
             396502: string;
             396503: string;
             396504: string;
             396505: string;
-            396506: string;
-            396508: string; /** 静音 */
+            /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */
+            396506: string; /** 是否播放中 @private */
+            396508: string;
             396509: string;
             396510: string;
             396511: string;
@@ -1972,9 +1982,6 @@ declare class Theme extends EventEmitter {
             396513: string;
             396514: string;
             396515: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
             396516: string;
             396517: string;
             396518: string;
@@ -2033,7 +2040,9 @@ declare class Theme extends EventEmitter {
             STOP_SUCCESS: string;
             CHANGE_PLAYURL_SUCCESS: string;
             CHANGE_PLAYURL_FAILED: string;
-            GET_OSD_TIME: string;
+            GET_OSD_TIME: string; /**
+             * url 信息 播放地址信息
+             */
             GET_OSD_TIME_FAILED: string;
             SET_POSTER: string;
             RESIZE: string;
@@ -2041,12 +2050,6 @@ declare class Theme extends EventEmitter {
             SPEED_RATE: string;
             SPEED_CANCEL: string;
             GET_SPEED: string;
-            /**
-             * 当前播放状态
-             * ```ts
-             * theme.playing // boolean
-             * ```
-             */
             MAX_SPEED_LIMIT: string;
             MIN_SPEED_LIMIT: string;
             SEEK_CANNOT_CROSS_DAYS: string;
@@ -2076,13 +2079,6 @@ declare class Theme extends EventEmitter {
             BTN_PAUSE: string;
             BTN_VOLUME: string;
             BTN_MUTED: string;
-            /**
-             * 加载状态
-             * ```ts
-             * // 事件监听
-             * theme.on(Theme.EVENTS.loading, (loading: boolean) => {})
-             * ```
-             */
             BTN_RECORDVIDEO: string;
             BTN_CAPTURE: string;
             BTN_TALK: string;
@@ -2294,10 +2290,12 @@ declare class Theme extends EventEmitter {
     _onPauseTimingFunc: ((open: boolean) => void) | null;
     /** 销毁标识  @readonly */
     destroyed: boolean;
-    /** 播放地址信息 */
-    urlInfo: any | null;
     scaleMode: ThemeOptions['scaleMode'];
     constructor(options: ThemeOptions);
+    /**
+     * url 信息 播放地址信息
+     */
+    get urlInfo(): Partial<_ezuikit_utils_tools.EzopenURL>;
     /**
      * 容器的宽(单位 px)
      * ```ts
@@ -2629,7 +2627,7 @@ declare class Theme extends EventEmitter {
      * @param url 录像 url
      * @returns {"rec" | "cloudRecord" | "cloudRec" | ""} 录像类型， rec: 录像， cloudRec: 云录像， cloudRecord: 云录制
      */
-    protected _getRecType(url: string): "" | "rec" | "cloudRec" | "cloudRecord";
+    protected _getRecType(url: string): "" | "cloudRec" | "cloudRecord" | "rec";
     private resetControl;
     /**
      * 窗口全屏后旋转 90度判断， 然后设置控件已经旋转 90度， 为了解决控件交互问题
@@ -2755,7 +2753,7 @@ interface ThemeOptions {
     ptzOptions?: OmitControlOptions<PtzOptions> | null;
     /** 回放类型控件配置， 设置 null 不渲染控件 @since 0.0.1 */
     recOptions?: OmitControlOptions<RecOptions> | null;
-    /** 录像列表控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    /** 录像列表控件配置， 设置 null 不渲染控件 @since 3.1.1 */
     recListOptions?: OmitControlOptions<RecListOptions> | null;
     /** 录制控件配置 ，设置 null 不渲染控件 @since 0.0.1 */
     recordOptions?: OmitControlOptions<RecordOptions> | null;

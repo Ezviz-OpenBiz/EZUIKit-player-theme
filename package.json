@@ -1,6 +1,6 @@
 {
   "name": "@ezuikit/player-theme",
-  "version": "3.1.1",
+  "version": "3.1.2-beta.1",
   "description": "player theme",
   "title": "theme",
   "main": "dist/index.cjs",
@@ -27,6 +27,7 @@
     "theme",
     "ezuikit",
     "ezviz",
+    "ezopen",
     "ui"
   ],
   "author": "Ezviz-OpenBiz",

@@ -1,13 +1,13 @@
 /*
-* @ezuikit/player-theme v3.1.1
-* Copyright (c) 2026-08-03 10:44:57 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.2-beta.1
+* Copyright (c) 2026-08-10 02:32:17 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
 import Picker from '@skax/picker';
 import delegate from '@skax/delegate';
 import deepmerge from 'deepmerge';
-import { isMobile, DateTime, parseEzopenUrl, isHttp } from '@ezuikit/utils-tools';
+import { isMobile, DateTime, isHttp, parseEzopenUrl } from '@ezuikit/utils-tools';
 import screenfull from 'screenfull';
 import I18n from '@ezuikit/utils-i18n';
 import Logger from '@ezuikit/utils-logger';
@@ -45,7 +45,8 @@ var THEME_PROPS = [
     'urlInfo',
     'videoLevelList',
     'videoLevel',
-    'recMonth'
+    'recMonth',
+    'url'
 ];
 /**
  * 当移动端 picker 控件打开时需要关闭动画（定时器）
@@ -3329,6 +3330,59 @@ var en = {
             {
                 iconId: 'zoom',
                 part: 'left',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
+                iconId: 'fullscreen',
+                part: 'right',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
+                iconId: 'globalFullscreen',
+                part: 'right',
+                defaultActive: 0,
+                isrender: 1
+            }
+        ]
+    }
+};
+
+/**
+ * flv 预览
+ */ var hlsRecTemplate = {
+    autoFocus: 3,
+    // poster:
+    //   "https://img2.baidu.com/it/u=3209353042,356122753&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
+    footer: {
+        btnList: [
+            {
+                iconId: 'play',
+                part: 'left',
+                isrender: 1
+            },
+            {
+                iconId: 'capturePicture',
+                part: 'left',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
+                iconId: 'volume',
+                part: 'left',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
+                iconId: 'zoom',
+                part: 'left',
+                defaultActive: 0,
+                isrender: 1
+            },
+            {
+                iconId: 'speed',
+                part: 'right',
                 defaultActive: 0,
                 isrender: 1
             },
@@ -8202,7 +8256,7 @@ var SPEED_DEFAULT_OPTIONS = {
                 _assert_this_initialized(_this).emit(EVENTS.control.speedPanelOpenChange, open, value, item);
             }
         })) || this;
-        _this._filterSpeedList(options.list, options.props.recType);
+        _this._filterSpeedList(options.list, options.props.recType, options.props.url);
         _this.on(EVENTS.speedChange, function(speed) {
             if (_this.value !== speed + '') _this.value = speed + '';
         });
@@ -8216,18 +8270,24 @@ var SPEED_DEFAULT_OPTIONS = {
    * 滤掉本地回放不支持的倍速
    * @param optionsList 初始化配置倍速列表
    * @param type 回放类型
-   */ _proto._filterSpeedList = function _filterSpeedList(optionsList, type) {
+   */ _proto._filterSpeedList = function _filterSpeedList(optionsList, type, url) {
         if (!optionsList) {
-            // 非用户自定义
-            if (type === 'rec') {
-                // 本地回放 不支持 8 16 32 倍速
+            // 非用户自定义  /openpb/ 是标准流回放路径
+            if (type === 'rec' || (url == null ? void 0 : url.includes('/openpb/'))) {
+                // ezopen本地回放 或 hls 回放 不支持 8 16 32 倍速
                 var list = this.list.filter(function(item) {
                     return (item == null ? void 0 : item.value) && +item.value < 8;
                 });
                 this.updateOptions(list);
-            } else {
+            } else if (type === 'cloudRec' || type === 'cloudRecord') {
                 // 云端回放 支持 8 16 32 倍速
                 this.updateOptions(SPEED_DEFAULT_OPTIONS.list);
+            } else {
+                // 三方默认回放倍速设置
+                var list1 = this.list.filter(function(item) {
+                    return (item == null ? void 0 : item.value) && +item.value < 8;
+                });
+                this.updateOptions(list1);
             }
         }
     };
@@ -9507,7 +9567,11 @@ function _renderTheme(theme, data) {
                     }
                     if (!theme._playing) (_theme_posterControl = theme.posterControl) == null ? void 0 : _theme_posterControl.show();
                     props = THEME_PROPS.reduce(function(acc, cur) {
-                        acc[cur] = theme[cur];
+                        if (cur === 'url') {
+                            acc[cur] = theme.options.url;
+                        } else {
+                            acc[cur] = theme[cur];
+                        }
                         return acc;
                     }, {});
                     // 由于 resize 改变有延时（节流）， 第一次渲染时， 宽度高度可能为 0， 需要手动设置一下
@@ -10110,11 +10174,10 @@ var THEME_DEFAULT_OPTIONS = {
         // _recMonthObj: Record<string, string[]> = {};
         /**
    * 录像回放的月份列表 @private
-   */ _this.recMonth = [], /** 清理 header/footer 动画 定时器 @private */ _this._onPauseTimingFunc = null, /** 销毁标识  @readonly */ _this.destroyed = false, /** 播放地址信息 */ _this.urlInfo = null, _this.scaleMode = 0;
+   */ _this.recMonth = [], /** 清理 header/footer 动画 定时器 @private */ _this._onPauseTimingFunc = null, /** 销毁标识  @readonly */ _this.destroyed = false, _this.scaleMode = 0;
         _this._initOptions(options);
         if (_this.options.type === 'ezopen') {
             var _this_urlInfo_searchParams, _this_urlInfo;
-            _this.urlInfo = parseEzopenUrl(_this.options.url);
             if ((_this_urlInfo = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.spaceId) {
                 _this.options.spaceId = _this.urlInfo.searchParams.spaceId;
             }
@@ -10169,9 +10232,10 @@ var THEME_DEFAULT_OPTIONS = {
         var template = (_this_options1 = _this.options) == null ? void 0 : _this_options1.template; //  ThemeTemplateType | string | undefined
         var initialThemeData;
         if (options.type === 'hls' || options.type === 'ezhls') {
+            var _options_url;
             // hls / ezhls：@3.1.1 起支持自定义 themeData，但不支持标准提供的模板；未传时回退 hlsLiveTemplate
-            // FIXME: 部分控件在 hls 下不生效，开发者需自行斟酌
-            initialThemeData = themeData !== undefined ? themeData : hlsLiveTemplate;
+            // FIXME: themeData 部分控件在 hls 下不生效，开发者需自行斟酌
+            initialThemeData = themeData !== undefined ? themeData : ((_options_url = options.url) == null ? void 0 : _options_url.includes('/openpb/')) ? hlsRecTemplate : hlsLiveTemplate;
         } else if ([
             'flv',
             'mp4'
@@ -10894,13 +10958,12 @@ var THEME_DEFAULT_OPTIONS = {
    * @returns {"rec" | "cloudRecord" | "cloudRec" | ""} 录像类型， rec: 录像， cloudRec: 云录像， cloudRecord: 云录制
    */ _proto._getRecType = function _getRecType(url) {
         if (this.options.type === 'ezopen' && /^ezopen:\/\//.test(url)) {
-            var urlInfo = parseEzopenUrl(url);
-            if (urlInfo.type === 'rec') {
-                var _urlInfo_searchParams;
-                if (urlInfo.recType === 'cloud' && (urlInfo == null ? void 0 : (_urlInfo_searchParams = urlInfo.searchParams) == null ? void 0 : _urlInfo_searchParams.busType) === '7') {
+            if (this.urlInfo.type === 'rec') {
+                var _this_urlInfo_searchParams, _this_urlInfo;
+                if (this.urlInfo.recType === 'cloud' && ((_this_urlInfo = this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.busType) === '7') {
                     this.recType = 'cloudRecord';
                     return 'cloudRecord';
-                } else if (urlInfo.recType === 'cloud') {
+                } else if (this.urlInfo.recType === 'cloud') {
                     this.recType = 'cloudRec';
                     return 'cloudRec';
                 } else {
@@ -10908,13 +10971,13 @@ var THEME_DEFAULT_OPTIONS = {
                     return 'rec';
                 }
             }
-        } else if (isHttp(url) && url.includes("/openpb/llhls/")) {
-            // 萤石 ll-hls 回放
-            if (url.includes("rec=cloud")) {
+        } else if (isHttp(url) && url.includes('/openpb/')) {
+            // 萤石 ll-hls/flv 回放
+            if (url.includes('rec=cloud')) {
                 // 云存储
                 this.recType = 'cloudRec';
                 return 'cloudRec';
-            } else if (url.includes("rec=local")) {
+            } else if (url.includes('rec=local')) {
                 // 本地存储
                 this.recType = 'rec';
                 return 'rec';
@@ -10962,6 +11025,17 @@ var THEME_DEFAULT_OPTIONS = {
         }
     };
     _create_class(Theme, [
+        {
+            key: "urlInfo",
+            get: /**
+   * url 信息 播放地址信息
+   */ function get() {
+                if (this.options.url) {
+                    return parseEzopenUrl(this.options.url);
+                }
+                return {};
+            }
+        },
         {
             key: "width",
             get: /**
@@ -11371,6 +11445,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.2-beta.1';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
