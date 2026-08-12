@@ -20,7 +20,8 @@
     "./dist/constant": "./dist/constant.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/*.map"
   ],
   "keywords": [
     "player",
