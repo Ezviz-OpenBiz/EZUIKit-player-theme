@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.2-beta.1
-* Copyright (c) 2026-08-10 02:32:17 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.2-beta.2
+* Copyright (c) 2026-08-12 04:37:54 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -8642,6 +8642,7 @@
 	    _inherits$f(AIChat, Control);
 	    function AIChat(options) {
 	        var _this;
+	        var _options_urlInfo_searchParams, _options_urlInfo, _options_urlInfo1;
 	        _this = Control.call(this, _extends$h({}, options, {
 	            tagName: 'span',
 	            controlType: 'button',
@@ -8655,7 +8656,7 @@
 	                _this._render();
 	            }
 	        });
-	        if (options.urlInfo.searchParams.busType !== '7' && options.urlInfo.recType === 'cloud' && options.sdkType === 'base') {
+	        if (((_options_urlInfo = options.urlInfo) == null ? void 0 : (_options_urlInfo_searchParams = _options_urlInfo.searchParams) == null ? void 0 : _options_urlInfo_searchParams.busType) !== '7' && ((_options_urlInfo1 = options.urlInfo) == null ? void 0 : _options_urlInfo1.recType) === 'cloud' && options.sdkType === 'base') {
 	            _this.$container.style.removeProperty('display');
 	        } else {
 	            _this.$container.style.display = 'none';
@@ -11794,7 +11795,7 @@
 	                if (theme.options.deviceOptions !== null) {
 	                    var _theme_controls;
 	                    if (!((_theme_controls = theme.controls) == null ? void 0 : _theme_controls["deviceControl"])) {
-	                        var _theme_options;
+	                        var _theme_urlInfo, _theme_urlInfo1, _theme_options;
 	                        // eslint-disable-next-line @typescript-eslint/dot-notation, new-cap, @typescript-eslint/no-unsafe-argument
 	                        theme.controls["deviceControl"] = new Controls["device"](_extends$1({
 	                            rootContainer: theme.$container,
@@ -11805,8 +11806,8 @@
 	                            language: theme.options.language,
 	                            locales: theme.i18n.translations,
 	                            type: theme.options.type,
-	                            deviceSerial: theme.urlInfo.deviceSerial,
-	                            channelNo: theme.urlInfo.channelNo
+	                            deviceSerial: (_theme_urlInfo = theme.urlInfo) == null ? void 0 : _theme_urlInfo.deviceSerial,
+	                            channelNo: (_theme_urlInfo1 = theme.urlInfo) == null ? void 0 : _theme_urlInfo1.channelNo
 	                        }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["deviceOptions"]) || {}, {
 	                            props: props
 	                        }));
@@ -11817,7 +11818,7 @@
 	            // footer
 	            if (Controls[item.iconId]) {
 	                if (theme.options["" + item.iconId + "Options"] !== null) {
-	                    var _theme_options1;
+	                    var _theme_urlInfo2, _theme_urlInfo3, _theme_options1;
 	                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 	                    theme.controls["" + item.iconId + "Control"] = new Controls[item.iconId](_extends$1({
 	                        rootContainer: theme.$container,
@@ -11830,8 +11831,8 @@
 	                        env: theme.options.env,
 	                        accessToken: theme.options.accessToken,
 	                        token: theme.options.token,
-	                        deviceSerial: theme.urlInfo.deviceSerial,
-	                        channelNo: theme.urlInfo.channelNo,
+	                        deviceSerial: (_theme_urlInfo2 = theme.urlInfo) == null ? void 0 : _theme_urlInfo2.deviceSerial,
+	                        channelNo: (_theme_urlInfo3 = theme.urlInfo) == null ? void 0 : _theme_urlInfo3.channelNo,
 	                        urlInfo: theme.urlInfo
 	                    } : {}, {
 	                        PLAY_TYPE: theme.options.type,
@@ -12077,7 +12078,7 @@
 	var _renderTimeLine = function(theme, container, props) {
 	    if (props === void 0) props = {};
 	    if (!theme.controls.timeLineControl && theme.options.timeLineOptions !== null) {
-	        var _theme_urlInfo, _theme_options, _theme_options1, _this, _theme_options2;
+	        var _theme_urlInfo, _theme_urlInfo1, _theme_options, _theme_options1, _this, _theme_options2;
 	        var _showSectionIcon;
 	        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 	        theme.controls.timeLineControl = new Controls['timeLine'](_extends$1({
@@ -12086,7 +12087,7 @@
 	            },
 	            language: theme.options.language,
 	            locales: theme.i18n.translations,
-	            coverQuery: ((_theme_urlInfo = theme.urlInfo) == null ? void 0 : _theme_urlInfo.validateCode) ? "decodekey=" + theme.urlInfo.validateCode : ''
+	            coverQuery: ((_theme_urlInfo = theme.urlInfo) == null ? void 0 : _theme_urlInfo.validateCode) ? "decodekey=" + ((_theme_urlInfo1 = theme.urlInfo) == null ? void 0 : _theme_urlInfo1.validateCode) : ''
 	        }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["timeLineOptions"]) || {}, {
 	            showSectionIcon: ((_theme_options1 = theme.options) == null ? void 0 : _theme_options1["recListOptions"]) !== null ? (_showSectionIcon = (_this = ((_theme_options2 = theme.options) == null ? void 0 : _theme_options2["timeLineOptions"]) || {}) == null ? void 0 : _this.showSectionIcon) != null ? _showSectionIcon : true : true,
 	            props: props
@@ -12489,7 +12490,7 @@
 	    _inherits(Theme, EventEmitter);
 	    function Theme(options) {
 	        var _this;
-	        var _this_options_volumeOptions, _this_options_volumeOptions1, _this_options_speedOptions, _this_options, _this_options1;
+	        var _this_options_volumeOptions, _this_options_volumeOptions1, _this_options_speedOptions, _this_urlInfo_searchParams, _this_urlInfo, _this_options, _this_options1;
 	        _this = EventEmitter.call(this) || this, /** 播放器配置项 */ _this.options = THEME_DEFAULT_OPTIONS, _this.staticPath = '', /** 所有控件列表, 所有控件名称规则（`${iconId}Control`）， 如音量控件 this.controls["volumeControl"]  @since 0.0.1 */ _this.controls = {}, /**
 	   * @since 0.0.1
 	   * @private
@@ -12509,7 +12510,7 @@
 	   */ _this._footerMoreControl = null, /** 头部控件 @since 0.0.1 @private */ _this._header = null, /** 低部控件 @since 0.0.1 @private */ _this._footer = null, /** 回放底部时间轴 @since 0.0.1 @private */ _this._recFooter = null, /**
 	   * 移动端扩展容器, 扩展的控件渲染在指定容器以外， 仅只用端适用， 为了可以放置大的控件和方便开发接入
 	   * @private
-	   */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, /** 是否播放中 @private */ _this._playing = false, /** @private 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /** 清晰度列表 */ _this.videoLevelList = [], /** 回放片段列表 */ _this.recordList = [], /** 窗口尺寸变化时，设置窗口超出隐藏，防止出现滚动条 */ _this._resizeOverflowTimer = null, // /**
+	   */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, _this._url = '', /** 是否播放中 @private */ _this._playing = false, /** @private 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /** 清晰度列表 */ _this.videoLevelList = [], /** 回放片段列表 */ _this.recordList = [], /** 窗口尺寸变化时，设置窗口超出隐藏，防止出现滚动条 */ _this._resizeOverflowTimer = null, // /**
 	        //  * 记录回放的月份
 	        //  *
 	        //  * key: {序列号}_{通道号}_{rec | cloud | cloudRecord}   比如：BC7799091_1_rec  BC7799091_1_cloud BC7799091_1_cloudRecord
@@ -12523,13 +12524,14 @@
 	   */ _this.recMonth = [], /** 清理 header/footer 动画 定时器 @private */ _this._onPauseTimingFunc = null, /** 销毁标识  @readonly */ _this.destroyed = false, _this.scaleMode = 0;
 	        _this._initOptions(options);
 	        if (_this.options.type === 'ezopen') {
-	            var _this_urlInfo_searchParams, _this_urlInfo;
-	            if ((_this_urlInfo = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.spaceId) {
-	                _this.options.spaceId = _this.urlInfo.searchParams.spaceId;
+	            var _this_urlInfo_searchParams1, _this_urlInfo1, _this_urlInfo2;
+	            if ((_this_urlInfo1 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams1 = _this_urlInfo1.searchParams) == null ? void 0 : _this_urlInfo_searchParams1.spaceId) {
+	                var _this_urlInfo_searchParams2, _this_urlInfo3;
+	                _this.options.spaceId = (_this_urlInfo3 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams2 = _this_urlInfo3.searchParams) == null ? void 0 : _this_urlInfo_searchParams2.spaceId;
 	            }
-	            if (_this.urlInfo.type === 'rec') {
-	                var _this_urlInfo_searchParams1, _this_urlInfo1, _this_urlInfo_searchParams2, _this_urlInfo2;
-	                _this._seekDate = ((_this_urlInfo1 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams1 = _this_urlInfo1.searchParams) == null ? void 0 : _this_urlInfo_searchParams1.begin) ? distExports$3.DateTime.toDate((_this_urlInfo2 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams2 = _this_urlInfo2.searchParams) == null ? void 0 : _this_urlInfo_searchParams2.begin) : distExports$3.DateTime.toDate(distExports$3.DateTime.format(new Date(), 'YYYY/MM/DD') + ' 00:00:00');
+	            if (((_this_urlInfo2 = _this.urlInfo) == null ? void 0 : _this_urlInfo2.type) === 'rec') {
+	                var _this_urlInfo_searchParams3, _this_urlInfo4, _this_urlInfo_searchParams4, _this_urlInfo5;
+	                _this._seekDate = ((_this_urlInfo4 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams3 = _this_urlInfo4.searchParams) == null ? void 0 : _this_urlInfo_searchParams3.begin) ? distExports$3.DateTime.toDate((_this_urlInfo5 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams4 = _this_urlInfo5.searchParams) == null ? void 0 : _this_urlInfo_searchParams4.begin) : distExports$3.DateTime.toDate(distExports$3.DateTime.format(new Date(), 'YYYY/MM/DD') + ' 00:00:00');
 	            }
 	        }
 	        _this._getRecType(_this.options.url);
@@ -12561,7 +12563,8 @@
 	        var _this_options_volumeOptions_muted, _ref1;
 	        _this._muted = (_ref1 = (_this_options_volumeOptions_muted = (_this_options_volumeOptions1 = _this.options.volumeOptions) == null ? void 0 : _this_options_volumeOptions1.muted) != null ? _this_options_volumeOptions_muted : _this.options.muted) != null ? _ref1 : false;
 	        var _this_options_speedOptions_value, _ref2;
-	        _this._speed = (_ref2 = (_this_options_speedOptions_value = (_this_options_speedOptions = _this.options.speedOptions) == null ? void 0 : _this_options_speedOptions.value) != null ? _this_options_speedOptions_value : _this.options.value) != null ? _ref2 : 1;
+	        // playbackSpeed 是 萤石标准流倍速字段
+	        _this._speed = (_ref2 = (_this_options_speedOptions_value = (_this_options_speedOptions = _this.options.speedOptions) == null ? void 0 : _this_options_speedOptions.value) != null ? _this_options_speedOptions_value : (_this_urlInfo = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.playbackSpeed) != null ? _ref2 : 1;
 	        _this._mobileInnerWidthHeight = _this._mobileInnerWidthHeight.bind(_this);
 	        _this._throttleMobileInnerWidthHeight = throttle(_this._mobileInnerWidthHeight, 20).bind(_this);
 	        _this._onDblClickFullscreen = debounce(_this._onDblClickFullscreen, 20).bind(_this);
@@ -12814,6 +12817,7 @@
 	        this.options = deepmerge(THEME_DEFAULT_OPTIONS, options, {
 	            clone: false
 	        });
+	        this._url = this.options.url;
 	        // ⚠警告 （./utils/interactiveHF.ts）
 	        // PC 中窗口鼠标在header footer 移动（mousemove）, 不允许消失及不要冒泡
 	        // Mobile 中窗口点击在header footer 上（pointerdown/touchstart）, 不允许消失及不要冒泡
@@ -13304,12 +13308,13 @@
 	   * @returns {"rec" | "cloudRecord" | "cloudRec" | ""} 录像类型， rec: 录像， cloudRec: 云录像， cloudRecord: 云录制
 	   */ _proto._getRecType = function _getRecType(url) {
 	        if (this.options.type === 'ezopen' && /^ezopen:\/\//.test(url)) {
-	            if (this.urlInfo.type === 'rec') {
-	                var _this_urlInfo_searchParams, _this_urlInfo;
-	                if (this.urlInfo.recType === 'cloud' && ((_this_urlInfo = this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.busType) === '7') {
+	            var _this_urlInfo;
+	            if (((_this_urlInfo = this.urlInfo) == null ? void 0 : _this_urlInfo.type) === 'rec') {
+	                var _this_urlInfo1, _this_urlInfo_searchParams, _this_urlInfo2, _this_urlInfo3;
+	                if (((_this_urlInfo1 = this.urlInfo) == null ? void 0 : _this_urlInfo1.recType) === 'cloud' && ((_this_urlInfo2 = this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo2.searchParams) == null ? void 0 : _this_urlInfo_searchParams.busType) === '7') {
 	                    this.recType = 'cloudRecord';
 	                    return 'cloudRecord';
-	                } else if (this.urlInfo.recType === 'cloud') {
+	                } else if (((_this_urlInfo3 = this.urlInfo) == null ? void 0 : _this_urlInfo3.recType) === 'cloud') {
 	                    this.recType = 'cloudRec';
 	                    return 'cloudRec';
 	                } else {
@@ -13372,12 +13377,21 @@
 	    };
 	    _create_class(Theme, [
 	        {
+	            key: "url",
+	            get: function get() {
+	                return this._url;
+	            },
+	            set: function set(url) {
+	                this._url = url;
+	            }
+	        },
+	        {
 	            key: "urlInfo",
 	            get: /**
 	   * url 信息 播放地址信息
 	   */ function get() {
-	                if (this.options.url) {
-	                    return distExports$3.parseEzopenUrl(this.options.url);
+	                if (this._url) {
+	                    return distExports$3.parseEzopenUrl(this._url);
 	                }
 	                return {};
 	            }
@@ -13781,6 +13795,36 @@
 	   */ function get() {
 	                return !!this._footerMoreControl;
 	            }
+	        },
+	        {
+	            key: "isEzopen",
+	            get: function get() {
+	                // 私有流地址
+	                return /^ezopen:\/\//.test(this._url);
+	            }
+	        },
+	        {
+	            key: "isEzviz",
+	            get: /**
+	   * 判断播放地址是萤石的播放地址
+	   * @since 3.1.2
+	   */ function get() {
+	                var path = this._url.split('?')[0];
+	                var queryStr = this._url.split('?')[1];
+	                var lastPath = path.split('/')[path.split('/').length - 1];
+	                // ezopen://open.ys7.com/BC7799091/1.rec
+	                // rtmp://rtmp05open.ys7.com:1935/v3/openpb/BC7799091_1_1
+	                // https://open.ys7.com/v3/openpb/llhls/BC7799091_1_1.m3u8
+	                // https://rtmp05open.ys7.com:9188/v3/openpb/BC7799091_1_1.flv
+	                // https://host:2001/live?dev=D08197169&chn=1&ss=token&stream=1
+	                if (// 私有流地址
+	                /^ezopen:\/\//.test(path) || // 标准流地址
+	                path.includes('/openlive/') || path.includes('/openpb/') && /[a-zA-Z0-9:]+_\d+_\d+/.test(lastPath) || // webtransport 取流
+	                distExports$3.isHttp(this._url) && queryStr && /dev=[a-zA-Z0-9:]+/.test(queryStr) && /chn=\d+/.test(queryStr) && /stream=\d+/.test(queryStr) && queryStr.includes('ssn=')) {
+	                    return true;
+	                }
+	                return false;
+	            }
 	        }
 	    ]);
 	    return Theme;
@@ -13791,7 +13835,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.2-beta.1';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.2-beta.2';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
