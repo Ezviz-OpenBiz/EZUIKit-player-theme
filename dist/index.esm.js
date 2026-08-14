@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.2-beta.2
-* Copyright (c) 2026-08-12 04:37:54 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.2-beta.3
+* Copyright (c) 2026-08-14 08:18:55 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -4275,6 +4275,7 @@ function debounce(func, wait) {
             var // rerender 画面
             _theme_contentControl_emit, _theme_contentControl;
             (_theme_contentControl = theme.contentControl) == null ? void 0 : (_theme_contentControl_emit = _theme_contentControl.emit) == null ? void 0 : _theme_contentControl_emit.call(_theme_contentControl, EVENTS.videoInfo, info.width, info.height);
+            theme._videoInfo = info;
         }
     });
     theme == null ? void 0 : theme.on(EVENTS.resize, function() {
@@ -10175,7 +10176,7 @@ var THEME_DEFAULT_OPTIONS = {
         // _recMonthObj: Record<string, string[]> = {};
         /**
    * 录像回放的月份列表 @private
-   */ _this.recMonth = [], /** 清理 header/footer 动画 定时器 @private */ _this._onPauseTimingFunc = null, /** 销毁标识  @readonly */ _this.destroyed = false, _this.scaleMode = 0;
+   */ _this.recMonth = [], /** 清理 header/footer 动画 定时器 @private */ _this._onPauseTimingFunc = null, /** 销毁标识  @readonly */ _this.destroyed = false, _this.scaleMode = 0, _this._videoInfo = {};
         _this._initOptions(options);
         if (_this.options.type === 'ezopen') {
             var _this_urlInfo_searchParams1, _this_urlInfo1, _this_urlInfo2;
@@ -10218,7 +10219,7 @@ var THEME_DEFAULT_OPTIONS = {
         _this._muted = (_ref1 = (_this_options_volumeOptions_muted = (_this_options_volumeOptions1 = _this.options.volumeOptions) == null ? void 0 : _this_options_volumeOptions1.muted) != null ? _this_options_volumeOptions_muted : _this.options.muted) != null ? _ref1 : false;
         var _this_options_speedOptions_value, _ref2;
         // playbackSpeed 是 萤石标准流倍速字段
-        _this._speed = (_ref2 = (_this_options_speedOptions_value = (_this_options_speedOptions = _this.options.speedOptions) == null ? void 0 : _this_options_speedOptions.value) != null ? _this_options_speedOptions_value : (_this_urlInfo = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.playbackSpeed) != null ? _ref2 : 1;
+        _this._speed = +((_ref2 = (_this_options_speedOptions_value = (_this_options_speedOptions = _this.options.speedOptions) == null ? void 0 : _this_options_speedOptions.value) != null ? _this_options_speedOptions_value : (_this_urlInfo = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.playbackSpeed) != null ? _ref2 : 1);
         _this._mobileInnerWidthHeight = _this._mobileInnerWidthHeight.bind(_this);
         _this._throttleMobileInnerWidthHeight = throttle(_this._mobileInnerWidthHeight, 20).bind(_this);
         _this._onDblClickFullscreen = debounce(_this._onDblClickFullscreen, 20).bind(_this);
@@ -10456,6 +10457,8 @@ var THEME_DEFAULT_OPTIONS = {
         if (this.i18n) this.i18n = null;
         this.recType = '';
         this.recMonth = []; // 清空数据
+        // 重置
+        this._videoInfo = {};
         this.emit(EVENTS.theme.destroyed);
         this.removeAllListeners();
         if (this.logger) this.logger = null;
@@ -11073,6 +11076,41 @@ var THEME_DEFAULT_OPTIONS = {
             }
         },
         {
+            key: "videoInfo",
+            get: /**
+   * 视频信息
+   * @version 3.1.2
+   * ```ts
+   * theme.videoInfo // ThemeVideoInfo
+   * ```
+   */ function get() {
+                return this._videoInfo || {};
+            }
+        },
+        {
+            key: "videoWidth",
+            get: /**
+   * 视频分辨率 宽
+   *
+   * @version 3.1.2
+   *
+   * ```ts
+   * theme.videoWidth // number
+   * ```
+   */ function get() {
+                return this._videoInfo.width || 0;
+            }
+        },
+        {
+            key: "videoHeight",
+            get: /**
+   * 视频分辨率 高
+   * @version 3.1.2
+   */ function get() {
+                return this._videoInfo.height || 0;
+            }
+        },
+        {
             key: "playing",
             get: /**
    * 当前播放状态
@@ -11336,13 +11374,13 @@ var THEME_DEFAULT_OPTIONS = {
         {
             key: "speed",
             get: function get() {
-                return this._speed;
+                return +this._speed;
             },
             set: /**
    * 倍速
    */ function set(speed) {
                 speed = +speed;
-                if (speed !== this._speed) {
+                if (speed !== +this._speed) {
                     this._speed = speed;
                     this.emit(EVENTS.speedChange, speed);
                 }
@@ -11489,6 +11527,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.2-beta.2';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.2-beta.3';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
