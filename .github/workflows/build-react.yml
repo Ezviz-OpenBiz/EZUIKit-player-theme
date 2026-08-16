@@ -1,0 +1,41 @@
+name: build-react
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Vite 8 / @vitejs/plugin-react 6 require Node "^20.19.0 || >=22.12.0".
+    # Node 16.x / 18.x are still exercised for visibility but are allowed to
+    # fail (experimental), so they won't turn the whole workflow red.
+    continue-on-error: ${{ matrix.experimental || false }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20.x, 22.x, 24.x, 26.x]
+        include:
+          - node-version: 16.x
+            experimental: true
+          - node-version: 18.x
+            experimental: true
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: examples/with-react-vite/package-lock.json
+
+      - name: Build with-react-vite
+        working-directory: ./examples/with-react-vite
+        run: |
+          npm ci
+          npm run build

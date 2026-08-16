@@ -1,0 +1,22 @@
+{
+  "name": "with-react-vite",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "React + Vite demo for @ezuikit/player-theme",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ezuikit/control-time-line": "2.1.0",
+    "@ezuikit/player-theme": "3.1.2-beta.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.5",
+    "vite": "^8.2.1"
+  }
+}
