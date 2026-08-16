@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.2-beta.3
-* Copyright (c) 2026-08-14 08:18:55 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.2-beta.4
+* Copyright (c) 2026-08-16 15:20:04 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -293,7 +293,7 @@ function _set_prototype_of$y(o, p) {
     function Control(options) {
         var _this;
         var _this___options;
-        _this = EventEmitter.call(this) || this, /** 具体语言对应的值 */ _this.locale = null, _this.__options = {}, _this._disabled = false, _this._active = false, _this._camelCaseName = '';
+        _this = EventEmitter.call(this) || this, /** 具体语言对应的值 */ _this.locale = null, _this.__options = {}, _this._disabled = false, _this._active = false, _this._camelCaseName = '', /** click 监听引用，销毁时需显式移除 */ _this._onClickHandler = null;
         _this.__options = options;
         _this.locale = getLocale(_this.__options.locales, _this.__options.language);
         _this._camelCaseName = _this.__options.classNameSuffix ? _this.__options.classNameSuffix.replace(/[-_\s]+(.)?/g, function(_, c) {
@@ -382,6 +382,12 @@ function _set_prototype_of$y(o, p) {
             this.emit("Control." + this._camelCaseName + "Destroy");
         }
         if (((_this___options = this.__options) == null ? void 0 : _this___options.controlType) !== 'block') this.$container.removeEventListener('dblclick', this._onDBlClick);
+        // 移除 click 监听
+        if (this._onClickHandler) {
+            var _this_$container1;
+            (_this_$container1 = this.$container) == null ? void 0 : _this_$container1.removeEventListener('click', this._onClickHandler);
+            this._onClickHandler = null;
+        }
         this._active = false;
         this.removeAllListeners();
         (_this_$container = this.$container) == null ? void 0 : (_this_$container_remove = _this_$container.remove) == null ? void 0 : _this_$container_remove.call(_this_$container);
@@ -410,14 +416,16 @@ function _set_prototype_of$y(o, p) {
    * 当点击 Control 时 触发子类的 _onControlClick
    */ _proto._onClick = function _onClick() {
         var _this = this;
-        this.$container.addEventListener('click', function(e) {
+        // 使用具名 handler 便于在 destroy 时精确移除，避免匿名监听残留
+        this._onClickHandler = function(e) {
             var _this_$container;
             // prettier-ignore
             if (!((_this_$container = _this.$container) == null ? void 0 : _this_$container.classList.contains("" + PREFIX_CLASS + "-disabled"))) {
                 // _onControlClick 来源自子类中
                 _this._onControlClick == null ? void 0 : _this._onControlClick.call(_this, e);
             }
-        });
+        };
+        this.$container.addEventListener('click', this._onClickHandler);
     };
     _proto._onDBlClick = function _onDBlClick(e) {
         e.stopPropagation();
@@ -4607,8 +4615,14 @@ function debounce(func, wait) {
     }
     // 播放地址切换后同步 Live/RecDropdown 激活状态
     // changePlayUrl 后 urlInfo 已更新，firstFrameDisplay 表示新地址播放成功
+    // 注意：_controlEventemitter 每次 _renderTheme 都会执行，这里的监听挂在 theme 上，
+    // 必须先移除上一次的引用，避免 changeTheme 反复切换导致监听器无限累积（内存泄漏 + 重复执行）。
+    if (theme._onFirstFrameSync) {
+        theme.removeListener(EVENTS.firstFrameDisplay, theme._onFirstFrameSync);
+        theme._onFirstFrameSync = null;
+    }
     if (((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.liveControl) || ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.recDropdownControl)) {
-        theme.on(EVENTS.firstFrameDisplay, function() {
+        theme._onFirstFrameSync = function() {
             var _theme_controls, _theme_controls1;
             var urlInfo = theme.urlInfo;
             if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.liveControl) {
@@ -4617,7 +4631,8 @@ function debounce(func, wait) {
             if ((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1.recDropdownControl) {
                 theme.controls.recDropdownControl._syncActiveByUrlInfo(urlInfo);
             }
-        });
+        };
+        theme.on(EVENTS.firstFrameDisplay, theme._onFirstFrameSync);
     }
     // 缩放控件
     if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.zoomControl) {
@@ -5190,15 +5205,20 @@ function _ts_generator$6(thisArg, body) {
  * @returns
  */ function getThemeDataByTemplate(theme, id) {
     return _async_to_generator$6(function() {
-        var _theme_options_token_httpToken, _theme_options_token, url;
+        var _theme_options_token_httpToken, _theme_options_token, // 中止上一个在途请求，并为本次请求创建可中止的信号（destroy 时会 abort）
+        _theme__templateAbortController, url, controller;
         return _ts_generator$6(this, function(_state) {
             switch(_state.label){
                 case 0:
                     url = theme.options.env.domain + "/api/service/media/template/getDetail?accessToken=" + (theme.options.accessToken || ((_theme_options_token = theme.options.token) == null ? void 0 : (_theme_options_token_httpToken = _theme_options_token.httpToken) == null ? void 0 : _theme_options_token_httpToken.url)) + "&id=" + id;
+                    (_theme__templateAbortController = theme._templateAbortController) == null ? void 0 : _theme__templateAbortController.abort();
+                    controller = new AbortController();
+                    theme._templateAbortController = controller;
                     return [
                         4,
                         fetch(url, {
-                            method: 'GET'
+                            method: 'GET',
+                            signal: controller == null ? void 0 : controller.signal
                         }).then(function(response) {
                             return _async_to_generator$6(function() {
                                 return _ts_generator$6(this, function(_state) {
@@ -5502,7 +5522,7 @@ function _filterLeftRightControls(btnList) {
  * @returns
  */ function getThemeData(theme, data) {
     return _async_to_generator$5(function() {
-        var themeData, _theme_logger, template;
+        var themeData, _theme_logger, template, e;
         return _ts_generator$5(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -5548,13 +5568,23 @@ function _filterLeftRightControls(btnList) {
                         2,
                         template
                     ];
+                    // 请求返回前已销毁则静默返回，不在已释放的 theme 上派发事件
+                    if (theme.destroyed) return [
+                        2,
+                        null
+                    ];
                     theme.emit(EVENTS.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
                     return [
                         2,
                         null
                     ];
                 case 4:
-                    _state.sent();
+                    e = _state.sent();
+                    // 请求被中止（destroy/重新渲染）或已销毁：静默返回
+                    if (theme.destroyed || (e == null ? void 0 : e.name) === 'AbortError') return [
+                        2,
+                        null
+                    ];
                     theme.emit(EVENTS.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
                     return [
                         2,
@@ -9244,6 +9274,11 @@ var _unmountedControls = function(theme) {
     if (theme._onPauseTimingFunc) {
         theme._onPauseTimingFunc = null;
     }
+    // 移除首帧同步监听（挂在 theme 上，需显式解绑，避免 changeTheme 累积）
+    if (theme._onFirstFrameSync) {
+        theme.removeListener(EVENTS.firstFrameDisplay, theme._onFirstFrameSync);
+        theme._onFirstFrameSync = null;
+    }
     if (hasControls) {
         theme.emit(EVENTS.control.unmountedControls);
     }
@@ -9514,6 +9549,10 @@ function _renderTheme(theme, data) {
                     ];
                 case 1:
                     themeData = _state.sent();
+                    // 异步获取主题数据期间可能已 destroy()，避免在已释放的 theme 上继续渲染/emit
+                    if (theme.destroyed) return [
+                        2
+                    ];
                     _unmountedControls(theme);
                     if (Object.prototype.toString.call(themeData) !== '[object Object]') {
                         // 主题空
@@ -10176,7 +10215,15 @@ var THEME_DEFAULT_OPTIONS = {
         // _recMonthObj: Record<string, string[]> = {};
         /**
    * 录像回放的月份列表 @private
-   */ _this.recMonth = [], /** 清理 header/footer 动画 定时器 @private */ _this._onPauseTimingFunc = null, /** 销毁标识  @readonly */ _this.destroyed = false, _this.scaleMode = 0, _this._videoInfo = {};
+   */ _this.recMonth = [], /** 清理 header/footer 动画 定时器 @private */ _this._onPauseTimingFunc = null, /**
+   * 首帧同步 Live/RecDropdown 激活态的监听器引用。
+   * 每次 `_renderTheme` 重新绑定前需先移除旧引用，避免 changeTheme 累积监听。
+   * @private
+   */ _this._onFirstFrameSync = null, /**
+   * 模板请求（getDetail）的中止控制器。
+   * 重新渲染或销毁时中止在途请求，避免请求返回后在已销毁/已切换的 theme 上继续操作。
+   * @private
+   */ _this._templateAbortController = null, /** 销毁标识  @readonly */ _this.destroyed = false, _this.scaleMode = 0, _this._videoInfo = {};
         _this._initOptions(options);
         if (_this.options.type === 'ezopen') {
             var _this_urlInfo_searchParams1, _this_urlInfo1, _this_urlInfo2;
@@ -10431,12 +10478,15 @@ var THEME_DEFAULT_OPTIONS = {
    * ```
    */ _proto.destroy = function destroy() {
         var _this = this;
-        var _this_contentControl, _this_$container;
+        var // 中止在途的模板请求，避免其回调在已销毁的 theme 上继续执行
+        _this__templateAbortController, _this_contentControl, _this_$container;
         if (!this.$container || this.destroyed) {
             // 防止多次销毁
             return;
         }
         this.emit(EVENTS.theme.beforeDestroy);
+        (_this__templateAbortController = this._templateAbortController) == null ? void 0 : _this__templateAbortController.abort();
+        this._templateAbortController = null;
         this._removeEventListener();
         _unmountedControls(this);
         (_this_contentControl = this.contentControl) == null ? void 0 : _this_contentControl.destroy();
@@ -10471,7 +10521,12 @@ var THEME_DEFAULT_OPTIONS = {
     /** 初始化配置项 */ _proto._initOptions = function _initOptions(options) {
         if (options === void 0) options = {};
         var _this_options_loggerOptions, _this_options_definitionOptions_list, _this_options_definitionOptions, _this_options_videoLevelList;
-        this.options = deepmerge(THEME_DEFAULT_OPTIONS, options, {
+        // 先对模块级默认配置做一次深拷贝，得到全新的嵌套对象/数组，
+        // 避免 this.options 与 THEME_DEFAULT_OPTIONS（如 mobileExtendOptions.controls、env、loggerOptions）
+        // 共享引用而在多实例间相互污染。
+        // 仍对用户 options 使用 clone:false —— container 可能是 DOM 节点/函数，深拷贝会破坏它。
+        var defaults = deepmerge({}, THEME_DEFAULT_OPTIONS);
+        this.options = deepmerge(defaults, options, {
             clone: false
         });
         this._url = this.options.url;
@@ -10506,10 +10561,12 @@ var THEME_DEFAULT_OPTIONS = {
             this.logger.log('[options] \n', this.options);
         }
         var language = this.options.language || 'zh';
-        var locales = deepmerge({
+        // 深拷贝内置语言包，避免与模块级 zh/en 常量共享引用（I18n 若对其做合并/修改会污染全局）
+        var baseLocales = deepmerge({}, {
             zh: zh,
             en: en
-        }, this.options.locales || {}, {
+        });
+        var locales = deepmerge(baseLocales, this.options.locales || {}, {
             clone: false
         });
         // prettier-ignore
@@ -11527,6 +11584,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.2-beta.3';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.2-beta.4';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };

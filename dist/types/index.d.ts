@@ -342,6 +342,8 @@ declare class Control extends EventEmitter {
     protected _disabled: boolean;
     protected _active: boolean;
     private readonly _camelCaseName;
+    /** click 监听引用，销毁时需显式移除 */
+    private _onClickHandler;
     constructor(options: Partial<ControlOptions>);
     /**
      * 是否激活
@@ -1888,6 +1890,11 @@ declare class Theme extends EventEmitter {
             SET_FEC_PARAMS: string;
             GET_FEC_PARAMS: string;
             SET_FEC_PARAMS_FAILED: string;
+            /**
+             * 模板请求（getDetail）的中止控制器。
+             * 重新渲染或销毁时中止在途请求，避免请求返回后在已销毁/已切换的 theme 上继续操作。
+             * @private
+             */
             GET_FEC_PARAMS_FAILED: string;
             GET_FEC_PARAMS_SUPPORT_VERSION: string;
             SET_WATERMARK: string;
@@ -2067,8 +2074,11 @@ declare class Theme extends EventEmitter {
             CHANGE_VIDEO_LEVEL_FAIL: string;
             GET_VIDEO_LEVEL_LIST: string;
             /**
-             * 视频分辨率 高
+             * 视频信息
              * @version 3.1.2
+             * ```ts
+             * theme.videoInfo // ThemeVideoInfo
+             * ```
              */
             PLEASE_INPUT_RIGHT_VIDEO_LEVEL: string;
             VIDEO_LEVEL_NOT_SUPPORT: string;
@@ -2076,11 +2086,19 @@ declare class Theme extends EventEmitter {
             VIDEO_LEVEL_FLUENT: string;
             VIDEO_LEVEL_STANDARD: string;
             VIDEO_LEVEL_HEIGH: string;
-            VIDEO_LEVEL_SUPER: string;
+            VIDEO_LEVEL_SUPER: string; /**
+             * 视频分辨率 高
+             * @version 3.1.2
+             */
             VIDEO_LEVEL_EXTREME: string;
             VIDEO_LEVEL_3K: string;
             VIDEO_LEVEL_4k: string;
-            RESET_THEME: string;
+            RESET_THEME: string; /**
+             * 当前播放状态
+             * ```ts
+             * theme.playing // boolean
+             * ```
+             */
             BTN_PLAY: string;
             BTN_PAUSE: string;
             BTN_VOLUME: string;
@@ -2117,11 +2135,14 @@ declare class Theme extends EventEmitter {
             DEVICE_ID: string;
             CAPTURE_SUCCESS: string;
             CAPTURE_FAILED: string;
-            START_RECORD_SUCCESS: string;
-            START_RECORD_FAILED: string;
-            /**
-             * 音量值
+            START_RECORD_SUCCESS: string; /**
+             * 加载状态
+             * ```ts
+             * // 事件监听
+             * theme.on(Theme.EVENTS.loading, (loading: boolean) => {})
+             * ```
              */
+            START_RECORD_FAILED: string;
             STOP_RECORD_SUCCESS: string;
             STOP_RECORD_FAILED: string;
             RECORD_TIPS: string;
@@ -2138,10 +2159,6 @@ declare class Theme extends EventEmitter {
             ZOOM_SUB_MIN: string;
             ZOOM_LIMIT_MAX: string;
             ZOOM_LIMIT_MIN: string;
-            /**
-             * 静音
-             *
-             */
             ZOOM_NOT_ENABLED: string;
             '3D_ZOOM': string;
             '3D_ZOOM_DISABLE': string;
@@ -2302,6 +2319,18 @@ declare class Theme extends EventEmitter {
     recMonth: string[];
     /** 清理 header/footer 动画 定时器 @private */
     _onPauseTimingFunc: ((open: boolean) => void) | null;
+    /**
+     * 首帧同步 Live/RecDropdown 激活态的监听器引用。
+     * 每次 `_renderTheme` 重新绑定前需先移除旧引用，避免 changeTheme 累积监听。
+     * @private
+     */
+    _onFirstFrameSync: (() => void) | null;
+    /**
+     * 模板请求（getDetail）的中止控制器。
+     * 重新渲染或销毁时中止在途请求，避免请求返回后在已销毁/已切换的 theme 上继续操作。
+     * @private
+     */
+    _templateAbortController: AbortController | null;
     /** 销毁标识  @readonly */
     destroyed: boolean;
     scaleMode: ThemeOptions['scaleMode'];
