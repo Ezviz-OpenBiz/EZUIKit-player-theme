@@ -66,10 +66,10 @@
   resolved "https://registry.yarnpkg.com/@ezuikit/control-zoom/-/control-zoom-1.0.0-beta.4.tgz#a3ff1fd43e1a1bb23103a4c263c026348119c423"
   integrity sha512-MG+weJeYSeh86LyZWFseUSWw9VCkyKFIE0V58Nee1+NCIuctbTd9fBmtAexX8xHEiApHKDwfQmwc+xlUZgTb6Q==
 
-"@ezuikit/player-theme@3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@ezuikit/player-theme/-/player-theme-3.1.1.tgz#a62aaacca506d5f36239fb25d6711a4b5614a977"
-  integrity sha512-81es4DYLTjUDwljco7jUgcvRGwwv0If3Qdg/9nzs8fesxw9NuOok+KcfECnh4Dh4qGPLX++qnbA3/bPGI67EVQ==
+"@ezuikit/player-theme@3.1.2-beta.4":
+  version "3.1.2-beta.4"
+  resolved "https://registry.yarnpkg.com/@ezuikit/player-theme/-/player-theme-3.1.2-beta.4.tgz#0860b67c8b5b2613618c922d48371e70249aea71"
+  integrity sha512-zg1FRzHyyuasoKTQbpvyN5tMujxGj8Z+NgLabxcbd6mMFcXaIOfrfwZP67pOcIl/iL/4KaryYdL/Bj1RHOwZ7w==
   dependencies:
     "@ezuikit/control-date-picker" "2.1.1"
     "@ezuikit/control-ptz" "1.0.0"
