@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.2-beta.4
-* Copyright (c) 2026-08-16 15:20:04 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.3-beta.1
+* Copyright (c) 2026-08-19 16:47:24 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 /**
@@ -33,7 +33,9 @@ var THEME_PROPS = [
     'videoLevelList',
     'videoLevel',
     'recMonth',
-    'url'
+    'url',
+    // 播放区间（片段分享）。通过 props 下发而不是靠事件，避免主题异步渲染时错过初始化事件
+    'playbackRange'
 ];
 /**
  * 当移动端 picker 控件打开时需要关闭动画（定时器）
@@ -101,7 +103,8 @@ var THEME_PROPS = [
     'ptz',
     'timeLine',
     'rec',
-    'date'
+    'date',
+    'segmentProgress'
 ];
 /**
  * 回放时间轴和日历
@@ -173,6 +176,7 @@ var EVENTS = {
     currentVideoLevelAuto: 'currentVideoLevelAuto',
     setAllDayRecTimes: 'setAllDayRecTimes',
     getOSDTime: 'getOSDTime',
+    /** 播放区间播放结束（SDK 层 playbackRange 特性） */ playbackEnd: 'playbackEnd',
     /**
    * 控件相关
    */ control: {
