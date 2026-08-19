@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.3-beta.1
-* Copyright (c) 2026-08-19 16:47:24 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.3-beta.2
+* Copyright (c) 2026-08-19 17:37:07 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -9841,9 +9841,8 @@ function _renderTheme(theme, data) {
                     _needTimeLine = list.some(function(item) {
                         return REC_GROUP.includes(item.iconId) || item.iconId === 'recDropdown';
                     }) && ((_theme_urlInfo = theme.urlInfo) == null ? void 0 : _theme_urlInfo.type) === 'rec';
-                    // 处于播放区间约束中时不渲染日历：区间必然在同一天内，切到任何其它日期都会越界
                     _hasPlaybackRange = !!((_theme_playbackRange = theme.playbackRange) == null ? void 0 : _theme_playbackRange.begin) && !!((_theme_playbackRange1 = theme.playbackRange) == null ? void 0 : _theme_playbackRange1.end);
-                    _needDatePicker = theme.options.dateOptions !== null && !_hasPlaybackRange;
+                    _needDatePicker = theme.options.dateOptions !== null;
                     theme.$container.classList.remove("" + PREFIX_CLASS + "-has-time-line");
                     // PC 单独渲染timeLine
                     if (!Utils.isMobile && !(theme.options.timeLineOptions === null || theme.options.disabledTimeLine) && _needTimeLine) {
@@ -10380,7 +10379,7 @@ var THEME_DEFAULT_OPTIONS = {
    */ _this._footerMoreControl = null, /** 头部控件 @since 0.0.1 @private */ _this._header = null, /** 低部控件 @since 0.0.1 @private */ _this._footer = null, /** 回放底部时间轴 @since 0.0.1 @private */ _this._recFooter = null, /**
    * 移动端扩展容器, 扩展的控件渲染在指定容器以外， 仅只用端适用， 为了可以放置大的控件和方便开发接入
    * @private
-   */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, _this._url = '', /** 是否播放中 @private */ _this._playing = false, /** @private 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /** 清晰度列表 */ _this.videoLevelList = [], /** 回放片段列表 */ _this.recordList = [], /**
+   */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, _this._url = '', _this._urlInfoCache = null, /** 是否播放中 @private */ _this._playing = false, /** @private 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /** 清晰度列表 */ _this.videoLevelList = [], /** 回放片段列表 */ _this.recordList = [], /**
    * 播放区间（片段分享），null 表示不约束。
    * 由 SDK 层在初始化时通过 props 下发，主题层据此决定日历/回放类型按钮
    * 是否渲染、片段进度条是否渲染。区间没有运行时变更入口。
@@ -11281,10 +11280,16 @@ var THEME_DEFAULT_OPTIONS = {
             get: /**
    * url 信息 播放地址信息
    */ function get() {
+                if (this._urlInfoCache) {
+                    return this._urlInfoCache;
+                }
                 if (this._url) {
                     return parseEzopenUrl(this._url);
                 }
                 return {};
+            },
+            set: function set(info) {
+                this._urlInfoCache = info;
             }
         },
         {
@@ -11319,6 +11324,9 @@ var THEME_DEFAULT_OPTIONS = {
    * ```
    */ function get() {
                 return this._videoInfo || {};
+            },
+            set: function set(info) {
+                this._videoInfo = info;
             }
         },
         {
@@ -11761,6 +11769,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.3-beta.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.3-beta.2';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
