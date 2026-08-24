@@ -6,12 +6,15 @@ settings:
 
 dependencies:
   '@ezuikit/control-date-picker':
-    specifier: 2.1.1
-    version: 2.1.1
+    specifier: 2.1.2-beta.1
+    version: 2.1.2-beta.1
   '@ezuikit/control-ptz':
     specifier: 1.0.0
     version: 1.0.0
   '@ezuikit/control-rec-list-modal':
+    specifier: 0.0.1
+    version: 0.0.1
+  '@ezuikit/control-segment-progress':
     specifier: 0.0.1
     version: 0.0.1
   '@ezuikit/control-time-line':
@@ -50,8 +53,8 @@ dependencies:
 
 packages:
 
-  /@ezuikit/control-date-picker@2.1.1:
-    resolution: {integrity: sha512-gahPkxzpxNRuWLjjoE5IImQbO9MRC8k/v5CwLMofrxzMowzx0f8YqqAlQR7mZ6uW/gfHBoCezMvABLBKODRiww==}
+  /@ezuikit/control-date-picker@2.1.2-beta.1:
+    resolution: {integrity: sha512-IGbJ0J+SifQSOMdCjnTQMJZWlD+qEqQHgWYtCWUtGP82q6pOwMGbSBE6PU1OneU7mjy9PyuvUE8Y17ylof5cFg==}
     dependencies:
       '@ezuikit/utils-i18n': 2.0.1
       '@ezuikit/utils-tools': 2.0.6
@@ -83,6 +86,10 @@ packages:
       '@ezuikit/utils-i18n': 2.0.1
       '@ezuikit/utils-tools': 2.0.6
       deepmerge: 4.3.1
+    dev: false
+
+  /@ezuikit/control-segment-progress@0.0.1:
+    resolution: {integrity: sha512-po+tJxVJlFbI2TnPzLyt4GL3KZc/X0nFsJ9Fn8HCpI0R2AiMtwx5ZBADV17xa13A82/Us3rl1R0ijVj1pRvn0g==}
     dev: false
 
   /@ezuikit/control-time-line@2.1.0:
