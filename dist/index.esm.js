@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.4-beta.1
-* Copyright (c) 2026-08-24 09:15:26 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.4-beta.2
+* Copyright (c) 2026-08-27 19:42:35 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -478,14 +478,10 @@ function _set_prototype_of$z(o, p) {
 }(EventEmitter);
 
 function _extends$y() {
-    _extends$y = Object.assign || function(target) {
+    _extends$y = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -559,14 +555,10 @@ var LOADING_DEFAULT_OPTIONS = {};
 }(Control);
 
 function _extends$x() {
-    _extends$x = Object.assign || function(target) {
+    _extends$x = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -672,7 +664,7 @@ var POSTER_OPTIONS = {
 var Icons = {
     /** 播放 */ play: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" focusable="false" aria-hidden="true" data-icon="play">\n      <rect x="6.5" y="5.5" rx="1.25" width="2.5" height="13"/>\n      <rect x="15" y="5.5" rx="1.25" width="2.5" height="13"/>\n    </svg>',
     /** 暂停 */ pause: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"  focusable="false" aria-hidden="true" data-icon="pause"> <path d="M17.5 13.66L9.1 19.26C7.78 20.14 6 19.19 6 17.59L6 6.4C6 4.8 7.78 3.85 9.1 4.73L17.5 10.33C18.69 11.12 18.69 12.87 17.5 13.66Z" /></svg>',
-    /** 音量 */ volume: function(prefix) {
+    /** 音量 */ volume: function volume(prefix) {
         return '<svg  width="1em" height="1em" viewBox="0 0 24 24" stroke="currentColor" fill="none" focusable="false" aria-hidden="true" data-icon="volume">\n     	<path class="' + prefix + '-icon-volume-muted" d="M20.57 9.69L16.07 14.19" stroke-width="1.500000" stroke-linejoin="round" stroke-linecap="round"/>\n     	<path class="' + prefix + '-icon-volume-muted" d="M20.57 14.19L16.07 9.69" stroke-width="1.500000" stroke-linejoin="round" stroke-linecap="round"/>\n      <!-- 音低 -->\n      <path class="' + prefix + '-icon-volume-low" d="M15.53 15.97C16.69 15.25 17.49 13.75 17.49 12C17.49 10.25 16.69 8.75 15.53 8.02" stroke-width="1.500000" stroke-linejoin="round" stroke-linecap="round"/>\n     	<!-- 音高 -->\n      <path class="' + prefix + '-icon-volume-high" d="M18.5 19.06C20.31 17.5 21.49 14.93 21.49 12C21.49 9.07 20.31 6.48 18.49 4.93" stroke-width="1.500000" stroke-linejoin="round" stroke-linecap="round"/>\n     	<path d="M5.87 8.62L9.85 5.25C10.5 4.7 11.49 5.16 11.49 6.01L11.49 17.98C11.49 18.83 10.5 19.29 9.85 18.74L5.87 15.37" stroke-width="1.500000" stroke-linejoin="round" stroke-linecap="round"/>\n     	<path d="M5.87 15.37L3.49 15.37C2.94 15.37 2.49 14.92 2.49 14.37L2.49 9.62C2.49 9.07 2.94 8.62 3.49 8.62L5.87 8.62" stroke-width="1.500000" stroke-linejoin="round" stroke-linecap="round"/>\n    </svg>';
     },
     /** 全屏 */ mobileFullscreen: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" focusable="false" aria-hidden="true" data-icon="mobile-fullscreen">\n      <path d="M4 2.9082L11 2.9082C12.5188 2.9082 13.75 4.1394 13.75 5.6582L13.75 17.6582C13.75 19.177 12.5188 20.4082 11 20.4082L4 20.4082C2.4812 20.4082 1.25 19.177 1.25 17.6582L1.25 5.6582C1.25 4.1394 2.4812 2.9082 4 2.9082ZM4 4.4082L11 4.4082C11.6903 4.4082 12.25 4.9679 12.25 5.6582L12.25 17.6582C12.25 18.3485 11.6903 18.9082 11 18.9082L4 18.9082C3.30969 18.9082 2.75 18.3485 2.75 17.6582L2.75 5.6582C2.75 4.9679 3.30969 4.4082 4 4.4082ZM22.1511 18.3113C22.1511 19.3595 21.2467 20.1652 20.1509 20.2362L19.993 20.2413L15.2939 20.2413C14.8798 20.2413 14.5439 19.9055 14.5439 19.4913C14.5439 19.1116 14.8262 18.7979 15.1921 18.7482L15.2939 18.7413L19.993 18.7413C20.344 18.7413 20.5962 18.5592 20.6432 18.3732L20.6511 18.3113L20.6511 12.4895C20.6511 12.3048 20.4338 12.1042 20.1062 12.066L19.993 12.0594L15.2939 12.0594C14.8798 12.0594 14.5439 11.7238 14.5439 11.3094C14.5439 10.9298 14.8262 10.616 15.1921 10.5663L15.2939 10.5594L19.993 10.5594C21.1055 10.5594 22.0605 11.3175 22.145 12.3416L22.1511 12.4895L22.1511 18.3113ZM10.3225 16.1035C10.3225 15.6893 9.98669 15.3535 9.57251 15.3535L5.84644 15.3535L5.74463 15.3604C5.37854 15.41 5.09644 15.7239 5.09644 16.1035C5.09644 16.5177 5.43225 16.8535 5.84644 16.8535L9.57251 16.8535L9.67432 16.8467C10.0404 16.797 10.3225 16.4832 10.3225 16.1035Z" clip-rule="evenodd" fill-rule="evenodd"/>\n    </svg>',
@@ -698,7 +690,7 @@ var Icons = {
     /** 录制/摄像机 */ record: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="record">\n      <path d="M4.53 19C3.03 19 1.8 17.74 1.8 16.2L1.8 7.8C1.8 6.25 3.03 5 4.53 5L14.08 5C15.58 5 16.8 6.25 16.8 7.8L16.8 16.2C16.8 17.74 15.58 19 14.08 19L4.53 19Z" stroke-width="1.5" stroke-linejoin="round"/>\n      <path d="M17.25 13.64C17.94 14.2 18.97 15.03 20.36 16.15C21.09 16.74 22.19 16.21 22.19 15.27L22.19 8.72C22.19 7.78 21.09 7.25 20.36 7.84C18.99 8.94 17.96 9.77 17.28 10.32" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>\n    </svg>',
     recordCircle: '<svg width="1em" height="1em" viewBox="0 0 14 14" fill="currentColor" stroke="none" focusable="false" aria-hidden="true" data-icon="record-circle">\n		<path d="M7.00044 2.5C9.70278 2.5 11.8935 4.69068 11.8935 7.39302C11.8935 10.0954 9.70278 12.286 7.00044 12.286C4.2981 12.286 2.10742 10.0954 2.10742 7.39302C2.10742 4.69068 4.2981 2.5 7.00044 2.5ZM7.00044 3.5C4.85039 3.5 3.10742 5.24296 3.10742 7.39302C3.10742 9.54307 4.85039 11.286 7.00044 11.286C9.15049 11.286 10.8935 9.54307 10.8935 7.39302C10.8935 5.24296 9.15049 3.5 7.00044 3.5ZM9.50049 7.39252C9.50049 6.01181 8.3812 4.89252 7.00049 4.89252C5.61978 4.89252 4.50049 6.01181 4.50049 7.39252C4.50049 8.77323 5.61978 9.89252 7.00049 9.89252C8.3812 9.89252 9.50049 8.77323 9.50049 7.39252Z" fill-rule="evenodd" />\n  </svg>\n  ',
     /** 对讲 */ talk: '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" focusable="false" aria-hidden="true" data-icon="talk">\n      	<path stroke="none" d="M12.22 18.95C12.65 18.95 13.01 19.21 13.07 19.54L13.08 19.64L13.08 21.78C13.08 22.16 12.69 22.47 12.22 22.47C11.78 22.47 11.42 22.21 11.37 21.87L11.36 21.78L11.36 19.64C11.36 19.26 11.74 18.95 12.22 18.95Z" fill-rule="evenodd"/>\n        <path d="M19.53 11.37L19.53 11.58C19.53 15.74 16.15 19.11 11.99 19.11C7.83 19.11 4.46 15.74 4.46 11.58L4.46 11.43" fill="none" stroke-width="1.5" stroke-linecap="round"/>\n        <path stroke="none" d="M12.05 1.52C9.3 1.52 7.07 3.58 7.07 6.12L7.07 12.07C7.07 14.61 9.3 16.67 12.05 16.67C14.79 16.67 17.02 14.61 17.02 12.07L17.02 6.12C17.02 3.58 14.79 1.52 12.05 1.52ZM8.57 12.07L8.57 6.12C8.57 5.94 8.59 5.75 8.63 5.57C8.67 5.36 8.74 5.16 8.83 4.96C8.86 4.89 8.9 4.82 8.93 4.75C9.09 4.46 9.3 4.21 9.55 3.97C9.64 3.89 9.73 3.81 9.83 3.74C10.08 3.55 10.35 3.4 10.66 3.28C10.79 3.23 10.93 3.19 11.06 3.15C11.38 3.07 11.71 3.02 12.05 3.02C12.38 3.02 12.71 3.07 13.03 3.15C13.17 3.19 13.3 3.23 13.43 3.28C13.74 3.4 14.02 3.55 14.27 3.74C14.36 3.81 14.45 3.89 14.54 3.97C14.79 4.21 15 4.46 15.16 4.75C15.2 4.82 15.23 4.89 15.26 4.96C15.35 5.16 15.42 5.36 15.46 5.57C15.5 5.75 15.52 5.94 15.52 6.12L15.52 12.07C15.52 12.26 15.5 12.44 15.46 12.63C15.42 12.83 15.35 13.04 15.26 13.24C15.23 13.31 15.2 13.38 15.16 13.45C15 13.73 14.79 13.99 14.54 14.22C14.45 14.3 14.36 14.38 14.27 14.45C14.02 14.64 13.74 14.79 13.43 14.91C13.3 14.96 13.17 15.01 13.03 15.05C12.71 15.13 12.38 15.17 12.05 15.17C11.71 15.17 11.38 15.13 11.06 15.05C10.93 15.01 10.79 14.96 10.66 14.91C10.35 14.79 10.08 14.64 9.83 14.45C9.73 14.38 9.64 14.3 9.55 14.22C9.3 13.99 9.09 13.73 8.93 13.45C8.9 13.38 8.86 13.31 8.83 13.24C8.74 13.04 8.67 12.83 8.63 12.63C8.59 12.44 8.57 12.26 8.57 12.07Z" fill-rule="evenodd"/>\n      </svg>',
-    talkGrowth: function(prefix) {
+    talkGrowth: function talkGrowth(prefix) {
         return '<svg width="1em" height="1em" viewBox="0 0 24 24" focusable="false" aria-hidden="true" data-icon="talk-growth">\n      		<g fill="currentColor" stroke="currentColor">\n            <path stroke="none" d="M9.22313 18.9543C9.6588 18.9543 10.0189 19.2133 10.0759 19.5494L10.0837 19.6428L10.0837 21.7847C10.0837 22.1649 9.69841 22.4732 9.22313 22.4732C8.78745 22.4732 8.42739 22.2142 8.37041 21.8781L8.36255 21.7847L8.36255 19.6428C8.36255 19.2626 8.74784 18.9543 9.22313 18.9543Z" fill-rule="evenodd" />\n            <path d="M16.5323 11.3779L16.5323 11.5872C16.5323 15.7472 13.1599 19.1197 8.99981 19.1197C4.83971 19.1197 1.46729 15.7472 1.46729 11.5872L1.46729 11.4335" fill-rule="evenodd" fill="none" stroke-width="1.5" />\n            <path stroke="none" d="M4.07861 6.12978C4.07861 3.589 6.30476 1.5293 9.05085 1.5293C11.7969 1.5293 14.0231 3.589 14.0231 6.12978L14.0231 12.075C14.0231 14.6158 11.7969 16.6755 9.05085 16.6755C6.30476 16.6755 4.07861 14.6158 4.07861 12.075L4.07861 6.12978ZM5.57861 12.075L5.57861 6.12978C5.57861 5.94083 5.597 5.75561 5.63376 5.57412C5.67605 5.36539 5.74265 5.16158 5.83357 4.9627C5.86625 4.8912 5.90164 4.82121 5.93974 4.75272C6.09781 4.4685 6.30245 4.21019 6.55365 3.97777C6.64206 3.89597 6.73424 3.81921 6.83019 3.7475C7.0816 3.55959 7.3589 3.40632 7.66207 3.28767C7.79552 3.23545 7.93107 3.19114 8.06871 3.15475C8.38503 3.07111 8.71241 3.0293 9.05085 3.0293C9.38929 3.0293 9.71668 3.07112 10.033 3.15475C10.1706 3.19114 10.3062 3.23545 10.4396 3.28767C10.7428 3.40632 11.0201 3.55959 11.2715 3.74749C11.3675 3.81921 11.4596 3.89596 11.548 3.97777C11.7993 4.2102 12.0039 4.46853 12.162 4.75276C12.2001 4.82124 12.2354 4.89122 12.2681 4.9627C12.359 5.16157 12.4256 5.36536 12.4679 5.57407C12.5047 5.75558 12.5231 5.94082 12.5231 6.12978L12.5231 12.075C12.5231 12.264 12.5047 12.4492 12.4679 12.6307C12.4256 12.8394 12.359 13.0432 12.2681 13.2421C12.2355 13.3136 12.2001 13.3835 12.162 13.452C12.0039 13.7362 11.7993 13.9946 11.548 14.227C11.4596 14.3088 11.3675 14.3856 11.2715 14.4573C11.0201 14.6452 10.7428 14.7985 10.4396 14.9171C10.3062 14.9693 10.1706 15.0136 10.033 15.05C9.71667 15.1337 9.38929 15.1755 9.05085 15.1755C8.71241 15.1755 8.38503 15.1337 8.06871 15.05C7.93107 15.0136 7.79552 14.9693 7.66207 14.9171C7.3589 14.7985 7.0816 14.6452 6.83019 14.4573C6.73424 14.3856 6.64206 14.3088 6.55365 14.227C6.30244 13.9946 6.09779 13.7363 5.93972 13.452C5.90163 13.3836 5.86625 13.3136 5.83357 13.2421C5.74265 13.0432 5.67605 12.8394 5.63377 12.6307C5.597 12.4492 5.57861 12.264 5.57861 12.075Z" fill-rule="evenodd" />\n          </g>\n          <g class="' + prefix + '-icon-talk-growth-dot">\n            <path class="' + prefix + '-icon-talk-growth-dot1" d="M19.1333 6.40039L22.8667 6.40039" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n            <path class="' + prefix + '-icon-talk-growth-dot2" d="M19.1333 10.1338L21.9331 10.1338" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n            <path class="' + prefix + '-icon-talk-growth-dot3" d="M19.1333 13.8672L20.9995 13.8672" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n            <path class="' + prefix + '-icon-talk-growth-dot4" d="M19.1333 17.6001L20.0669 17.6001" stroke="currentColor" stroke-linecap="round" stroke-width="1.86666667" />\n          </g>\n      </svg>';
     },
     /** 语音广播 */ broadcast: '\n  <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="none" focusable="false" aria-hidden="true" data-icon="broadcast">\n <g>\n  <path id="矢量 1" d="m8.52109,6.76609l6.17823,-2.91335c0.2485,-0.11718 0.5027,-0.19531 0.7627,-0.2351c0.2034,-0.03077 0.4104,-0.03809 0.6211,-0.02173c0.2092,0.01636 0.4116,0.05493 0.6069,0.11621c0.2278,0.07129 0.4461,0.1731 0.6548,0.30542c0.2087,0.13232 0.394,0.28638 0.5557,0.46216l0.0002,0l0,0c0.1384,0.15064 0.2598,0.31714 0.3638,0.49951c0.1047,0.18335 0.1865,0.37354 0.2451,0.57081c0.0752,0.25219 0.1128,0.51562 0.1128,0.79004l0,10.64651c0,0.2744 -0.0376,0.5379 -0.1128,0.7901l0,0c-0.0586,0.197 -0.1404,0.3874 -0.2451,0.5708c-0.104,0.1823 -0.2254,0.3488 -0.364,0.4995c-0.1617,0.1758 -0.347,0.3298 -0.5557,0.4621c-0.2087,0.1324 -0.427,0.2342 -0.6548,0.3054c-0.1953,0.0611 -0.3977,0.0999 -0.6069,0.1163c-0.2107,0.0163 -0.4175,0.009 -0.6209,-0.0218c-0.2602,-0.0398 -0.5144,-0.1181 -0.7629,-0.2351l-5.45044,-2.5703l0,2.759c0,0.1036 -0.01831,0.1995 -0.05494,0.2879c-0.03662,0.0886 -0.09155,0.1692 -0.16479,0.2424c-0.14624,0.1465 -0.32324,0.2197 -0.53027,0.2197l-2,0c-0.14209,0 -0.27344,-0.0373 -0.39429,-0.112c-0.12085,-0.0745 -0.21289,-0.1756 -0.27661,-0.3025l-1.99268,-3.9856c-0.06225,-0.0234 -0.12402,-0.0481 -0.18555,-0.074c-0.26953,-0.114 -0.52417,-0.2502 -0.7644,-0.4084c-0.26636,-0.1758 -0.51489,-0.3789 -0.74512,-0.6094c-0.23047,-0.2302 -0.43359,-0.4788 -0.60937,-0.7451c-0.1582,-0.2403 -0.29444,-0.4949 -0.40845,-0.7644c-0.11328,-0.2679 -0.20068,-0.5413 -0.26245,-0.8206l0,0c-0.07398,-0.3347 -0.11108,-0.6775 -0.11108,-1.0286c0,-0.351 0.0371,-0.6938 0.11108,-1.0285c0.06177,-0.2793 0.14917,-0.5528 0.26245,-0.8206c0.11401,-0.26953 0.25025,-0.52417 0.40845,-0.7644c0.17578,-0.26636 0.3789,-0.5149 0.60937,-0.74512c0.23023,-0.23047 0.47876,-0.4336 0.74512,-0.60938l0,0c0.24023,-0.1582 0.49487,-0.29444 0.7644,-0.40845c0.26783,-0.11328 0.54126,-0.20068 0.82056,-0.26245l0,0l0,0l0,0c0.33472,-0.07398 0.67749,-0.11109 1.02857,-0.11109l2.93872,0c0.02636,-0.0166 0.05444,-0.03198 0.08349,-0.04589zm0.72876,8.47948l6.08937,2.8716c0.1287,0.0606 0.2598,0.0987 0.3935,0.114c0.0772,0.0088 0.1551,0.0103 0.2337,0.0042c0.0857,-0.0068 0.1687,-0.0217 0.2495,-0.0452c0.1133,-0.0329 0.2219,-0.0822 0.3257,-0.1479c0.104,-0.0659 0.1948,-0.1431 0.2729,-0.2317c0.0554,-0.063 0.1045,-0.1318 0.147,-0.2063c0.0393,-0.0686 0.0713,-0.1397 0.0962,-0.2131c0.043,-0.1277 0.0647,-0.2625 0.0647,-0.4046l0,-10.64651c0,-0.14209 -0.0217,-0.2771 -0.0647,-0.40454c-0.0249,-0.07349 -0.0569,-0.14454 -0.0962,-0.21314c-0.0425,-0.07471 -0.0916,-0.14331 -0.147,-0.2063c-0.0781,-0.08862 -0.1689,-0.16577 -0.2729,-0.23169c-0.1038,-0.06567 -0.2124,-0.11523 -0.3257,-0.14795c-0.0808,-0.02344 -0.1638,-0.03833 -0.2495,-0.04517c-0.0786,-0.0061 -0.1565,-0.00463 -0.2337,0.00415c-0.1337,0.01539 -0.2648,0.05347 -0.3935,0.11402l-6.09034,2.87208l0.00097,7.16405zm13.58447,-7.9121l-2,1c-0.3757,0.18775 -0.8184,0.04029 -1.0063,-0.33545c-0.0552,-0.11035 -0.0813,-0.22656 -0.0813,-0.34033c0,-0.27344 0.1516,-0.53321 0.4167,-0.66602l2,-1c0.3757,-0.18775 0.8186,-0.04004 1.0064,0.33545c0.0551,0.11035 0.0813,0.22656 0.0813,0.34033c0,0.27368 -0.1514,0.53345 -0.4168,0.66602zm-15.08544,8.9785l-2.08667,0l1.30029,2.6006l0.78638,0l0,-2.6006zm0,-7.99998l-2.25,0c-0.24976,0 -0.49317,0.02734 -0.73023,0.08179c-0.18188,0.04174 -0.36011,0.09961 -0.53467,0.17334c-0.17944,0.07593 -0.34961,0.1665 -0.51049,0.27124c-0.18702,0.12231 -0.36133,0.26416 -0.52271,0.42554c-0.16138,0.16137 -0.30322,0.33569 -0.42554,0.52267c-0.10473,0.1609 -0.19531,0.3311 -0.27124,0.5105c-0.07373,0.1746 -0.13159,0.3528 -0.17334,0.5347c-0.05444,0.2371 -0.08178,0.4805 -0.08178,0.7302c0,0.2498 0.02734,0.4932 0.08178,0.7303c0.04175,0.1818 0.09961,0.3601 0.17334,0.5346c0.07593,0.1795 0.16651,0.3496 0.27124,0.5105c0.12232,0.187 0.26416,0.3614 0.42554,0.5227c0.16138,0.1614 0.33569,0.3033 0.52271,0.4256c0.16088,0.1047 0.33105,0.1953 0.51049,0.2712c0.17456,0.0737 0.35279,0.1316 0.53467,0.1734c0.23706,0.0544 0.48047,0.0817 0.73023,0.0817l2.25097,0l-0.00097,-6.49998zm12.75004,2.60058l2,0c0.4199,0 0.75,0.3301 0.75,0.75c0,0.4199 -0.3301,0.75 -0.75,0.75l-2,0c-0.42,0 -0.75,-0.3301 -0.75,-0.75c0,-0.4199 0.33,-0.75 0.75,-0.75zm0.3354,4.0791l2,1c0.2654,0.1326 0.4168,0.3924 0.4168,0.6661c0,0.1137 -0.0262,0.2299 -0.0813,0.3403c-0.1878,0.3755 -0.6307,0.5232 -1.0064,0.3354l-2,-1c-0.2651,-0.1328 -0.4167,-0.3925 -0.4167,-0.666c0,-0.1138 0.0261,-0.23 0.0813,-0.3403c0.1879,-0.3758 0.6306,-0.5232 1.0063,-0.3355z" fill-rule="evenodd"/>\n </g>\n</svg>',
@@ -740,173 +732,169 @@ var Icons = {
     return '<span class="' + PREFIX_CLASS + "-icon " + PREFIX_CLASS + "-icon-" + type + '" ' + attrStr + ">" + svg + "</span>";
 }
 var IconComponents = {
-    /** 播放 */ play: function(attr) {
+    /** 播放 */ play: function play(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.play, 'play', attr);
     },
-    /** 暂停 */ pause: function(attr) {
+    /** 暂停 */ pause: function pause(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.pause, 'pause', attr);
     },
-    volume: function(attr) {
+    volume: function volume(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.volume(PREFIX_CLASS), 'volume', attr);
     },
-    mobileFullscreen: function(attr) {
+    mobileFullscreen: function mobileFullscreen(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.mobileFullscreen, 'mobile-fullscreen', attr);
     },
-    exitFullscreen: function(attr) {
+    exitFullscreen: function exitFullscreen(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.exitFullscreen, 'exit-fullscreen', attr);
     },
-    fullscreen: function(attr) {
+    fullscreen: function fullscreen(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.fullscreen, 'fullscreen', attr);
     },
-    exitGlobalFullscreen: function(attr) {
+    exitGlobalFullscreen: function exitGlobalFullscreen(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.exitGlobalFullscreen, 'exit-global-fullscreen', attr);
     },
-    globalFullscreen: function(attr) {
+    globalFullscreen: function globalFullscreen(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.globalFullscreen, 'global-fullscreen', attr);
     },
-    capturePicture: function(attr) {
+    capturePicture: function capturePicture(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.capturePicture, 'capture-picture', attr);
     },
-    ptz: function(attr) {
+    ptz: function ptz(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.ptz, 'ptz', attr);
     },
-    record: function(attr) {
+    record: function record(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.record, 'record', attr);
     },
-    recordCircle: function(attr) {
+    recordCircle: function recordCircle(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.recordCircle, 'record-circle', attr);
     },
-    talk: function(attr) {
+    talk: function talk(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.talk, 'talk', attr);
     },
-    broadcast: function(attr) {
+    broadcast: function broadcast(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.broadcast, 'broadcast', attr);
     },
-    aiChat: function(attr) {
+    aiChat: function aiChat(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.aiChat, 'aiChat', attr);
     },
-    talkGrowth: function(attr) {
+    talkGrowth: function talkGrowth(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.talkGrowth(PREFIX_CLASS), 'talk-growth', attr);
     },
-    zoom: function(attr) {
+    zoom: function zoom(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.zoom, 'zoom', attr);
     },
-    more: function(attr) {
+    more: function more(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.more, 'more', attr);
     },
-    moreDot: function(attr) {
+    moreDot: function moreDot(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.moreDot, 'more-dot', attr);
     },
-    minusCircle: function(attr) {
+    minusCircle: function minusCircle(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.minusCircle, 'minus-circle', attr);
     },
-    plusCircle: function(attr) {
+    plusCircle: function plusCircle(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.plusCircle, 'plus-circle', attr);
     },
-    sdk: function(attr) {
+    sdk: function sdk(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.sdk, 'sdk', attr);
     },
-    cloudRec: function(attr) {
+    cloudRec: function cloudRec(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.cloudRec, 'cloud-rec', attr);
     },
-    cloudRecord: function(attr) {
+    cloudRecord: function cloudRecord(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.cloudRecord, 'cloud-record', attr);
     },
-    error: function(attr) {
+    error: function error(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.error, 'error', attr);
     },
-    info: function(attr) {
+    info: function info(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.info, 'info', attr);
     },
-    close: function(attr) {
+    close: function close(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.close, 'close', attr);
     },
-    closeCircleOutLined: function(attr) {
+    closeCircleOutLined: function closeCircleOutLined(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.closeCircleOutLined, 'close-circle', attr);
     },
-    warnCircleOutLined: function(attr) {
+    warnCircleOutLined: function warnCircleOutLined(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.warnCircleOutLined, 'warn-circle', attr);
     },
-    infoCircleOutLined: function(attr) {
+    infoCircleOutLined: function infoCircleOutLined(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.infoCircleOutLined, 'info-circle', attr);
     },
-    date: function(attr) {
+    date: function date(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.date, 'date', attr);
     },
-    filter: function(attr) {
+    filter: function filter(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.filter, 'filter', attr);
     },
-    add: function(attr) {
+    add: function add(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.add, 'add', attr);
     },
-    reduce: function(attr) {
+    reduce: function reduce(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.reduce, 'reduce', attr);
     },
-    /** 直播 */ live: function(attr) {
+    /** 直播 */ live: function live(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.live, 'live', attr);
     },
-    /** 回放 */ recDropdown: function(attr) {
+    /** 回放 */ recDropdown: function recDropdown(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.recDropdown, 'rec-dropdown', attr);
     },
-    /** 录像列表 */ recList: function(attr) {
+    /** 录像列表 */ recList: function recList(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.list, 'rec-list', attr);
     },
-    /** 消息 */ alarmMessage: function(attr) {
+    /** 消息 */ alarmMessage: function alarmMessage(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.alarmMessage, 'alarm-message', attr);
     },
-    time: function(attr) {
+    time: function time(attr) {
         if (attr === void 0) attr = {};
         return createIcon(Icons.time, 'time', attr);
     }
 };
 
 function _extends$w() {
-    _extends$w = Object.assign || function(target) {
+    _extends$w = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -1099,14 +1087,10 @@ function _create_class$8(Constructor, protoProps, staticProps) {
     return Constructor;
 }
 function _extends$v() {
-    _extends$v = Object.assign || function(target) {
+    _extends$v = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -1225,14 +1209,6 @@ function _array_like_to_array$2(arr, len) {
     for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
     return arr2;
 }
-function _unsupported_iterable_to_array$2(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _array_like_to_array$2(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(n);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array$2(o, minLen);
-}
 function _create_for_of_iterator_helper_loose$2(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (it) return (it = it.call(o)).next.bind(it);
@@ -1240,18 +1216,24 @@ function _create_for_of_iterator_helper_loose$2(o, allowArrayLike) {
         if (it) o = it;
         var i = 0;
         return function() {
-            if (i >= o.length) {
-                return {
-                    done: true
-                };
-            }
+            if (i >= o.length) return {
+                done: true
+            };
             return {
                 done: false,
                 value: o[i++]
             };
         };
     }
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupported_iterable_to_array$2(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _array_like_to_array$2(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array$2(o, minLen);
 }
 /**
  * 工具类
@@ -1278,7 +1260,7 @@ function _create_for_of_iterator_helper_loose$2(o, allowArrayLike) {
    */ // prettier-ignore
     Utils.orientationEventListener = function orientationEventListener(change) {
         var _orientationTimer = null;
-        var getOrientation = function() {
+        var getOrientation = function getOrientation() {
             var _screen, _window;
             // 现代浏览器方案
             if ((_screen = screen) == null ? void 0 : _screen.orientation) {
@@ -1315,7 +1297,7 @@ function _create_for_of_iterator_helper_loose$2(o, allowArrayLike) {
         };
         var orientation = getOrientation();
         // 监听变化（兼容写法）
-        var onOrientationChange = function() {
+        var onOrientationChange = function onOrientationChange() {
             var newOrientation = getOrientation == null ? void 0 : getOrientation();
             // console.log("onOrientationChange", newOrientation, orientation)
             // prettier-ignore
@@ -1324,7 +1306,7 @@ function _create_for_of_iterator_helper_loose$2(o, allowArrayLike) {
                 orientation = newOrientation;
             }
         };
-        var onResize = function() {
+        var onResize = function onResize() {
             // 防抖处理
             if (_orientationTimer) clearTimeout(_orientationTimer);
             if (onOrientationChange) _orientationTimer = setTimeout(onOrientationChange, 200);
@@ -1379,7 +1361,7 @@ function _create_for_of_iterator_helper_loose$2(o, allowArrayLike) {
    */ // prettier-ignore
     Utils.resizeObserver = function resizeObserver(node, callback) {
         // prettier-ignore
-        var observerFn = function(entries, observer) {
+        var observerFn = function observerFn(entries, observer) {
             for(var _iterator = _create_for_of_iterator_helper_loose$2(entries), _step; !(_step = _iterator()).done;){
                 var entry = _step.value;
                 if (entry.target === node) {
@@ -1443,9 +1425,9 @@ var PROGRESS_DEFAULT_OPTIONS = {
     showPlus: false,
     showMinus: false,
     isRotated: false,
-    onChange: function() {
+    onChange: function onChange() {
     /* no-op */ },
-    renderText: function(_, percent) {
+    renderText: function renderText(_, percent) {
         return (percent * 100).toFixed(0);
     }
 };
@@ -1468,6 +1450,7 @@ var PROGRESS_DEFAULT_OPTIONS = {
  * })
  */ var Progress = /*#__PURE__*/ function() {
     function Progress(options) {
+        var _this_options_defaultValue;
         var _this_options_range;
         this._percent = 0;
         this._value = 0;
@@ -1489,7 +1472,6 @@ var PROGRESS_DEFAULT_OPTIONS = {
         this.$container = options.container;
         this._render();
         this._eventListeners();
-        var _this_options_defaultValue;
         var value = (_this_options_defaultValue = this.options.defaultValue) != null ? _this_options_defaultValue : this.options.range[0]; // 设置默认值
         this._value = +value.toFixed(2); // 保留两位小数
         // prettier-ignore
@@ -1562,8 +1544,8 @@ var PROGRESS_DEFAULT_OPTIONS = {
         this._percent = +((value - this.options.range[0]) / (this.options.range[1] - this.options.range[0])).toFixed(2);
     };
     _proto._render = function _render() {
-        this.$content = document.createElement('div');
         var _this_options_className;
+        this.$content = document.createElement('div');
         this.$content.className = PREFIX_CLASS + "-progress " + ((_this_options_className = this.options.className) != null ? _this_options_className : '');
         this.$content.innerHTML = (this.options.showPercent ? '<div class="' + PREFIX_CLASS + '-progress-text">' + (this.options.renderText == null ? void 0 : this.options.renderText.call(this.options, this._value, this._percent, this.options.range)) + "</div>" : '') + "\n            " + (this.options.showPlus ? '<div class="' + PREFIX_CLASS + '-progress-plus">\n              ' + IconComponents.plusCircle() + "\n            </div>" : '') + '\n            <div class="' + PREFIX_CLASS + '-progress-slider">\n                <div class="' + PREFIX_CLASS + '-progress-slider-fill"></div>\n                <div class="' + PREFIX_CLASS + '-progress-slider-handle" style="top: 100%"></div>\n            </div>\n            ' + (this.options.showMinus ? '<div class="' + PREFIX_CLASS + '-progress-minus">\n            ' + IconComponents.minusCircle() + "\n            </div>" : '');
         this.$container.appendChild(this.$content);
@@ -1756,14 +1738,10 @@ function _create_class$6(Constructor, protoProps, staticProps) {
     return Constructor;
 }
 function _extends$u() {
-    _extends$u = Object.assign || function(target) {
+    _extends$u = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -1794,8 +1772,8 @@ var VOLUME_DEFAULT_OPTIONS = {
     muted: false,
     open: false,
     trigger: 'hover',
-    onOpenChange: function() {},
-    onChange: function() {}
+    onOpenChange: function onOpenChange() {},
+    onChange: function onChange() {}
 };
 /**
  * 音量调节控件
@@ -1823,7 +1801,7 @@ var VOLUME_DEFAULT_OPTIONS = {
         if (!(Utils.isMobile || _this._options.PLAY_TYPE === 'ezopen' || _this._options.PLAY_TYPE === 'ezhls')) {
             var _this__options_props4, _this__options_props5;
             _this.picker = new Picker(_this.$container, {
-                getPopupContainer: function() {
+                getPopupContainer: function getPopupContainer() {
                     return _this.$container;
                 },
                 trigger: _this._options.trigger,
@@ -1834,7 +1812,7 @@ var VOLUME_DEFAULT_OPTIONS = {
                     -10
                 ],
                 placement: 'top',
-                onOpenChange: function(open) {
+                onOpenChange: function onOpenChange(open) {
                     _this._options.onOpenChange == null ? void 0 : _this._options.onOpenChange.call(_this._options, open, _this._muted ? _this._lastVolume : _this.volume, _this._muted);
                     // prettier-ignore
                     _this.emit(EVENTS.control.volumePanelOpenChange, open, _this._lastVolume, _this._muted);
@@ -1851,10 +1829,10 @@ var VOLUME_DEFAULT_OPTIONS = {
                 showPercent: true,
                 className: "" + PREFIX_CLASS + "-volume-progress",
                 // 为了解决点击进度调取消静音
-                onProgressClick: function() {
+                onProgressClick: function onProgressClick() {
                     _this.muted = false;
                 },
-                onChange: function(value) {
+                onChange: function onChange(value) {
                     if (value !== _this._volume) _this.volume = value;
                 }
             });
@@ -2031,11 +2009,8 @@ function asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, key, arg) {
         reject(error);
         return;
     }
-    if (info.done) {
-        resolve(value);
-    } else {
-        Promise.resolve(value).then(_next, _throw);
-    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
 }
 function _async_to_generator$7(fn) {
     return function() {
@@ -2061,9 +2036,17 @@ function _ts_generator$7(thisArg, body) {
         },
         trys: [],
         ops: []
-    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -2467,14 +2450,10 @@ var __fullscreenProvider__ = Provider.getInstance();
 }();
 
 function _extends$t() {
-    _extends$t = Object.assign || function(target) {
+    _extends$t = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -2574,14 +2553,10 @@ function _set_prototype_of$t(o, p) {
 }(Control);
 
 function _extends$s() {
-    _extends$s = Object.assign || function(target) {
+    _extends$s = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -4107,14 +4082,10 @@ function _set_prototype_of$r(o, p) {
 }(EventEmitter);
 
 function _extends$r() {
-    _extends$r = Object.assign || function(target) {
+    _extends$r = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -4166,7 +4137,7 @@ function _set_prototype_of$q(o, p) {
             title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_MORE
         });
         this.picker = new Picker(this.$container, {
-            getPopupContainer: function() {
+            getPopupContainer: function getPopupContainer() {
                 return _this.$container;
             },
             trigger: Utils.isMobile ? 'click' : 'hover',
@@ -4905,14 +4876,10 @@ function _create_class$5(Constructor, protoProps, staticProps) {
     return Constructor;
 }
 function _extends$q() {
-    _extends$q = Object.assign || function(target) {
+    _extends$q = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -4991,14 +4958,14 @@ var ZOOM_DEFAULT_OPTIONS = {
             showPlus: true,
             showPercent: true,
             isRotated: this._isRotated,
-            onChange: function(value, percent, range) {
+            onChange: function onChange(value, percent, range) {
                 if (value !== _this._value) {
                     _this._value = value;
                     _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, value, percent, range);
                     _this.emit(EVENTS.control.zoomChange, value, percent, range);
                 }
             },
-            renderText: function(value) {
+            renderText: function renderText(value) {
                 return "" + value + "X";
             }
         });
@@ -5078,14 +5045,10 @@ var ZOOM_DEFAULT_OPTIONS = {
 }(Control);
 
 function _extends$p() {
-    _extends$p = Object.assign || function(target) {
+    _extends$p = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -5094,14 +5057,14 @@ function _extends$p() {
 function __zoom(theme, container, options) {
     theme.zoomUtil = new Zoom$1(container, _extends$p({}, options || {}, {
         min: 1,
-        onChange: function(zoom, reset) {
+        onChange: function onChange(zoom, reset) {
             if (zoom !== theme._zoom) {
                 var _options_onChange;
                 theme.zoom = zoom;
                 options == null ? void 0 : (_options_onChange = options.onChange) == null ? void 0 : _options_onChange.call(options, zoom, reset);
             }
         },
-        onTranslateChange: function(pos) {
+        onTranslateChange: function onTranslateChange(pos) {
             var _options_onTranslateChange;
             theme.emit(EVENTS.zoomTranslateChange, pos);
             options == null ? void 0 : (_options_onTranslateChange = options.onTranslateChange) == null ? void 0 : _options_onTranslateChange.call(options, pos);
@@ -5118,11 +5081,8 @@ function asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, key, arg) {
         reject(error);
         return;
     }
-    if (info.done) {
-        resolve(value);
-    } else {
-        Promise.resolve(value).then(_next, _throw);
-    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
 }
 function _async_to_generator$6(fn) {
     return function() {
@@ -5148,9 +5108,17 @@ function _ts_generator$6(thisArg, body) {
         },
         trys: [],
         ops: []
-    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -5306,11 +5274,8 @@ function asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, key, arg) {
         reject(error);
         return;
     }
-    if (info.done) {
-        resolve(value);
-    } else {
-        Promise.resolve(value).then(_next, _throw);
-    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
 }
 function _async_to_generator$5(fn) {
     return function() {
@@ -5328,14 +5293,10 @@ function _async_to_generator$5(fn) {
     };
 }
 function _extends$o() {
-    _extends$o = Object.assign || function(target) {
+    _extends$o = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -5350,9 +5311,17 @@ function _ts_generator$5(thisArg, body) {
         },
         trys: [],
         ops: []
-    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -5445,10 +5414,10 @@ function _ts_generator$5(thisArg, body) {
  * @param {IThemeData} themeData 主题数据
  * @returns
  */ function _filterControls(themeData) {
+    var _ref;
     var _themeData_header, _themeData_footer;
     var data = {};
-    var _themeData_autoFocus;
-    data.autoFocus = (_themeData_autoFocus = themeData == null ? void 0 : themeData.autoFocus) != null ? _themeData_autoFocus : 3; // 3s
+    data.autoFocus = (_ref = themeData == null ? void 0 : themeData.autoFocus) != null ? _ref : 3; // 3s
     data.poster = (themeData == null ? void 0 : themeData.poster) || ''; //
     var deviceControls = [];
     var recControls = [];
@@ -5753,14 +5722,10 @@ function rgbOrHexToRgbaWithOpacity(color, opacity) {
 }();
 
 function _extends$n() {
-    _extends$n = Object.assign || function(target) {
+    _extends$n = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -5798,14 +5763,10 @@ var Footer = /*#__PURE__*/ function(Component) {
 }(Component);
 
 function _extends$m() {
-    _extends$m = Object.assign || function(target) {
+    _extends$m = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -5857,13 +5818,13 @@ function interactiveHF($container, second, callback) {
     var _alwaysDisplay = false;
     var _$header = $container.querySelector("." + PREFIX_CLASS + "-header");
     var _$footer = $container.querySelector("." + PREFIX_CLASS + "-footer");
-    var _clearTimeout = function() {
+    var _clearTimeout = function _clearTimeout() {
         if (_timer) {
             clearTimeout(_timer);
             _timer = null;
         }
     };
-    var _show = function() {
+    var _show = function _show() {
         _clearTimeout == null ? void 0 : _clearTimeout();
         _$header == null ? void 0 : _$header.classList.remove("" + PREFIX_CLASS + "-hide-transition");
         _$footer == null ? void 0 : _$footer.classList.remove("" + PREFIX_CLASS + "-hide-transition");
@@ -5873,7 +5834,7 @@ function interactiveHF($container, second, callback) {
         }
         _open = true;
     };
-    var _hide = function() {
+    var _hide = function _hide() {
         if (_alwaysDisplay) {
             return;
         }
@@ -5888,27 +5849,27 @@ function interactiveHF($container, second, callback) {
         }
         _open = false;
     };
-    var _setTimeoutShow = function() {
+    var _setTimeoutShow = function _setTimeoutShow() {
         _show == null ? void 0 : _show();
         _timer = setTimeout(function() {
             _clearTimeout == null ? void 0 : _clearTimeout();
             _hide == null ? void 0 : _hide();
         }, second);
     };
-    var _headerFooterMousemove = function(e) {
+    var _headerFooterMousemove = function _headerFooterMousemove(e) {
         var // 鼠标在header footer 移动, 不允许消失及不要冒泡
         _e_stopPropagation;
         e == null ? void 0 : (_e_stopPropagation = e.stopPropagation) == null ? void 0 : _e_stopPropagation.call(e);
         _clearTimeout == null ? void 0 : _clearTimeout();
     };
-    var _touchStart = function() {
+    var _touchStart = function _touchStart() {
         if (_open) {
             _hide == null ? void 0 : _hide();
         } else {
             _setTimeoutShow == null ? void 0 : _setTimeoutShow();
         }
     };
-    var _headerFooterTouchStart = function(e) {
+    var _headerFooterTouchStart = function _headerFooterTouchStart(e) {
         var // 移动端特殊处理， 点击 header footer不允许消失及不要冒泡
         _e_stopPropagation;
         e == null ? void 0 : (_e_stopPropagation = e.stopPropagation) == null ? void 0 : _e_stopPropagation.call(e);
@@ -5945,7 +5906,7 @@ function interactiveHF($container, second, callback) {
     }
     /**
      * 销毁
-     */ var cleanup = function() {
+     */ var cleanup = function cleanup() {
         if ($container) {
             if (Utils.isMobile && _touchStart) {
                 var eventName = "click";
@@ -5989,11 +5950,11 @@ function interactiveHF($container, second, callback) {
     };
     return {
         cleanup: cleanup,
-        clearTimeout: function() {
+        clearTimeout: function clearTimeout1() {
             _clearTimeout == null ? void 0 : _clearTimeout();
             _alwaysDisplay = true;
         },
-        setTimeoutShow: function() {
+        setTimeoutShow: function setTimeoutShow() {
             _setTimeoutShow == null ? void 0 : _setTimeoutShow();
             _alwaysDisplay = false;
         },
@@ -6002,14 +5963,10 @@ function interactiveHF($container, second, callback) {
 }
 
 function _extends$l() {
-    _extends$l = Object.assign || function(target) {
+    _extends$l = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -6074,14 +6031,10 @@ function _set_prototype_of$m(o, p) {
 }(Fullscreen);
 
 function _extends$k() {
-    _extends$k = Object.assign || function(target) {
+    _extends$k = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -6144,8 +6097,8 @@ function _set_prototype_of$l(o, p) {
    * 点击 Control 会触发
    */ _proto._onControlClick = function _onControlClick(e) {
         var _this = this;
-        this.active = true;
         var _this_options_type, _this_options_cloudRecUpload;
+        this.active = true;
         this.emit(EVENTS.control.capturePicture, {
             type: (_this_options_type = this.options.type) != null ? _this_options_type : 'download',
             quality: this.options.quality || 0.9,
@@ -6181,14 +6134,10 @@ function _create_class$4(Constructor, protoProps, staticProps) {
     return Constructor;
 }
 function _extends$j() {
-    _extends$j = Object.assign || function(target) {
+    _extends$j = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -6357,7 +6306,7 @@ function formatTime(seconds, format) {
     var hours = Math.floor(seconds / 3600);
     var minutes = Math.floor(seconds % 3600 / 60);
     var secs = seconds % 60;
-    var pad = function(num) {
+    var pad = function pad(num) {
         return num.toString().padStart(2, '0');
     };
     return format.replace('HH', pad(hours)).replace('MM', pad(minutes)).replace('SS', pad(secs));
@@ -6377,14 +6326,10 @@ function _create_class$3(Constructor, protoProps, staticProps) {
     return Constructor;
 }
 function _extends$i() {
-    _extends$i = Object.assign || function(target) {
+    _extends$i = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -6532,11 +6477,8 @@ function asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, key, arg) {
         reject(error);
         return;
     }
-    if (info.done) {
-        resolve(value);
-    } else {
-        Promise.resolve(value).then(_next, _throw);
-    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
 }
 function _async_to_generator$4(fn) {
     return function() {
@@ -6567,14 +6509,10 @@ function _create_class$2(Constructor, protoProps, staticProps) {
     return Constructor;
 }
 function _extends$h() {
-    _extends$h = Object.assign || function(target) {
+    _extends$h = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -6609,9 +6547,17 @@ function _ts_generator$4(thisArg, body) {
         },
         trys: [],
         ops: []
-    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -6752,7 +6698,7 @@ function _ts_generator$4(thisArg, body) {
     /**
    * 点击 Control 会触发
    */ _proto._onControlClick = function _onControlClick(e) {
-        var _this = this, _superprop_get__onControlClick = function() {
+        var _this = this, _superprop_get__onControlClick = function _superprop_get__onControlClick() {
             return Control.prototype._onControlClick;
         };
         return _async_to_generator$4(function() {
@@ -6815,11 +6761,8 @@ function asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, key, arg) {
         reject(error);
         return;
     }
-    if (info.done) {
-        resolve(value);
-    } else {
-        Promise.resolve(value).then(_next, _throw);
-    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
 }
 function _async_to_generator$3(fn) {
     return function() {
@@ -6837,14 +6780,10 @@ function _async_to_generator$3(fn) {
     };
 }
 function _extends$g() {
-    _extends$g = Object.assign || function(target) {
+    _extends$g = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -6879,9 +6818,17 @@ function _ts_generator$3(thisArg, body) {
         },
         trys: [],
         ops: []
-    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -7017,7 +6964,7 @@ function _ts_generator$3(thisArg, body) {
     /**
    * 点击 Control 会触发
    */ _proto._onControlClick = function _onControlClick(e) {
-        var _this = this, _superprop_get__onControlClick = function() {
+        var _this = this, _superprop_get__onControlClick = function _superprop_get__onControlClick() {
             return Control.prototype._onControlClick;
         };
         return _async_to_generator$3(function() {
@@ -7045,11 +6992,8 @@ function asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, key, arg) {
         reject(error);
         return;
     }
-    if (info.done) {
-        resolve(value);
-    } else {
-        Promise.resolve(value).then(_next, _throw);
-    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
 }
 function _async_to_generator$2(fn) {
     return function() {
@@ -7067,14 +7011,10 @@ function _async_to_generator$2(fn) {
     };
 }
 function _extends$f() {
-    _extends$f = Object.assign || function(target) {
+    _extends$f = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -7109,9 +7049,17 @@ function _ts_generator$2(thisArg, body) {
         },
         trys: [],
         ops: []
-    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -7248,7 +7196,7 @@ function _ts_generator$2(thisArg, body) {
     /**
    * 点击 Control 会触发
    */ _proto._onControlClick = function _onControlClick(e) {
-        var _this = this, _superprop_get__onControlClick = function() {
+        var _this = this, _superprop_get__onControlClick = function _superprop_get__onControlClick() {
             return Control.prototype._onControlClick;
         };
         return _async_to_generator$2(function() {
@@ -7269,14 +7217,10 @@ function _ts_generator$2(thisArg, body) {
 }(Control);
 
 function _extends$e() {
-    _extends$e = Object.assign || function(target) {
+    _extends$e = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -7364,14 +7308,10 @@ function _set_prototype_of$f(o, p) {
 }(Control);
 
 function _extends$d() {
-    _extends$d = Object.assign || function(target) {
+    _extends$d = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -7454,7 +7394,7 @@ function _set_prototype_of$e(o, p) {
     _proto._initPicker = function _initPicker() {
         var _this = this;
         this._picker = new Picker(this.$container, {
-            getPopupContainer: function() {
+            getPopupContainer: function getPopupContainer() {
                 return Utils.isMobile ? _this.__options.rootContainer : _this.$container;
             },
             trigger: Utils.isMobile ? 'click' : 'hover',
@@ -7528,14 +7468,10 @@ function _set_prototype_of$e(o, p) {
 }(Control);
 
 function _extends$c() {
-    _extends$c = Object.assign || function(target) {
+    _extends$c = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -7588,10 +7524,10 @@ function _set_prototype_of$d(o, p) {
             showEventFilter: false,
             showCardTypeIcon: false,
             sections: [],
-            onCardClick: function(section, index, sections) {
+            onCardClick: function onCardClick(section, index, sections) {
                 _this.emit(EVENTS.control.recListCardClick, section, index, sections);
             },
-            onClose: function() {
+            onClose: function onClose() {
                 var _this__options_onClose, _this__options;
                 _this._panelOpen = false;
                 _this.active = false;
@@ -7680,14 +7616,10 @@ function _set_prototype_of$d(o, p) {
 }(Control);
 
 function _extends$b() {
-    _extends$b = Object.assign || function(target) {
+    _extends$b = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -7776,14 +7708,10 @@ function _create_class$1(Constructor, protoProps, staticProps) {
     return Constructor;
 }
 function _extends$a() {
-    _extends$a = Object.assign || function(target) {
+    _extends$a = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -7814,11 +7742,11 @@ var SELECT_DEFAULT_OPTIONS = {
         label: 'label',
         value: 'value'
     },
-    renderLabel: function(label) {
+    renderLabel: function renderLabel(label) {
         return "<span>" + (label || '') + "</span>";
     },
-    onChange: function() {},
-    onOpenChange: function() {}
+    onChange: function onChange() {},
+    onOpenChange: function onOpenChange() {}
 };
 /**
  * 选择器切换 (支持PC/Mobile)
@@ -7872,6 +7800,7 @@ var SELECT_DEFAULT_OPTIONS = {
     _inherits$b(Select, Control);
     function Select(options) {
         var _this;
+        var _ref;
         var _this__options_fieldNames, _this__picker_$body;
         _this = Control.call(this, _extends$a({
             tagName: 'span',
@@ -7885,11 +7814,10 @@ var SELECT_DEFAULT_OPTIONS = {
         if (options.value !== undefined || options.value !== null) {
             _this._value = options.value + '';
         }
-        var _this__options_fieldNames_value;
-        var valueKey = (_this__options_fieldNames_value = (_this__options_fieldNames = _this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.value) != null ? _this__options_fieldNames_value : 'value';
+        var valueKey = (_ref = (_this__options_fieldNames = _this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.value) != null ? _ref : 'value';
         _this._picker = new Picker(_this.$container, {
             // 由于某些原因， 移动端强制渲染在 body 上
-            getPopupContainer: function() {
+            getPopupContainer: function getPopupContainer() {
                 return Utils.isMobile ? options.rootContainer : _this.$container;
             },
             trigger: Utils.isMobile ? 'click' : 'hover',
@@ -7902,7 +7830,7 @@ var SELECT_DEFAULT_OPTIONS = {
             ],
             placement: 'top',
             // zIndex: 10000,
-            onOpenChange: function(open) {
+            onOpenChange: function onOpenChange(open) {
                 var item = _this.list.find(function(item) {
                     return item[valueKey] + '' === _this.value;
                 });
@@ -7926,11 +7854,10 @@ var SELECT_DEFAULT_OPTIONS = {
         var _this = this;
         if (list === void 0) list = [];
         if ((list == null ? void 0 : list.length) > 0 && this._picker) {
+            var _ref, _ref1;
             var _this__options_fieldNames, _this__options_fieldNames1, _this_locale, _this__picker;
-            var _this__options_fieldNames_label;
-            var labelKey = (_this__options_fieldNames_label = (_this__options_fieldNames = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.label) != null ? _this__options_fieldNames_label : 'label';
-            var _this__options_fieldNames_value;
-            var valueKey = (_this__options_fieldNames_value = (_this__options_fieldNames1 = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames1.value) != null ? _this__options_fieldNames_value : 'value';
+            var labelKey = (_ref = (_this__options_fieldNames = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.label) != null ? _ref : 'label';
+            var valueKey = (_ref1 = (_this__options_fieldNames1 = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames1.value) != null ? _ref1 : 'value';
             (_this__picker = this._picker) == null ? void 0 : _this__picker.innerHTML('<div class="' + PREFIX_CLASS + '-select-panel">\n            <ul class="' + PREFIX_CLASS + '-select-list">\n              ' + list.map(function(item) {
                 return '\n                    <li class="' + PREFIX_CLASS + "-select-option " + (+item[valueKey] === _this.value ? "" + PREFIX_CLASS + "-active" : '') + '" data-value="' + item[valueKey] + '">\n                      <span>' + item[labelKey] + "</span>\n                    </li>\n                  ";
             }).join('') + "\n            </ul>\n            " + (Utils.isMobile ? '<div class="' + PREFIX_CLASS + '-select-cancel">\n                  <span>' + (((_this_locale = this.locale) == null ? void 0 : _this_locale.cancel) || '取消') + "</span>\n                </div>" : '') + "\n            " + (Utils.isMobile ? '<span class="' + PREFIX_CLASS + '-select-close">' + IconComponents.close() + "</span>" : '') + "\n          <div>");
@@ -7942,12 +7869,12 @@ var SELECT_DEFAULT_OPTIONS = {
         }
     };
     _proto._render = function _render(item) {
+        var _ref;
         var _this__options_fieldNames;
         if (this.list.length === 0) {
             return;
         }
-        var _this__options_fieldNames_label;
-        var labelKey = (_this__options_fieldNames_label = (_this__options_fieldNames = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.label) != null ? _this__options_fieldNames_label : 'label';
+        var labelKey = (_ref = (_this__options_fieldNames = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.label) != null ? _ref : 'label';
         if (this.$container.querySelector("." + PREFIX_CLASS + "-select-btn")) {
             this.$container.querySelector("." + PREFIX_CLASS + "-select-btn").innerHTML = this._options.renderLabel == null ? void 0 : this._options.renderLabel.call(this._options, item == null ? void 0 : item[labelKey], item, this.list);
         } else {
@@ -7963,9 +7890,9 @@ var SELECT_DEFAULT_OPTIONS = {
     _proto._activeOption = function _activeOption() {
         var _this = this;
         if (this._picker) {
+            var _ref;
             var _this__options_fieldNames, _this__picker_$body, _this__picker_$body1;
-            var _this__options_fieldNames_value;
-            var valueKey = (_this__options_fieldNames_value = (_this__options_fieldNames = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.value) != null ? _this__options_fieldNames_value : 'value';
+            var valueKey = (_ref = (_this__options_fieldNames = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.value) != null ? _ref : 'value';
             var $active = (_this__picker_$body = this._picker.$body) == null ? void 0 : _this__picker_$body.querySelector("." + PREFIX_CLASS + "-active");
             $active == null ? void 0 : $active.classList.remove(PREFIX_CLASS + '-active');
             var $target = (_this__picker_$body1 = this._picker.$body) == null ? void 0 : _this__picker_$body1.querySelector("." + PREFIX_CLASS + '-select-option[data-value="' + this.value + '"]');
@@ -7979,9 +7906,9 @@ var SELECT_DEFAULT_OPTIONS = {
     _proto._onSelectChange = function _onSelectChange() {
         var _this = this;
         if (this._picker) {
+            var _ref;
             var _this__options_fieldNames;
-            var _this__options_fieldNames_value;
-            var valueKey = (_this__options_fieldNames_value = (_this__options_fieldNames = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.value) != null ? _this__options_fieldNames_value : 'value';
+            var valueKey = (_ref = (_this__options_fieldNames = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.value) != null ? _ref : 'value';
             this._delegationOption = delegate(this._picker.$body, "." + PREFIX_CLASS + "-select-option", 'click', function(e) {
                 var target = e.delegateTarget;
                 e.stopPropagation();
@@ -8066,20 +7993,14 @@ var SELECT_DEFAULT_OPTIONS = {
 }(Control);
 
 function _assert_this_initialized$1(self) {
-    if (self === void 0) {
-        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
+    if (self === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     return self;
 }
 function _extends$9() {
-    _extends$9 = Object.assign || function(target) {
+    _extends$9 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -8169,7 +8090,7 @@ function __filter(list, locale) {
             title: options == null ? void 0 : (_options_locales_options_language = options.locales[options.language]) == null ? void 0 : _options_locales_options_language.BTN_HD,
             controlType: 'button',
             classNameSuffix: 'definition',
-            renderLabel: function(label, item, list) {
+            renderLabel: function renderLabel(label, item, list) {
                 var _list_;
                 if ((item == null ? void 0 : item.level) === 'auto') {
                     var _options_locales_options_language;
@@ -8181,7 +8102,7 @@ function __filter(list, locale) {
                 // 如果 label 不存在，则不显示label，直接显示list的第一个label， 一般自定义清晰度列表可能会出现
                 return "<span>" + (label || ((_list_ = list[0]) == null ? void 0 : _list_.name) || '') + "</span>";
             },
-            onChange: function(value, item) {
+            onChange: function onChange(value, item) {
                 var _options_onChange;
                 options == null ? void 0 : (_options_onChange = options.onChange) == null ? void 0 : _options_onChange.call(options, value, item);
                 if (value === 'auto') {
@@ -8191,7 +8112,7 @@ function __filter(list, locale) {
                     _assert_this_initialized$1(_this).emit(EVENTS.control.definitionChange, value, item);
                 }
             },
-            onOpenChange: function(open, value, item) {
+            onOpenChange: function onOpenChange(open, value, item) {
                 var _options_onOpenChange;
                 options == null ? void 0 : (_options_onOpenChange = options.onOpenChange) == null ? void 0 : _options_onOpenChange.call(options, open, value, item);
                 _assert_this_initialized$1(_this).emit(EVENTS.control.definitionPanelOpenChange, open, value, item);
@@ -8227,20 +8148,14 @@ function __filter(list, locale) {
 }(Select);
 
 function _assert_this_initialized(self) {
-    if (self === void 0) {
-        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
+    if (self === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     return self;
 }
 function _extends$8() {
-    _extends$8 = Object.assign || function(target) {
+    _extends$8 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -8307,13 +8222,13 @@ var SPEED_DEFAULT_OPTIONS = {
             classNameSuffix: 'speed',
             controlType: 'button',
             title: options == null ? void 0 : (_options_locales = options.locales) == null ? void 0 : (_options_locales_options_language = _options_locales[options.language]) == null ? void 0 : _options_locales_options_language.BTN_SPEED,
-            onChange: function(value, item) {
+            onChange: function onChange(value, item) {
                 var _options_onChange;
                 value = +value;
                 options == null ? void 0 : (_options_onChange = options.onChange) == null ? void 0 : _options_onChange.call(options, value, item);
                 _assert_this_initialized(_this).emit(EVENTS.control.speedChange, value, item);
             },
-            onOpenChange: function(open, value, item) {
+            onOpenChange: function onOpenChange(open, value, item) {
                 var _options_onOpenChange;
                 value = +value;
                 options == null ? void 0 : (_options_onOpenChange = options.onOpenChange) == null ? void 0 : _options_onOpenChange.call(options, open, value, item);
@@ -8363,14 +8278,10 @@ var SPEED_DEFAULT_OPTIONS = {
 }(Select);
 
 function _extends$7() {
-    _extends$7 = Object.assign || function(target) {
+    _extends$7 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -8447,16 +8358,16 @@ function _set_prototype_of$8(o, p) {
             current: DateTime.toDate(this._value),
             placement: 'tr',
             triggerClose: true,
-            disabledDate: function(date) {
+            disabledDate: function disabledDate(date) {
                 return date.getTime() > (_this.options.maxDate || new Date()).getTime();
             }
         }, this.options || {}, {
             // 不支持自定义
-            getPopupContainer: function() {
+            getPopupContainer: function getPopupContainer() {
                 return _this.$container;
             },
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onOk: function(date, _mode) {
+            onOk: function onOk(date, _mode) {
                 if (date && _this._value !== DateTime.format(date, 'YYYY-MM-DD') && isMobile1) {
                     _this._value = DateTime.format(date, 'YYYY-MM-DD');
                     _this.options.onOk == null ? void 0 : _this.options.onOk.call(_this.options, date);
@@ -8466,14 +8377,14 @@ function _set_prototype_of$8(o, p) {
                     }
                 }
             },
-            onChange: function(date, mode) {
+            onChange: function onChange(date, mode) {
                 if (date && _this._value !== DateTime.format(date, 'YYYY-MM-DD') && !isMobile1 && mode === 'date') {
                     _this._value = DateTime.format(date, 'YYYY-MM-DD');
                     _this.options.onChange == null ? void 0 : _this.options.onChange.call(_this.options, date);
                     _this.emit(EVENTS.control.dateChange, date);
                 }
             },
-            onOpenChange: function(open) {
+            onOpenChange: function onOpenChange(open) {
                 _this.options.onPanelChange == null ? void 0 : _this.options.onPanelChange.call(_this.options, open, _this.datePicker.current);
                 _this.emit(EVENTS.control.datePanelOpenChange, open, _this.datePicker.current);
             }
@@ -8523,14 +8434,10 @@ function _set_prototype_of$8(o, p) {
 }(Control);
 
 function _extends$6() {
-    _extends$6 = Object.assign || function(target) {
+    _extends$6 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -8604,17 +8511,17 @@ function _set_prototype_of$7(o, p) {
             triggerClose: true
         }, this.options || {}, {
             // 不支持自定义
-            getPopupContainer: function() {
+            getPopupContainer: function getPopupContainer() {
                 return _this.$container;
             },
-            onChange: function(time, _times) {
+            onChange: function onChange(time, _times) {
                 if (time && _this._value !== time) {
                     _this._value = time;
                     _this.options.onChange == null ? void 0 : _this.options.onChange.call(_this.options, time, _times);
                     _this.emit(EVENTS.control.timeChange, time);
                 }
             },
-            onOpenChange: function(open) {
+            onOpenChange: function onOpenChange(open) {
                 _this.options.onPanelChange == null ? void 0 : _this.options.onPanelChange.call(_this.options, open, _this.timePicker.current);
                 _this.emit(EVENTS.control.timePanelOpenChange, open, _this.timePicker.current);
             }
@@ -8662,14 +8569,10 @@ function _set_prototype_of$7(o, p) {
 }(Control);
 
 function _extends$5() {
-    _extends$5 = Object.assign || function(target) {
+    _extends$5 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -8738,8 +8641,8 @@ function _set_prototype_of$6(o, p) {
     var _proto = TimeLineControl.prototype;
     _proto._render = function _render() {
         var _this = this;
-        var _this_timeLineUtil_updateTimeSections, _this_timeLineUtil;
         var _this__options_showTimeWidthBtn, _this__options_showCoverFold;
+        var _this_timeLineUtil_updateTimeSections, _this_timeLineUtil;
         var _timeLineOptions = _extends$5({
             language: this._options.language || 'zh',
             coverQuery: this._options.coverQuery || '',
@@ -8748,19 +8651,19 @@ function _set_prototype_of$6(o, p) {
             hoverTipPlacement: 'top'
         }, this._options || {}, {
             showSectionIcon: false,
-            onClickSeek: function(date) {
+            onClickSeek: function onClickSeek(date) {
                 if (date == null ? void 0 : date.getTime()) {
                     _this._options.onClickSeek == null ? void 0 : _this._options.onClickSeek.call(_this._options, date);
                     _this.emit(EVENTS.control.timeLineChange, date);
                 }
             },
-            onChange: function(date) {
+            onChange: function onChange(date) {
                 if (_this._currentTime !== (date == null ? void 0 : date.getTime())) {
                     _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, date);
                     _this.emit(EVENTS.control.timeLineChange, date);
                 }
             },
-            onDragEnd: function(date, isOver) {
+            onDragEnd: function onDragEnd(date, isOver) {
                 var _this__options_props_playbackRange, _this__options_props, _this__options;
                 _this._options.onDragEnd == null ? void 0 : _this._options.onDragEnd.call(_this._options, date, isOver);
                 // 松手时鼠标已移出时间轴容器（isOver 为 false）：控件把这种拖动视为取消，
@@ -8779,11 +8682,11 @@ function _set_prototype_of$6(o, p) {
                     _this.emit(EVENTS.control.timeLineChange, date);
                 }
             },
-            onPickerOpenChange: function(open) {
+            onPickerOpenChange: function onPickerOpenChange(open) {
                 _this.emit(EVENTS.control.timeLinePanelOpenChange, open);
             },
             // 2025-10-27 仅移动端支持
-            onPickerSelect: function(item) {
+            onPickerSelect: function onPickerSelect(item) {
                 var date = null;
                 try {
                     if ((item.startTime + '').length === 10) date = new Date(item.startTime * 1000);
@@ -8794,7 +8697,7 @@ function _set_prototype_of$6(o, p) {
                 } catch (error) {
                 }
             },
-            onSectionIconClick: function(result) {
+            onSectionIconClick: function onSectionIconClick(result) {
                 _this.emit('TimeLine.onSectionIconClick', result);
             }
         });
@@ -8865,14 +8768,10 @@ function _set_prototype_of$6(o, p) {
 }(Control);
 
 function _extends$4() {
-    _extends$4 = Object.assign || function(target) {
+    _extends$4 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -8917,8 +8816,8 @@ function _set_prototype_of$5(o, p) {
  * @param seg 录像片段
  * @param which 取起点还是终点
  */ function segMs(seg, which) {
-    var _seg_startTime, _seg_endTime;
-    var value = which === 'start' ? (_seg_startTime = seg == null ? void 0 : seg.startTime) != null ? _seg_startTime : seg == null ? void 0 : seg.begin : (_seg_endTime = seg == null ? void 0 : seg.endTime) != null ? _seg_endTime : seg == null ? void 0 : seg.end;
+    var _ref, _ref1;
+    var value = which === 'start' ? (_ref = seg == null ? void 0 : seg.startTime) != null ? _ref : seg == null ? void 0 : seg.begin : (_ref1 = seg == null ? void 0 : seg.endTime) != null ? _ref1 : seg == null ? void 0 : seg.end;
     if (value === undefined || value === null || value === '') return NaN;
     if (typeof value === 'number') return value < 1e12 ? value * 1000 : value;
     return DateTime.toDate(value).getTime();
@@ -8979,17 +8878,17 @@ function _set_prototype_of$5(o, p) {
     _proto._render = function _render() {
         var _this = this;
         this._progress = new SegmentProgress(this.$container, {
-            onChange: function(date) {
+            onChange: function onChange(date) {
                 // 用户主动定位即视为重新开始播放，立即解除结束静默，否则静默期内的回写被丢弃、
                 // 进度条会停住不动
                 _this._silenceUntil = 0;
                 _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, date);
                 _this.emit(EVENTS.control.timeLineChange, date);
             },
-            onDragStart: function() {
+            onDragStart: function onDragStart() {
                 _this._isDragging = true;
             },
-            onDragEnd: function() {
+            onDragEnd: function onDragEnd() {
                 _this._isDragging = false;
             }
         });
@@ -9082,14 +8981,10 @@ function _set_prototype_of$5(o, p) {
 }(Control);
 
 function _extends$3() {
-    _extends$3 = Object.assign || function(target) {
+    _extends$3 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -9179,7 +9074,7 @@ var Controls = {
     segmentProgress: SegmentProgressControl
 };
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */ function _inherits$3(subClass, superClass) {
+function _inherits$3(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -9344,14 +9239,10 @@ function _set_prototype_of$2(o, p) {
 }(EventEmitter);
 
 function _extends$2() {
-    _extends$2 = Object.assign || function(target) {
+    _extends$2 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -9483,7 +9374,7 @@ var PAUSE_DEFAULT_OPTIONS = {};
     return Pause;
 }(Control);
 
-var _unmountedControls = function(theme) {
+var _unmountedControls = function _unmountedControls(theme) {
     if (!theme.controls) {
         return;
     }
@@ -9570,11 +9461,8 @@ function asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, key, arg) {
         reject(error);
         return;
     }
-    if (info.done) {
-        resolve(value);
-    } else {
-        Promise.resolve(value).then(_next, _throw);
-    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
 }
 function _async_to_generator$1(fn) {
     return function() {
@@ -9591,28 +9479,6 @@ function _async_to_generator$1(fn) {
         });
     };
 }
-function _extends$1() {
-    _extends$1 = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
-        }
-        return target;
-    };
-    return _extends$1.apply(this, arguments);
-}
-function _unsupported_iterable_to_array$1(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _array_like_to_array$1(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(n);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array$1(o, minLen);
-}
 function _create_for_of_iterator_helper_loose$1(o, allowArrayLike) {
     var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
     if (it) return (it = it.call(o)).next.bind(it);
@@ -9620,18 +9486,26 @@ function _create_for_of_iterator_helper_loose$1(o, allowArrayLike) {
         if (it) o = it;
         var i = 0;
         return function() {
-            if (i >= o.length) {
-                return {
-                    done: true
-                };
-            }
+            if (i >= o.length) return {
+                done: true
+            };
             return {
                 done: false,
                 value: o[i++]
             };
         };
     }
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _extends$1() {
+    _extends$1 = Object.assign || function assign(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends$1.apply(this, arguments);
 }
 function _ts_generator$1(thisArg, body) {
     var f, y, t, _ = {
@@ -9642,9 +9516,17 @@ function _ts_generator$1(thisArg, body) {
         },
         trys: [],
         ops: []
-    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -9724,6 +9606,14 @@ function _ts_generator$1(thisArg, body) {
         };
     }
 }
+function _unsupported_iterable_to_array$1(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _array_like_to_array$1(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array$1(o, minLen);
+}
 // 需要权限的控件
 var AUTH_KEY = [
     'ptz',
@@ -9762,7 +9652,7 @@ function _renderControls(theme, $container, btnList, props) {
                         // eslint-disable-next-line @typescript-eslint/dot-notation, new-cap, @typescript-eslint/no-unsafe-argument
                         theme.controls["deviceControl"] = new Controls["device"](_extends$1({
                             rootContainer: theme.$container,
-                            getPopupContainer: function() {
+                            getPopupContainer: function getPopupContainer() {
                                 return $container;
                             },
                             recType: theme.recType,
@@ -9785,7 +9675,7 @@ function _renderControls(theme, $container, btnList, props) {
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                     theme.controls["" + item.iconId + "Control"] = new Controls[item.iconId](_extends$1({
                         rootContainer: theme.$container,
-                        getPopupContainer: function() {
+                        getPopupContainer: function getPopupContainer() {
                             return $container;
                         },
                         language: theme.options.language || "zh",
@@ -9812,7 +9702,7 @@ function _renderControls(theme, $container, btnList, props) {
 }
 function _renderTheme(theme, data) {
     return _async_to_generator$1(function() {
-        var _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_urlInfo, _theme_playbackRange, _theme_playbackRange1, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, _filterThemeData_footer_btnList, list, _needTimeLine, _hasPlaybackRange, _needDatePicker, hasPtz, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_options_mobileExtendOptions3, _theme_options_mobileExtendOptions4, _theme_controls2, _theme_options_mobileExtendOptions5, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions6, _filterThemeData_header1, _filterThemeData_footer1, _filterThemeData_footer_btnList1, _theme_options;
+        var _ref, _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_urlInfo, _theme_playbackRange, _theme_playbackRange1, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, list, _needTimeLine, _hasPlaybackRange, _needDatePicker, hasPtz, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_options_mobileExtendOptions3, _theme_options_mobileExtendOptions4, _theme_controls2, _theme_options_mobileExtendOptions5, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions6, _ref1, _filterThemeData_header1, _filterThemeData_footer1, _theme_options;
         return _ts_generator$1(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -9838,7 +9728,7 @@ function _renderTheme(theme, data) {
                             language: theme.options.language,
                             locales: theme.i18n.translations
                         }, theme.options.loadingOptions || {}, {
-                            getPopupContainer: function() {
+                            getPopupContainer: function getPopupContainer() {
                                 return theme.$container;
                             }
                         }));
@@ -9848,7 +9738,7 @@ function _renderTheme(theme, data) {
                             language: theme.options.language,
                             locales: theme.i18n.translations
                         }, theme.options.pauseOptions || {}, {
-                            getPopupContainer: function() {
+                            getPopupContainer: function getPopupContainer() {
                                 return theme.contentControl.$wrapper;
                             }
                         }));
@@ -9860,14 +9750,14 @@ function _renderTheme(theme, data) {
                         theme.messageControl = new Message(_extends$1({
                             rootContainer: theme.$container
                         }, theme.options.messageOptions || {}, {
-                            getPopupContainer: function() {
+                            getPopupContainer: function getPopupContainer() {
                                 return theme.contentControl.$wrapper;
                             }
                         }));
                     }
                     if (theme.options.posterOptions !== null) {
                         theme.posterControl = new Poster(_extends$1({}, theme.options.posterOptions || {}, {
-                            getPopupContainer: function() {
+                            getPopupContainer: function getPopupContainer() {
                                 return theme.contentControl.$video;
                             }
                         }));
@@ -9897,7 +9787,7 @@ function _renderTheme(theme, data) {
                     }
                     if (filterThemeData.header) {
                         theme._header = new Header({
-                            getPopupContainer: function() {
+                            getPopupContainer: function getPopupContainer() {
                                 return theme.$container;
                             },
                             color: filterThemeData.header.color,
@@ -9912,7 +9802,7 @@ function _renderTheme(theme, data) {
                     if (filterThemeData.footer) {
                         // prettier-ignore
                         theme._footer = new Footer({
-                            getPopupContainer: function() {
+                            getPopupContainer: function getPopupContainer() {
                                 return theme.$container;
                             },
                             color: filterThemeData.footer.color,
@@ -9958,7 +9848,7 @@ function _renderTheme(theme, data) {
                         _renderControls(theme, theme._footer.$left, leftBtns1, props);
                         _renderControls(theme, theme._footer.$right, rightBtns1, props);
                     }
-                    list = [].concat(((_filterThemeData_header = filterThemeData.header) == null ? void 0 : _filterThemeData_header.btnList) || [], (_filterThemeData_footer_btnList = (_filterThemeData_footer = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer.btnList) != null ? _filterThemeData_footer_btnList : []);
+                    list = [].concat(((_filterThemeData_header = filterThemeData.header) == null ? void 0 : _filterThemeData_header.btnList) || [], (_ref = (_filterThemeData_footer = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer.btnList) != null ? _ref : []);
                     // FIXME: 这个逻辑实际上是有问题的
                     _needTimeLine = list.some(function(item) {
                         return REC_GROUP.includes(item.iconId) || item.iconId === 'recDropdown';
@@ -10005,7 +9895,7 @@ function _renderTheme(theme, data) {
                             }
                             // 回放类型切换正常渲染，用户点击后由 SDK 层在 recDropdownChange 事件中自行处理
                             if (theme.options.recOptions !== null && ((_theme_options_mobileExtendOptions4 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions4.controls.includes('rec')) && _needTimeLine) {
-                                [].concat(((_filterThemeData_header1 = filterThemeData.header) == null ? void 0 : _filterThemeData_header1.btnList) || [], (_filterThemeData_footer_btnList1 = (_filterThemeData_footer1 = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer1.btnList) != null ? _filterThemeData_footer_btnList1 : []).forEach(function(item) {
+                                [].concat(((_filterThemeData_header1 = filterThemeData.header) == null ? void 0 : _filterThemeData_header1.btnList) || [], (_ref1 = (_filterThemeData_footer1 = filterThemeData.footer) == null ? void 0 : _filterThemeData_footer1.btnList) != null ? _ref1 : []).forEach(function(item) {
                                     var _theme__mobileExtend;
                                     if (REC_GROUP.includes(item.iconId)) _renderRecType(theme, (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight, item.iconId, props);
                                 });
@@ -10015,7 +9905,7 @@ function _renderTheme(theme, data) {
                                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                                 theme.controls['alarmMessageControl'] = new Controls['alarmMessage'](_extends$1({
                                     rootContainer: theme.$container,
-                                    getPopupContainer: function() {
+                                    getPopupContainer: function getPopupContainer() {
                                         var _theme__mobileExtend;
                                         return (_theme__mobileExtend = theme._mobileExtend) == null ? void 0 : _theme__mobileExtend.$topRight;
                                     },
@@ -10049,33 +9939,33 @@ function _renderTheme(theme, data) {
         });
     })();
 }
-var _renderTimeLine = function(theme, container, props) {
+var _renderTimeLine = function _renderTimeLine(theme, container, props) {
     if (props === void 0) props = {};
     if (!theme.controls.timeLineControl && theme.options.timeLineOptions !== null) {
+        var _ref;
         var _theme_urlInfo, _theme_urlInfo1, _theme_options, _theme_options1, _this, _theme_options2;
-        var _showSectionIcon;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         theme.controls.timeLineControl = new Controls['timeLine'](_extends$1({
-            getPopupContainer: function() {
+            getPopupContainer: function getPopupContainer() {
                 return container;
             },
             language: theme.options.language,
             locales: theme.i18n.translations,
             coverQuery: ((_theme_urlInfo = theme.urlInfo) == null ? void 0 : _theme_urlInfo.validateCode) ? "decodekey=" + ((_theme_urlInfo1 = theme.urlInfo) == null ? void 0 : _theme_urlInfo1.validateCode) : ''
         }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["timeLineOptions"]) || {}, {
-            showSectionIcon: ((_theme_options1 = theme.options) == null ? void 0 : _theme_options1["recListOptions"]) !== null ? (_showSectionIcon = (_this = ((_theme_options2 = theme.options) == null ? void 0 : _theme_options2["timeLineOptions"]) || {}) == null ? void 0 : _this.showSectionIcon) != null ? _showSectionIcon : true : true,
+            showSectionIcon: ((_theme_options1 = theme.options) == null ? void 0 : _theme_options1["recListOptions"]) !== null ? (_ref = (_this = ((_theme_options2 = theme.options) == null ? void 0 : _theme_options2["timeLineOptions"]) || {}) == null ? void 0 : _this.showSectionIcon) != null ? _ref : true : true,
             props: props
         }));
     }
 };
-var _renderSegmentProgress = function(theme, container, props) {
+var _renderSegmentProgress = function _renderSegmentProgress(theme, container, props) {
     if (props === void 0) props = {};
     if (!theme.controls.segmentProgressControl && theme.options.segmentProgressOptions !== null) {
         var _theme_options;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         theme.controls.segmentProgressControl = new Controls['segmentProgress'](_extends$1({
             rootContainer: theme.$container,
-            getPopupContainer: function() {
+            getPopupContainer: function getPopupContainer() {
                 return container;
             },
             language: theme.options.language,
@@ -10085,13 +9975,13 @@ var _renderSegmentProgress = function(theme, container, props) {
         }));
     }
 };
-var _renderDatePicker = function(theme, container, props) {
+var _renderDatePicker = function _renderDatePicker(theme, container, props) {
     if (props === void 0) props = {};
     if (!theme.controls.dateControl && theme.options.dateOptions !== null) {
         var _theme_options;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         theme.controls.dateControl = new Controls['date'](_extends$1({
-            getPopupContainer: function() {
+            getPopupContainer: function getPopupContainer() {
                 return container;
             },
             language: theme.options.language,
@@ -10101,13 +9991,13 @@ var _renderDatePicker = function(theme, container, props) {
         }));
     }
 };
-var _renderTimePicker = function(theme, container, props) {
+var _renderTimePicker = function _renderTimePicker(theme, container, props) {
     if (props === void 0) props = {};
     if (!theme.controls.timeControl && theme.options.timeOptions !== null) {
         var _theme_options;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         theme.controls.timeControl = new Controls['time'](_extends$1({
-            getPopupContainer: function() {
+            getPopupContainer: function getPopupContainer() {
                 return container;
             },
             language: theme.options.language,
@@ -10117,14 +10007,14 @@ var _renderTimePicker = function(theme, container, props) {
         }));
     }
 };
-var _renderRecType = function(theme, container, recType, props) {
+var _renderRecType = function _renderRecType(theme, container, recType, props) {
     if (props === void 0) props = {};
     var _theme_controls, _theme_controls1, _theme_controls2;
     if (!((_theme_controls = theme.controls) == null ? void 0 : _theme_controls['recControl']) && theme.options.recOptions !== null && container) {
         var _theme_options;
         // eslint-disable-next-line @typescript-eslint/dot-notation, new-cap, @typescript-eslint/no-unsafe-argument
         theme.controls['recControl'] = new Controls['rec'](_extends$1({
-            getPopupContainer: function() {
+            getPopupContainer: function getPopupContainer() {
                 return container;
             },
             recType: theme.recType,
@@ -10228,7 +10118,7 @@ var _renderRecType = function(theme, container, recType, props) {
     return width - leftWidth - rightWidth > offset;
 }
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */ function _array_like_to_array(arr, len) {
+function _array_like_to_array(arr, len) {
     if (len == null || len > arr.length) len = arr.length;
     for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
     return arr2;
@@ -10241,11 +10131,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
         reject(error);
         return;
     }
-    if (info.done) {
-        resolve(value);
-    } else {
-        Promise.resolve(value).then(_next, _throw);
-    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
 }
 function _async_to_generator(fn) {
     return function() {
@@ -10275,15 +10162,29 @@ function _create_class(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     return Constructor;
 }
+function _create_for_of_iterator_helper_loose(o, allowArrayLike) {
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+    if (it) return (it = it.call(o)).next.bind(it);
+    if (Array.isArray(o) || (it = _unsupported_iterable_to_array(o)) || allowArrayLike) {
+        if (it) o = it;
+        var i = 0;
+        return function() {
+            if (i >= o.length) return {
+                done: true
+            };
+            return {
+                done: false,
+                value: o[i++]
+            };
+        };
+    }
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
 function _extends() {
-    _extends = Object.assign || function(target) {
+    _extends = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
@@ -10309,34 +10210,6 @@ function _set_prototype_of(o, p) {
     };
     return _set_prototype_of(o, p);
 }
-function _unsupported_iterable_to_array(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _array_like_to_array(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(n);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array(o, minLen);
-}
-function _create_for_of_iterator_helper_loose(o, allowArrayLike) {
-    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
-    if (it) return (it = it.call(o)).next.bind(it);
-    if (Array.isArray(o) || (it = _unsupported_iterable_to_array(o)) || allowArrayLike) {
-        if (it) o = it;
-        var i = 0;
-        return function() {
-            if (i >= o.length) {
-                return {
-                    done: true
-                };
-            }
-            return {
-                done: false,
-                value: o[i++]
-            };
-        };
-    }
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
 function _ts_generator(thisArg, body) {
     var f, y, t, _ = {
         label: 0,
@@ -10346,9 +10219,17 @@ function _ts_generator(thisArg, body) {
         },
         trys: [],
         ops: []
-    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -10428,6 +10309,14 @@ function _ts_generator(thisArg, body) {
         };
     }
 }
+function _unsupported_iterable_to_array(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _array_like_to_array(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array(o, minLen);
+}
 var THEME_DEFAULT_OPTIONS = {
     dblClickFullscreen: true,
     language: 'zh',
@@ -10481,6 +10370,7 @@ var THEME_DEFAULT_OPTIONS = {
     _inherits(Theme, EventEmitter);
     function Theme(options) {
         var _this;
+        var _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
         var _this_options_volumeOptions, _this_options_volumeOptions1, _this_options_speedOptions, _this_urlInfo_searchParams, _this_urlInfo, _this_options, _this_options1;
         _this = EventEmitter.call(this) || this, /** 播放器配置项 */ _this.options = THEME_DEFAULT_OPTIONS, _this.staticPath = '', /** 所有控件列表, 所有控件名称规则（`${iconId}Control`）， 如音量控件 this.controls["volumeControl"]  @since 0.0.1 */ _this.controls = {}, /**
    * @since 0.0.1
@@ -10546,7 +10436,7 @@ var THEME_DEFAULT_OPTIONS = {
         _this._initClassName();
         // 画布需要渲染在 this.contentControl.$content 内
         _this.contentControl = new Content({
-            getContainer: function() {
+            getContainer: function getContainer() {
                 return _this.$container;
             },
             scaleMode: _this.scaleMode
@@ -10556,18 +10446,15 @@ var THEME_DEFAULT_OPTIONS = {
         });
         //  zoom utils
         __zoom(_this, _this.contentControl.$content, _extends({}, _this.options.zoomOptions || {}, {
-            onTap: function() {
+            onTap: function onTap() {
                 var _this__interactiveResult_setTimeoutShow, _this__interactiveResult;
                 (_this__interactiveResult = _this._interactiveResult) == null ? void 0 : (_this__interactiveResult_setTimeoutShow = _this__interactiveResult.setTimeoutShow) == null ? void 0 : _this__interactiveResult_setTimeoutShow.call(_this__interactiveResult);
             }
         }));
-        var _this_options_volumeOptions_volume, _ref;
-        _this._volume = (_ref = (_this_options_volumeOptions_volume = (_this_options_volumeOptions = _this.options.volumeOptions) == null ? void 0 : _this_options_volumeOptions.volume) != null ? _this_options_volumeOptions_volume : _this.options.volume) != null ? _ref : 0.8;
-        var _this_options_volumeOptions_muted, _ref1;
-        _this._muted = (_ref1 = (_this_options_volumeOptions_muted = (_this_options_volumeOptions1 = _this.options.volumeOptions) == null ? void 0 : _this_options_volumeOptions1.muted) != null ? _this_options_volumeOptions_muted : _this.options.muted) != null ? _ref1 : false;
-        var _this_options_speedOptions_value, _ref2;
+        _this._volume = (_ref = (_ref1 = (_this_options_volumeOptions = _this.options.volumeOptions) == null ? void 0 : _this_options_volumeOptions.volume) != null ? _ref1 : _this.options.volume) != null ? _ref : 0.8;
+        _this._muted = (_ref2 = (_ref3 = (_this_options_volumeOptions1 = _this.options.volumeOptions) == null ? void 0 : _this_options_volumeOptions1.muted) != null ? _ref3 : _this.options.muted) != null ? _ref2 : false;
         // playbackSpeed 是 萤石标准流倍速字段
-        _this._speed = +((_ref2 = (_this_options_speedOptions_value = (_this_options_speedOptions = _this.options.speedOptions) == null ? void 0 : _this_options_speedOptions.value) != null ? _this_options_speedOptions_value : (_this_urlInfo = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.playbackSpeed) != null ? _ref2 : 1);
+        _this._speed = +((_ref4 = (_ref5 = (_this_options_speedOptions = _this.options.speedOptions) == null ? void 0 : _this_options_speedOptions.value) != null ? _ref5 : (_this_urlInfo = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.playbackSpeed) != null ? _ref4 : 1);
         _this._mobileInnerWidthHeight = _this._mobileInnerWidthHeight.bind(_this);
         _this._throttleMobileInnerWidthHeight = throttle(_this._mobileInnerWidthHeight, 20).bind(_this);
         _this._onDblClickFullscreen = debounce(_this._onDblClickFullscreen, 20).bind(_this);
@@ -10595,9 +10482,9 @@ var THEME_DEFAULT_OPTIONS = {
             // flv / mp4：支持自定义 themeData，未传时回退到标准直播模板 LiveTemplate（2026-01-19 起支持自定义）
             initialThemeData = themeData !== undefined ? themeData : LiveTemplate;
         } else {
-            var _ref3;
+            var _ref6;
             // 其余类型（如 ezopen 私有流）：template 优先级高于 themeData，二者都未设置时为 null
-            initialThemeData = (_ref3 = template != null ? template : themeData) != null ? _ref3 : null;
+            initialThemeData = (_ref6 = template != null ? template : themeData) != null ? _ref6 : null;
         }
         _this._renderTheme(initialThemeData);
         _this._addEventListener();
@@ -10948,7 +10835,7 @@ var THEME_DEFAULT_OPTIONS = {
         this._fullscreen = new Fullscreen$1(this.$container, {
             prefix: PREFIX_CLASS,
             // 全屏变化
-            onChange: function(info) {
+            onChange: function onChange(info) {
                 if (info.isCurrentFullscreen) {
                     _this.emit(EVENTS.fullscreen);
                 } else if (_this._isCurrentFullscreen) {
@@ -10966,7 +10853,7 @@ var THEME_DEFAULT_OPTIONS = {
             }
         });
         // ------------------------------  旋转方向 -----------------------------
-        var rotateOrientation = function(orientation) {
+        var rotateOrientation = function rotateOrientation(orientation) {
             if (_this.$container) {
                 var // 重置移除旋转角度
                 _this_$container_classList;
@@ -11089,7 +10976,7 @@ var THEME_DEFAULT_OPTIONS = {
                         language: this.options.language,
                         locales: this.i18n.translations,
                         rootContainer: this.$container,
-                        getPopupContainer: function() {
+                        getPopupContainer: function getPopupContainer() {
                             var _this__header;
                             return (_this__header = _this._header) == null ? void 0 : _this__header.$right;
                         },
@@ -11101,7 +10988,7 @@ var THEME_DEFAULT_OPTIONS = {
                             8
                         ],
                         wrapClassName: "" + PREFIX_CLASS + "-header-more",
-                        onOpenChange: function(open) {
+                        onOpenChange: function onOpenChange(open) {
                             _this.emit(EVENTS.control.headerMorePanelOpenChange, open);
                         }
                     });
@@ -11144,7 +11031,7 @@ var THEME_DEFAULT_OPTIONS = {
                         language: this.options.language,
                         locales: this.i18n.translations,
                         rootContainer: this.$container,
-                        getPopupContainer: function() {
+                        getPopupContainer: function getPopupContainer() {
                             var _this__footer;
                             return (_this__footer = _this._footer) == null ? void 0 : _this__footer.$right;
                         },
@@ -11156,7 +11043,7 @@ var THEME_DEFAULT_OPTIONS = {
                             -8
                         ],
                         wrapClassName: "" + PREFIX_CLASS + "-footer-more",
-                        onOpenChange: function(open) {
+                        onOpenChange: function onOpenChange(open) {
                             _this.emit(EVENTS.control.footerMorePanelOpenChange, open);
                         }
                     });
@@ -11675,6 +11562,7 @@ var THEME_DEFAULT_OPTIONS = {
    * theme.on(Theme.EVENTS.zoomChange, (zoom: number) => {})
    * ```
    */ function set(zoom) {
+                var _ref;
                 var _this_options_zoomOptions;
                 if (!this._zooming) {
                     var _this_messageControl_info, _this_messageControl, _this_logger;
@@ -11683,8 +11571,7 @@ var THEME_DEFAULT_OPTIONS = {
                     return;
                 }
                 zoom = +zoom.toFixed(1);
-                var _this_options_zoomOptions_max;
-                var ZOOM_MAX = (_this_options_zoomOptions_max = (_this_options_zoomOptions = this.options.zoomOptions) == null ? void 0 : _this_options_zoomOptions.max) != null ? _this_options_zoomOptions_max : ZOOM_DEFAULT_OPTIONS.max;
+                var ZOOM_MAX = (_ref = (_this_options_zoomOptions = this.options.zoomOptions) == null ? void 0 : _this_options_zoomOptions.max) != null ? _ref : ZOOM_DEFAULT_OPTIONS.max;
                 if (zoom > ZOOM_MAX) {
                     var _this_messageControl_info1, _this_messageControl1, _this_logger1;
                     (_this_messageControl1 = this.messageControl) == null ? void 0 : (_this_messageControl_info1 = _this_messageControl1.info) == null ? void 0 : _this_messageControl_info1.call(_this_messageControl1, this.i18n.t('ZOOM_LIMIT_MAX', {
@@ -11888,6 +11775,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.4-beta.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.4-beta.2';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
