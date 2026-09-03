@@ -1,6 +1,6 @@
 {
   "name": "@ezuikit/player-theme",
-  "version": "3.1.5-beta.1",
+  "version": "3.1.5-beta.2",
   "description": "player theme",
   "title": "theme",
   "main": "dist/index.cjs",
@@ -36,7 +36,7 @@
   "dependencies": {
     "@ezuikit/utils-i18n": "^2.0.1",
     "@ezuikit/utils-logger": "^2.0.1",
-    "@ezuikit/utils-tools": "^2.0.6",
+    "@ezuikit/utils-tools": "^2.0.7",
     "@ezuikit/control-date-picker": "2.1.2-beta.1",
     "@ezuikit/control-time-line": "2.1.0",
     "@ezuikit/control-ptz": "1.0.0",

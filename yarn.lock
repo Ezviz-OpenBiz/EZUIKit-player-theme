@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ezuikit/control-date-picker@2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-date-picker/-/control-date-picker-2.1.1.tgz#1a6df7c0e25b42abd31904481794089f6cbe4961"
-  integrity sha512-gahPkxzpxNRuWLjjoE5IImQbO9MRC8k/v5CwLMofrxzMowzx0f8YqqAlQR7mZ6uW/gfHBoCezMvABLBKODRiww==
+"@ezuikit/control-date-picker@2.1.2-beta.1":
+  version "2.1.2-beta.1"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-date-picker/-/control-date-picker-2.1.2-beta.1.tgz#160e494f674b7e74b98f531ed0b3e9220651db38"
+  integrity sha512-IGbJ0J+SifQSOMdCjnTQMJZWlD+qEqQHgWYtCWUtGP82q6pOwMGbSBE6PU1OneU7mjy9PyuvUE8Y17ylof5cFg==
   dependencies:
     "@ezuikit/utils-i18n" "^2.0.1"
     "@ezuikit/utils-tools" "^2.0.6"
@@ -40,6 +40,11 @@
     "@ezuikit/utils-i18n" "^2.0.1"
     "@ezuikit/utils-tools" "^2.0.6"
     deepmerge "^4.3.1"
+
+"@ezuikit/control-segment-progress@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-segment-progress/-/control-segment-progress-0.0.1.tgz#ddc48ec7723b2fccaec231cda45a74346b3110f3"
+  integrity sha512-po+tJxVJlFbI2TnPzLyt4GL3KZc/X0nFsJ9Fn8HCpI0R2AiMtwx5ZBADV17xa13A82/Us3rl1R0ijVj1pRvn0g==
 
 "@ezuikit/control-time-line@2.1.0":
   version "2.1.0"
@@ -82,6 +87,11 @@
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@ezuikit/utils-tools/-/utils-tools-2.0.6.tgz#a0d984f362ed9cfdc582b9426c5d651471acab08"
   integrity sha512-1XUk8IY28FpspjzgbbVEfcsRiwKx9l5ltjOYw9RYh3BK2XAKv2B2N+79RCQ1qfmjLVsHLx2H8xTwSJECSWcnqg==
+
+"@ezuikit/utils-tools@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@ezuikit/utils-tools/-/utils-tools-2.0.7.tgz#96053009c89a894242deda4e1bd2bfed9c229603"
+  integrity sha512-phxKRP17FunG0cwLLK951V18x96EzwO5XSfZ+FfI4jv8agbujV5HtY709lpXM0H5j4XC7pZryT70wjdRFASQgA==
 
 "@juggle/resize-observer@^3.4.0":
   version "3.4.0"

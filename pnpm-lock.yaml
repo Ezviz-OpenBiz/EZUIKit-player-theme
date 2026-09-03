@@ -33,7 +33,7 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1
       '@ezuikit/utils-tools':
-        specifier: ^2.0.6
+        specifier: ^2.0.7
         version: 2.0.7
       '@juggle/resize-observer':
         specifier: ^3.4.0

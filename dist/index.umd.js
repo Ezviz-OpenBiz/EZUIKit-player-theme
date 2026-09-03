@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.5-beta.1
-* Copyright (c) 2026-09-03 20:27:16 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.5-beta.2
+* Copyright (c) 2026-09-04 02:44:28 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -4750,6 +4750,12 @@
 	                isrender: 1
 	            },
 	            {
+	                iconId: 'capturePicture',
+	                part: 'left',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
 	                iconId: 'volume',
 	                part: 'left',
 	                defaultActive: 0,
@@ -4759,6 +4765,72 @@
 	                // flv 录制 2.1.0 新增
 	                iconId: 'record',
 	                part: 'left',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
+	                // flv 录制 2.1.2 新增
+	                iconId: 'zoom',
+	                part: 'left',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'fullscreen',
+	                part: 'right',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'globalFullscreen',
+	                part: 'right',
+	                defaultActive: 0,
+	                isrender: 1
+	            }
+	        ]
+	    }
+	};
+
+	/**
+	 * flv 预览
+	 */ var RecTemplate = {
+	    autoFocus: 3,
+	    // poster:
+	    //   "https://img2.baidu.com/it/u=3209353042,356122753&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500",
+	    footer: {
+	        btnList: [
+	            {
+	                iconId: 'play',
+	                part: 'left',
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'capturePicture',
+	                part: 'left',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'volume',
+	                part: 'left',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'recordvideo',
+	                part: 'left',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'zoom',
+	                part: 'left',
+	                defaultActive: 0,
+	                isrender: 1
+	            },
+	            {
+	                iconId: 'speed',
+	                part: 'right',
 	                defaultActive: 0,
 	                isrender: 1
 	            },
@@ -12467,6 +12539,7 @@
 	        var themeData = (_this_options = _this.options) == null ? void 0 : _this_options.themeData; // IThemeData | null | undefined
 	        var template = (_this_options1 = _this.options) == null ? void 0 : _this_options1.template; //  ThemeTemplateType | string | undefined
 	        var initialThemeData;
+	        // hls ezhls flv mp4 不支持 template
 	        if (options.type === 'hls' || options.type === 'ezhls') {
 	            var _options_url;
 	            // hls / ezhls：@3.1.1 起支持自定义 themeData，但不支持标准提供的模板；未传时回退 hlsLiveTemplate
@@ -12476,8 +12549,9 @@
 	            'flv',
 	            'mp4'
 	        ].includes(options.type)) {
+	            var _options_url1;
 	            // flv / mp4：支持自定义 themeData，未传时回退到标准直播模板 LiveTemplate（2026-01-19 起支持自定义）
-	            initialThemeData = themeData !== undefined ? themeData : LiveTemplate;
+	            initialThemeData = themeData !== undefined ? themeData : ((_options_url1 = options.url) == null ? void 0 : _options_url1.includes('/openpb/')) ? RecTemplate : LiveTemplate;
 	        } else {
 	            var _ref6;
 	            // 其余类型（如 ezopen 私有流）：template 优先级高于 themeData，二者都未设置时为 null
@@ -13779,7 +13853,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.5-beta.1';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.5-beta.2';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
