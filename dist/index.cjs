@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.5-beta.2
-* Copyright (c) 2026-09-04 02:44:28 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.5-beta.3
+* Copyright (c) 2026-09-04 06:40:24 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -2841,6 +2841,8 @@ var zh = {
     GET_SPEED: '获取当前播放速率',
     MAX_SPEED_LIMIT: '播放速度最大为4倍速度',
     MIN_SPEED_LIMIT: '播放速度最小为0.5倍速度',
+    SPEED_SWITCH_ERRROR: '切换播放速度失败',
+    SPEED_SWITCH_NOT_SUPPORT: '切换倍速（{{rate}}）不支持',
     SEEK_CANNOT_CROSS_DAYS: 'seek时间不能跨日期',
     SEEK_TIMEFORMAT_ERROR: 'seek时间格式错误',
     PAUSE: '暂停',
@@ -3121,6 +3123,8 @@ var en = {
     GET_SPEED: 'Get the current playback rate',
     MAX_SPEED_LIMIT: 'The maximum playback speed is 4 times the speed',
     MIN_SPEED_LIMIT: 'The minimum playback speed is 0.5 times the speed',
+    SPEED_SWITCH_ERRROR: 'Failed to switch playback speed',
+    SPEED_SWITCH_NOT_SUPPORT: 'Switching speed({{rate}}) is not supported',
     SEEK_CANNOT_CROSS_DAYS: 'The seek time cannot cross dates',
     SEEK_TIMEFORMAT_ERROR: 'The seek time format is wrong',
     PAUSE: 'Pause',
@@ -10399,6 +10403,7 @@ var THEME_DEFAULT_OPTIONS = {
     env: {
         domain: 'https://open.ys7.com'
     },
+    isEzviz: true,
     /** 移动端竖屏, 全屏情况下不展示扩张，放置在 footer 中 */ mobileExtendOptions: {
         controls: MOBILE_EXTENDS
     }
@@ -11823,6 +11828,7 @@ var THEME_DEFAULT_OPTIONS = {
    * 判断播放地址是萤石的播放地址
    * @since 3.1.2
    */ function get() {
+                if (this.options.isEzviz) return true;
                 try {
                     var _this__url_split, _this__url_split1, _path_split;
                     var path = (_this__url_split = this._url.split('?')) == null ? void 0 : _this__url_split[0];
@@ -11835,7 +11841,8 @@ var THEME_DEFAULT_OPTIONS = {
                     // https://host:2001/live?dev=D08197169&chn=1&ss=token&stream=1
                     if (// 私有流地址
                     /^ezopen:\/\//.test(path) || // 标准流地址
-                    path.includes('/openlive/') || path.includes('/openpb/') && /[a-zA-Z0-9:]+_\d+_\d+/.test(lastPath) || // webtransport 取流
+                    // 海外回放 https://test-ali-live.ys7.com/400e03b1738a484685f1bc2359fa141c_live/439ee62f0749a11f24595f35137b50af-BA0844510_1_1.flv?auth_key=1804485786-0-0-043eb3c148737c0f007a63e3e07243e6&begin=20250317190802&end=20250317231056&rec=local&v=1&vc=3
+                    (path.includes('/openlive/') || path.includes('/openpb/') || queryStr.includes('v=1') && (queryStr.includes('rec=local') || queryStr.includes('rec=cloud'))) && /[a-zA-Z0-9:]+_\d+_\d+/.test(lastPath) || // webtransport 取流
                     utilsTools.isHttp(this._url) && queryStr && /dev=[a-zA-Z0-9:]+/.test(queryStr) && /chn=\d+/.test(queryStr) && /stream=\d+/.test(queryStr) && queryStr.includes('ssn=')) {
                         return true;
                     }
@@ -11854,7 +11861,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.5-beta.2';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.5-beta.3';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;
