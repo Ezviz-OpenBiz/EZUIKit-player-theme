@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.4-beta.2
-* Copyright (c) 2026-08-27 19:42:35 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.5-beta.1
+* Copyright (c) 2026-09-03 20:27:16 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -2406,9 +2406,9 @@
 	var dist$3 = {};
 
 	/*
-	* @ezuikit/utils-tools v2.0.6
+	* @ezuikit/utils-tools v2.0.7
 	* tools utils
-	* Copyright (c) 2026-08-02 Ezviz-OpenBiz
+	* Copyright (c) 2026-09-02 Ezviz-OpenBiz
 	* Released under the MIT License.
 	*/
 
@@ -2417,7 +2417,7 @@
 	function requireDist$3 () {
 		if (hasRequiredDist$3) return dist$3;
 		hasRequiredDist$3 = 1;
-	function isHttp(url){return /^http[s]?:\/\//.test(url)}var getQuery=function(url){var query=url.split("?")[1],obj={};if(query)for(var vars=query.split("&"),i=0;i<vars.length;i++){var pair=vars[i].split("=");obj[pair[0]]=decodeURIComponent(pair[1]);}return obj};function parseEzopenUrl(url){var obj={};if(/^ezopen:\/\//.test(url)){if(url.includes("@")){var endIndex=url.indexOf("@"),startIndex=url.indexOf("//");obj.validateCode=url.substring(startIndex+2,endIndex),url=url.replace(obj.validateCode+"@","");}obj.protocol=url.split("//")[0],obj.search=url.split("?")[1]?"?"+url.split("?")[1]:"",obj.hostname=url.split("/")[2],obj.origin=obj.protocol+"//"+obj.hostname,obj.pathname=url.split("?")[0].replace(obj.origin,""),obj.href=url;var pathnames=obj.pathname.split("/"),lastPath=pathnames[2].split(".");return obj.deviceSerial=pathnames[1],obj.channelNo=lastPath[0],obj.type=lastPath[lastPath.length-1],"live"===obj.type&&(obj.definition=lastPath.length>2?lastPath[1]:"sd"),"rec"===obj.type&&pathnames[2]&&(obj.recType=pathnames[2].includes(".cloud.")?"cloud":""),obj.searchParams=getQuery(url),obj}if(isHttp(url))try{var u=new URL(url),file=u.pathname.split("/").pop();if(file){var m=file.match(/^([^_]+)_(\d+)_(\d+)\./);if(m){var deviceSerial=m[1],channelNo=m[2],quality=m[3];return obj.deviceSerial=deviceSerial,obj.channelNo=channelNo,u.searchParams.get("code")&&(obj.validateCode=u.searchParams.get("code")),obj.search=url.split("?")[1]?"?"+url.split("?")[1]:"",obj.protocol=url.split("//")[0],obj.hostname=url.split("/")[2],obj.origin=obj.protocol+"//"+obj.hostname,obj.pathname=url.split("?")[0].replace(obj.origin,""),obj.href=url,obj.type="live",(url.includes("rec=local")||url.includes("rec=cloud"))&&(obj.type="rec",url.includes("rec=cloud")?obj.recType="cloud":obj.recType=""),"live"===obj.type&&(obj.definition="1"===quality?"hd":"sd"),obj.searchParams=getQuery(url),obj}}}catch(e){}return {}}var codec={h264:1,h265:2,h266:4,vp8:8,vp9:16,av1:32},getQueryVC=function(CODECS){return CODECS.reduce((function(acc,key){return key=key.toLowerCase(),acc+(codec[key]||0)}),0)};function _array_like_to_array(arr,len){(null==len||len>arr.length)&&(len=arr.length);for(var i=0,arr2=new Array(len);i<len;i++)arr2[i]=arr[i];return arr2}function _instanceof(left,right){return null!=right&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?!!right[Symbol.hasInstance](left):left instanceof right}function _create_for_of_iterator_helper_loose(o,allowArrayLike){var it="undefined"!=typeof Symbol&&o[Symbol.iterator]||o["@@iterator"];if(it)return (it=it.call(o)).next.bind(it);if(Array.isArray(o)||(it=function(o,minLen){if(o){if("string"==typeof o)return _array_like_to_array(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);return "Object"===n&&o.constructor&&(n=o.constructor.name),"Map"===n||"Set"===n?Array.from(n):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?_array_like_to_array(o,minLen):void 0}}(o))||allowArrayLike){it&&(o=it);var i=0;return function(){return i>=o.length?{done:true}:{done:false,value:o[i++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var DateTime=function(){function DateTime(){}return DateTime.normalizeUnit=function(unit){return "year"===unit||"y"===unit||"年"===unit?"year":"month"===unit||"M"===unit||"月"===unit?"month":"day"===unit||"d"===unit||"日"===unit?"day":"hour"===unit||"h"===unit||"时"===unit?"hour":"minute"===unit||"m"===unit||"分"===unit?"minute":"second"},DateTime.daysInMonth=function(year,month){return new Date(year,month+1,0).getDate()},DateTime.shiftMonth=function(baseDate,months){var result=new Date(baseDate.getTime()),currentDate=result.getDate();result.setDate(1),result.setMonth(result.getMonth()+months);var maxDate=DateTime.daysInMonth(result.getFullYear(),result.getMonth());return result.setDate(Math.min(currentDate,maxDate)),result},DateTime.add=function(input,value,unit){if(void 0===unit&&(unit="day"),!Number.isFinite(value))throw new Error("Invalid value");var baseDate=DateTime.toDate(input),normalizedUnit=DateTime.normalizeUnit(unit);if("year"===normalizedUnit)return DateTime.shiftMonth(baseDate,12*value);if("month"===normalizedUnit)return DateTime.shiftMonth(baseDate,value);var result=new Date(baseDate.getTime());return result.setTime(result.getTime()+value*{day:864e5,hour:36e5,minute:6e4,second:1e3}[normalizedUnit]),result},DateTime.subtract=function(input,value,unit){return void 0===unit&&(unit="day"),DateTime.add(input,-value,unit)},DateTime.fillZero=function(num,len){return void 0===len&&(len=2),num.toString().padStart(len,"0")},DateTime.format=function(input,format){var date;if(_instanceof(input,Date))date=input;else {if("number"!=typeof input&&"string"!=typeof input)throw new Error("Invalid date input");date=DateTime.toDate(input+"");}for(var _step,result=format,_iterator=_create_for_of_iterator_helper_loose([[/(yyyy|YYYY)/g,function(){return DateTime.fillZero(date.getFullYear(),4)}],[/(yy|YY)/g,function(){return DateTime.fillZero(date.getFullYear()%100,2)}],[/(MM)/g,function(){return DateTime.fillZero(date.getMonth()+1,2)}],[/(M)/g,function(){return (date.getMonth()+1).toString()}],[/(dd|DD)/g,function(){return DateTime.fillZero(date.getDate(),2)}],[/(d|D)/g,function(){return date.getDate().toString()}],[/(HH|hh)/g,function(){return DateTime.fillZero(date.getHours(),2)}],[/(H|h)/g,function(){return date.getHours().toString()}],[/(mm)/g,function(){return DateTime.fillZero(date.getMinutes(),2)}],[/(m)/g,function(){return date.getMinutes().toString()}],[/(ss|SS)/g,function(){return DateTime.fillZero(date.getSeconds(),2)}],[/(s|S)/g,function(){return date.getSeconds().toString()}],[/(fff)/g,function(){return DateTime.fillZero(date.getMilliseconds(),3)}]]);!(_step=_iterator()).done;){var _step_value=_step.value,regexp=_step_value[0],fn=_step_value[1];result=result.replace(regexp,fn);}return result},DateTime.toDate=function(str){if(_instanceof(str,Date))return str;str=(str+"").trim().replace(/\/|\./gi,"-"),/^\d{4}$/.test(str)&&(str+="-01"),/^\d{4}-\d{2}$/.test(str)&&(str+="-01");try{return /^\d{4}-\d{2}-\d{2}$/.test(str)?new Date(+str.slice(0,4),+str.slice(5,7)-1,+str.slice(8,10),0,0,0):/^\d{8}$/.test(str)?(str+="",new Date(+str.slice(0,4),+str.slice(4,6)-1,+str.slice(6,8),0,0,0)):/^\d{14}$/.test(str)?(str+="",new Date(+str.slice(0,4),+str.slice(4,6)-1,+str.slice(6,8),+str.slice(8,10),+str.slice(10,12),+str.slice(12,14))):/^\d{13}$/.test(str)?new Date(Number(str)):/^\d{10}$/.test(str)?new Date(1e3*Number(str)):new Date(str)}catch(error){throw new Error("Invalid date string")}},DateTime.diff=function(date1,date2,type){ void 0===type&&(type="second");var d1=DateTime.toDate(date1),d2=DateTime.toDate(date2);return "second"===type?Math.floor((d1.getTime()-d2.getTime())/1e3):"minute"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60):"hour"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60):"day"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60/24):Math.abs(d1.getTime()-d2.getTime())},DateTime}();dist$3.DateTime=DateTime,dist$3.addVc=function(url,codecs){ void 0===codecs&&(codecs=["h264"]);var vc=getQueryVC(codecs||["h264"]),host=url.split("?")[0],query=url.split("?")[1];return query=(query||"").split("&").filter((function(item){return !/^vc=\d?/.test(item)})).join("&"),host+"?"+(query+=(query?"&":"")+"vc="+vc)},dist$3.getQuery=getQuery,dist$3.getQueryVC=getQueryVC,dist$3.getStaticPath=function(path,base){ void 0===base&&(base="");var protocolReg=/^(https?:\/\/|^\/\/)/;if(""===path||void 0===path)return "";if(protocolReg.test(path))return path;path=path.replace(/\/+/g,"/"),base=protocolReg.test(base||"")?base:window.location.href;try{return new URL(path,base).href}catch(error){return path}},dist$3.isEmpty=function(param){return void 0===param||""===param||null===param},dist$3.isHttp=isHttp,dist$3.isMobile=function(agent){var _navigator,_navigator1,_navigator2,_window,_navigator_maxTouchPoints;return /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone|Opera Mini)/i.test(null!=agent?agent:null==(_navigator=navigator)?void 0:_navigator.userAgent)||/Macintosh/i.test(agent||(null==(_navigator1=navigator)?void 0:_navigator1.userAgent))&&(null!=(_navigator_maxTouchPoints=null==(_navigator2=navigator)?void 0:_navigator2.maxTouchPoints)?_navigator_maxTouchPoints:0)>1||!!(null==(_window=window)?void 0:_window.__IS_MOBILE_SIMULATOR__)},dist$3.isRealMobile=function(agent){var _navigator,_ref,ua=(null!=(_ref=null!=agent?agent:null==(_navigator=navigator)?void 0:_navigator.userAgent)?_ref:"").toLowerCase();if(/ipad|tablet|playbook|silk|android(?!.*mobile)/i.test(ua))return  false;var hasTouch="ontouchstart"in window||navigator.maxTouchPoints>0;return /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(ua)&&hasTouch},dist$3.objectIsNull=function(obj){try{return "{}"===JSON.stringify(obj)}catch(error){return  false}},dist$3.parseEzopenUrl=parseEzopenUrl,dist$3.pick=function(obj,keys){return Object.entries(obj).reduce((function(acc,param){var key=param[0],value=param[1];return keys.includes(key)&&(acc[key]=value),acc}),{})},dist$3.switchEzopenUrl=function(url,options){var _ref=null!=options?options:{},type=_ref.type,recType=_ref.recType,search=_ref.search,definition=_ref.definition,channelNo=_ref.channelNo,deviceSerial=_ref.deviceSerial,validateCode=_ref.validateCode,obj=parseEzopenUrl(url);if(search){var ns=Object.assign({},obj.searchParams,getQuery("?"+search.replace("?","")));search=Object.entries(ns).reduce((function(acc,param){var key=param[0],value=param[1];return ""===value?acc:acc+=key+"="+encodeURIComponent(value)+"&"}),"?").replace(/&$/,"");}else search=obj.search;return type=type||obj.type,recType=null!=recType?recType:obj.recType,definition=null!=definition?definition:obj.definition,channelNo=channelNo||obj.channelNo,deviceSerial=deviceSerial||obj.deviceSerial,validateCode=null!=validateCode?validateCode:obj.validateCode,obj.protocol+"//"+(validateCode?validateCode+"@":"")+obj.hostname+"/"+deviceSerial+"/"+channelNo+("rec"===type&&recType?"."+recType:"")+("live"===type&&"hd"===definition?"."+definition:"")+"."+type+search};
+	function isHttp(url){return /^http[s]?:\/\//.test(url)}var getQuery=function(url){var query=url.split("?")[1],obj={};if(query)for(var vars=query.split("&"),i=0;i<vars.length;i++){var pair=vars[i].split("=");obj[pair[0]]=decodeURIComponent(pair[1]);}return obj};function parseEzopenUrl(url){var obj={};if(/^ezopen:\/\//.test(url)){if(url.includes("@")){var endIndex=url.indexOf("@"),startIndex=url.indexOf("//");obj.validateCode=url.substring(startIndex+2,endIndex),url=url.replace(obj.validateCode+"@","");}obj.protocol=url.split("//")[0],obj.search=url.split("?")[1]?"?"+url.split("?")[1]:"",obj.hostname=url.split("/")[2],obj.origin=obj.protocol+"//"+obj.hostname,obj.pathname=url.split("?")[0].replace(obj.origin,""),obj.href=url;var pathnames=obj.pathname.split("/"),lastPath=pathnames[2].split(".");return obj.deviceSerial=pathnames[1],obj.channelNo=lastPath[0],obj.streamTypeIn=pathnames[2].includes(".hd.")?1:2,obj.type=lastPath[lastPath.length-1],"live"===obj.type&&(obj.definition=lastPath.length>2?lastPath[1]:"sd"),"rec"===obj.type&&pathnames[2]&&(obj.recType=pathnames[2].includes(".cloud.")?"cloud":""),obj.searchParams=getQuery(url),obj}if(isHttp(url))try{var u=new URL(url),file=u.pathname.split("/").pop();if(file&&["live","playback","cloudplayback","download"].includes(file)&&u.search.includes("dev=")&&u.search.includes("stream=")){var deviceSerial=u.searchParams.get("dev"),channelNo=u.searchParams.get("chn")||"1",sessionToken=u.searchParams.get("ssn"),stream=u.searchParams.get("stream"),streamTypeIn=Number(stream);if("https:"!==u.protocol||!deviceSerial||!channelNo||!sessionToken)return {};var searchParams={};u.searchParams.forEach((function(value,key){searchParams[key]=value;})),obj.protocol=u.protocol,obj.search=u.search,obj.searchParams=searchParams,obj.pathname=u.pathname,obj.origin=u.origin,obj.href=url,obj.hostname=u.host,obj.deviceSerial=deviceSerial,obj.channelNo=channelNo,obj.streamTypeIn=streamTypeIn;var validateCode=u.searchParams.get("code");return validateCode&&(obj.validateCode=validateCode),"live"===file?(obj.type="live",obj.definition=1===streamTypeIn?"hd":"sd"):"playback"===file?(obj.type="rec",obj.recType=""):"cloudplayback"===file?(obj.type="rec",obj.recType="cloud"):obj.type="download",obj}if(file){var m=file.match(/^([^_]+)_(\d+)_(\d+)\./);if(m){var deviceSerial1=m[1],channelNo1=m[2],quality=m[3];return obj.deviceSerial=deviceSerial1,obj.channelNo=channelNo1,obj.streamTypeIn=+quality,u.searchParams.get("code")&&(obj.validateCode=u.searchParams.get("code")),obj.search=url.split("?")[1]?"?"+url.split("?")[1]:"",obj.protocol=url.split("//")[0],obj.hostname=url.split("/")[2],obj.origin=obj.protocol+"//"+obj.hostname,obj.pathname=url.split("?")[0].replace(obj.origin,""),obj.href=url,obj.type="live",(url.includes("rec=local")||url.includes("rec=cloud"))&&(obj.type="rec",url.includes("rec=cloud")?obj.recType="cloud":obj.recType=""),"live"===obj.type&&(obj.definition="1"===quality?"hd":"sd"),obj.searchParams=getQuery(url),obj}}}catch(e){}return {}}var codec={h264:1,h265:2,h266:4,vp8:8,vp9:16,av1:32},getQueryVC=function(CODECS){return CODECS.reduce((function(acc,key){return key=key.toLowerCase(),acc+(codec[key]||0)}),0)};function _array_like_to_array(arr,len){(null==len||len>arr.length)&&(len=arr.length);for(var i=0,arr2=new Array(len);i<len;i++)arr2[i]=arr[i];return arr2}function _instanceof(left,right){return null!=right&&"undefined"!=typeof Symbol&&right[Symbol.hasInstance]?!!right[Symbol.hasInstance](left):left instanceof right}function _create_for_of_iterator_helper_loose(o,allowArrayLike){var it="undefined"!=typeof Symbol&&o[Symbol.iterator]||o["@@iterator"];if(it)return (it=it.call(o)).next.bind(it);if(Array.isArray(o)||(it=function(o,minLen){if(o){if("string"==typeof o)return _array_like_to_array(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);return "Object"===n&&o.constructor&&(n=o.constructor.name),"Map"===n||"Set"===n?Array.from(n):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?_array_like_to_array(o,minLen):void 0}}(o))||allowArrayLike){it&&(o=it);var i=0;return function(){return i>=o.length?{done:true}:{done:false,value:o[i++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var DateTime=function(){function DateTime(){}return DateTime.normalizeUnit=function(unit){return "year"===unit||"y"===unit||"年"===unit?"year":"month"===unit||"M"===unit||"月"===unit?"month":"day"===unit||"d"===unit||"日"===unit?"day":"hour"===unit||"h"===unit||"时"===unit?"hour":"minute"===unit||"m"===unit||"分"===unit?"minute":"second"},DateTime.daysInMonth=function(year,month){return new Date(year,month+1,0).getDate()},DateTime.shiftMonth=function(baseDate,months){var result=new Date(baseDate.getTime()),currentDate=result.getDate();result.setDate(1),result.setMonth(result.getMonth()+months);var maxDate=DateTime.daysInMonth(result.getFullYear(),result.getMonth());return result.setDate(Math.min(currentDate,maxDate)),result},DateTime.add=function(input,value,unit){if(void 0===unit&&(unit="day"),!Number.isFinite(value))throw new Error("Invalid value");var baseDate=DateTime.toDate(input),normalizedUnit=DateTime.normalizeUnit(unit);if("year"===normalizedUnit)return DateTime.shiftMonth(baseDate,12*value);if("month"===normalizedUnit)return DateTime.shiftMonth(baseDate,value);var result=new Date(baseDate.getTime());return result.setTime(result.getTime()+value*{day:864e5,hour:36e5,minute:6e4,second:1e3}[normalizedUnit]),result},DateTime.subtract=function(input,value,unit){return void 0===unit&&(unit="day"),DateTime.add(input,-value,unit)},DateTime.fillZero=function(num,len){return void 0===len&&(len=2),num.toString().padStart(len,"0")},DateTime.format=function(input,format){var date;if(_instanceof(input,Date))date=input;else {if("number"!=typeof input&&"string"!=typeof input)throw new Error("Invalid date input");date=DateTime.toDate(input+"");}for(var _step,result=format,_iterator=_create_for_of_iterator_helper_loose([[/(yyyy|YYYY)/g,function(){return DateTime.fillZero(date.getFullYear(),4)}],[/(yy|YY)/g,function(){return DateTime.fillZero(date.getFullYear()%100,2)}],[/(MM)/g,function(){return DateTime.fillZero(date.getMonth()+1,2)}],[/(M)/g,function(){return (date.getMonth()+1).toString()}],[/(dd|DD)/g,function(){return DateTime.fillZero(date.getDate(),2)}],[/(d|D)/g,function(){return date.getDate().toString()}],[/(HH|hh)/g,function(){return DateTime.fillZero(date.getHours(),2)}],[/(H|h)/g,function(){return date.getHours().toString()}],[/(mm)/g,function(){return DateTime.fillZero(date.getMinutes(),2)}],[/(m)/g,function(){return date.getMinutes().toString()}],[/(ss|SS)/g,function(){return DateTime.fillZero(date.getSeconds(),2)}],[/(s|S)/g,function(){return date.getSeconds().toString()}],[/(fff)/g,function(){return DateTime.fillZero(date.getMilliseconds(),3)}]]);!(_step=_iterator()).done;){var _step_value=_step.value,regexp=_step_value[0],fn=_step_value[1];result=result.replace(regexp,fn);}return result},DateTime.toDate=function(str){if(_instanceof(str,Date))return str;str=(str+"").trim().replace(/\/|\./gi,"-"),/^\d{4}$/.test(str)&&(str+="-01"),/^\d{4}-\d{2}$/.test(str)&&(str+="-01");try{return /^\d{4}-\d{2}-\d{2}$/.test(str)?new Date(+str.slice(0,4),+str.slice(5,7)-1,+str.slice(8,10),0,0,0):/^\d{8}$/.test(str)?(str+="",new Date(+str.slice(0,4),+str.slice(4,6)-1,+str.slice(6,8),0,0,0)):/^\d{14}$/.test(str)?(str+="",new Date(+str.slice(0,4),+str.slice(4,6)-1,+str.slice(6,8),+str.slice(8,10),+str.slice(10,12),+str.slice(12,14))):/^\d{13}$/.test(str)?new Date(Number(str)):/^\d{10}$/.test(str)?new Date(1e3*Number(str)):new Date(str)}catch(error){throw new Error("Invalid date string")}},DateTime.diff=function(date1,date2,type){ void 0===type&&(type="second");var d1=DateTime.toDate(date1),d2=DateTime.toDate(date2);return "second"===type?Math.floor((d1.getTime()-d2.getTime())/1e3):"minute"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60):"hour"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60):"day"===type?Math.floor((d1.getTime()-d2.getTime())/1e3/60/60/24):Math.abs(d1.getTime()-d2.getTime())},DateTime}();dist$3.DateTime=DateTime,dist$3.addVc=function(url,codecs){ void 0===codecs&&(codecs=["h264"]);var vc=getQueryVC(codecs||["h264"]),host=url.split("?")[0],query=url.split("?")[1];return query=(query||"").split("&").filter((function(item){return !/^vc=\d?/.test(item)})).join("&"),host+"?"+(query+=(query?"&":"")+"vc="+vc)},dist$3.getQuery=getQuery,dist$3.getQueryVC=getQueryVC,dist$3.getStaticPath=function(path,base){ void 0===base&&(base="");var protocolReg=/^(https?:\/\/|^\/\/)/;if(""===path||void 0===path)return "";if(protocolReg.test(path))return path;path=path.replace(/\/+/g,"/"),base=protocolReg.test(base||"")?base:window.location.href;try{return new URL(path,base).href}catch(error){return path}},dist$3.isEmpty=function(param){return void 0===param||""===param||null===param},dist$3.isHttp=isHttp,dist$3.isMobile=function(agent){var _navigator,_navigator1,_navigator2,_window,_navigator_maxTouchPoints;return /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone|Opera Mini)/i.test(null!=agent?agent:null==(_navigator=navigator)?void 0:_navigator.userAgent)||/Macintosh/i.test(agent||(null==(_navigator1=navigator)?void 0:_navigator1.userAgent))&&(null!=(_navigator_maxTouchPoints=null==(_navigator2=navigator)?void 0:_navigator2.maxTouchPoints)?_navigator_maxTouchPoints:0)>1||!!(null==(_window=window)?void 0:_window.__IS_MOBILE_SIMULATOR__)},dist$3.isRealMobile=function(agent){var _navigator,_ref,ua=(null!=(_ref=null!=agent?agent:null==(_navigator=navigator)?void 0:_navigator.userAgent)?_ref:"").toLowerCase();if(/ipad|tablet|playbook|silk|android(?!.*mobile)/i.test(ua))return  false;var hasTouch="ontouchstart"in window||navigator.maxTouchPoints>0;return /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(ua)&&hasTouch},dist$3.objectIsNull=function(obj){try{return "{}"===JSON.stringify(obj)}catch(error){return  false}},dist$3.parseEzopenUrl=parseEzopenUrl,dist$3.pick=function(obj,keys){return Object.entries(obj).reduce((function(acc,param){var key=param[0],value=param[1];return keys.includes(key)&&(acc[key]=value),acc}),{})},dist$3.switchEzopenUrl=function(url,options){var _ref=null!=options?options:{},type=_ref.type,recType=_ref.recType,search=_ref.search,definition=_ref.definition,channelNo=_ref.channelNo,deviceSerial=_ref.deviceSerial,validateCode=_ref.validateCode,obj=parseEzopenUrl(url);if(search){var ns=Object.assign({},obj.searchParams,getQuery("?"+search.replace("?","")));search=Object.entries(ns).reduce((function(acc,param){var key=param[0],value=param[1];return ""===value?acc:acc+=key+"="+encodeURIComponent(value)+"&"}),"?").replace(/&$/,"");}else search=obj.search;return type=type||obj.type,recType=null!=recType?recType:obj.recType,definition=null!=definition?definition:obj.definition,channelNo=channelNo||obj.channelNo,deviceSerial=deviceSerial||obj.deviceSerial,validateCode=null!=validateCode?validateCode:obj.validateCode,obj.protocol+"//"+(validateCode?validateCode+"@":"")+obj.hostname+"/"+deviceSerial+"/"+channelNo+("rec"===type&&recType?"."+recType:"")+("live"===type&&"hd"===definition?"."+definition:"")+"."+type+search};
 		return dist$3;
 	}
 
@@ -3588,11 +3588,10 @@
 	                return item.element === element;
 	            });
 	            if (index >= 0) {
-	                if (!this.fullscreens[index].onChange) {
-	                    this.fullscreens[index].onChange = [];
-	                    this.fullscreens[index].onChange.push(onChange);
-	                } else {
-	                    this.fullscreens[index].onChange.push(onChange);
+	                var target = this.fullscreens[index];
+	                target.onChange = Array.isArray(target.onChange) ? target.onChange : [];
+	                if (!target.onChange.includes(onChange)) {
+	                    target.onChange.push(onChange);
 	                }
 	            } else {
 	                this.fullscreens.push({
@@ -6261,7 +6260,7 @@
 	            theme.emit(EVENTS$2.control.dateChange, date);
 	        });
 	        theme.controls.dateControl.on(EVENTS$2.control.dateDestroy, function() {
-	            theme.emit(EVENTS$2.control.recDestroy);
+	            theme.emit(EVENTS$2.control.dateDestroy);
 	        });
 	    }
 	    // 时间控件
@@ -7070,7 +7069,7 @@
 	                        2,
 	                        null
 	                    ];
-	                    theme.emit(EVENTS$2.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
+	                    theme.emit(EVENTS$2.message, theme.i18n.t('FETCH_THEME_FAILED') + ' ' + data, 'themeError');
 	                    return [
 	                        2,
 	                        null
@@ -7082,7 +7081,7 @@
 	                        2,
 	                        null
 	                    ];
-	                    theme.emit(EVENTS$2.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
+	                    theme.emit(EVENTS$2.message, theme.i18n.t('FETCH_THEME_FAILED') + ' ' + data, 'themeError');
 	                    return [
 	                        2,
 	                        null
@@ -7407,31 +7406,28 @@
 	            if (Utils.isMobile && _touchStart) {
 	                var eventName = "click";
 	                $container.removeEventListener(eventName, _touchStart);
-	                if (_$footer && _setTimeoutShow) {
+	                if (_$footer && _headerFooterTouchStart) {
 	                    _$footer.removeEventListener(eventName, _headerFooterTouchStart);
 	                }
-	                if (_$header && _setTimeoutShow) {
+	                if (_$header && _headerFooterTouchStart) {
 	                    _$header.removeEventListener(eventName, _headerFooterTouchStart);
 	                }
 	            }
-	            if (_setTimeoutShow) {
+	            if (_hide || _setTimeoutShow) {
 	                var eventName1 = window.PointerEvent ? "pointerdown" : "click";
 	                $container.removeEventListener(eventName1, _setTimeoutShow);
 	                $container.removeEventListener('mousemove', _setTimeoutShow); // 不要被 header 和 footer 冒泡过来
 	                $container.removeEventListener('mouseleave', _hide);
-	                if (_$footer && _clearTimeout) {
+	                if (_$footer && _headerFooterMousemove) {
 	                    var _$footer_removeEventListener, _$footer_removeEventListener1;
 	                    _$footer == null ? void 0 : (_$footer_removeEventListener = _$footer.removeEventListener) == null ? void 0 : _$footer_removeEventListener.call(_$footer, eventName1, _headerFooterMousemove);
 	                    _$footer == null ? void 0 : (_$footer_removeEventListener1 = _$footer.removeEventListener) == null ? void 0 : _$footer_removeEventListener1.call(_$footer, "mousemove", _headerFooterMousemove);
 	                }
-	                if (_$header && _clearTimeout) {
+	                if (_$header && _headerFooterMousemove) {
 	                    var _$header_removeEventListener, _$header_removeEventListener1;
 	                    _$header == null ? void 0 : (_$header_removeEventListener = _$header.removeEventListener) == null ? void 0 : _$header_removeEventListener.call(_$header, eventName1, _headerFooterMousemove);
 	                    _$header == null ? void 0 : (_$header_removeEventListener1 = _$header.removeEventListener) == null ? void 0 : _$header_removeEventListener1.call(_$header, "mousemove", _headerFooterMousemove);
 	                }
-	            }
-	            if (_hide) {
-	                $container.removeEventListener('mouseleave', _hide);
 	            }
 	            _touchStart = null;
 	            _setTimeoutShow = null;
@@ -13434,7 +13430,6 @@
 	   * theme.on(Theme.EVENTS.loading, (loading: boolean) => {})
 	   * ```
 	   */ function set(loading) {
-	                this._loading = loading;
 	                if (loading) {
 	                    var _this__loadingControl;
 	                    (_this__loadingControl = this._loadingControl) == null ? void 0 : _this__loadingControl.show();
@@ -13443,6 +13438,7 @@
 	                    (_this__loadingControl1 = this._loadingControl) == null ? void 0 : _this__loadingControl1.hide();
 	                }
 	                if (this._loading !== loading) {
+	                    this._loading = loading;
 	                    this.emit(EVENTS$2.loading, loading);
 	                }
 	            }
@@ -13739,7 +13735,9 @@
 	        },
 	        {
 	            key: "isEzopen",
-	            get: function get() {
+	            get: /**
+	   * 私有流地址
+	   */ function get() {
 	                // 私有流地址
 	                return /^ezopen:\/\//.test(this._url);
 	            }
@@ -13750,21 +13748,26 @@
 	   * 判断播放地址是萤石的播放地址
 	   * @since 3.1.2
 	   */ function get() {
-	                var path = this._url.split('?')[0];
-	                var queryStr = this._url.split('?')[1];
-	                var lastPath = path.split('/')[path.split('/').length - 1];
-	                // ezopen://open.ys7.com/BC7799091/1.rec
-	                // rtmp://rtmp05open.ys7.com:1935/v3/openpb/BC7799091_1_1
-	                // https://open.ys7.com/v3/openpb/llhls/BC7799091_1_1.m3u8
-	                // https://rtmp05open.ys7.com:9188/v3/openpb/BC7799091_1_1.flv
-	                // https://host:2001/live?dev=D08197169&chn=1&ss=token&stream=1
-	                if (// 私有流地址
-	                /^ezopen:\/\//.test(path) || // 标准流地址
-	                path.includes('/openlive/') || path.includes('/openpb/') && /[a-zA-Z0-9:]+_\d+_\d+/.test(lastPath) || // webtransport 取流
-	                distExports$3.isHttp(this._url) && queryStr && /dev=[a-zA-Z0-9:]+/.test(queryStr) && /chn=\d+/.test(queryStr) && /stream=\d+/.test(queryStr) && queryStr.includes('ssn=')) {
-	                    return true;
+	                try {
+	                    var _this__url_split, _this__url_split1, _path_split;
+	                    var path = (_this__url_split = this._url.split('?')) == null ? void 0 : _this__url_split[0];
+	                    var queryStr = (_this__url_split1 = this._url.split('?')) == null ? void 0 : _this__url_split1[1];
+	                    var lastPath = (_path_split = path.split('/')) == null ? void 0 : _path_split[path.split('/').length - 1];
+	                    // ezopen://open.ys7.com/BC7799091/1.rec
+	                    // rtmp://rtmp05open.ys7.com:1935/v3/openpb/BC7799091_1_1
+	                    // https://open.ys7.com/v3/openpb/llhls/BC7799091_1_1.m3u8
+	                    // https://rtmp05open.ys7.com:9188/v3/openpb/BC7799091_1_1.flv
+	                    // https://host:2001/live?dev=D08197169&chn=1&ss=token&stream=1
+	                    if (// 私有流地址
+	                    /^ezopen:\/\//.test(path) || // 标准流地址
+	                    path.includes('/openlive/') || path.includes('/openpb/') && /[a-zA-Z0-9:]+_\d+_\d+/.test(lastPath) || // webtransport 取流
+	                    distExports$3.isHttp(this._url) && queryStr && /dev=[a-zA-Z0-9:]+/.test(queryStr) && /chn=\d+/.test(queryStr) && /stream=\d+/.test(queryStr) && queryStr.includes('ssn=')) {
+	                        return true;
+	                    }
+	                    return false;
+	                } catch (error) {
+	                    return false;
 	                }
-	                return false;
 	            }
 	        }
 	    ]);
@@ -13776,7 +13779,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.4-beta.2';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.5-beta.1';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 

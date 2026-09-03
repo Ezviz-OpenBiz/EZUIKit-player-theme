@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.4-beta.2
-* Copyright (c) 2026-08-27 19:42:35 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.5-beta.1
+* Copyright (c) 2026-09-03 20:27:16 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -2142,11 +2142,10 @@ var Provider = /*#__PURE__*/ function() {
                 return item.element === element;
             });
             if (index >= 0) {
-                if (!this.fullscreens[index].onChange) {
-                    this.fullscreens[index].onChange = [];
-                    this.fullscreens[index].onChange.push(onChange);
-                } else {
-                    this.fullscreens[index].onChange.push(onChange);
+                var target = this.fullscreens[index];
+                target.onChange = Array.isArray(target.onChange) ? target.onChange : [];
+                if (!target.onChange.includes(onChange)) {
+                    target.onChange.push(onChange);
                 }
             } else {
                 this.fullscreens.push({
@@ -4774,7 +4773,7 @@ function debounce(func, wait) {
             theme.emit(EVENTS.control.dateChange, date);
         });
         theme.controls.dateControl.on(EVENTS.control.dateDestroy, function() {
-            theme.emit(EVENTS.control.recDestroy);
+            theme.emit(EVENTS.control.dateDestroy);
         });
     }
     // 时间控件
@@ -5576,7 +5575,7 @@ function _filterLeftRightControls(btnList) {
                         2,
                         null
                     ];
-                    theme.emit(EVENTS.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
+                    theme.emit(EVENTS.message, theme.i18n.t('FETCH_THEME_FAILED') + ' ' + data, 'themeError');
                     return [
                         2,
                         null
@@ -5588,7 +5587,7 @@ function _filterLeftRightControls(btnList) {
                         2,
                         null
                     ];
-                    theme.emit(EVENTS.message, theme.i18n.t('FETCH_THEME_FAILED'), 'themeError');
+                    theme.emit(EVENTS.message, theme.i18n.t('FETCH_THEME_FAILED') + ' ' + data, 'themeError');
                     return [
                         2,
                         null
@@ -5913,31 +5912,28 @@ function interactiveHF($container, second, callback) {
             if (Utils.isMobile && _touchStart) {
                 var eventName = "click";
                 $container.removeEventListener(eventName, _touchStart);
-                if (_$footer && _setTimeoutShow) {
+                if (_$footer && _headerFooterTouchStart) {
                     _$footer.removeEventListener(eventName, _headerFooterTouchStart);
                 }
-                if (_$header && _setTimeoutShow) {
+                if (_$header && _headerFooterTouchStart) {
                     _$header.removeEventListener(eventName, _headerFooterTouchStart);
                 }
             }
-            if (_setTimeoutShow) {
+            if (_hide || _setTimeoutShow) {
                 var eventName1 = window.PointerEvent ? "pointerdown" : "click";
                 $container.removeEventListener(eventName1, _setTimeoutShow);
                 $container.removeEventListener('mousemove', _setTimeoutShow); // 不要被 header 和 footer 冒泡过来
                 $container.removeEventListener('mouseleave', _hide);
-                if (_$footer && _clearTimeout) {
+                if (_$footer && _headerFooterMousemove) {
                     var _$footer_removeEventListener, _$footer_removeEventListener1;
                     _$footer == null ? void 0 : (_$footer_removeEventListener = _$footer.removeEventListener) == null ? void 0 : _$footer_removeEventListener.call(_$footer, eventName1, _headerFooterMousemove);
                     _$footer == null ? void 0 : (_$footer_removeEventListener1 = _$footer.removeEventListener) == null ? void 0 : _$footer_removeEventListener1.call(_$footer, "mousemove", _headerFooterMousemove);
                 }
-                if (_$header && _clearTimeout) {
+                if (_$header && _headerFooterMousemove) {
                     var _$header_removeEventListener, _$header_removeEventListener1;
                     _$header == null ? void 0 : (_$header_removeEventListener = _$header.removeEventListener) == null ? void 0 : _$header_removeEventListener.call(_$header, eventName1, _headerFooterMousemove);
                     _$header == null ? void 0 : (_$header_removeEventListener1 = _$header.removeEventListener) == null ? void 0 : _$header_removeEventListener1.call(_$header, "mousemove", _headerFooterMousemove);
                 }
-            }
-            if (_hide) {
-                $container.removeEventListener('mouseleave', _hide);
             }
             _touchStart = null;
             _setTimeoutShow = null;
@@ -11435,7 +11431,6 @@ var THEME_DEFAULT_OPTIONS = {
    * theme.on(Theme.EVENTS.loading, (loading: boolean) => {})
    * ```
    */ function set(loading) {
-                this._loading = loading;
                 if (loading) {
                     var _this__loadingControl;
                     (_this__loadingControl = this._loadingControl) == null ? void 0 : _this__loadingControl.show();
@@ -11444,6 +11439,7 @@ var THEME_DEFAULT_OPTIONS = {
                     (_this__loadingControl1 = this._loadingControl) == null ? void 0 : _this__loadingControl1.hide();
                 }
                 if (this._loading !== loading) {
+                    this._loading = loading;
                     this.emit(EVENTS.loading, loading);
                 }
             }
@@ -11740,7 +11736,9 @@ var THEME_DEFAULT_OPTIONS = {
         },
         {
             key: "isEzopen",
-            get: function get() {
+            get: /**
+   * 私有流地址
+   */ function get() {
                 // 私有流地址
                 return /^ezopen:\/\//.test(this._url);
             }
@@ -11751,21 +11749,26 @@ var THEME_DEFAULT_OPTIONS = {
    * 判断播放地址是萤石的播放地址
    * @since 3.1.2
    */ function get() {
-                var path = this._url.split('?')[0];
-                var queryStr = this._url.split('?')[1];
-                var lastPath = path.split('/')[path.split('/').length - 1];
-                // ezopen://open.ys7.com/BC7799091/1.rec
-                // rtmp://rtmp05open.ys7.com:1935/v3/openpb/BC7799091_1_1
-                // https://open.ys7.com/v3/openpb/llhls/BC7799091_1_1.m3u8
-                // https://rtmp05open.ys7.com:9188/v3/openpb/BC7799091_1_1.flv
-                // https://host:2001/live?dev=D08197169&chn=1&ss=token&stream=1
-                if (// 私有流地址
-                /^ezopen:\/\//.test(path) || // 标准流地址
-                path.includes('/openlive/') || path.includes('/openpb/') && /[a-zA-Z0-9:]+_\d+_\d+/.test(lastPath) || // webtransport 取流
-                utilsTools.isHttp(this._url) && queryStr && /dev=[a-zA-Z0-9:]+/.test(queryStr) && /chn=\d+/.test(queryStr) && /stream=\d+/.test(queryStr) && queryStr.includes('ssn=')) {
-                    return true;
+                try {
+                    var _this__url_split, _this__url_split1, _path_split;
+                    var path = (_this__url_split = this._url.split('?')) == null ? void 0 : _this__url_split[0];
+                    var queryStr = (_this__url_split1 = this._url.split('?')) == null ? void 0 : _this__url_split1[1];
+                    var lastPath = (_path_split = path.split('/')) == null ? void 0 : _path_split[path.split('/').length - 1];
+                    // ezopen://open.ys7.com/BC7799091/1.rec
+                    // rtmp://rtmp05open.ys7.com:1935/v3/openpb/BC7799091_1_1
+                    // https://open.ys7.com/v3/openpb/llhls/BC7799091_1_1.m3u8
+                    // https://rtmp05open.ys7.com:9188/v3/openpb/BC7799091_1_1.flv
+                    // https://host:2001/live?dev=D08197169&chn=1&ss=token&stream=1
+                    if (// 私有流地址
+                    /^ezopen:\/\//.test(path) || // 标准流地址
+                    path.includes('/openlive/') || path.includes('/openpb/') && /[a-zA-Z0-9:]+_\d+_\d+/.test(lastPath) || // webtransport 取流
+                    utilsTools.isHttp(this._url) && queryStr && /dev=[a-zA-Z0-9:]+/.test(queryStr) && /chn=\d+/.test(queryStr) && /stream=\d+/.test(queryStr) && queryStr.includes('ssn=')) {
+                        return true;
+                    }
+                    return false;
+                } catch (error) {
+                    return false;
                 }
-                return false;
             }
         }
     ]);
@@ -11777,7 +11780,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.4-beta.2';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.5-beta.1';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;

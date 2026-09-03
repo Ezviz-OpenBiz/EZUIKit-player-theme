@@ -1,159 +1,182 @@
-lockfileVersion: '6.0'
+lockfileVersion: '9.0'
 
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@ezuikit/control-date-picker':
-    specifier: 2.1.2-beta.1
-    version: 2.1.2-beta.1
-  '@ezuikit/control-ptz':
-    specifier: 1.0.0
-    version: 1.0.0
-  '@ezuikit/control-rec-list-modal':
-    specifier: 0.0.1
-    version: 0.0.1
-  '@ezuikit/control-segment-progress':
-    specifier: 0.0.1
-    version: 0.0.1
-  '@ezuikit/control-time-line':
-    specifier: 2.1.0
-    version: 2.1.0
-  '@ezuikit/control-zoom':
-    specifier: 1.0.0-beta.4
-    version: 1.0.0-beta.4
-  '@ezuikit/utils-i18n':
-    specifier: ^2.0.1
-    version: 2.0.1
-  '@ezuikit/utils-logger':
-    specifier: ^2.0.1
-    version: 2.0.1
-  '@ezuikit/utils-tools':
-    specifier: ^2.0.6
-    version: 2.0.6
-  '@juggle/resize-observer':
-    specifier: ^3.4.0
-    version: 3.4.0
-  '@skax/delegate':
-    specifier: 4.0.2
-    version: 4.0.2
-  '@skax/picker':
-    specifier: 1.1.8
-    version: 1.1.8
-  deepmerge:
-    specifier: ^4.3.1
-    version: 4.3.1
-  eventemitter3:
-    specifier: ^5.0.1
-    version: 5.0.1
-  screenfull:
-    specifier: 5.2.0
-    version: 5.2.0
+importers:
+
+  .:
+    dependencies:
+      '@ezuikit/control-date-picker':
+        specifier: 2.1.2-beta.1
+        version: 2.1.2-beta.1
+      '@ezuikit/control-ptz':
+        specifier: 1.0.0
+        version: 1.0.0
+      '@ezuikit/control-rec-list-modal':
+        specifier: 0.0.1
+        version: 0.0.1
+      '@ezuikit/control-segment-progress':
+        specifier: 0.0.1
+        version: 0.0.1
+      '@ezuikit/control-time-line':
+        specifier: 2.1.0
+        version: 2.1.0
+      '@ezuikit/control-zoom':
+        specifier: 1.0.0-beta.4
+        version: 1.0.0-beta.4
+      '@ezuikit/utils-i18n':
+        specifier: ^2.0.1
+        version: 2.0.1
+      '@ezuikit/utils-logger':
+        specifier: ^2.0.1
+        version: 2.0.1
+      '@ezuikit/utils-tools':
+        specifier: ^2.0.6
+        version: 2.0.7
+      '@juggle/resize-observer':
+        specifier: ^3.4.0
+        version: 3.4.0
+      '@skax/delegate':
+        specifier: 4.0.2
+        version: 4.0.2
+      '@skax/picker':
+        specifier: 1.1.8
+        version: 1.1.8
+      deepmerge:
+        specifier: ^4.3.1
+        version: 4.3.1
+      eventemitter3:
+        specifier: ^5.0.1
+        version: 5.0.4
+      screenfull:
+        specifier: 5.2.0
+        version: 5.2.0
 
 packages:
 
-  /@ezuikit/control-date-picker@2.1.2-beta.1:
+  '@ezuikit/control-date-picker@2.1.2-beta.1':
     resolution: {integrity: sha512-IGbJ0J+SifQSOMdCjnTQMJZWlD+qEqQHgWYtCWUtGP82q6pOwMGbSBE6PU1OneU7mjy9PyuvUE8Y17ylof5cFg==}
+
+  '@ezuikit/control-modal@0.0.1':
+    resolution: {integrity: sha512-PWm8jL0tp5FzWp8gA1YJI+uw1KmPvRKMGkbCQALDevEja9qPp4xS4Fuvn5phhcUY1Wvd8G4K/8L/qICz3mlFNQ==}
+
+  '@ezuikit/control-ptz@1.0.0':
+    resolution: {integrity: sha512-4N0NX3ocJxVVqyVbYwwJXhh8HIJFudBuZHmhXPShpLFS1SbO3Ej/GhYNVsPUNG7JdoiL31Bn6M3pbkbP05JBCQ==}
+
+  '@ezuikit/control-rec-list-modal@0.0.1':
+    resolution: {integrity: sha512-uqA5arV5kcdLcsZwe74hcd5UIbPeM/ZASDi1bqm7uqVVpMl4Igy7W+xDc/OQxzrvXzmk6VXabx98zh9al2qYYA==}
+
+  '@ezuikit/control-segment-progress@0.0.1':
+    resolution: {integrity: sha512-po+tJxVJlFbI2TnPzLyt4GL3KZc/X0nFsJ9Fn8HCpI0R2AiMtwx5ZBADV17xa13A82/Us3rl1R0ijVj1pRvn0g==}
+
+  '@ezuikit/control-time-line@2.1.0':
+    resolution: {integrity: sha512-hUk9VF+R4tozbJ5O8yFEhSTI1iHLyild+Uli+E7uag0LIfaSYSNY1dqps4TiXWwTzet3lfn2mYYq8jZGVd1kKw==}
+
+  '@ezuikit/control-virtual-scroll@0.0.1':
+    resolution: {integrity: sha512-L/YLVQDQUxV1XGm87yA24AK3205rV0JAge9lT0cK9DikVRk50uq9+hR7DYrKlwwIse2Zf1Lydzm/vTHQeBce5Q==}
+
+  '@ezuikit/control-zoom@1.0.0-beta.4':
+    resolution: {integrity: sha512-MG+weJeYSeh86LyZWFseUSWw9VCkyKFIE0V58Nee1+NCIuctbTd9fBmtAexX8xHEiApHKDwfQmwc+xlUZgTb6Q==}
+
+  '@ezuikit/utils-i18n@2.0.1':
+    resolution: {integrity: sha512-846z2bDpCxioTBO3KG8Uw8QUFa6hzquSzmZKWPO6fjT3P4v6zNnXRz+Z3JCPlXnc4eesi03A+JmMAU6m5KI4gg==}
+
+  '@ezuikit/utils-logger@2.0.1':
+    resolution: {integrity: sha512-AeLLR9ZQJkSJFfCicpkVBcnOE4zyQMp4W4997sTEGyF3k3I8Upkfn4Cye2A44MIphdw6eytKlaJp6H4joSafQw==}
+
+  '@ezuikit/utils-tools@2.0.7':
+    resolution: {integrity: sha512-phxKRP17FunG0cwLLK951V18x96EzwO5XSfZ+FfI4jv8agbujV5HtY709lpXM0H5j4XC7pZryT70wjdRFASQgA==}
+
+  '@juggle/resize-observer@3.4.0':
+    resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
+
+  '@skax/delegate@4.0.2':
+    resolution: {integrity: sha512-8imP+fGESjlbU4mFhZMEuR3/qmYVtqQjXXzZ/C/imbzKqyaMWYpEDqQXNf6yGHzWHUJhZwn5AWNm645U1GjQsQ==}
+
+  '@skax/drag-scroll@1.1.2':
+    resolution: {integrity: sha512-dRYjWY6+ix7FCdDLkkEgitO5EcawaHJt1Fu6BXUwKjpikkGnVeMRzrIwfH3jr6FbrhZvZr4StsYG7x5xMHZ3CQ==}
+
+  '@skax/picker@1.1.8':
+    resolution: {integrity: sha512-PY8eefUG2KYheTV4VsToL66JDyFWbNrUQcz4sdEUfdFs5A2JWBYL4tNVEIMUq92m03yXaPtkNXh2RcgKO2Czzg==}
+
+  deepmerge@4.3.1:
+    resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
+    engines: {node: '>=0.10.0'}
+
+  eventemitter3@5.0.4:
+    resolution: {integrity: sha512-mlsTRyGaPBjPedk6Bvw+aqbsXDtoAyAzm5MO7JgU+yVRyMQ5O8bD4Kcci7BS85f93veegeCPkL8R4GLClnjLFw==}
+
+  screenfull@5.2.0:
+    resolution: {integrity: sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA==}
+    engines: {node: '>=0.10.0'}
+
+snapshots:
+
+  '@ezuikit/control-date-picker@2.1.2-beta.1':
     dependencies:
       '@ezuikit/utils-i18n': 2.0.1
-      '@ezuikit/utils-tools': 2.0.6
+      '@ezuikit/utils-tools': 2.0.7
       '@skax/delegate': 4.0.2
       '@skax/picker': 1.1.8
       deepmerge: 4.3.1
-    dev: false
 
-  /@ezuikit/control-modal@0.0.1:
-    resolution: {integrity: sha512-PWm8jL0tp5FzWp8gA1YJI+uw1KmPvRKMGkbCQALDevEja9qPp4xS4Fuvn5phhcUY1Wvd8G4K/8L/qICz3mlFNQ==}
+  '@ezuikit/control-modal@0.0.1':
     dependencies:
       '@ezuikit/utils-i18n': 2.0.1
       deepmerge: 4.3.1
-      eventemitter3: 5.0.1
-    dev: false
+      eventemitter3: 5.0.4
 
-  /@ezuikit/control-ptz@1.0.0:
-    resolution: {integrity: sha512-4N0NX3ocJxVVqyVbYwwJXhh8HIJFudBuZHmhXPShpLFS1SbO3Ej/GhYNVsPUNG7JdoiL31Bn6M3pbkbP05JBCQ==}
+  '@ezuikit/control-ptz@1.0.0':
     dependencies:
-      '@ezuikit/utils-tools': 2.0.6
+      '@ezuikit/utils-tools': 2.0.7
       deepmerge: 4.3.1
-    dev: false
 
-  /@ezuikit/control-rec-list-modal@0.0.1:
-    resolution: {integrity: sha512-uqA5arV5kcdLcsZwe74hcd5UIbPeM/ZASDi1bqm7uqVVpMl4Igy7W+xDc/OQxzrvXzmk6VXabx98zh9al2qYYA==}
+  '@ezuikit/control-rec-list-modal@0.0.1':
     dependencies:
       '@ezuikit/control-modal': 0.0.1
       '@ezuikit/control-virtual-scroll': 0.0.1
       '@ezuikit/utils-i18n': 2.0.1
-      '@ezuikit/utils-tools': 2.0.6
+      '@ezuikit/utils-tools': 2.0.7
       deepmerge: 4.3.1
-    dev: false
 
-  /@ezuikit/control-segment-progress@0.0.1:
-    resolution: {integrity: sha512-po+tJxVJlFbI2TnPzLyt4GL3KZc/X0nFsJ9Fn8HCpI0R2AiMtwx5ZBADV17xa13A82/Us3rl1R0ijVj1pRvn0g==}
-    dev: false
+  '@ezuikit/control-segment-progress@0.0.1': {}
 
-  /@ezuikit/control-time-line@2.1.0:
-    resolution: {integrity: sha512-hUk9VF+R4tozbJ5O8yFEhSTI1iHLyild+Uli+E7uag0LIfaSYSNY1dqps4TiXWwTzet3lfn2mYYq8jZGVd1kKw==}
+  '@ezuikit/control-time-line@2.1.0':
     dependencies:
       '@ezuikit/utils-i18n': 2.0.1
-      '@ezuikit/utils-tools': 2.0.6
+      '@ezuikit/utils-tools': 2.0.7
       '@skax/delegate': 4.0.2
       '@skax/drag-scroll': 1.1.2
       '@skax/picker': 1.1.8
       deepmerge: 4.3.1
-    dev: false
 
-  /@ezuikit/control-virtual-scroll@0.0.1:
-    resolution: {integrity: sha512-L/YLVQDQUxV1XGm87yA24AK3205rV0JAge9lT0cK9DikVRk50uq9+hR7DYrKlwwIse2Zf1Lydzm/vTHQeBce5Q==}
+  '@ezuikit/control-virtual-scroll@0.0.1':
     dependencies:
       deepmerge: 4.3.1
-      eventemitter3: 5.0.1
-    dev: false
+      eventemitter3: 5.0.4
 
-  /@ezuikit/control-zoom@1.0.0-beta.4:
-    resolution: {integrity: sha512-MG+weJeYSeh86LyZWFseUSWw9VCkyKFIE0V58Nee1+NCIuctbTd9fBmtAexX8xHEiApHKDwfQmwc+xlUZgTb6Q==}
-    dev: false
+  '@ezuikit/control-zoom@1.0.0-beta.4': {}
 
-  /@ezuikit/utils-i18n@2.0.1:
-    resolution: {integrity: sha512-846z2bDpCxioTBO3KG8Uw8QUFa6hzquSzmZKWPO6fjT3P4v6zNnXRz+Z3JCPlXnc4eesi03A+JmMAU6m5KI4gg==}
+  '@ezuikit/utils-i18n@2.0.1':
     dependencies:
       deepmerge: 4.3.1
-    dev: false
 
-  /@ezuikit/utils-logger@2.0.1:
-    resolution: {integrity: sha512-AeLLR9ZQJkSJFfCicpkVBcnOE4zyQMp4W4997sTEGyF3k3I8Upkfn4Cye2A44MIphdw6eytKlaJp6H4joSafQw==}
-    dev: false
+  '@ezuikit/utils-logger@2.0.1': {}
 
-  /@ezuikit/utils-tools@2.0.6:
-    resolution: {integrity: sha512-1XUk8IY28FpspjzgbbVEfcsRiwKx9l5ltjOYw9RYh3BK2XAKv2B2N+79RCQ1qfmjLVsHLx2H8xTwSJECSWcnqg==}
-    dev: false
+  '@ezuikit/utils-tools@2.0.7': {}
 
-  /@juggle/resize-observer@3.4.0:
-    resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
-    dev: false
+  '@juggle/resize-observer@3.4.0': {}
 
-  /@skax/delegate@4.0.2:
-    resolution: {integrity: sha512-8imP+fGESjlbU4mFhZMEuR3/qmYVtqQjXXzZ/C/imbzKqyaMWYpEDqQXNf6yGHzWHUJhZwn5AWNm645U1GjQsQ==}
-    dev: false
+  '@skax/delegate@4.0.2': {}
 
-  /@skax/drag-scroll@1.1.2:
-    resolution: {integrity: sha512-dRYjWY6+ix7FCdDLkkEgitO5EcawaHJt1Fu6BXUwKjpikkGnVeMRzrIwfH3jr6FbrhZvZr4StsYG7x5xMHZ3CQ==}
-    dev: false
+  '@skax/drag-scroll@1.1.2': {}
 
-  /@skax/picker@1.1.8:
-    resolution: {integrity: sha512-PY8eefUG2KYheTV4VsToL66JDyFWbNrUQcz4sdEUfdFs5A2JWBYL4tNVEIMUq92m03yXaPtkNXh2RcgKO2Czzg==}
-    dev: false
+  '@skax/picker@1.1.8': {}
 
-  /deepmerge@4.3.1:
-    resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
-    engines: {node: '>=0.10.0'}
-    dev: false
+  deepmerge@4.3.1: {}
 
-  /eventemitter3@5.0.1:
-    resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
-    dev: false
+  eventemitter3@5.0.4: {}
 
-  /screenfull@5.2.0:
-    resolution: {integrity: sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA==}
-    engines: {node: '>=0.10.0'}
-    dev: false
+  screenfull@5.2.0: {}
