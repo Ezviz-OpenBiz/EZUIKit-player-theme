@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@ezuikit/control-time-line": "2.1.0",
-    "@ezuikit/player-theme": "3.1.2-beta.4",
+    "@ezuikit/player-theme": "3.1.5-beta.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
