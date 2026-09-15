@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.5-beta.3
-* Copyright (c) 2026-09-04 06:40:24 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.5-beta.4
+* Copyright (c) 2026-09-15 13:35:29 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -7608,11 +7608,20 @@ function _set_prototype_of$d(o, p) {
             }
         }));
         _this.on(EVENTS.setAllDayRecTimes, function(records) {
-            var // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            var _this__options_props_urlInfo, _this__options_props, _this__options, // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             _this__modal;
             _this.disabled = records.length === 0;
             _this.records = records;
-            (_this__modal = _this._modal) == null ? void 0 : _this__modal.setSections(records);
+            if ((_this__options = _this._options) == null ? void 0 : (_this__options_props = _this__options.props) == null ? void 0 : (_this__options_props_urlInfo = _this__options_props.urlInfo) == null ? void 0 : _this__options_props_urlInfo.validateCode) {
+                _this.records = records.map(function(item) {
+                    var _this__options_props_urlInfo, _this__options_props, _this__options;
+                    return _extends$c({}, item, {
+                        // 加密图片的地址是有时效的
+                        coverPic: item.coverPic + "&decodekey=" + ((_this__options = _this._options) == null ? void 0 : (_this__options_props = _this__options.props) == null ? void 0 : (_this__options_props_urlInfo = _this__options_props.urlInfo) == null ? void 0 : _this__options_props_urlInfo.validateCode)
+                    });
+                });
+            }
+            (_this__modal = _this._modal) == null ? void 0 : _this__modal.setSections(_this.records);
         // this._modal?.showEventFilter(this._options.showEventFilter ?? true);
         });
         _this.on(EVENTS.getOSDTime, function(time) {
@@ -11859,6 +11868,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.5-beta.3';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.5-beta.4';
 
 export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
