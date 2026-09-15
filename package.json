@@ -1,6 +1,6 @@
 {
   "name": "@ezuikit/player-theme",
-  "version": "3.1.5-beta.3",
+  "version": "3.1.5-beta.4",
   "description": "player theme",
   "title": "theme",
   "main": "dist/index.cjs",
@@ -40,7 +40,7 @@
     "@ezuikit/control-date-picker": "2.1.2-beta.1",
     "@ezuikit/control-time-line": "2.1.0",
     "@ezuikit/control-ptz": "1.0.0",
-    "@ezuikit/control-rec-list-modal": "0.0.1",
+    "@ezuikit/control-rec-list-modal": "0.0.2",
     "@ezuikit/control-segment-progress": "0.0.1",
     "@ezuikit/control-zoom": "1.0.0-beta.4",
     "@juggle/resize-observer": "^3.4.0",
