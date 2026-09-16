@@ -219,6 +219,10 @@ declare const EVENTS: {
         readonly dateChange: "Control.dateChange";
         /** 日期改变 */
         readonly dateMonthChange: "Control.dateMonthChange";
+        /** 日期面板展示的月份变化 */
+        readonly datePanelMonthChange: "Control.datePanelMonthChange";
+        /** 日期面板展示的年份变化 */
+        readonly datePanelYearChange: "Control.datePanelYearChange";
         /** 日期销毁 */
         readonly dateDestroy: "Control.datePanelDestroy";
         /** 时间面板展示隐藏变换 */
@@ -1505,7 +1509,7 @@ declare class Theme extends EventEmitter {
         readonly fullscreen: "fullscreen";
         readonly exitFullscreen: "exitFullscreen";
         readonly fullscreenChange: "fullscreenChange";
-        readonly resize: "resize"; /** 所有控件列表, 所有控件名称规则（`${iconId}Control`）， 如音量控件 this.controls["volumeControl"]  @since 0.0.1 */
+        readonly resize: "resize";
         readonly orientationChange: "orientationChange";
         readonly audioCodecUnsupported: "audioCodecUnsupported";
         readonly changeTheme: "changeTheme";
@@ -1521,15 +1525,18 @@ declare class Theme extends EventEmitter {
         readonly recDropdownChange: "recDropdownChange";
         readonly recListChange: "recListChange";
         readonly alarmMessageChange: "alarmMessageChange";
-        readonly setLoggerOptions: "setLoggerOptions";
+        readonly setLoggerOptions: "setLoggerOptions"; /**
+         * 更多控件（footer more）
+         * @since 0.0.1
+         * @private
+         */
         readonly records: "records";
         readonly ptzSpeedChange: "ptzSpeedChange";
-        /** 回放底部时间轴 @since 0.0.1 @private */
         readonly setVideoLevelList: "setVideoLevelList";
         readonly currentVideoLevel: "currentVideoLevel";
         readonly currentVideoLevelAuto: "currentVideoLevelAuto";
         readonly setAllDayRecTimes: "setAllDayRecTimes";
-        readonly getOSDTime: "getOSDTime"; /**  @since 0.0.1 @private */
+        readonly getOSDTime: "getOSDTime";
         readonly playbackEnd: "playbackEnd";
         readonly control: {
             readonly play: "Control.play";
@@ -1585,6 +1592,8 @@ declare class Theme extends EventEmitter {
             readonly datePanelOpenChange: "Control.datePanelOpenChange";
             readonly dateChange: "Control.dateChange";
             readonly dateMonthChange: "Control.dateMonthChange";
+            readonly datePanelMonthChange: "Control.datePanelMonthChange";
+            readonly datePanelYearChange: "Control.datePanelYearChange";
             readonly dateDestroy: "Control.datePanelDestroy";
             readonly timePanelOpenChange: "Control.timePanelOpenChange";
             readonly timeChange: "Control.timeChange";
@@ -3214,6 +3223,10 @@ interface ThemeEventMap {
     'Control.datePanelOpenChange': (open: boolean, date: Date) => void;
     'Control.dateChange': (date: Date) => void;
     'Control.dateMonthChange': (dates: string[]) => void;
+    /** 日历面板展示的月份变化，`month` 格式 `YYYY-MM` */
+    'Control.datePanelMonthChange': (date: Date, month: string) => void;
+    /** 日历面板展示的年份变化，`year` 格式 `YYYY` */
+    'Control.datePanelYearChange': (date: Date, year: string) => void;
     /** 日历控件销毁（注意其字符串值为 `Control.datePanelDestroy`） */
     'Control.datePanelDestroy': () => void;
     'Control.timePanelOpenChange': (open: boolean, time: string) => void;

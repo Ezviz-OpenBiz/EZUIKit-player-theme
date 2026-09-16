@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.5-beta.4
-* Copyright (c) 2026-09-15 13:35:29 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.6-beta.1
+* Copyright (c) 2026-09-16 19:24:27 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -219,6 +219,8 @@ var EVENTS = {
         /** 日期面板展示隐藏变换 */ datePanelOpenChange: 'Control.datePanelOpenChange',
         /** 日期改变 */ dateChange: 'Control.dateChange',
         /** 日期改变 */ dateMonthChange: 'Control.dateMonthChange',
+        /** 日期面板展示的月份变化 */ datePanelMonthChange: 'Control.datePanelMonthChange',
+        /** 日期面板展示的年份变化 */ datePanelYearChange: 'Control.datePanelYearChange',
         /** 日期销毁 */ dateDestroy: 'Control.datePanelDestroy',
         /** 时间面板展示隐藏变换 */ timePanelOpenChange: 'Control.timePanelOpenChange',
         /** 时间改变 */ timeChange: 'Control.timeChange',
@@ -4848,6 +4850,12 @@ function debounce(func, wait) {
         theme.controls.dateControl.on(EVENTS.control.dateChange, function(date) {
             theme.emit(EVENTS.control.dateChange, date);
         });
+        theme.controls.dateControl.on(EVENTS.control.datePanelMonthChange, function(date, month) {
+            theme.emit(EVENTS.control.datePanelMonthChange, date, month);
+        });
+        theme.controls.dateControl.on(EVENTS.control.datePanelYearChange, function(date, year) {
+            theme.emit(EVENTS.control.datePanelYearChange, date, year);
+        });
         theme.controls.dateControl.on(EVENTS.control.dateDestroy, function() {
             theme.emit(EVENTS.control.dateDestroy);
         });
@@ -8407,6 +8415,8 @@ function _set_prototype_of$8(o, p) {
         })) || this;
         _this.options = options;
         _this._value = utilsTools.DateTime.format(((_this_options_props = _this.options.props) == null ? void 0 : (_this_options_props_urlInfo = _this_options_props.urlInfo) == null ? void 0 : (_this_options_props_urlInfo_searchParams = _this_options_props_urlInfo.searchParams) == null ? void 0 : _this_options_props_urlInfo_searchParams.begin) || new Date(), 'YYYY-MM-DD');
+        // 面板首次展示的就是选中日期所在月份，初始化后不应触发年 / 月变化
+        _this._renderMonth = _this._value.slice(0, 7);
         _this._render();
         // 日期上的点
         _this.on(EVENTS.control.dateMonthChange, function(dates) {
@@ -8467,9 +8477,26 @@ function _set_prototype_of$8(o, p) {
                     _this.emit(EVENTS.control.dateChange, date);
                 }
             },
+            // 日历面板「上一月 / 上一年」，底层两种翻页都回调 onPrevMonth
+            onPrevMonth: function onPrevMonth(current, prev) {
+                _this.options.onPrevMonth == null ? void 0 : _this.options.onPrevMonth.call(_this.options, current, prev);
+                _this._onPanelDateChange(prev);
+            },
+            // 日历面板「下一月 / 下一年」，底层两种翻页都回调 onNextMonth
+            onNextMonth: function onNextMonth(current, next) {
+                _this.options.onNextMonth == null ? void 0 : _this.options.onNextMonth.call(_this.options, current, next);
+                _this._onPanelDateChange(next);
+            },
+            // 月 / 年面板中点选单元格同样会改变日历展示的年月，但底层不回调翻页钩子
+            onCell: function onCell(date, mode) {
+                _this.options.onCell == null ? void 0 : _this.options.onCell.call(_this.options, date, mode);
+                if (mode !== 'date' && !_this._isPanelCellDisabled(date, mode)) _this._onPanelDateChange(date);
+            },
             onOpenChange: function onOpenChange(open) {
                 _this.options.onPanelChange == null ? void 0 : _this.options.onPanelChange.call(_this.options, open, _this.datePicker.current);
                 _this.emit(EVENTS.control.datePanelOpenChange, open, _this.datePicker.current);
+                // 面板重新打开会跳回选中日期所在月份，且底层不会回调翻页钩子，这里补齐
+                if (open) _this._onPanelDateChange(_this.datePicker.current);
             }
         }));
     };
@@ -8481,6 +8508,8 @@ function _set_prototype_of$8(o, p) {
         if (change === void 0) change = true;
         var _this_datePicker;
         (_this_datePicker = this.datePicker) == null ? void 0 : _this_datePicker.setCurrent(date, change);
+        // 主动设值由调用方发起，同步展示月份但不触发年 / 月变化回调
+        if (date) this._renderMonth = utilsTools.DateTime.format(date, 'YYYY-MM');
         if (date && !change && this._value !== utilsTools.DateTime.format(date, 'YYYY-MM-DD')) {
             this._value = utilsTools.DateTime.format(date, 'YYYY-MM-DD');
             if (date && this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value")) {
@@ -8506,6 +8535,36 @@ function _set_prototype_of$8(o, p) {
     _proto._getDateStr = function _getDateStr() {
         var arr = this._value.split('-');
         return arr[1] + "." + arr[2];
+    };
+    /**
+   * 月 / 年面板中被点选的单元格是否已被调用方禁用
+   *
+   * 禁用的单元格底层不会切换展示的年月，因此不应派发变化
+   * @param date 单元格日期
+   * @param mode 当前面板模式
+   */ _proto._isPanelCellDisabled = function _isPanelCellDisabled(date, mode) {
+        if (mode === 'month') return !!(this.options.disabledMonth == null ? void 0 : this.options.disabledMonth.call(this.options, date, utilsTools.DateTime.format(date, 'YYYY-MM')));
+        if (mode === 'year') return !!(this.options.disabledYear == null ? void 0 : this.options.disabledYear.call(this.options, date, date.getFullYear()));
+        return false;
+    };
+    /**
+   * 日历面板展示的年月发生变化时，派发年份 / 月份变化
+   *
+   * 年份变化会先于月份变化派发；跨年翻页（如 2026-01 -> 2025-12）两者都会触发
+   * @param renderDate 面板当前展示的日期
+   */ _proto._onPanelDateChange = function _onPanelDateChange(renderDate) {
+        if (!renderDate) return;
+        var month = utilsTools.DateTime.format(renderDate, 'YYYY-MM');
+        if (!month || month === this._renderMonth) return;
+        var prevYear = this._renderMonth.slice(0, 4);
+        var year = month.slice(0, 4);
+        this._renderMonth = month;
+        if (year !== prevYear) {
+            this.options.onYearChange == null ? void 0 : this.options.onYearChange.call(this.options, renderDate, year);
+            this.emit(EVENTS.control.datePanelYearChange, renderDate, year);
+        }
+        this.options.onMonthChange == null ? void 0 : this.options.onMonthChange.call(this.options, renderDate, month);
+        this.emit(EVENTS.control.datePanelMonthChange, renderDate, month);
     };
     /**
    * 点击 Control 会触发
@@ -11870,7 +11929,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.5-beta.4';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.6-beta.1';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;

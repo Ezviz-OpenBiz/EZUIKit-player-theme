@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.5-beta.4
-* Copyright (c) 2026-09-15 13:35:29 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.6-beta.1
+* Copyright (c) 2026-09-16 19:24:27 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 /**
@@ -233,6 +233,8 @@ var EVENTS = {
         /** 日期面板展示隐藏变换 */ datePanelOpenChange: 'Control.datePanelOpenChange',
         /** 日期改变 */ dateChange: 'Control.dateChange',
         /** 日期改变 */ dateMonthChange: 'Control.dateMonthChange',
+        /** 日期面板展示的月份变化 */ datePanelMonthChange: 'Control.datePanelMonthChange',
+        /** 日期面板展示的年份变化 */ datePanelYearChange: 'Control.datePanelYearChange',
         /** 日期销毁 */ dateDestroy: 'Control.datePanelDestroy',
         /** 时间面板展示隐藏变换 */ timePanelOpenChange: 'Control.timePanelOpenChange',
         /** 时间改变 */ timeChange: 'Control.timeChange',
