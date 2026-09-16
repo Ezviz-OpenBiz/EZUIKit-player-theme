@@ -715,10 +715,10 @@
   resolved "https://registry.yarnpkg.com/@ezuikit/control-zoom/-/control-zoom-1.0.0-beta.4.tgz#a3ff1fd43e1a1bb23103a4c263c026348119c423"
   integrity sha512-MG+weJeYSeh86LyZWFseUSWw9VCkyKFIE0V58Nee1+NCIuctbTd9fBmtAexX8xHEiApHKDwfQmwc+xlUZgTb6Q==
 
-"@ezuikit/player-theme@3.1.5-beta.4":
-  version "3.1.5-beta.4"
-  resolved "https://registry.npmjs.org/@ezuikit/player-theme/-/player-theme-3.1.5-beta.4.tgz#78df630874504299911909bad2d4e7ec3645864b"
-  integrity sha512-wyDsX6BI//9A0Js5+Q/tk/7nCTzVsCCSHTfza+vyGXIrGpwDPSiA6a1dri7hciLaPMXnN8jrGSi3f7IHjuOo+Q==
+"@ezuikit/player-theme@3.1.6-beta.1":
+  version "3.1.6-beta.1"
+  resolved "https://registry.npmjs.org/@ezuikit/player-theme/-/player-theme-3.1.6-beta.1.tgz#4a945f6ed6fc04ba12a46cf7eab9aeb5bf26fc6a"
+  integrity sha512-ct6FIJuNfAVZg4vr8GRxFe1DdjWyl8nNtZxE602hJTkDLHXsEZ1jgYfvh8Z9wg6vuaFsmD/q8UWGMfQrLRNMZQ==
   dependencies:
     "@ezuikit/control-date-picker" "2.1.2-beta.1"
     "@ezuikit/control-ptz" "1.0.0"
@@ -727,7 +727,7 @@
     "@ezuikit/control-time-line" "2.1.0"
     "@ezuikit/control-zoom" "1.0.0-beta.4"
     "@ezuikit/utils-i18n" "^2.0.1"
-    "@ezuikit/utils-logger" "^2.0.1"
+    "@ezuikit/utils-logger" "^2.1.0"
     "@ezuikit/utils-tools" "^2.0.7"
     "@juggle/resize-observer" "^3.4.0"
     "@skax/delegate" "4.0.2"
@@ -743,10 +743,10 @@
   dependencies:
     deepmerge "^4.3.1"
 
-"@ezuikit/utils-logger@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@ezuikit/utils-logger/-/utils-logger-2.0.1.tgz#5493ec1e388a55b14e557581cb382edcae71cfdc"
-  integrity sha512-AeLLR9ZQJkSJFfCicpkVBcnOE4zyQMp4W4997sTEGyF3k3I8Upkfn4Cye2A44MIphdw6eytKlaJp6H4joSafQw==
+"@ezuikit/utils-logger@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ezuikit/utils-logger/-/utils-logger-2.1.0.tgz#d65b0277cc35a4e7f2596e7d135e5a4fd653dc3f"
+  integrity sha512-Kj/vTddGWhRhOApo/QmesxqEPxkSwhwakQGZx3b3xLI8Dou2NMg8iNA+9aXU4jT5uT13TmdCn0oMC8Kbq6BMGQ==
 
 "@ezuikit/utils-tools@^2.0.6":
   version "2.0.6"
