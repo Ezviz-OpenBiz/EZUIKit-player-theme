@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.6-beta.1
-* Copyright (c) 2026-09-16 19:24:27 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.6
+* Copyright (c) 2026-09-18 12:22:27 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -2968,7 +2968,8 @@ var zh = {
     cancel: '取消',
     ok: '确定',
     close: '关闭',
-    BTN_REC_LIST_TITLE: '录像片段'
+    BTN_REC_LIST_TITLE: '录像片段',
+    UNKOWN_ISSUE: '未知问题 【{{scope}}】'
 };
 
 // 不要出现多层的的数据, 数据铺平
@@ -3252,7 +3253,8 @@ var en = {
     cancel: 'Cancel',
     ok: 'Ok',
     close: 'Close',
-    BTN_REC_LIST_TITLE: 'Records'
+    BTN_REC_LIST_TITLE: 'Records',
+    UNKOWN_ISSUE: 'Unknown issue [{{scope}}]'
 };
 
 /**
@@ -10459,6 +10461,11 @@ function _unsupported_iterable_to_array(o, minLen) {
     if (n === "Map" || n === "Set") return Array.from(n);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array(o, minLen);
 }
+/**
+ * 语言包缺 key 时的兜底文案 key
+ *
+ * 拼写沿用语言包中既有的 `UNKOWN_ISSUE`（少了一个 N），改名属破坏性变更，故保持原样。
+ */ var UNKOWN_ISSUE_KEY = 'UNKOWN_ISSUE';
 var THEME_DEFAULT_OPTIONS = {
     dblClickFullscreen: true,
     language: 'zh',
@@ -10534,7 +10541,7 @@ var THEME_DEFAULT_OPTIONS = {
    */ _this._footerMoreControl = null, /** 头部控件 @since 0.0.1 @private */ _this._header = null, /** 低部控件 @since 0.0.1 @private */ _this._footer = null, /** 回放底部时间轴 @since 0.0.1 @private */ _this._recFooter = null, /**
    * 移动端扩展容器, 扩展的控件渲染在指定容器以外， 仅只用端适用， 为了可以放置大的控件和方便开发接入
    * @private
-   */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, _this._url = '', /** 是否播放中 @private */ _this._playing = false, /** @private 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /** 清晰度列表 */ _this.videoLevelList = [], /** 回放片段列表 */ _this.recordList = [], /**
+   */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, _this._url = '', /** 是否播放中 @private */ _this._playing = false, /** @private 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 正在兜底的原始 scope，非 null 表示处于兜底取值中（用于避免 customizeMissing 无限递归） */ _this._missingScope = null, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /** 清晰度列表 */ _this.videoLevelList = [], /** 回放片段列表 */ _this.recordList = [], /**
    * 播放区间（片段分享），null 表示不约束。
    * 由 SDK 层在初始化时通过 props 下发，主题层据此决定日历/回放类型按钮
    * 是否渲染、片段进度条是否渲染。区间没有运行时变更入口。
@@ -10797,6 +10804,50 @@ var THEME_DEFAULT_OPTIONS = {
         }
     };
     /**
+   * 获取多语言文案
+   *
+   * 相比直接用 `theme.i18n.t()`：返回类型收窄为 `string`（底层签名是 `string | number`，
+   * 调用处不必再写 `as string`）。缺失 key 的兜底由 i18n 实例上的 `customizeMissing`
+   * 统一处理，因此两者在兜底行为上一致。
+   * @param scope 多语言 key
+   * @param variables 插值变量，如 `{ zoom: 8 }`；传 `defaultvalue` 可指定自己的兜底文案
+   * @returns 文案；scope 不存在时返回「未知问题 【scope】」
+   * @example
+   * ```ts
+   * theme.t('ZOOM_LIMIT_MAX', { zoom: 8 });
+   * theme.t('NOT_EXIST_KEY'); // 未知问题 【NOT_EXIST_KEY】
+   * theme.t('NOT_EXIST_KEY', { defaultvalue: '自定义兜底' }); // 自定义兜底
+   * ```
+   */ _proto.t = function t(scope, variables) {
+        return this.i18n.t(scope, variables);
+    };
+    /**
+   * 语言包缺 key 时的兜底文案（`customizeMissing` 的实现）
+   *
+   * 注意底层是把本方法的返回值「原样返回」、不再做插值，所以这里借
+   * `i18n.t(UNKOWN_ISSUE)` 完成插值。而这一次取值本身也可能缺失
+   * （如 `language` 传了不存在的语言，当前语言包整体不存在），
+   * 那会再次回调到这里造成无限递归，因此用重入标记兜住，退化为直接返回原始 scope。
+   *
+   * 注：`options.locales` 与内置语言包是深合并，无法移除内置的 UNKOWN_ISSUE，
+   * 因此正常配置下不会走到退化分支。
+   * @param scope 缺失的多语言 key
+   * @param variables 原始插值变量
+   */ _proto._missingText = function _missingText(scope, variables) {
+        // 兜底文案自身也缺失（如当前语言的语言包不存在）：直接返回最初的 scope，
+        // 而不是兜底 key 本身，否则用户看到的是 'UNKOWN_ISSUE' 这种无意义内容
+        if (this._missingScope !== null) return "" + this._missingScope;
+        this._missingScope = scope;
+        try {
+            // scope 放在最后，避免调用方传入同名变量把它覆盖掉
+            return this.i18n.t(UNKOWN_ISSUE_KEY, _extends({}, variables, {
+                scope: scope
+            }));
+        } finally{
+            this._missingScope = null;
+        }
+    };
+    /**
    * 销毁包括事件、控件 ...
    *
    * Destroy (including events, controls...)
@@ -10852,6 +10903,7 @@ var THEME_DEFAULT_OPTIONS = {
     // 私有方法
     // ==============================================================================================
     /** 初始化配置项 */ _proto._initOptions = function _initOptions(options) {
+        var _this = this;
         if (options === void 0) options = {};
         var _this_options_loggerOptions, _this_options_definitionOptions_list, _this_options_definitionOptions, _this_options_videoLevelList;
         // 先对模块级默认配置做一次深拷贝，得到全新的嵌套对象/数组，
@@ -10904,7 +10956,13 @@ var THEME_DEFAULT_OPTIONS = {
         });
         // prettier-ignore
         this.i18n = new I18n(locales, {
-            defaultLocale: language
+            defaultLocale: language,
+            // 语言包缺 key 时，底层默认返回 `[missing "zh.XXX" translation]`，
+            // 这种占位串一旦透到 UI 上对用户毫无意义。挂在 i18n 实例上统一兜底，
+            // 这样控件内直接调用 `i18n.t()` 的地方也能受益，无需逐处改造。
+            customizeMissing: function customizeMissing(scope, variables) {
+                return _this._missingText(scope, variables);
+            }
         });
         // 默认清晰度列表
         if (((_this_options_definitionOptions = this.options.definitionOptions) == null ? void 0 : (_this_options_definitionOptions_list = _this_options_definitionOptions.list) == null ? void 0 : _this_options_definitionOptions_list.length) > 0 || ((_this_options_videoLevelList = this.options.videoLevelList) == null ? void 0 : _this_options_videoLevelList.length) > 0) {
@@ -11929,7 +11987,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.6-beta.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.6';
 
 exports.Control = Control;
 exports.EVENTS = EVENTS;

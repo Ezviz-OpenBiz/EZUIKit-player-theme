@@ -1,6 +1,6 @@
 import EventEmitter from 'eventemitter3';
 import Picker from '@skax/picker';
-import I18n, { I18nTranslation } from '@ezuikit/utils-i18n';
+import I18n, { TranslateVariables, I18nTranslation } from '@ezuikit/utils-i18n';
 import { LoggerCls, LoggerOptions } from '@ezuikit/utils-logger';
 import { BasePtzOptions } from '@ezuikit/control-ptz';
 import { RecListModalOptions } from '@ezuikit/control-rec-list-modal';
@@ -1525,18 +1525,14 @@ declare class Theme extends EventEmitter {
         readonly recDropdownChange: "recDropdownChange";
         readonly recListChange: "recListChange";
         readonly alarmMessageChange: "alarmMessageChange";
-        readonly setLoggerOptions: "setLoggerOptions"; /**
-         * 更多控件（footer more）
-         * @since 0.0.1
-         * @private
-         */
+        readonly setLoggerOptions: "setLoggerOptions";
         readonly records: "records";
         readonly ptzSpeedChange: "ptzSpeedChange";
         readonly setVideoLevelList: "setVideoLevelList";
         readonly currentVideoLevel: "currentVideoLevel";
         readonly currentVideoLevelAuto: "currentVideoLevelAuto";
         readonly setAllDayRecTimes: "setAllDayRecTimes";
-        readonly getOSDTime: "getOSDTime";
+        readonly getOSDTime: "getOSDTime"; /** 头部控件 @since 0.0.1 @private */
         readonly playbackEnd: "playbackEnd";
         readonly control: {
             readonly play: "Control.play";
@@ -1772,12 +1768,13 @@ declare class Theme extends EventEmitter {
             SPEED_CANCEL: string;
             GET_SPEED: string;
             MAX_SPEED_LIMIT: string;
+            /** 版本号 @since 0.0.1 */
             MIN_SPEED_LIMIT: string;
-            SPEED_SWITCH_ERRROR: string;
+            SPEED_SWITCH_ERRROR: string; /** 播放器配置项 */
             SPEED_SWITCH_NOT_SUPPORT: string;
             SEEK_CANNOT_CROSS_DAYS: string;
             SEEK_TIMEFORMAT_ERROR: string;
-            PAUSE: string;
+            PAUSE: string; /** 多语言对象 https://www.npmjs.com/package/@ezuikit/utils-i18n  @since 0.0.1 */
             PAUSE_FAILED: string;
             RESUME: string;
             RESUME_FAILED: string;
@@ -1786,7 +1783,7 @@ declare class Theme extends EventEmitter {
             NO_CLOUD_RECORD: string;
             CHANGE_VIDEO_LEVEL: string;
             CHANGE_VIDEO_LEVEL_FAIL: string;
-            GET_VIDEO_LEVEL_LIST: string; /** 消息提示控件 @since 0.0.1 @private */
+            GET_VIDEO_LEVEL_LIST: string;
             PLEASE_INPUT_RIGHT_VIDEO_LEVEL: string;
             VIDEO_LEVEL_NOT_SUPPORT: string;
             VIDEO_LEVEL_AUTO: string;
@@ -1796,6 +1793,10 @@ declare class Theme extends EventEmitter {
             VIDEO_LEVEL_SUPER: string;
             VIDEO_LEVEL_EXTREME: string;
             VIDEO_LEVEL_3K: string;
+            /**
+             * @since 0.0.1
+             * @private
+             */
             VIDEO_LEVEL_4k: string;
             RESET_THEME: string;
             BTN_PLAY: string;
@@ -1816,10 +1817,7 @@ declare class Theme extends EventEmitter {
             BTN_ZOOM: string;
             BTN_3D_ZOOM: string;
             BTN_PTZ: string;
-            BTN_GLOBAL_FULLSCREEN: string; /**
-             * 移动端扩展容器, 扩展的控件渲染在指定容器以外， 仅只用端适用， 为了可以放置大的控件和方便开发接入
-             * @private
-             */
+            BTN_GLOBAL_FULLSCREEN: string;
             BTN_EXIT_GLOBAL_FULLSCREEN: string;
             BTN_FULLSCREEN: string;
             BTN_EXIR_FULLSCREEN: string;
@@ -1843,10 +1841,9 @@ declare class Theme extends EventEmitter {
             RECORDS: string;
             OPEN_SOUND: string;
             CLOSE_SOUND: string;
-            SOUND_OPENED: string; /** 容器的宽 */
+            SOUND_OPENED: string;
             ZOOM: string;
             START_ZOOM: string;
-            /** 容器的高 */
             CLOSE_ZOOM: string;
             ZOOM_ADD: string;
             ZOOM_SUB: string;
@@ -1856,7 +1853,7 @@ declare class Theme extends EventEmitter {
             ZOOM_LIMIT_MIN: string;
             ZOOM_NOT_ENABLED: string;
             '3D_ZOOM': string;
-            '3D_ZOOM_DISABLE': string;
+            '3D_ZOOM_DISABLE': string; /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */
             '3D_ZOOM_FAILED': string;
             START_3D_ZOOM: string;
             CLOSE_3D_ZOOM: string;
@@ -1871,25 +1868,18 @@ declare class Theme extends EventEmitter {
             WEB_FULLSCREEN: string;
             WEB_FULLSCREEN_EXIT: string;
             DESTROY: string;
-            /** 回放片段列表 */
             GET_CAPACITY: string;
             GET_PTZ_STATUS: string;
             GET_PTZ_STATUS_FAILED: string;
             MOBILE_HIDE_PTZ: string;
             OPTION_PTZ_FAILED: string;
             MOBILE_PTZ_TIPS: string;
-            PTZ_FAST: string; /** 窗口尺寸变化时，设置窗口超出隐藏，防止出现滚动条 */
+            PTZ_FAST: string;
             PTZ_MID: string;
             PTZ_SLOW: string;
             PTZ_SPEED: string;
             DEVICE_ZOOM: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
             DEVICE_FOCUS: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
             NOT_SUPPORT_DEVICE_ZOOM: string;
             NOT_SUPPORT_FOCUS: string;
             MIRROR: string;
@@ -1903,13 +1893,19 @@ declare class Theme extends EventEmitter {
             GET_FEC_PARAMS: string;
             SET_FEC_PARAMS_FAILED: string;
             GET_FEC_PARAMS_FAILED: string;
-            GET_FEC_PARAMS_SUPPORT_VERSION: string;
+            /**
+             * 录像回放的月份列表 @private
+             */
+            GET_FEC_PARAMS_SUPPORT_VERSION: string; /**
+             * 录像回放的月份列表 @private
+             */
             SET_WATERMARK: string;
-            FETCH_THEME_FAILED: string;
+            FETCH_THEME_FAILED: string; /** 清理 header/footer 动画 定时器 @private */
             cancel: string;
             ok: string;
             close: string;
             BTN_REC_LIST_TITLE: string;
+            UNKOWN_ISSUE: string;
         };
         en: {
             391001: string;
@@ -1990,7 +1986,7 @@ declare class Theme extends EventEmitter {
             396506: string;
             396508: string;
             396509: string;
-            396510: string; /** 静音 */
+            396510: string;
             396511: string;
             396512: string;
             396513: string;
@@ -2000,24 +1996,19 @@ declare class Theme extends EventEmitter {
             396517: string;
             396518: string;
             396519: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
             396520: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
             396700: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
             396701: string;
             397001: string;
             397002: string;
             397003: string;
             397004: string;
             397005: string;
-            397006: string;
+            397006: string; /**
+             * 首帧同步 Live/RecDropdown 激活态的监听器引用。
+             * 每次 `_renderTheme` 重新绑定前需先移除旧引用，避免 changeTheme 累积监听。
+             * @private
+             */
             397007: string;
             399000: string;
             399001: string;
@@ -2116,6 +2107,12 @@ declare class Theme extends EventEmitter {
             BTN_ZOOM: string;
             BTN_3D_ZOOM: string;
             BTN_PTZ: string;
+            /**
+             * 当前播放状态
+             * ```ts
+             * theme.playing // boolean
+             * ```
+             */
             BTN_GLOBAL_FULLSCREEN: string;
             BTN_EXIT_GLOBAL_FULLSCREEN: string;
             BTN_FULLSCREEN: string;
@@ -2175,9 +2172,7 @@ declare class Theme extends EventEmitter {
             MOBILE_HIDE_PTZ: string;
             OPTION_PTZ_FAILED: string;
             MOBILE_PTZ_TIPS: string;
-            PTZ_FAST: string; /**
-             * 是否在缩放中
-             */
+            PTZ_FAST: string;
             PTZ_MID: string;
             PTZ_SLOW: string;
             PTZ_SPEED: string;
@@ -2203,6 +2198,7 @@ declare class Theme extends EventEmitter {
             ok: string;
             close: string;
             BTN_REC_LIST_TITLE: string;
+            UNKOWN_ISSUE: string;
         };
     };
     /** 版本号 @since 0.0.1 */
@@ -2290,6 +2286,8 @@ declare class Theme extends EventEmitter {
     private _volume;
     /** 静音 */
     private _muted;
+    /** 正在兜底的原始 scope，非 null 表示处于兜底取值中（用于避免 customizeMissing 无限递归） */
+    private _missingScope;
     /** 电子放大倍数 @private */
     _zoom: number;
     /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */
@@ -2631,6 +2629,37 @@ declare class Theme extends EventEmitter {
      * @param {0 | 1 | 2} scaleMode - 缩放模式， 0: 窗口铺满， 1: 等比缩放大边铺满， 2: 等比缩放小边铺满
      */
     setScaleMode(scaleMode: ThemeOptions['scaleMode']): void;
+    /**
+     * 获取多语言文案
+     *
+     * 相比直接用 `theme.i18n.t()`：返回类型收窄为 `string`（底层签名是 `string | number`，
+     * 调用处不必再写 `as string`）。缺失 key 的兜底由 i18n 实例上的 `customizeMissing`
+     * 统一处理，因此两者在兜底行为上一致。
+     * @param scope 多语言 key
+     * @param variables 插值变量，如 `{ zoom: 8 }`；传 `defaultvalue` 可指定自己的兜底文案
+     * @returns 文案；scope 不存在时返回「未知问题 【scope】」
+     * @example
+     * ```ts
+     * theme.t('ZOOM_LIMIT_MAX', { zoom: 8 });
+     * theme.t('NOT_EXIST_KEY'); // 未知问题 【NOT_EXIST_KEY】
+     * theme.t('NOT_EXIST_KEY', { defaultvalue: '自定义兜底' }); // 自定义兜底
+     * ```
+     */
+    t(scope: string | number, variables?: TranslateVariables): string;
+    /**
+     * 语言包缺 key 时的兜底文案（`customizeMissing` 的实现）
+     *
+     * 注意底层是把本方法的返回值「原样返回」、不再做插值，所以这里借
+     * `i18n.t(UNKOWN_ISSUE)` 完成插值。而这一次取值本身也可能缺失
+     * （如 `language` 传了不存在的语言，当前语言包整体不存在），
+     * 那会再次回调到这里造成无限递归，因此用重入标记兜住，退化为直接返回原始 scope。
+     *
+     * 注：`options.locales` 与内置语言包是深合并，无法移除内置的 UNKOWN_ISSUE，
+     * 因此正常配置下不会走到退化分支。
+     * @param scope 缺失的多语言 key
+     * @param variables 原始插值变量
+     */
+    private _missingText;
     /**
      * 销毁包括事件、控件 ...
      *
