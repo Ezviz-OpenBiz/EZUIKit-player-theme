@@ -1,7 +1,7 @@
 import EventEmitter from 'eventemitter3';
-import Picker from '@skax/picker';
 import I18n, { TranslateVariables, I18nTranslation } from '@ezuikit/utils-i18n';
 import { LoggerCls, LoggerOptions } from '@ezuikit/utils-logger';
+import Picker from '@skax/picker';
 import { BasePtzOptions } from '@ezuikit/control-ptz';
 import { RecListModalOptions } from '@ezuikit/control-rec-list-modal';
 import * as _ezuikit_utils_tools from '@ezuikit/utils-tools';
@@ -19,6 +19,74 @@ declare const THEME_SCALE_MODE_TYPE: {
     readonly fullAuto: 2;
 };
 declare const THEME_PROPS: readonly ["width", "height", "playing", "volume", "muted", "loading", "recType", "isCurrentFullscreen", "orientationAngle", "zooming", "zoom", "recording", "recordList", "speed", "urlInfo", "videoLevelList", "videoLevel", "recMonth", "url", "playbackRange"];
+/**
+ * 全部播放类型：直播 + 三种回放
+ *
+ * 控件用静态属性 `supportedPlayTypes` 声明支持范围，默认取本数组（即全支持）。
+ * 与 {@link REC_GROUP} 的区别：REC_GROUP 是「回放类型切换控件的 iconId 分组」，
+ * 这里是「播放地址实际解析出的播放类型」，两者取值恰好在回放侧重合。
+ */
+declare const PLAY_TYPES: readonly ["live", "rec", "cloudRec", "cloudRecord"];
+/**
+ * 控件初始化完成事件名
+ *
+ * 键与 `Controls`（`src/Controls/index.ts`）的键一一对应，值为 `Control.<键>ControlInit`，
+ * 在控件实例创建成功后由 `_renderTheme` 派发一次，无载荷。
+ *
+ * 这些成员会被展开进 {@link EVENTS}.control，因此既可以 `EVENTS.control.playControlInit`
+ * 这样按名取用，也可以在只拿到 `iconId` 的场合用 `CONTROL_INIT_EVENTS[iconId]` 查表。
+ *
+ * @remarks `changeTheme` 会先卸载旧控件并重置 `theme.controls`，因此切换主题时这些事件会再次派发；
+ * 同一次渲染内则由 `!theme.controls.xxxControl` 守卫保证只派发一次。
+ */
+declare const CONTROL_INIT_EVENTS: {
+    /** 播放/暂停控件初始化完成 */
+    readonly playControlInit: "Control.playControlInit";
+    /** 音量控件初始化完成 */
+    readonly volumeControlInit: "Control.volumeControlInit";
+    /** 设备信息控件初始化完成 */
+    readonly deviceControlInit: "Control.deviceControlInit";
+    /** 截图控件初始化完成 */
+    readonly capturePictureControlInit: "Control.capturePictureControlInit";
+    /** 云台控件初始化完成 */
+    readonly ptzControlInit: "Control.ptzControlInit";
+    /** 录制控件初始化完成 */
+    readonly recordControlInit: "Control.recordControlInit";
+    /** 对讲控件初始化完成 */
+    readonly talkControlInit: "Control.talkControlInit";
+    /** 语音广播控件初始化完成 */
+    readonly broadcastControlInit: "Control.broadcastControlInit";
+    /** AI 对话控件初始化完成 */
+    readonly aiChatControlInit: "Control.aiChatControlInit";
+    /** 直播按钮控件初始化完成 */
+    readonly liveControlInit: "Control.liveControlInit";
+    /** 回放下拉控件初始化完成 */
+    readonly recDropdownControlInit: "Control.recDropdownControlInit";
+    /** 录像列表控件初始化完成 */
+    readonly recListControlInit: "Control.recListControlInit";
+    /** 告警消息控件初始化完成 */
+    readonly alarmMessageControlInit: "Control.alarmMessageControlInit";
+    /** 电子放大控件初始化完成 */
+    readonly zoomControlInit: "Control.zoomControlInit";
+    /** 清晰度控件初始化完成 */
+    readonly definitionControlInit: "Control.definitionControlInit";
+    /** web 全屏控件初始化完成 */
+    readonly fullscreenControlInit: "Control.fullscreenControlInit";
+    /** 全局全屏控件初始化完成 */
+    readonly globalFullscreenControlInit: "Control.globalFullscreenControlInit";
+    /** 回放类型控件初始化完成 */
+    readonly recControlInit: "Control.recControlInit";
+    /** 倍速控件初始化完成 */
+    readonly speedControlInit: "Control.speedControlInit";
+    /** 日历控件初始化完成 */
+    readonly dateControlInit: "Control.dateControlInit";
+    /** 时间选择控件初始化完成 */
+    readonly timeControlInit: "Control.timeControlInit";
+    /** 时间轴控件初始化完成 */
+    readonly timeLineControlInit: "Control.timeLineControlInit";
+    /** 回放片段进度条控件初始化完成 */
+    readonly segmentProgressControlInit: "Control.segmentProgressControlInit";
+};
 /**
  *
  * 事件名
@@ -224,7 +292,7 @@ declare const EVENTS: {
         /** 日期面板展示的年份变化 */
         readonly datePanelYearChange: "Control.datePanelYearChange";
         /** 日期销毁 */
-        readonly dateDestroy: "Control.datePanelDestroy";
+        readonly dateDestroy: "Control.dateDestroy";
         /** 时间面板展示隐藏变换 */
         readonly timePanelOpenChange: "Control.timePanelOpenChange";
         /** 时间改变 */
@@ -235,6 +303,8 @@ declare const EVENTS: {
         readonly timeLinePanelOpenChange: "Control.timeLinePanelOpenChange";
         /** 时间轴控件销毁 */
         readonly timeLineDestroy: "Control.timeLineDestroy";
+        /** 控件不支持当前播放类型（仅提示，控件仍会渲染） */
+        readonly unsupportedPlayType: "Control.unsupportedPlayType";
         /** 主题控件挂载前 切换新的主题也会触发，如果想首次获取需要在 onInitializing 回调中进行监听 */
         readonly beforeMountControls: "Control.beforeMountControls";
         /** 主题控件挂载完成, 切换新的主题也会触发，如果想首次获取需要在 onInitializing 回调中进行监听 */
@@ -253,6 +323,52 @@ declare const EVENTS: {
         readonly contentDestroy: "Control.contentDestroy";
         /** 播放器内容区域重新渲染 */
         readonly contentRerender: "Control.contentRerender";
+        /** 播放/暂停控件初始化完成 */
+        readonly playControlInit: "Control.playControlInit";
+        /** 音量控件初始化完成 */
+        readonly volumeControlInit: "Control.volumeControlInit";
+        /** 设备信息控件初始化完成 */
+        readonly deviceControlInit: "Control.deviceControlInit";
+        /** 截图控件初始化完成 */
+        readonly capturePictureControlInit: "Control.capturePictureControlInit";
+        /** 云台控件初始化完成 */
+        readonly ptzControlInit: "Control.ptzControlInit";
+        /** 录制控件初始化完成 */
+        readonly recordControlInit: "Control.recordControlInit";
+        /** 对讲控件初始化完成 */
+        readonly talkControlInit: "Control.talkControlInit";
+        /** 语音广播控件初始化完成 */
+        readonly broadcastControlInit: "Control.broadcastControlInit";
+        /** AI 对话控件初始化完成 */
+        readonly aiChatControlInit: "Control.aiChatControlInit";
+        /** 直播按钮控件初始化完成 */
+        readonly liveControlInit: "Control.liveControlInit";
+        /** 回放下拉控件初始化完成 */
+        readonly recDropdownControlInit: "Control.recDropdownControlInit";
+        /** 录像列表控件初始化完成 */
+        readonly recListControlInit: "Control.recListControlInit";
+        /** 告警消息控件初始化完成 */
+        readonly alarmMessageControlInit: "Control.alarmMessageControlInit";
+        /** 电子放大控件初始化完成 */
+        readonly zoomControlInit: "Control.zoomControlInit";
+        /** 清晰度控件初始化完成 */
+        readonly definitionControlInit: "Control.definitionControlInit";
+        /** web 全屏控件初始化完成 */
+        readonly fullscreenControlInit: "Control.fullscreenControlInit";
+        /** 全局全屏控件初始化完成 */
+        readonly globalFullscreenControlInit: "Control.globalFullscreenControlInit";
+        /** 回放类型控件初始化完成 */
+        readonly recControlInit: "Control.recControlInit";
+        /** 倍速控件初始化完成 */
+        readonly speedControlInit: "Control.speedControlInit";
+        /** 日历控件初始化完成 */
+        readonly dateControlInit: "Control.dateControlInit";
+        /** 时间选择控件初始化完成 */
+        readonly timeControlInit: "Control.timeControlInit";
+        /** 时间轴控件初始化完成 */
+        readonly timeLineControlInit: "Control.timeLineControlInit";
+        /** 回放片段进度条控件初始化完成 */
+        readonly segmentProgressControlInit: "Control.segmentProgressControlInit";
     };
     /**
      * 主题控件相关
@@ -271,201 +387,129 @@ declare const EVENTS: {
 };
 
 /**
- * 控件基类配置项
+ * 控件类型（iconId）不可以重复
  */
-interface ControlOptions {
-    /** 播放器窗口节点 */
-    rootContainer?: HTMLElement;
-    /** 挂载节点 player id, 默认挂载 body 上 */
-    getPopupContainer?: () => HTMLElement;
-    /** 给控件新增自定义类名 */
-    className?: string;
-    /** 语言数据 */
-    locale?: Record<string, string>;
-    /** 样式类后缀 */
-    classNameSuffix?: string;
+type ControlType = 
+/** 播放/暂停 */
+'play'
+/** 音量， 兼容 sound */
+ | 'volume'
+/** 截图 */
+ | 'capturePicture'
+/** ptz 云台, 兼容 pantile */
+ | 'ptz'
+/** 录制, 兼容 recordvideo */
+ | 'record'
+/** 对讲 */
+ | 'talk'
+/** 语音广播 */
+ | 'broadcast'
+/** AI对话 */
+ | 'aiChat'
+/** 直播按钮 */
+ | 'live'
+/** 回放下拉 */
+ | 'recDropdown'
+/** 录像列表 */
+ | 'recList'
+/** 告警消息 */
+ | 'alarmMessage'
+/** 电子放大 */
+ | 'zoom'
+/** 清晰度， 兼容 hd */
+ | 'definition'
+/** web 全屏, 兼容 webExtend */
+ | 'fullscreen'
+/** 全局全屏, 兼容 extend */
+ | 'globalFullscreen'
+/** 倍速 */
+ | 'speed'
+/** 日期选择 */
+ | 'date'
+/** 时间选择 */
+ | 'time'
+/** 时间轴 */
+ | 'timeLine'
+/** 回放片段进度条（移动端，播放区间约束下渲染） */
+ | 'segmentProgress';
+type MergeControlType = 
+/** 设备序列号 */
+'deviceID'
+/** 设备名称 */
+ | 'deviceName'
+/** 云存储 */
+ | 'cloudRec'
+/** 云录制 */
+ | 'cloudRecord'
+/** 本地存储 sdk */
+ | 'rec';
+/**
+ * 控件
+ */
+interface ControlItem {
     /**
-     * 渲染节点标签
+     * 控件id
      */
-    tagName?: 'div' | 'span';
+    iconId: ControlType | MergeControlType;
     /**
-     * 控件类型, 默认 button
+     * 控件位置
+     * |    left     |    right     |
+     * |:-----------:|:------------:|
+     * | 控件栏的左部  |  控件栏的右部  |
      */
-    controlType?: 'button' | 'text' | 'block';
+    part: 'left' | 'right';
+    /** 是否激活 0 否 1 是 默认是 0 */
     /**
-     * 当前语言
+     * 是否渲染 0 否 1 是 默认是 undefined， 0 不渲染, 非 0 渲染
      */
-    language?: 'zh' | 'en' | string;
-    /**
-     * 所有语言数据
-     */
-    locales?: Record<string, Record<string | number, string | number>>;
-    /** 点击控件时的回调 */
-    onClick?: (e: Event) => void;
-    /**
-     * ----- 播放器状态 -------
-     * 窗口宽度  width?: number;
-     * 窗口高度  height?: number;
-     * 窗口是否全屏 isCurrentFullscreen?: boolean;
-     * 播放器是否播放中 playing?: boolean;
-     * 音量大小 0-1  volume?: number;
-     * 是否静音 muted?: boolean;
-     * 浏览器选择角度 0 ｜ 90 ｜ 180 ｜ 270  orientationAngle?: number;
-     * 所有属性值来源 constant.ts 文中 THEME_PROPS
-     */
-    props?: Record<(typeof THEME_PROPS)[number], number | string | Record<string, unknown>>;
-    [key: string]: any;
+    isrender?: 0 | 1;
 }
-/**
- * 不允许控件自定义的参数
- * @typeParam T - 控件配置项
- */
-type OmitControlOptions<T extends ControlOptions> = Omit<T, 'rootContainer' | 'getPopupContainer' | 'classNameSuffix' | 'type' | 'tagName' | 'controlType'>;
-/**
- * 控件基类
- * @category Control
- * @example
- * ```ts
- * // 创建控件
- * class MyControl extends Control {}
- *
- * // 使用控件
- * const myControl = new MyControl({})
- * ```
- */
-declare class Control extends EventEmitter {
+interface IThemeDataItem {
     /**
-     * 控件内容
+     * 控件按钮或文本颜色
+     * @since 0.0.1
+     * @deprecated 从 0.0.1 开始不再推荐, 字体和图标颜色， 推荐 css 变量 --ezplayer-default-color
      */
-    $container: HTMLDivElement | HTMLSpanElement;
+    color?: string;
     /**
-     * 控件挂载的节点
+     * 控件栏（header/footer）背景颜色
+     * @since 0.0.1
+     * @deprecated 由于header/footer高度变化， 从 0.0.1 开始不再推荐, 可以通过 className 覆盖样式
      */
-    $popupContainer: HTMLElement;
-    /** 具体语言对应的值 */
-    locale: Record<string | number, string> | null;
-    protected __options: ControlOptions;
-    protected _disabled: boolean;
-    protected _active: boolean;
-    private readonly _camelCaseName;
-    /** click 监听引用，销毁时需显式移除 */
-    private _onClickHandler;
-    constructor(options: Partial<ControlOptions>);
+    backgroundColor?: string;
     /**
-     * 是否激活
+     * 控件激活后的颜色
+     * @since 0.0.1
+     * @deprecated 从 0.0.1 开始不再推荐,可以通过 className 覆盖样式，推荐 css 变量 --ezplayer-active-color
      */
-    get active(): boolean;
-    set active(active: boolean);
+    activeColor?: string;
     /**
-     * 是否禁用
-     */
-    get disabled(): boolean;
-    set disabled(disabled: boolean);
-    /**
-     * 重置整个控件
-     */
-    reset(hide?: boolean): void;
-    /**
-     * 重置控件挂载节点
-     * @param popupContainer 重新挂载的节点
-     * @param append 添加的方式， 默认 append
-     * @param element 当 append = before 时 需要 element, 插入 element 前
+     * 控件列表
+     * @remarks
+     * 控件列表， 按照 iconId 顺序渲染， 需要注意的是， 控件类型（iconId）不可以重复;
+     * 注意 ⚠️： deviceID, deviceName, rec, cloudRec, cloudRecord  这五个控件特殊处理, deviceID 和 deviceName 是一组, rec、 cloudRec 和 cloudRecord 是一组
      *
-     * |     prepend   |    append       |
-     * |:-------------:|:---------------:|
-     * | 插入第一个位置 |    追加在末尾    |
+     * @since 0.0.1
      */
-    resetPopupContainer(popupContainer: Element, append?: 'prepend' | 'append' | 'before', element?: Element): void;
-    /**
-     * 隐藏整个控件
-     */
-    hide(): void;
-    /**
-     * 销毁控件
-     */
-    destroy(): void;
-    protected _updateDisabledState(disabled: boolean): void;
-    protected _updateActiveState(active: boolean): void;
-    /**
-     * 当点击 Control 时 触发子类的 _onControlClick
-     */
-    protected _onClick(): void;
-    protected _onDBlClick(e: Event): void;
-    /**
-     * 点击 Control 控件触发
-     * @param {Event} e
-     * @returns {void}
-     */
-    protected _onControlClick(e: Event): void;
-}
-
-/**
- * 加载动画控件配置项
- */
-interface LoadingOptions extends Omit<ControlOptions, 'tagName' | 'controlType'> {
-    /**
-     * 自定义加载动画的 HTML 结构, 当 theme.loading = true 时展示
-     * @returns HTML 字符串
-     */
-    render?: () => string;
+    btnList?: ControlItem[];
 }
 /**
- * 加载动画控件
- * @category Control
+ * 主题数据， 优先级最高， 支持用户自定义
  */
-declare class Loading extends Control {
-    private readonly _options;
-    constructor(options?: Partial<LoadingOptions>);
-    private _html;
-    /**
-     * 动画展示
-     * @param html 自定义动画内容, 如果不存在则使用默认动画
-     */
-    show(html?: string): void;
-    /**
-     * 隐藏动画
-     */
-    hide(): void;
-}
-
-/**
- * 封面控件配置项
- */
-interface PosterOptions extends Omit<ControlOptions, 'tagName'> {
-    /** 默认封面 */
+interface IThemeData {
+    /** 控件展示时长,默认自动聚焦持续 3s , 单位秒 0 表示一直展示 */
+    autoFocus?: number;
+    /** 优先级高于初始化 posterOptions.poster */
     poster?: string;
-    /** 封面加载失败回调 */
-    onLoadImgError?: (src: string) => void;
-}
-/**
- * 封面控件
- * @category Control
- */
-declare class Poster extends Control {
-    private readonly _options;
-    constructor(options?: Partial<PosterOptions>);
+    themeType?: 'webLive' | 'webRec' | 'mobileLive' | 'mobileRec';
     /**
-     * 封面图片加载失败
-     * @param error
+     * 头部工具栏
      */
-    private _imgLoadErrorEvent;
+    header?: Partial<IThemeDataItem> | null;
     /**
-     * 设置封面 这里不对 poster 进行缓存，如果有值优先使用，如果没有值优先使用 初始化传入的值
-     * @param {string} poster 封面地址或 base64 数据
+     * 底部工具栏
      */
-    setPoster(poster?: string): void;
-    /**
-     * 展示封面 这里不对 poster 进行缓存， 如果有值优先使用， 如果没有值优先使用 初始化传入的值
-     */
-    show(): void;
-    /**
-     * 隐藏封面
-     */
-    hide(): void;
-    /**
-     * 销毁
-     */
-    destroy(): void;
+    footer?: Partial<IThemeDataItem> | null;
 }
 
 /**
@@ -541,53 +585,43 @@ declare class Message extends Control {
 }
 
 /**
- * Header/Footer 的父组件
+ * 封面控件配置项
  */
-interface ComponentOptions {
-    /** 挂载节点 player id, 默认挂载 body 上 */
-    getPopupContainer?: () => HTMLElement;
-    /** 自定义类名 */
-    className?: string;
-    /** 文字/图标默认颜色（兼容老版本和平台配置） */
-    color?: string;
-    /** 文字/图标激活态颜色（兼容老版本和平台配置） */
-    activeColor?: string;
-    /** 背景色，支持 Hex / rgb / rgba，会自动转换为渐变背景（兼容老版本和平台配置） */
-    backgroundColor?: string;
-    /** 组件类型， header 或 footer */
-    cType: 'header' | 'footer';
+interface PosterOptions extends Omit<ControlOptions, 'tagName'> {
+    /** 默认封面 */
+    poster?: string;
+    /** 封面加载失败回调 */
+    onLoadImgError?: (src: string) => void;
 }
 /**
- * Header
+ * 封面控件
+ * @category Control
  */
-declare class Component {
-    $container: HTMLDivElement;
-    $popupContainer: HTMLElement;
+declare class Poster extends Control {
     private readonly _options;
-    private readonly _defaultClass;
-    $left: HTMLDivElement;
-    $right: HTMLDivElement;
-    constructor(options?: Partial<ComponentOptions>);
+    constructor(options?: Partial<PosterOptions>);
     /**
-     * 销毁 header
+     * 封面图片加载失败
+     * @param error
+     */
+    private _imgLoadErrorEvent;
+    /**
+     * 设置封面 这里不对 poster 进行缓存，如果有值优先使用，如果没有值优先使用 初始化传入的值
+     * @param {string} poster 封面地址或 base64 数据
+     */
+    setPoster(poster?: string): void;
+    /**
+     * 展示封面 这里不对 poster 进行缓存， 如果有值优先使用， 如果没有值优先使用 初始化传入的值
+     */
+    show(): void;
+    /**
+     * 隐藏封面
+     */
+    hide(): void;
+    /**
+     * 销毁
      */
     destroy(): void;
-}
-
-/**
- * Footer options
- */
-type FooterOptions = ComponentOptions;
-declare class Footer extends Component {
-    constructor(options?: Partial<FooterOptions>);
-}
-
-/**
- * Header options
- */
-type HeaderOptions = ComponentOptions;
-declare class Header extends Component {
-    constructor(options?: Partial<HeaderOptions>);
 }
 
 /**
@@ -988,132 +1022,6 @@ declare class Fullscreen extends Control {
 }
 
 /**
- * 控件类型（iconId）不可以重复
- */
-type ControlType = 
-/** 播放/暂停 */
-'play'
-/** 音量， 兼容 sound */
- | 'volume'
-/** 截图 */
- | 'capturePicture'
-/** ptz 云台, 兼容 pantile */
- | 'ptz'
-/** 录制, 兼容 recordvideo */
- | 'record'
-/** 对讲 */
- | 'talk'
-/** 语音广播 */
- | 'broadcast'
-/** AI对话 */
- | 'aiChat'
-/** 直播按钮 */
- | 'live'
-/** 回放下拉 */
- | 'recDropdown'
-/** 录像列表 */
- | 'recList'
-/** 告警消息 */
- | 'alarmMessage'
-/** 电子放大 */
- | 'zoom'
-/** 清晰度， 兼容 hd */
- | 'definition'
-/** web 全屏, 兼容 webExtend */
- | 'fullscreen'
-/** 全局全屏, 兼容 extend */
- | 'globalFullscreen'
-/** 倍速 */
- | 'speed'
-/** 日期选择 */
- | 'date'
-/** 时间选择 */
- | 'time'
-/** 时间轴 */
- | 'timeLine'
-/** 回放片段进度条（移动端，播放区间约束下渲染） */
- | 'segmentProgress';
-type MergeControlType = 
-/** 设备序列号 */
-'deviceID'
-/** 设备名称 */
- | 'deviceName'
-/** 云存储 */
- | 'cloudRec'
-/** 云录制 */
- | 'cloudRecord'
-/** 本地存储 sdk */
- | 'rec';
-/**
- * 控件
- */
-interface ControlItem {
-    /**
-     * 控件id
-     */
-    iconId: ControlType | MergeControlType;
-    /**
-     * 控件位置
-     * |    left     |    right     |
-     * |:-----------:|:------------:|
-     * | 控件栏的左部  |  控件栏的右部  |
-     */
-    part: 'left' | 'right';
-    /** 是否激活 0 否 1 是 默认是 0 */
-    /**
-     * 是否渲染 0 否 1 是 默认是 undefined， 0 不渲染, 非 0 渲染
-     */
-    isrender?: 0 | 1;
-}
-interface IThemeDataItem {
-    /**
-     * 控件按钮或文本颜色
-     * @since 0.0.1
-     * @deprecated 从 0.0.1 开始不再推荐, 字体和图标颜色， 推荐 css 变量 --ezplayer-default-color
-     */
-    color?: string;
-    /**
-     * 控件栏（header/footer）背景颜色
-     * @since 0.0.1
-     * @deprecated 由于header/footer高度变化， 从 0.0.1 开始不再推荐, 可以通过 className 覆盖样式
-     */
-    backgroundColor?: string;
-    /**
-     * 控件激活后的颜色
-     * @since 0.0.1
-     * @deprecated 从 0.0.1 开始不再推荐,可以通过 className 覆盖样式，推荐 css 变量 --ezplayer-active-color
-     */
-    activeColor?: string;
-    /**
-     * 控件列表
-     * @remarks
-     * 控件列表， 按照 iconId 顺序渲染， 需要注意的是， 控件类型（iconId）不可以重复;
-     * 注意 ⚠️： deviceID, deviceName, rec, cloudRec, cloudRecord  这五个控件特殊处理, deviceID 和 deviceName 是一组, rec、 cloudRec 和 cloudRecord 是一组
-     *
-     * @since 0.0.1
-     */
-    btnList?: ControlItem[];
-}
-/**
- * 主题数据， 优先级最高， 支持用户自定义
- */
-interface IThemeData {
-    /** 控件展示时长,默认自动聚焦持续 3s , 单位秒 0 表示一直展示 */
-    autoFocus?: number;
-    /** 优先级高于初始化 posterOptions.poster */
-    poster?: string;
-    themeType?: 'webLive' | 'webRec' | 'mobileLive' | 'mobileRec';
-    /**
-     * 头部工具栏
-     */
-    header?: Partial<IThemeDataItem> | null;
-    /**
-     * 底部工具栏
-     */
-    footer?: Partial<IThemeDataItem> | null;
-}
-
-/**
  * 全屏控件配置
  */
 interface GlobalFullscreenOptions extends FullscreenOptions {
@@ -1224,6 +1132,45 @@ interface PtzOptions extends Omit<ControlOptions, 'tagName'>, BasePtzOptions {
 }
 
 /**
+ * 回放控件配置项
+ */
+interface RecOptions extends Omit<ControlOptions, 'tagName'> {
+    /** 点击控件时的回调 */
+    onClick?: (e: Event) => void;
+    /** 回放类型切换时的回调 */
+    onChange?: (type: ThemeRecType) => void;
+    /** 默认回放类型， 默认 'rec' */
+    recType?: ThemeRecType;
+}
+/**
+ * 回放类型切换（本地回放(sdk 卡)， 云存储回放， 云录制回放）控件
+ * @category Control
+ */
+declare class Rec extends Control {
+    /** 回放类型切换组，本身就是三种回放之间的切换入口，直播下无意义 */
+    static supportedPlayTypes: ThemePlayType[];
+    private readonly _options;
+    private _delegation;
+    private recType;
+    constructor(options: RecOptions);
+    /**
+     * 销毁
+     */
+    destroy(): void;
+    /**
+     * 添加回放类型图标
+     * @param {string} id 回放类型 'rec' | 'cloudRec' | 'cloudRecord'
+     */
+    addRecType(id: string): void;
+    private _activeIcon;
+    private _onClickIcon;
+    /**
+     * 点击 Control 会触发
+     */
+    protected _onControlClick(e: Event): void;
+}
+
+/**
  * 录像列表按钮控件配置项
  */
 interface RecListOptions extends Omit<ControlOptions, 'tagName'>, RecListModalOptions {
@@ -1288,6 +1235,56 @@ declare class Pause extends Control {
      */
     destroy(): void;
     protected _onControlClick(e: Event): void;
+}
+
+/**
+ * Header/Footer 的父组件
+ */
+interface ComponentOptions {
+    /** 挂载节点 player id, 默认挂载 body 上 */
+    getPopupContainer?: () => HTMLElement;
+    /** 自定义类名 */
+    className?: string;
+    /** 文字/图标默认颜色（兼容老版本和平台配置） */
+    color?: string;
+    /** 文字/图标激活态颜色（兼容老版本和平台配置） */
+    activeColor?: string;
+    /** 背景色，支持 Hex / rgb / rgba，会自动转换为渐变背景（兼容老版本和平台配置） */
+    backgroundColor?: string;
+    /** 组件类型， header 或 footer */
+    cType: 'header' | 'footer';
+}
+/**
+ * Header
+ */
+declare class Component {
+    $container: HTMLDivElement;
+    $popupContainer: HTMLElement;
+    private readonly _options;
+    private readonly _defaultClass;
+    $left: HTMLDivElement;
+    $right: HTMLDivElement;
+    constructor(options?: Partial<ComponentOptions>);
+    /**
+     * 销毁 header
+     */
+    destroy(): void;
+}
+
+/**
+ * Footer options
+ */
+type FooterOptions = ComponentOptions;
+declare class Footer extends Component {
+    constructor(options?: Partial<FooterOptions>);
+}
+
+/**
+ * Header options
+ */
+type HeaderOptions = ComponentOptions;
+declare class Header extends Component {
+    constructor(options?: Partial<HeaderOptions>);
 }
 
 /**
@@ -1502,7 +1499,7 @@ declare class Theme extends EventEmitter {
         readonly volumechange: "volumechange";
         readonly zoomChange: "zoomChange";
         readonly zoomingChange: "zoomingChange";
-        readonly zoomTranslateChange: "zoomTranslateChange";
+        readonly zoomTranslateChange: "zoomTranslateChange"; /**  resizeObserver 监听销毁 */
         readonly audioInfo: "audioInfo";
         readonly videoInfo: "videoInfo";
         readonly firstFrameDisplay: "firstFrameDisplay";
@@ -1515,7 +1512,7 @@ declare class Theme extends EventEmitter {
         readonly changeTheme: "changeTheme";
         readonly recTypeChange: "recTypeChange";
         readonly definitionChange: "definitionChange";
-        readonly speedChange: "speedChange";
+        readonly speedChange: "speedChange"; /** 倍速 @private */
         readonly recordingChange: "recordingChange";
         readonly talkingChange: "talkingChange";
         readonly talkVolumeChange: "talkVolumeChange";
@@ -1532,7 +1529,7 @@ declare class Theme extends EventEmitter {
         readonly currentVideoLevel: "currentVideoLevel";
         readonly currentVideoLevelAuto: "currentVideoLevelAuto";
         readonly setAllDayRecTimes: "setAllDayRecTimes";
-        readonly getOSDTime: "getOSDTime"; /** 头部控件 @since 0.0.1 @private */
+        readonly getOSDTime: "getOSDTime";
         readonly playbackEnd: "playbackEnd";
         readonly control: {
             readonly play: "Control.play";
@@ -1590,21 +1587,50 @@ declare class Theme extends EventEmitter {
             readonly dateMonthChange: "Control.dateMonthChange";
             readonly datePanelMonthChange: "Control.datePanelMonthChange";
             readonly datePanelYearChange: "Control.datePanelYearChange";
-            readonly dateDestroy: "Control.datePanelDestroy";
+            readonly dateDestroy: "Control.dateDestroy";
             readonly timePanelOpenChange: "Control.timePanelOpenChange";
             readonly timeChange: "Control.timeChange";
             readonly timeLineChange: "Control.timeLineChange";
             readonly timeLinePanelOpenChange: "Control.timeLinePanelOpenChange";
             readonly timeLineDestroy: "Control.timeLineDestroy";
+            readonly unsupportedPlayType: "Control.unsupportedPlayType";
             readonly beforeMountControls: "Control.beforeMountControls";
             readonly mountedControls: "Control.mountedControls";
-            readonly beforeUnmountControls: "Control.beforeUnmountControls";
+            readonly beforeUnmountControls: "Control.beforeUnmountControls"; /**
+             * 容器的宽(单位 px)
+             * ```ts
+             * theme.width // number
+             * ```
+             */
             readonly unmountedControls: "Control.unmountedControls";
             readonly posterDestroy: "Control.posterDestroy";
             readonly loadingDestroy: "Control.loadingDestroy";
             readonly messageDestroy: "Control.messageDestroy";
             readonly contentDestroy: "Control.contentDestroy";
             readonly contentRerender: "Control.contentRerender";
+            readonly playControlInit: "Control.playControlInit";
+            readonly volumeControlInit: "Control.volumeControlInit";
+            readonly deviceControlInit: "Control.deviceControlInit";
+            readonly capturePictureControlInit: "Control.capturePictureControlInit";
+            readonly ptzControlInit: "Control.ptzControlInit";
+            readonly recordControlInit: "Control.recordControlInit";
+            readonly talkControlInit: "Control.talkControlInit";
+            readonly broadcastControlInit: "Control.broadcastControlInit";
+            readonly aiChatControlInit: "Control.aiChatControlInit";
+            readonly liveControlInit: "Control.liveControlInit";
+            readonly recDropdownControlInit: "Control.recDropdownControlInit";
+            readonly recListControlInit: "Control.recListControlInit";
+            readonly alarmMessageControlInit: "Control.alarmMessageControlInit";
+            readonly zoomControlInit: "Control.zoomControlInit";
+            readonly definitionControlInit: "Control.definitionControlInit";
+            readonly fullscreenControlInit: "Control.fullscreenControlInit";
+            readonly globalFullscreenControlInit: "Control.globalFullscreenControlInit";
+            readonly recControlInit: "Control.recControlInit";
+            readonly speedControlInit: "Control.speedControlInit";
+            readonly dateControlInit: "Control.dateControlInit";
+            readonly timeControlInit: "Control.timeControlInit";
+            readonly timeLineControlInit: "Control.timeLineControlInit";
+            readonly segmentProgressControlInit: "Control.segmentProgressControlInit";
         };
         readonly theme: {
             readonly beforeDestroy: "Theme.beforeDestroy";
@@ -1768,13 +1794,13 @@ declare class Theme extends EventEmitter {
             SPEED_CANCEL: string;
             GET_SPEED: string;
             MAX_SPEED_LIMIT: string;
-            /** 版本号 @since 0.0.1 */
             MIN_SPEED_LIMIT: string;
-            SPEED_SWITCH_ERRROR: string; /** 播放器配置项 */
+            SPEED_SWITCH_ERRROR: string;
+            /** 播放器配置项 */
             SPEED_SWITCH_NOT_SUPPORT: string;
             SEEK_CANNOT_CROSS_DAYS: string;
             SEEK_TIMEFORMAT_ERROR: string;
-            PAUSE: string; /** 多语言对象 https://www.npmjs.com/package/@ezuikit/utils-i18n  @since 0.0.1 */
+            PAUSE: string;
             PAUSE_FAILED: string;
             RESUME: string;
             RESUME_FAILED: string;
@@ -1790,13 +1816,9 @@ declare class Theme extends EventEmitter {
             VIDEO_LEVEL_FLUENT: string;
             VIDEO_LEVEL_STANDARD: string;
             VIDEO_LEVEL_HEIGH: string;
-            VIDEO_LEVEL_SUPER: string;
+            VIDEO_LEVEL_SUPER: string; /** 封面控件 @since 0.0.1 @private */
             VIDEO_LEVEL_EXTREME: string;
             VIDEO_LEVEL_3K: string;
-            /**
-             * @since 0.0.1
-             * @private
-             */
             VIDEO_LEVEL_4k: string;
             RESET_THEME: string;
             BTN_PLAY: string;
@@ -1811,7 +1833,11 @@ declare class Theme extends EventEmitter {
             BTN_LIVE: string;
             BTN_REC_DROPDOWN: string;
             BTN_ALARM_MESSAGE: string;
-            REC_DROPDOWN_CLOUD_REC: string;
+            REC_DROPDOWN_CLOUD_REC: string; /**
+             * 更多控件（footer more）
+             * @since 0.0.1
+             * @private
+             */
             REC_DROPDOWN_CLOUD_RECORD: string;
             REC_DROPDOWN_LOCAL_REC: string;
             BTN_ZOOM: string;
@@ -1823,13 +1849,16 @@ declare class Theme extends EventEmitter {
             BTN_EXIR_FULLSCREEN: string;
             BTN_HD: string;
             BTN_SPEED: string;
-            BTN_CLOUDREC: string;
+            BTN_CLOUDREC: string; /**
+             * 移动端扩展容器, 扩展的控件渲染在指定容器以外， 仅只用端适用， 为了可以放置大的控件和方便开发接入
+             * @private
+             */
             BTN_CLOUDRECORD: string;
             BTN_REC: string;
             BTN_CALENDAR: string;
             BTN_TIME: string;
             BTN_MORE: string;
-            DEVICE_NAME: string;
+            DEVICE_NAME: string; /**  @since 0.0.1 @private */
             DEVICE_ID: string;
             CAPTURE_SUCCESS: string;
             CAPTURE_FAILED: string;
@@ -1842,6 +1871,7 @@ declare class Theme extends EventEmitter {
             OPEN_SOUND: string;
             CLOSE_SOUND: string;
             SOUND_OPENED: string;
+            /**  resizeObserver 监听销毁 */
             ZOOM: string;
             START_ZOOM: string;
             CLOSE_ZOOM: string;
@@ -1850,10 +1880,10 @@ declare class Theme extends EventEmitter {
             ZOOM_ADD_MAX: string;
             ZOOM_SUB_MIN: string;
             ZOOM_LIMIT_MAX: string;
-            ZOOM_LIMIT_MIN: string;
+            ZOOM_LIMIT_MIN: string; /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */
             ZOOM_NOT_ENABLED: string;
             '3D_ZOOM': string;
-            '3D_ZOOM_DISABLE': string; /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */
+            '3D_ZOOM_DISABLE': string;
             '3D_ZOOM_FAILED': string;
             START_3D_ZOOM: string;
             CLOSE_3D_ZOOM: string;
@@ -1869,9 +1899,9 @@ declare class Theme extends EventEmitter {
             WEB_FULLSCREEN_EXIT: string;
             DESTROY: string;
             GET_CAPACITY: string;
-            GET_PTZ_STATUS: string;
+            GET_PTZ_STATUS: string; /** 录制中 @private */
             GET_PTZ_STATUS_FAILED: string;
-            MOBILE_HIDE_PTZ: string;
+            MOBILE_HIDE_PTZ: string; /** 倍速 @private */
             OPTION_PTZ_FAILED: string;
             MOBILE_PTZ_TIPS: string;
             PTZ_FAST: string;
@@ -1893,19 +1923,18 @@ declare class Theme extends EventEmitter {
             GET_FEC_PARAMS: string;
             SET_FEC_PARAMS_FAILED: string;
             GET_FEC_PARAMS_FAILED: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
-            GET_FEC_PARAMS_SUPPORT_VERSION: string; /**
-             * 录像回放的月份列表 @private
-             */
+            GET_FEC_PARAMS_SUPPORT_VERSION: string;
             SET_WATERMARK: string;
-            FETCH_THEME_FAILED: string; /** 清理 header/footer 动画 定时器 @private */
+            FETCH_THEME_FAILED: string;
             cancel: string;
             ok: string;
             close: string;
             BTN_REC_LIST_TITLE: string;
-            UNKOWN_ISSUE: string;
+            UNKOWN_ISSUE: string; /**
+             * 首帧同步 Live/RecDropdown 激活态的监听器引用。
+             * 每次 `_renderTheme` 重新绑定前需先移除旧引用，避免 changeTheme 累积监听。
+             * @private
+             */
         };
         en: {
             391001: string;
@@ -1954,7 +1983,7 @@ declare class Theme extends EventEmitter {
             395562: string;
             395563: string;
             395564: string;
-            395566: string;
+            395566: string; /** 所有私有流的模板 @since 0.0.1 */
             395567: string;
             395568: string;
             395569: string;
@@ -1989,6 +2018,7 @@ declare class Theme extends EventEmitter {
             396510: string;
             396511: string;
             396512: string;
+            /** 静音 */
             396513: string;
             396514: string;
             396515: string;
@@ -2004,11 +2034,7 @@ declare class Theme extends EventEmitter {
             397003: string;
             397004: string;
             397005: string;
-            397006: string; /**
-             * 首帧同步 Live/RecDropdown 激活态的监听器引用。
-             * 每次 `_renderTheme` 重新绑定前需先移除旧引用，避免 changeTheme 累积监听。
-             * @private
-             */
+            397006: string;
             397007: string;
             399000: string;
             399001: string;
@@ -2082,6 +2108,9 @@ declare class Theme extends EventEmitter {
             VIDEO_LEVEL_NOT_SUPPORT: string;
             VIDEO_LEVEL_AUTO: string;
             VIDEO_LEVEL_FLUENT: string;
+            /**
+             * url 信息 播放地址信息
+             */
             VIDEO_LEVEL_STANDARD: string;
             VIDEO_LEVEL_HEIGH: string;
             VIDEO_LEVEL_SUPER: string;
@@ -2107,12 +2136,6 @@ declare class Theme extends EventEmitter {
             BTN_ZOOM: string;
             BTN_3D_ZOOM: string;
             BTN_PTZ: string;
-            /**
-             * 当前播放状态
-             * ```ts
-             * theme.playing // boolean
-             * ```
-             */
             BTN_GLOBAL_FULLSCREEN: string;
             BTN_EXIT_GLOBAL_FULLSCREEN: string;
             BTN_FULLSCREEN: string;
@@ -2160,7 +2183,13 @@ declare class Theme extends EventEmitter {
             '3D_ZOOM_NOT_ACTIVED': string;
             '3D_ZOOM_CLOSED': string;
             CHANGE_ZOOM_TYPE: string;
-            FULLSCREEN: string;
+            FULLSCREEN: string; /**
+             * 加载状态
+             * ```ts
+             * // 事件监听
+             * theme.on(Theme.EVENTS.loading, (loading: boolean) => {})
+             * ```
+             */
             FULLSCREEN_EXIT: string;
             GET_WEB_FULLSCREEN_STATUS: string;
             WEB_FULLSCREEN: string;
@@ -2344,6 +2373,22 @@ declare class Theme extends EventEmitter {
      * url 信息 播放地址信息
      */
     get urlInfo(): Partial<_ezuikit_utils_tools.EzopenURL>;
+    /**
+     * 当前播放类型，由播放地址解析得出
+     *
+     * 取值 `'live' | 'rec' | 'cloudRec' | 'cloudRecord'`，无法判定时为空字符串 `''`。
+     *
+     * 与 {@link recType} 的关系：`recType` 只覆盖三种回放，直播时为空串；
+     * 本 getter 把直播也纳入同一个枚举，作为「当前播放类型」的统一出口。
+     *
+     * @remarks 空串表示无法从地址判定（如 rtmp、webrtc、地址未设置）。
+     * 此时控件支持性校验会整体跳过，避免对判不出类型的地址误报。
+     * @since 3.1.7
+     * ```ts
+     * theme.playType // 'cloudRec'
+     * ```
+     */
+    get playType(): ThemePlayType | '';
     /**
      * 容器的宽(单位 px)
      * ```ts
@@ -2922,42 +2967,200 @@ interface ThemeVideoInfo {
  * @since 0.0.1
  */
 type ThemeRecType = 'rec' | 'cloudRec' | 'cloudRecord';
+/**
+ * 播放类型：直播 + 三种回放
+ *
+ * 由播放地址解析得出，见 `theme.playType`。控件通过静态属性 `supportedPlayTypes`
+ * 声明自己支持哪几种，渲染时不匹配只提示、不阻止渲染。
+ *
+ * 类型直接由 `PLAY_TYPES` 常量推导，保证值与类型不会漂移。
+ * @since 3.1.7
+ */
+type ThemePlayType = (typeof PLAY_TYPES)[number];
 
 /**
- * 回放控件配置项
+ * 控件基类配置项
  */
-interface RecOptions extends Omit<ControlOptions, 'tagName'> {
+interface ControlOptions {
+    /** 播放器窗口节点 */
+    rootContainer?: HTMLElement;
+    /** 挂载节点 player id, 默认挂载 body 上 */
+    getPopupContainer?: () => HTMLElement;
+    /** 给控件新增自定义类名 */
+    className?: string;
+    /** 语言数据 */
+    locale?: Record<string, string>;
+    /** 样式类后缀 */
+    classNameSuffix?: string;
+    /**
+     * 渲染节点标签
+     */
+    tagName?: 'div' | 'span';
+    /**
+     * 控件类型, 默认 button
+     */
+    controlType?: 'button' | 'text' | 'block';
+    /**
+     * 当前语言
+     */
+    language?: 'zh' | 'en' | string;
+    /**
+     * 所有语言数据
+     */
+    locales?: Record<string, Record<string | number, string | number>>;
     /** 点击控件时的回调 */
     onClick?: (e: Event) => void;
-    /** 回放类型切换时的回调 */
-    onChange?: (type: ThemeRecType) => void;
-    /** 默认回放类型， 默认 'rec' */
-    recType?: ThemeRecType;
+    /**
+     * ----- 播放器状态 -------
+     * 窗口宽度  width?: number;
+     * 窗口高度  height?: number;
+     * 窗口是否全屏 isCurrentFullscreen?: boolean;
+     * 播放器是否播放中 playing?: boolean;
+     * 音量大小 0-1  volume?: number;
+     * 是否静音 muted?: boolean;
+     * 浏览器选择角度 0 ｜ 90 ｜ 180 ｜ 270  orientationAngle?: number;
+     * 所有属性值来源 constant.ts 文中 THEME_PROPS
+     */
+    props?: Record<(typeof THEME_PROPS)[number], number | string | Record<string, unknown>>;
+    [key: string]: any;
 }
 /**
- * 回放类型切换（本地回放(sdk 卡)， 云存储回放， 云录制回放）控件
- * @category Control
+ * 不允许控件自定义的参数
+ * @typeParam T - 控件配置项
  */
-declare class Rec extends Control {
-    private readonly _options;
-    private _delegation;
-    private recType;
-    constructor(options: RecOptions);
+type OmitControlOptions<T extends ControlOptions> = Omit<T, 'rootContainer' | 'getPopupContainer' | 'classNameSuffix' | 'type' | 'tagName' | 'controlType'>;
+/**
+ * 控件基类
+ * @category Control
+ * @example
+ * ```ts
+ * // 创建控件
+ * class MyControl extends Control {}
+ *
+ * // 使用控件
+ * const myControl = new MyControl({})
+ * ```
+ */
+declare class Control extends EventEmitter {
     /**
-     * 销毁
+     * 该控件支持的播放类型，默认全支持
+     *
+     * 子类用 `static supportedPlayTypes = [...]` 覆盖来收窄范围。声明是**静态**的，
+     * 因为渲染层需要在不实例化控件的前提下就能读到（`Controls[iconId].supportedPlayTypes`）。
+     *
+     * 渲染时会拿 `theme.playType` 与此比对，不匹配只发警告与 `Control.unsupportedPlayType`
+     * 事件，**不阻止渲染**，控件照常创建、照常可交互，行为是否生效由 SDK 层与设备能力决定。
+     *
+     * @since 3.1.7
+     * @example
+     * ```ts
+     * class MyControl extends Control {
+     *   // 只在云存储回放下有意义
+     *   static supportedPlayTypes: ThemePlayType[] = ['cloudRec'];
+     * }
+     * ```
+     */
+    static supportedPlayTypes: ThemePlayType[];
+    /**
+     * 判断某个播放类型是否被本控件支持
+     *
+     * @param playType 播放类型；传空串（无法从地址判定）时一律返回 `true`，避免误报
+     * @returns 是否支持
+     * @since 3.1.7
+     */
+    static supportsPlayType(playType: ThemePlayType | ''): boolean;
+    /**
+     * 控件内容
+     */
+    $container: HTMLDivElement | HTMLSpanElement;
+    /**
+     * 控件挂载的节点
+     */
+    $popupContainer: HTMLElement;
+    /** 具体语言对应的值 */
+    locale: Record<string | number, string> | null;
+    protected __options: ControlOptions;
+    protected _disabled: boolean;
+    protected _active: boolean;
+    private readonly _camelCaseName;
+    /** click 监听引用，销毁时需显式移除 */
+    private _onClickHandler;
+    constructor(options: Partial<ControlOptions>);
+    /**
+     * 是否激活
+     */
+    get active(): boolean;
+    set active(active: boolean);
+    /**
+     * 是否禁用
+     */
+    get disabled(): boolean;
+    set disabled(disabled: boolean);
+    /**
+     * 重置整个控件
+     */
+    reset(hide?: boolean): void;
+    /**
+     * 重置控件挂载节点
+     * @param popupContainer 重新挂载的节点
+     * @param append 添加的方式， 默认 append
+     * @param element 当 append = before 时 需要 element, 插入 element 前
+     *
+     * |     prepend   |    append       |
+     * |:-------------:|:---------------:|
+     * | 插入第一个位置 |    追加在末尾    |
+     */
+    resetPopupContainer(popupContainer: Element, append?: 'prepend' | 'append' | 'before', element?: Element): void;
+    /**
+     * 隐藏整个控件
+     */
+    hide(): void;
+    /**
+     * 销毁控件
      */
     destroy(): void;
+    protected _updateDisabledState(disabled: boolean): void;
+    protected _updateActiveState(active: boolean): void;
     /**
-     * 添加回放类型图标
-     * @param {string} id 回放类型 'rec' | 'cloudRec' | 'cloudRecord'
+     * 当点击 Control 时 触发子类的 _onControlClick
      */
-    addRecType(id: string): void;
-    private _activeIcon;
-    private _onClickIcon;
+    protected _onClick(): void;
+    protected _onDBlClick(e: Event): void;
     /**
-     * 点击 Control 会触发
+     * 点击 Control 控件触发
+     * @param {Event} e
+     * @returns {void}
      */
     protected _onControlClick(e: Event): void;
+}
+
+/**
+ * 加载动画控件配置项
+ */
+interface LoadingOptions extends Omit<ControlOptions, 'tagName' | 'controlType'> {
+    /**
+     * 自定义加载动画的 HTML 结构, 当 theme.loading = true 时展示
+     * @returns HTML 字符串
+     */
+    render?: () => string;
+}
+/**
+ * 加载动画控件
+ * @category Control
+ */
+declare class Loading extends Control {
+    private readonly _options;
+    constructor(options?: Partial<LoadingOptions>);
+    private _html;
+    /**
+     * 动画展示
+     * @param html 自定义动画内容, 如果不存在则使用默认动画
+     */
+    show(html?: string): void;
+    /**
+     * 隐藏动画
+     */
+    hide(): void;
 }
 
 /**
@@ -3104,7 +3307,16 @@ interface PtzErrorInfo {
  * 可用于给 eventemitter3 提供泛型：`class Theme extends EventEmitter<ThemeEventMap>`，
  * 或直接查询单个事件的处理函数类型：`ThemeEventMap['play']`。
  */
-interface ThemeEventMap {
+/**
+ * 各控件初始化完成事件的载荷（统一为无参）。
+ *
+ * 由 `CONTROL_INIT_EVENTS` 的值映射生成，新增控件只需往常量里加一项，
+ * 类型侧自动跟上，无需在 {@link ThemeEventMap} 里手写。
+ */
+type ControlInitEventMap = {
+    [K in (typeof CONTROL_INIT_EVENTS)[keyof typeof CONTROL_INIT_EVENTS]]: () => void;
+};
+interface ThemeEventMap extends ControlInitEventMap {
     /** 加载状态变化 */
     loading: (loading: boolean) => void;
     /** 播放/暂停状态变化 */
@@ -3185,6 +3397,14 @@ interface ThemeEventMap {
     }) => void;
     /** 统一消息提示入口（duration 单位秒） */
     message: (message: string, type: string, duration?: number) => void;
+    /**
+     * 控件不支持当前播放类型（仅提示，控件仍会渲染）
+     *
+     * @param iconId 控件 iconId
+     * @param playType 当前播放类型
+     * @param supportedPlayTypes 该控件声明支持的播放类型
+     */
+    'Control.unsupportedPlayType': (iconId: string, playType: ThemePlayType, supportedPlayTypes: ThemePlayType[]) => void;
     /** 控件挂载前 */
     'Control.beforeMountControls': () => void;
     /** 控件挂载完成 */
@@ -3256,8 +3476,8 @@ interface ThemeEventMap {
     'Control.datePanelMonthChange': (date: Date, month: string) => void;
     /** 日历面板展示的年份变化，`year` 格式 `YYYY` */
     'Control.datePanelYearChange': (date: Date, year: string) => void;
-    /** 日历控件销毁（注意其字符串值为 `Control.datePanelDestroy`） */
-    'Control.datePanelDestroy': () => void;
+    /** 日历控件销毁 */
+    'Control.dateDestroy': () => void;
     'Control.timePanelOpenChange': (open: boolean, time: string) => void;
     'Control.timeChange': (time: string) => void;
     'Control.timeLineChange': (date: Date | string) => void;
@@ -3278,5 +3498,5 @@ type ThemeEventHandler<K extends ThemeEventName> = K extends keyof ThemeEventMap
 /** 单个事件的参数元组，如 `ThemeEventArgs<'volumechange'>` = `[number, boolean]` */
 type ThemeEventArgs<K extends ThemeEventName> = K extends keyof ThemeEventMap ? Parameters<ThemeEventMap[K]> : unknown[];
 
-export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
-export type { AudioInfo, CleanUpResizeObserver, CleanUpScreenOrientationFun, ControlEventName, ControlItem, ControlOptions, FooterOptions, FullscreenChangeInfo, FullscreenOptions, HeaderOptions, IThemeData, IThemeDataItem, LoadingOptions, MessageOptions, OrientationAngle, PlayOptions, PosterOptions, PtzErrorInfo, RecOptions, ResizeInfo, ScreenOrientation, ThemeEventArgs, ThemeEventHandler, ThemeEventMap, ThemeEventName, ThemeLifecycleEventName, ThemeOptions, ThemeOuterEventName, VideoInfo, VolumeOptions };
+export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
+export type { AudioInfo, CleanUpResizeObserver, CleanUpScreenOrientationFun, ControlEventName, ControlInitEventMap, ControlItem, ControlOptions, FooterOptions, FullscreenChangeInfo, FullscreenOptions, HeaderOptions, IThemeData, IThemeDataItem, LoadingOptions, MessageOptions, OrientationAngle, PlayOptions, PosterOptions, PtzErrorInfo, RecOptions, ResizeInfo, ScreenOrientation, ThemeEventArgs, ThemeEventHandler, ThemeEventMap, ThemeEventName, ThemeLifecycleEventName, ThemeOptions, ThemeOuterEventName, VideoInfo, VolumeOptions };

@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.6
-* Copyright (c) 2026-09-18 12:22:27 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.7-beta.1
+* Copyright (c) 2026-09-23 13:45:09 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -18,6 +18,16 @@ import { DatePicker, TimePicker } from '@ezuikit/control-date-picker';
 import { MobileTimeLine, TimeLine } from '@ezuikit/control-time-line';
 import SegmentProgress from '@ezuikit/control-segment-progress';
 
+function _extends$z() {
+    _extends$z = Object.assign || function assign(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends$z.apply(this, arguments);
+}
 /**
  * 播放器的类名前缀
  */ var PREFIX_CLASS = 'ezplayer';
@@ -98,6 +108,54 @@ var THEME_PROPS = [
     'segmentProgress'
 ];
 /**
+ * 全部播放类型：直播 + 三种回放
+ *
+ * 控件用静态属性 `supportedPlayTypes` 声明支持范围，默认取本数组（即全支持）。
+ * 与 {@link REC_GROUP} 的区别：REC_GROUP 是「回放类型切换控件的 iconId 分组」，
+ * 这里是「播放地址实际解析出的播放类型」，两者取值恰好在回放侧重合。
+ */ var PLAY_TYPES = [
+    'live',
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
+/**
+ * 控件初始化完成事件名
+ *
+ * 键与 `Controls`（`src/Controls/index.ts`）的键一一对应，值为 `Control.<键>ControlInit`，
+ * 在控件实例创建成功后由 `_renderTheme` 派发一次，无载荷。
+ *
+ * 这些成员会被展开进 {@link EVENTS}.control，因此既可以 `EVENTS.control.playControlInit`
+ * 这样按名取用，也可以在只拿到 `iconId` 的场合用 `CONTROL_INIT_EVENTS[iconId]` 查表。
+ *
+ * @remarks `changeTheme` 会先卸载旧控件并重置 `theme.controls`，因此切换主题时这些事件会再次派发；
+ * 同一次渲染内则由 `!theme.controls.xxxControl` 守卫保证只派发一次。
+ */ var CONTROL_INIT_EVENTS = {
+    /** 播放/暂停控件初始化完成 */ playControlInit: 'Control.playControlInit',
+    /** 音量控件初始化完成 */ volumeControlInit: 'Control.volumeControlInit',
+    /** 设备信息控件初始化完成 */ deviceControlInit: 'Control.deviceControlInit',
+    /** 截图控件初始化完成 */ capturePictureControlInit: 'Control.capturePictureControlInit',
+    /** 云台控件初始化完成 */ ptzControlInit: 'Control.ptzControlInit',
+    /** 录制控件初始化完成 */ recordControlInit: 'Control.recordControlInit',
+    /** 对讲控件初始化完成 */ talkControlInit: 'Control.talkControlInit',
+    /** 语音广播控件初始化完成 */ broadcastControlInit: 'Control.broadcastControlInit',
+    /** AI 对话控件初始化完成 */ aiChatControlInit: 'Control.aiChatControlInit',
+    /** 直播按钮控件初始化完成 */ liveControlInit: 'Control.liveControlInit',
+    /** 回放下拉控件初始化完成 */ recDropdownControlInit: 'Control.recDropdownControlInit',
+    /** 录像列表控件初始化完成 */ recListControlInit: 'Control.recListControlInit',
+    /** 告警消息控件初始化完成 */ alarmMessageControlInit: 'Control.alarmMessageControlInit',
+    /** 电子放大控件初始化完成 */ zoomControlInit: 'Control.zoomControlInit',
+    /** 清晰度控件初始化完成 */ definitionControlInit: 'Control.definitionControlInit',
+    /** web 全屏控件初始化完成 */ fullscreenControlInit: 'Control.fullscreenControlInit',
+    /** 全局全屏控件初始化完成 */ globalFullscreenControlInit: 'Control.globalFullscreenControlInit',
+    /** 回放类型控件初始化完成 */ recControlInit: 'Control.recControlInit',
+    /** 倍速控件初始化完成 */ speedControlInit: 'Control.speedControlInit',
+    /** 日历控件初始化完成 */ dateControlInit: 'Control.dateControlInit',
+    /** 时间选择控件初始化完成 */ timeControlInit: 'Control.timeControlInit',
+    /** 时间轴控件初始化完成 */ timeLineControlInit: 'Control.timeLineControlInit',
+    /** 回放片段进度条控件初始化完成 */ segmentProgressControlInit: 'Control.segmentProgressControlInit'
+};
+/**
  *
  * 事件名
  *
@@ -163,7 +221,7 @@ var EVENTS = {
     /** 播放区间播放结束（SDK 层 playbackRange 特性） */ playbackEnd: 'playbackEnd',
     /**
    * 控件相关
-   */ control: {
+   */ control: _extends$z({}, CONTROL_INIT_EVENTS, {
         /** 点击播放播放／暂停按钮 */ play: 'Control.play',
         /** 播放控件销毁 */ playDestroy: 'Control.playDestroy',
         /** 截图 */ capturePicture: 'Control.capturePicture',
@@ -219,12 +277,13 @@ var EVENTS = {
         /** 日期改变 */ dateMonthChange: 'Control.dateMonthChange',
         /** 日期面板展示的月份变化 */ datePanelMonthChange: 'Control.datePanelMonthChange',
         /** 日期面板展示的年份变化 */ datePanelYearChange: 'Control.datePanelYearChange',
-        /** 日期销毁 */ dateDestroy: 'Control.datePanelDestroy',
+        /** 日期销毁 */ dateDestroy: 'Control.dateDestroy',
         /** 时间面板展示隐藏变换 */ timePanelOpenChange: 'Control.timePanelOpenChange',
         /** 时间改变 */ timeChange: 'Control.timeChange',
         /** 时间轴拖动结束 */ timeLineChange: 'Control.timeLineChange',
         /** 时间轴图片列表面板 */ timeLinePanelOpenChange: 'Control.timeLinePanelOpenChange',
         /** 时间轴控件销毁 */ timeLineDestroy: 'Control.timeLineDestroy',
+        /** 控件不支持当前播放类型（仅提示，控件仍会渲染） */ unsupportedPlayType: 'Control.unsupportedPlayType',
         /** 主题控件挂载前 切换新的主题也会触发，如果想首次获取需要在 onInitializing 回调中进行监听 */ beforeMountControls: 'Control.beforeMountControls',
         /** 主题控件挂载完成, 切换新的主题也会触发，如果想首次获取需要在 onInitializing 回调中进行监听 */ mountedControls: 'Control.mountedControls',
         /** 主题控件卸载前, 已有控件卸载时才可触发 */ beforeUnmountControls: 'Control.beforeUnmountControls',
@@ -234,7 +293,7 @@ var EVENTS = {
         /** 消息控件销毁 */ messageDestroy: 'Control.messageDestroy',
         /** 播放器内容区域销毁 */ contentDestroy: 'Control.contentDestroy',
         /** 播放器内容区域重新渲染 */ contentRerender: 'Control.contentRerender'
-    },
+    }),
     /**
    * 主题控件相关
    */ theme: {
@@ -446,6 +505,16 @@ function _set_prototype_of$z(o, p) {
         // 这是一个空函数， 子类可以实现重新改方法
         this.__options.onClick == null ? void 0 : this.__options.onClick.call(this.__options, e);
     };
+    /**
+   * 判断某个播放类型是否被本控件支持
+   *
+   * @param playType 播放类型；传空串（无法从地址判定）时一律返回 `true`，避免误报
+   * @returns 是否支持
+   * @since 3.1.7
+   */ Control.supportsPlayType = function supportsPlayType(playType) {
+        if (!playType) return true;
+        return this.supportedPlayTypes.includes(playType);
+    };
     _create_class$9(Control, [
         {
             key: "active",
@@ -478,6 +547,24 @@ function _set_prototype_of$z(o, p) {
     ]);
     return Control;
 }(EventEmitter);
+/**
+   * 该控件支持的播放类型，默认全支持
+   *
+   * 子类用 `static supportedPlayTypes = [...]` 覆盖来收窄范围。声明是**静态**的，
+   * 因为渲染层需要在不实例化控件的前提下就能读到（`Controls[iconId].supportedPlayTypes`）。
+   *
+   * 渲染时会拿 `theme.playType` 与此比对，不匹配只发警告与 `Control.unsupportedPlayType`
+   * 事件，**不阻止渲染**，控件照常创建、照常可交互，行为是否生效由 SDK 层与设备能力决定。
+   *
+   * @since 3.1.7
+   * @example
+   * ```ts
+   * class MyControl extends Control {
+   *   // 只在云存储回放下有意义
+   *   static supportedPlayTypes: ThemePlayType[] = ['cloudRec'];
+   * }
+   * ```
+   */ Control.supportedPlayTypes = [].concat(PLAY_TYPES);
 
 function _extends$y() {
     _extends$y = Object.assign || function assign(target) {
@@ -2687,6 +2774,11 @@ function _set_prototype_of$s(o, p) {
    */ _proto._onControlClick = function _onControlClick(e) {};
     return Rec;
 }(Control);
+/** 回放类型切换组，本身就是三种回放之间的切换入口，直播下无意义 */ Rec.supportedPlayTypes = [
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
 
 var zh = {
     391001: '取流地址或端口非法',
@@ -6382,6 +6474,14 @@ function _set_prototype_of$k(o, p) {
     ]);
     return Ptz;
 }(Control);
+/**
+   * 云台是对设备的实时控制，回放场景下转动云台不影响已录制的画面。
+   *
+   * 依据是语义与 mobileRec 模板（不含云台）。`pcRec` 模板的配置里虽然还留着 `pantile`，
+   * 但实测在回放地址下它不会被渲染出来，因此这里声明为 live-only 不会对内置模板误报。
+   */ Ptz.supportedPlayTypes = [
+    'live'
+];
 
 function formatTime(seconds, format) {
     if (format === void 0) format = 'MM:SS';
@@ -6834,6 +6934,9 @@ function _ts_generator$4(thisArg, body) {
     ]);
     return Talk;
 }(Control);
+/** 对讲是实时上行通道，只有直播场景有意义 */ Talk.supportedPlayTypes = [
+    'live'
+];
 
 function asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, key, arg) {
     try {
@@ -7065,6 +7168,9 @@ function _ts_generator$3(thisArg, body) {
     };
     return Broadcast;
 }(Control);
+/** 语音广播是实时上行通道，只有直播场景有意义（另需 `sdkType === 'base'`，见构造函数） */ Broadcast.supportedPlayTypes = [
+    'live'
+];
 
 function asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, key, arg) {
     try {
@@ -7297,6 +7403,14 @@ function _ts_generator$2(thisArg, body) {
     };
     return AIChat;
 }(Control);
+/**
+   * 只在云存储回放下可用。
+   *
+   * 这是全部控件里证据最强的一条：构造函数里已显式要求 `recType === 'cloud'`
+   * 且排除 `busType === '7'`（云录制），不满足时直接 `display: none`。
+   */ AIChat.supportedPlayTypes = [
+    'cloudRec'
+];
 
 function _extends$e() {
     _extends$e = Object.assign || function assign(target) {
@@ -7441,7 +7555,7 @@ function _set_prototype_of$e(o, p) {
             _this.$container.style.display = 'none';
         }
         // 初始化时根据 urlInfo 确定当前回放类型和激活状态
-        _this._recType = options.recType || ((_options_props = options.props) == null ? void 0 : _options_props.recType) || 'cloudRec';
+        _this._recType = options.recType || ((_options_props = options.props) == null ? void 0 : _options_props.recType) || '';
         _this._syncActiveByUrlInfo((_this___options_props1 = _this.__options.props) == null ? void 0 : _this___options_props1.urlInfo);
         _this._render();
         _this._initPicker();
@@ -7673,7 +7787,6 @@ function _set_prototype_of$d(o, p) {
         if (this._panelOpen) {
             this.emit(EVENTS.control.recListChange, false);
         }
-        this.emit(EVENTS.control.recListDestroy);
         if (this._modal) {
             this._modal.destroy();
             this._modal = null;
@@ -7705,6 +7818,16 @@ function _set_prototype_of$d(o, p) {
     };
     return RecList;
 }(Control);
+/**
+   * 录像片段列表，只对回放有意义。
+   *
+   * 依据是内置模板分布（仅 pcRec 含 `recList`）与语义。若后续确认本地卡回放
+   * 没有片段列表接口，把 `'rec'` 去掉即可。
+   */ RecList.supportedPlayTypes = [
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
 
 function _extends$b() {
     _extends$b = Object.assign || function assign(target) {
@@ -8237,6 +8360,14 @@ function __filter(list, locale) {
     };
     return Definition;
 }(Select);
+/**
+   * 清晰度切换只在直播下有意义：回放播的是已落盘的码流，清晰度由录制时决定。
+   *
+   * 依据是内置模板分布（`hd` 只出现在 pcLive / mobileLive / security），控件本身无硬约束。
+   * 若后续确认本地卡回放支持主/子码流切换，把 `'rec'` 加进来即可。
+   */ Definition.supportedPlayTypes = [
+    'live'
+];
 
 function _assert_this_initialized(self) {
     if (self === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -8367,6 +8498,16 @@ var SPEED_DEFAULT_OPTIONS = {
     };
     return Speed;
 }(Select);
+/**
+   * 倍速只对回放有意义；直播是实时流，没有倍速语义。
+   *
+   * 三类回放都支持，但档位上限不同（见 `_filterSpeedList`）：
+   * 本地卡回放与标准流 ≤ 4x，云存储 / 云录制 ≤ 16x。
+   */ Speed.supportedPlayTypes = [
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
 
 function _extends$7() {
     _extends$7 = Object.assign || function assign(target) {
@@ -8574,6 +8715,11 @@ function _set_prototype_of$8(o, p) {
     };
     return DatePickerControl;
 }(Control);
+/** 选日期是为了定位录像，只对回放有意义（初值取自 `urlInfo.searchParams.begin`） */ DatePickerControl.supportedPlayTypes = [
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
 
 function _extends$6() {
     _extends$6 = Object.assign || function assign(target) {
@@ -8709,6 +8855,11 @@ function _set_prototype_of$7(o, p) {
     };
     return TimePickerControl;
 }(Control);
+/** 选时间是为了定位录像，只对回放有意义（初值取自 `urlInfo.searchParams.begin`） */ TimePickerControl.supportedPlayTypes = [
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
 
 function _extends$5() {
     _extends$5 = Object.assign || function assign(target) {
@@ -8908,6 +9059,11 @@ function _set_prototype_of$6(o, p) {
     };
     return TimeLineControl;
 }(Control);
+/** 时间轴展示的是录像片段，只对回放有意义（渲染层的 `_needTimeLine` 也要求 `urlInfo.type === 'rec'`） */ TimeLineControl.supportedPlayTypes = [
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
 
 function _extends$4() {
     _extends$4 = Object.assign || function assign(target) {
@@ -9121,6 +9277,11 @@ function _set_prototype_of$5(o, p) {
     };
     return SegmentProgressControl;
 }(Control);
+/** 片段进度条拖动的是录像片段内的位置，只对回放有意义（另需移动端 + 已设置播放区间） */ SegmentProgressControl.supportedPlayTypes = [
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
 
 function _extends$3() {
     _extends$3 = Object.assign || function assign(target) {
@@ -9765,6 +9926,26 @@ var AUTH_KEY = [
     'alarmMessage'
 ];
 /**
+ * 校验控件是否支持当前播放类型，不支持只提示、**不阻止渲染**
+ *
+ * 之所以只提示：控件能否真正工作还取决于设备能力与 SDK 层实现，主题层没有足够信息
+ * 直接判死；而模板可能来自开放平台配置（`getThemeData` 远程拉取）或开发者自定义的
+ * `themeData`，直接隐藏会让人无从排查。
+ *
+ * `theme.playType` 为空串（地址判不出类型，如 rtmp / webrtc / 地址未设置）时整体跳过校验。
+ *
+ * @param theme - Theme
+ * @param iconId - 控件 iconId
+ * @param ControlClass - 控件类，读其静态 `supportedPlayTypes`
+ */ function _checkPlayTypeSupport(theme, iconId, ControlClass) {
+    var playType = theme.playType;
+    if (!playType || ControlClass.supportsPlayType(playType)) return;
+    var supported = ControlClass.supportedPlayTypes;
+    // prettier-ignore
+    theme.logger.warn("[" + iconId + '] control does not support playType "' + playType + '" (supported: ' + supported.join(', ') + "). It is still rendered, but may not work as expected.");
+    theme.emit(EVENTS.control.unsupportedPlayType, iconId, playType, supported);
+}
+/**
  * 渲染控件
  * @param $container - 控件渲染节点
  * @param btnList - 控件按钮列表
@@ -9806,6 +9987,8 @@ function _renderControls(theme, $container, btnList, props) {
                         }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["deviceOptions"]) || {}, {
                             props: props
                         }));
+                        theme.emit(EVENTS.control.deviceControlInit);
+                        _checkPlayTypeSupport(theme, item.iconId, Controls["device"]);
                     }
                 }
                 continue;
@@ -9835,6 +10018,9 @@ function _renderControls(theme, $container, btnList, props) {
                     }, ((_theme_options1 = theme.options) == null ? void 0 : _theme_options1["" + item.iconId + "Options"]) || {}, {
                         props: props
                     }));
+                    // iconId 已由 Controls 查表校验过，这里必然能取到对应的初始化事件名
+                    theme.emit(CONTROL_INIT_EVENTS["" + item.iconId + "ControlInit"]);
+                    _checkPlayTypeSupport(theme, item.iconId, Controls[item.iconId]);
                 }
             } else {
                 theme.logger.warn("[" + item.iconId + "] control does not exist");
@@ -10043,7 +10229,7 @@ function _renderTheme(theme, data) {
                                 });
                             }
                             // 移动端：在 rec 控件旁渲染 alarmMessage 按钮
-                            if (theme.options.alarmMessageOptions !== null && !((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2['alarmMessageControl'])) {
+                            if (theme.options.alarmMessageOptions !== null && !((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2['alarmMessageControl']) && theme.options.sdkType === 'base') {
                                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                                 theme.controls['alarmMessageControl'] = new Controls['alarmMessage'](_extends$1({
                                     rootContainer: theme.$container,
@@ -10058,6 +10244,8 @@ function _renderTheme(theme, data) {
                                 }, ((_theme_options = theme.options) == null ? void 0 : _theme_options.alarmMessageOptions) || {}, {
                                     props: props
                                 }));
+                                theme.emit(EVENTS.control.alarmMessageControlInit);
+                                _checkPlayTypeSupport(theme, 'alarmMessage', Controls['alarmMessage']);
                             }
                             if ((theme.options.timeLineOptions !== null || !theme.options.disabledTimeLine) && ((_theme_options_mobileExtendOptions5 = theme.options.mobileExtendOptions) == null ? void 0 : _theme_options_mobileExtendOptions5.controls.includes('timeLine')) && _needTimeLine) {
                                 _renderTimeLine(theme, theme._mobileExtend.$content, props);
@@ -10098,6 +10286,8 @@ var _renderTimeLine = function _renderTimeLine(theme, container, props) {
             showSectionIcon: ((_theme_options1 = theme.options) == null ? void 0 : _theme_options1["recListOptions"]) !== null ? (_ref = (_this = ((_theme_options2 = theme.options) == null ? void 0 : _theme_options2["timeLineOptions"]) || {}) == null ? void 0 : _this.showSectionIcon) != null ? _ref : true : true,
             props: props
         }));
+        theme.emit(EVENTS.control.timeLineControlInit);
+        _checkPlayTypeSupport(theme, 'timeLine', Controls['timeLine']);
     }
 };
 var _renderSegmentProgress = function _renderSegmentProgress(theme, container, props) {
@@ -10115,6 +10305,8 @@ var _renderSegmentProgress = function _renderSegmentProgress(theme, container, p
         }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["segmentProgressOptions"]) || {}, {
             props: props
         }));
+        theme.emit(EVENTS.control.segmentProgressControlInit);
+        _checkPlayTypeSupport(theme, 'segmentProgress', Controls['segmentProgress']);
     }
 };
 var _renderDatePicker = function _renderDatePicker(theme, container, props) {
@@ -10131,6 +10323,8 @@ var _renderDatePicker = function _renderDatePicker(theme, container, props) {
         }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["dateOptions"]) || {}, {
             props: props
         }));
+        theme.emit(EVENTS.control.dateControlInit);
+        _checkPlayTypeSupport(theme, 'date', Controls['date']);
     }
 };
 var _renderTimePicker = function _renderTimePicker(theme, container, props) {
@@ -10147,6 +10341,8 @@ var _renderTimePicker = function _renderTimePicker(theme, container, props) {
         }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["timeOptions"]) || {}, {
             props: props
         }));
+        theme.emit(EVENTS.control.timeControlInit);
+        _checkPlayTypeSupport(theme, 'time', Controls['time']);
     }
 };
 var _renderRecType = function _renderRecType(theme, container, recType, props) {
@@ -10165,6 +10361,8 @@ var _renderRecType = function _renderRecType(theme, container, recType, props) {
         }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["recOptions"]) || {}, {
             props: props
         }));
+        theme.emit(EVENTS.control.recControlInit);
+        _checkPlayTypeSupport(theme, 'rec', Controls['rec']);
     }
     if ((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1['recControl']) ((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2['recControl']).addRecType(recType);
 };
@@ -10886,14 +11084,14 @@ var THEME_DEFAULT_OPTIONS = {
         });
         this.$container.classList.remove("" + PREFIX_CLASS);
         this._themeData = null;
-        if (this.i18n) this.i18n = null;
+        // if (this.i18n) this.i18n = null!; // 注释是为了防止出错
         this.recType = '';
         this.recMonth = []; // 清空数据
         // 重置
         this._videoInfo = {};
         this.emit(EVENTS.theme.destroyed);
         this.removeAllListeners();
-        if (this.logger) this.logger = null;
+        // if (this.logger) this.logger = null!; // 注释是为了防止出错
         // 销毁后，将 destroyed 设置为 true
         this.destroyed = true;
     };
@@ -11486,6 +11684,9 @@ var THEME_DEFAULT_OPTIONS = {
             },
             set: function set(url) {
                 this._url = url;
+                // 地址变了回放类型也要跟着变，否则 recType / playType 会停留在上一个地址的结果，
+                // 进而影响倍速档位过滤、回放类型控件激活态与控件支持性校验
+                this._getRecType(url);
             }
         },
         {
@@ -11497,6 +11698,32 @@ var THEME_DEFAULT_OPTIONS = {
                     return parseEzopenUrl(this._url);
                 }
                 return {};
+            }
+        },
+        {
+            key: "playType",
+            get: /**
+   * 当前播放类型，由播放地址解析得出
+   *
+   * 取值 `'live' | 'rec' | 'cloudRec' | 'cloudRecord'`，无法判定时为空字符串 `''`。
+   *
+   * 与 {@link recType} 的关系：`recType` 只覆盖三种回放，直播时为空串；
+   * 本 getter 把直播也纳入同一个枚举，作为「当前播放类型」的统一出口。
+   *
+   * @remarks 空串表示无法从地址判定（如 rtmp、webrtc、地址未设置）。
+   * 此时控件支持性校验会整体跳过，避免对判不出类型的地址误报。
+   * @since 3.1.7
+   * ```ts
+   * theme.playType // 'cloudRec'
+   * ```
+   */ function get() {
+                var _this_urlInfo;
+                // 回放三类由 _getRecType 解析（含 busType=7 → cloudRecord 的区分）
+                if (this.recType) return this.recType;
+                if (((_this_urlInfo = this.urlInfo) == null ? void 0 : _this_urlInfo.type) === 'live') return 'live';
+                // 标准流直播：http(s) 且不走回放路径 /openpb/
+                if (this._url && isHttp(this._url) && !this._url.includes('/openpb/')) return 'live';
+                return '';
             }
         },
         {
@@ -11985,6 +12212,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.6';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.7-beta.1';
 
-export { Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
+export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };

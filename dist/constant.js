@@ -1,8 +1,18 @@
 /*
-* @ezuikit/player-theme v3.1.6
-* Copyright (c) 2026-09-18 12:22:27 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.7-beta.1
+* Copyright (c) 2026-09-23 13:45:09 Ezviz-OpenBiz
 * Released under the MIT License.
 */
+function _extends() {
+    _extends = Object.assign || function assign(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
 /**
  * 播放器的类名前缀
  */ var PREFIX_CLASS = 'ezplayer';
@@ -114,6 +124,54 @@ var THEME_PROPS = [
     'date'
 ];
 /**
+ * 全部播放类型：直播 + 三种回放
+ *
+ * 控件用静态属性 `supportedPlayTypes` 声明支持范围，默认取本数组（即全支持）。
+ * 与 {@link REC_GROUP} 的区别：REC_GROUP 是「回放类型切换控件的 iconId 分组」，
+ * 这里是「播放地址实际解析出的播放类型」，两者取值恰好在回放侧重合。
+ */ var PLAY_TYPES = [
+    'live',
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
+/**
+ * 控件初始化完成事件名
+ *
+ * 键与 `Controls`（`src/Controls/index.ts`）的键一一对应，值为 `Control.<键>ControlInit`，
+ * 在控件实例创建成功后由 `_renderTheme` 派发一次，无载荷。
+ *
+ * 这些成员会被展开进 {@link EVENTS}.control，因此既可以 `EVENTS.control.playControlInit`
+ * 这样按名取用，也可以在只拿到 `iconId` 的场合用 `CONTROL_INIT_EVENTS[iconId]` 查表。
+ *
+ * @remarks `changeTheme` 会先卸载旧控件并重置 `theme.controls`，因此切换主题时这些事件会再次派发；
+ * 同一次渲染内则由 `!theme.controls.xxxControl` 守卫保证只派发一次。
+ */ var CONTROL_INIT_EVENTS = {
+    /** 播放/暂停控件初始化完成 */ playControlInit: 'Control.playControlInit',
+    /** 音量控件初始化完成 */ volumeControlInit: 'Control.volumeControlInit',
+    /** 设备信息控件初始化完成 */ deviceControlInit: 'Control.deviceControlInit',
+    /** 截图控件初始化完成 */ capturePictureControlInit: 'Control.capturePictureControlInit',
+    /** 云台控件初始化完成 */ ptzControlInit: 'Control.ptzControlInit',
+    /** 录制控件初始化完成 */ recordControlInit: 'Control.recordControlInit',
+    /** 对讲控件初始化完成 */ talkControlInit: 'Control.talkControlInit',
+    /** 语音广播控件初始化完成 */ broadcastControlInit: 'Control.broadcastControlInit',
+    /** AI 对话控件初始化完成 */ aiChatControlInit: 'Control.aiChatControlInit',
+    /** 直播按钮控件初始化完成 */ liveControlInit: 'Control.liveControlInit',
+    /** 回放下拉控件初始化完成 */ recDropdownControlInit: 'Control.recDropdownControlInit',
+    /** 录像列表控件初始化完成 */ recListControlInit: 'Control.recListControlInit',
+    /** 告警消息控件初始化完成 */ alarmMessageControlInit: 'Control.alarmMessageControlInit',
+    /** 电子放大控件初始化完成 */ zoomControlInit: 'Control.zoomControlInit',
+    /** 清晰度控件初始化完成 */ definitionControlInit: 'Control.definitionControlInit',
+    /** web 全屏控件初始化完成 */ fullscreenControlInit: 'Control.fullscreenControlInit',
+    /** 全局全屏控件初始化完成 */ globalFullscreenControlInit: 'Control.globalFullscreenControlInit',
+    /** 回放类型控件初始化完成 */ recControlInit: 'Control.recControlInit',
+    /** 倍速控件初始化完成 */ speedControlInit: 'Control.speedControlInit',
+    /** 日历控件初始化完成 */ dateControlInit: 'Control.dateControlInit',
+    /** 时间选择控件初始化完成 */ timeControlInit: 'Control.timeControlInit',
+    /** 时间轴控件初始化完成 */ timeLineControlInit: 'Control.timeLineControlInit',
+    /** 回放片段进度条控件初始化完成 */ segmentProgressControlInit: 'Control.segmentProgressControlInit'
+};
+/**
  *
  * 事件名
  *
@@ -179,7 +237,7 @@ var EVENTS = {
     /** 播放区间播放结束（SDK 层 playbackRange 特性） */ playbackEnd: 'playbackEnd',
     /**
    * 控件相关
-   */ control: {
+   */ control: _extends({}, CONTROL_INIT_EVENTS, {
         /** 点击播放播放／暂停按钮 */ play: 'Control.play',
         /** 播放控件销毁 */ playDestroy: 'Control.playDestroy',
         /** 截图 */ capturePicture: 'Control.capturePicture',
@@ -235,12 +293,13 @@ var EVENTS = {
         /** 日期改变 */ dateMonthChange: 'Control.dateMonthChange',
         /** 日期面板展示的月份变化 */ datePanelMonthChange: 'Control.datePanelMonthChange',
         /** 日期面板展示的年份变化 */ datePanelYearChange: 'Control.datePanelYearChange',
-        /** 日期销毁 */ dateDestroy: 'Control.datePanelDestroy',
+        /** 日期销毁 */ dateDestroy: 'Control.dateDestroy',
         /** 时间面板展示隐藏变换 */ timePanelOpenChange: 'Control.timePanelOpenChange',
         /** 时间改变 */ timeChange: 'Control.timeChange',
         /** 时间轴拖动结束 */ timeLineChange: 'Control.timeLineChange',
         /** 时间轴图片列表面板 */ timeLinePanelOpenChange: 'Control.timeLinePanelOpenChange',
         /** 时间轴控件销毁 */ timeLineDestroy: 'Control.timeLineDestroy',
+        /** 控件不支持当前播放类型（仅提示，控件仍会渲染） */ unsupportedPlayType: 'Control.unsupportedPlayType',
         /** 主题控件挂载前 切换新的主题也会触发，如果想首次获取需要在 onInitializing 回调中进行监听 */ beforeMountControls: 'Control.beforeMountControls',
         /** 主题控件挂载完成, 切换新的主题也会触发，如果想首次获取需要在 onInitializing 回调中进行监听 */ mountedControls: 'Control.mountedControls',
         /** 主题控件卸载前, 已有控件卸载时才可触发 */ beforeUnmountControls: 'Control.beforeUnmountControls',
@@ -250,7 +309,7 @@ var EVENTS = {
         /** 消息控件销毁 */ messageDestroy: 'Control.messageDestroy',
         /** 播放器内容区域销毁 */ contentDestroy: 'Control.contentDestroy',
         /** 播放器内容区域重新渲染 */ contentRerender: 'Control.contentRerender'
-    },
+    }),
     /**
    * 主题控件相关
    */ theme: {
@@ -262,4 +321,4 @@ var EVENTS = {
     message: 'message'
 };
 
-export { CLEAR_TIMER_HEADER_FOOTER_ANIMATION, DATE_PICKER_ICON_WIDTH, DEVICE_INFO_GROUP, EVENTS, FOOTER_MORE_GROUP, MOBILE_EXTENDS, PAUSE_DISABLED_BTN, PREFIX_CLASS, REC_BOTTOM_GROUP, REC_GROUP, THEME_PROPS, THEME_SCALE_MODE_TYPE };
+export { CLEAR_TIMER_HEADER_FOOTER_ANIMATION, CONTROL_INIT_EVENTS, DATE_PICKER_ICON_WIDTH, DEVICE_INFO_GROUP, EVENTS, FOOTER_MORE_GROUP, MOBILE_EXTENDS, PAUSE_DISABLED_BTN, PLAY_TYPES, PREFIX_CLASS, REC_BOTTOM_GROUP, REC_GROUP, THEME_PROPS, THEME_SCALE_MODE_TYPE };
