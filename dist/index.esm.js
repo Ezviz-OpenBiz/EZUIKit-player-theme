@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.7-beta.2
-* Copyright (c) 2026-09-24 13:42:47 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.7-beta.3
+* Copyright (c) 2026-09-24 15:33:23 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -7783,7 +7783,7 @@ function _set_prototype_of$d(o, p) {
                     var _this__options_props_urlInfo, _this__options_props, _this__options;
                     return _extends$c({}, item, {
                         // 加密图片的地址是有时效的
-                        coverPic: item.coverPic + "&decodekey=" + ((_this__options = _this._options) == null ? void 0 : (_this__options_props = _this__options.props) == null ? void 0 : (_this__options_props_urlInfo = _this__options_props.urlInfo) == null ? void 0 : _this__options_props_urlInfo.validateCode)
+                        coverPic: item.coverPic ? item.coverPic + "&decodekey=" + ((_this__options = _this._options) == null ? void 0 : (_this__options_props = _this__options.props) == null ? void 0 : (_this__options_props_urlInfo = _this__options_props.urlInfo) == null ? void 0 : _this__options_props_urlInfo.validateCode) : ''
                     });
                 });
             }
@@ -12260,6 +12260,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.7-beta.2';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.7-beta.3';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
