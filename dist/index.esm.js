@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.7-beta.1
-* Copyright (c) 2026-09-23 13:45:09 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.7-beta.2
+* Copyright (c) 2026-09-24 13:42:47 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -7533,6 +7533,7 @@ function _set_prototype_of$e(o, p) {
     };
     return _set_prototype_of$e(o, p);
 }
+/** 判定「贴近边缘」的安全距离（CSS px），弹窗右边缘与播放器右侧的间距小于它就换对齐方式 */ var REC_DROPDOWN_EDGE_GAP = 10;
 /**
  * 回放下拉控件
  *
@@ -7600,11 +7601,52 @@ function _set_prototype_of$e(o, p) {
             offset: [
                 0,
                 4
-            ]
+            ],
+            onOpenChange: function onOpenChange(open) {
+                // 打开时按控件在视口中的位置决定对齐方式。
+                // 此时 picker 已把 $wrapperContent 设为 inline-flex（可测量宽度），
+                // 而它内部的定位计算还在 requestAnimationFrame 里，改 placement 来得及生效。
+                // 移动端 placement 不生效（弹窗固定在窗口底部）
+                if (open && !Utils.isMobile) _this._adjustPlacement();
+            }
         });
         this._picker.innerHTML(this._getPanelHTML());
         this._activeOption(this._recType);
         this._bindPanelEvents();
+    };
+    /**
+   * 按控件在播放器实例窗口中的位置调整弹窗对齐方式
+   *
+   * 默认 `bottom` 是相对控件水平居中，弹窗比控件宽，控件靠近右边缘时弹窗会探出边界。
+   * 这种情况改用 `br`（弹窗右边缘与控件右边缘对齐、向左展开），控件本身在边界内，
+   * 因此右侧一定不会溢出。
+   *
+   * 边界取的是**播放器实例窗口**（`rootContainer`）而非浏览器窗口：播放器通常只占页面一部分，
+   * 弹窗一旦超出播放器就会画到播放器外面去，按浏览器窗口判断会漏掉这种情况。
+   * 拿不到 `rootContainer` 时退回按浏览器窗口判断。
+   *
+   * 每次打开都重新判断：resize、全屏切换、控件栏溢出收纳都会改变控件的相对位置，
+   * 一次性设定会在位置变化后失效。
+   */ _proto._adjustPlacement = function _adjustPlacement() {
+        var _this__picker;
+        // 移动端 placement 不生效（弹窗固定在窗口底部铺满）
+        if (Utils.isMobile) return;
+        if (!this.$container || !((_this__picker = this._picker) == null ? void 0 : _this__picker.$wrapperContent)) return;
+        var panelWidth = this._picker.$wrapperContent.getBoundingClientRect().width;
+        // 还没渲染出宽度，无法判断，保持当前对齐方式
+        if (!panelWidth) return;
+        var containerRect = this.$container.getBoundingClientRect();
+        var $root = this.__options.rootContainer;
+        var boundaryRight = ($root == null ? void 0 : $root.getBoundingClientRect) ? $root.getBoundingClientRect().right : window.innerWidth;
+        // 居中对齐时弹窗的右边缘位置
+        var centeredRight = Math.ceil(containerRect.left + (containerRect.width + panelWidth) / 2);
+        var willOverflowRight = centeredRight > boundaryRight - REC_DROPDOWN_EDGE_GAP;
+        if (willOverflowRight) {
+            this._picker.$wrapperContent.classList.add('epicker-br');
+        } else {
+            this._picker.$wrapperContent.classList.remove('epicker-br');
+        }
+        this._picker.setPlacement(willOverflowRight ? 'br' : 'bottom');
     };
     _proto._getPanelHTML = function _getPanelHTML() {
         var _this_locale, _this_locale1, _this_locale2;
@@ -9997,6 +10039,12 @@ function _renderControls(theme, $container, btnList, props) {
             if (Controls[item.iconId]) {
                 if (theme.options["" + item.iconId + "Options"] !== null) {
                     var _theme_urlInfo2, _theme_urlInfo3, _theme_options1;
+                    if (theme.options.sdkType === 'custom' && [
+                        "alarmMessage",
+                        "broadcast"
+                    ].includes(item.iconId)) {
+                        continue;
+                    }
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                     theme.controls["" + item.iconId + "Control"] = new Controls[item.iconId](_extends$1({
                         rootContainer: theme.$container,
@@ -12212,6 +12260,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.7-beta.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.7-beta.2';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
