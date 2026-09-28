@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.7-beta.3
-* Copyright (c) 2026-09-24 15:33:23 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.7-beta.4
+* Copyright (c) 2026-09-28 08:24:45 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -14261,7 +14261,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.7-beta.3';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.7-beta.4';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
