@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.8-beta.2
-* Copyright (c) 2026-10-10 15:37:05 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.8-beta.3
+* Copyright (c) 2026-10-10 18:47:13 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -659,6 +659,7 @@ var LOADING_DEFAULT_OPTIONS = {};
     var _proto = Loading.prototype;
     _proto._html = function _html() {
         if (typeof this._options.render === 'function') {
+            // 自定义节点安全由开发者自己保障
             this.$container.innerHTML = this._options.render();
         } else {
             var _this_locale;
@@ -1109,7 +1110,7 @@ var MESSAGE_DEFAULT_OPTIONS = {};
    * @param {number=} duration 认自动关闭延时，单位秒， 默认 0 不关闭， 需手动 调用 hide()
    */ _proto.error = function error(msg, duration) {
         if (duration === void 0) duration = 0;
-        this._show(this._getIcon('error') + '<div class="' + PREFIX_CLASS + '-message-msg">' + (msg || '') + "</div>", duration, 'error');
+        this._show(this._getIcon('error') + '<div class="' + PREFIX_CLASS + '-message-msg">' + (escapeHtml(msg) || '') + "</div>", duration, 'error');
     };
     _proto._toast = function _toast(msg, type, duration) {
         var _this = this;
@@ -1155,7 +1156,7 @@ var MESSAGE_DEFAULT_OPTIONS = {};
             //
             this.$container.innerHTML = this.options.render(msg, duration, type);
         } else {
-            this.$container.innerHTML = '<div class="' + PREFIX_CLASS + "-message-content " + PREFIX_CLASS + "-message-" + type + '">' + escapeHtml(msg) + "</div>";
+            this.$container.innerHTML = '<div class="' + PREFIX_CLASS + "-message-content " + PREFIX_CLASS + "-message-" + type + '">' + msg + "</div>";
         }
         //
         this.$container.style.display = 'flex';
@@ -12446,6 +12447,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.8-beta.2';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.8-beta.3';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
