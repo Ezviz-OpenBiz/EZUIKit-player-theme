@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.8-beta.1
-* Copyright (c) 2026-09-29 20:25:53 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.8-beta.2
+* Copyright (c) 2026-10-10 15:37:05 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -443,20 +443,22 @@ function _set_prototype_of$z(o, p) {
     /**
    * 销毁控件
    */ _proto.destroy = function destroy() {
-        var _this___options, _this_$container_remove, _this_$container;
+        var _this___options, _this_$container, _this_$container_remove, _this_$container1;
         if (this._camelCaseName) {
             this.emit("Control." + this._camelCaseName + "Destroy");
         }
-        if (((_this___options = this.__options) == null ? void 0 : _this___options.controlType) !== 'block') this.$container.removeEventListener('dblclick', this._onDBlClick);
+        // 用可选链与下面的 click 解绑保持一致：destroy() 之后 $container 会被置空，
+        // 重复 destroy（例如主题卸载控件后调用方又手动销毁一次）不应抛错
+        if (((_this___options = this.__options) == null ? void 0 : _this___options.controlType) !== 'block') (_this_$container = this.$container) == null ? void 0 : _this_$container.removeEventListener('dblclick', this._onDBlClick);
         // 移除 click 监听
         if (this._onClickHandler) {
-            var _this_$container1;
-            (_this_$container1 = this.$container) == null ? void 0 : _this_$container1.removeEventListener('click', this._onClickHandler);
+            var _this_$container2;
+            (_this_$container2 = this.$container) == null ? void 0 : _this_$container2.removeEventListener('click', this._onClickHandler);
             this._onClickHandler = null;
         }
         this._active = false;
         this.removeAllListeners();
-        (_this_$container = this.$container) == null ? void 0 : (_this_$container_remove = _this_$container.remove) == null ? void 0 : _this_$container_remove.call(_this_$container);
+        (_this_$container1 = this.$container) == null ? void 0 : (_this_$container_remove = _this_$container1.remove) == null ? void 0 : _this_$container_remove.call(_this_$container1);
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.$container = null;
     };
@@ -566,6 +568,45 @@ function _set_prototype_of$z(o, p) {
    * ```
    */ Control.supportedPlayTypes = [].concat(PLAY_TYPES);
 
+/**
+ * HTML 转义
+ *
+ * 控件大量使用「模板字符串拼 HTML + innerHTML」的写法，只要拼进去的值来自
+ * 播放地址、接口返回或多语言配置，就存在注入风险。能改用 `textContent` /
+ * `createElement` 的地方应优先改用 DOM API；确实需要拼字符串时，所有外部
+ * 数据都必须先过这个函数。
+ *
+ * 同时覆盖两种语境：
+ * - 文本内容：`<span>${escapeHtml(v)}</span>`
+ * - 属性值：`<span title="${escapeHtml(v)}">`
+ *
+ * @remarks 用一次 `replace` 扫描完成，不存在「先转 `&` 再转其他」导致的二次转义。
+ */ /** 需要转义的字符与对应实体 */ var HTML_ESCAPE_MAP = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+};
+/**
+ * 转义 HTML 中有特殊含义的字符
+ *
+ * @param value - 任意值，`null` / `undefined` 归一成空字符串
+ * @returns 可安全拼进 HTML 文本或双引号属性值的字符串
+ * @since 3.1.8
+ * @example
+ * ```ts
+ * escapeHtml('x" onerror="alert(1)');  // 'x&quot; onerror=&quot;alert(1)'
+ * escapeHtml('<img src=x>');           // '&lt;img src=x&gt;'
+ * escapeHtml(undefined);               // ''
+ * ```
+ */ function escapeHtml(value) {
+    if (value === null || value === undefined) return '';
+    return String(value).replace(/[&<>"']/g, function(char) {
+        return HTML_ESCAPE_MAP[char];
+    });
+}
+
 function _extends$y() {
     _extends$y = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
@@ -621,11 +662,13 @@ var LOADING_DEFAULT_OPTIONS = {};
             this.$container.innerHTML = this._options.render();
         } else {
             var _this_locale;
-            this.$container.innerHTML = '\n          <span class="' + PREFIX_CLASS + "-loading-dot " + PREFIX_CLASS + '-loading-dot-load">\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n          </span>\n        <div class="' + PREFIX_CLASS + '-loading-text">' + (((_this_locale = this.locale) == null ? void 0 : _this_locale.LOADING) || 'loading...') + "</div>\n        ";
+            this.$container.innerHTML = '\n          <span class="' + PREFIX_CLASS + "-loading-dot " + PREFIX_CLASS + '-loading-dot-load">\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n          </span>\n        <div class="' + PREFIX_CLASS + '-loading-text">' + escapeHtml(((_this_locale = this.locale) == null ? void 0 : _this_locale.LOADING) || 'loading...') + "</div>\n        ";
         }
     };
     /**
    * 动画展示
+   *
+   * @remarks `html` 会原样写入 `innerHTML`，**不做转义**，仅接受可信内容。
    * @param html 自定义动画内容, 如果不存在则使用默认动画
    */ _proto.show = function show(html) {
         if (html) this.$container.innerHTML = html;
@@ -714,16 +757,21 @@ var POSTER_OPTIONS = {
    * 设置封面 这里不对 poster 进行缓存，如果有值优先使用，如果没有值优先使用 初始化传入的值
    * @param {string} poster 封面地址或 base64 数据
    */ _proto.setPoster = function setPoster(poster) {
-        var // eslint-disable-next-line @typescript-eslint/unbound-method
-        // prettier-ignore
-        _this_$container_querySelector;
         poster = poster != null ? poster : this._options.poster;
-        if (poster === '') {
-            this.$container.innerHTML = '';
+        // 空值一律清空。原先只判 `=== ''`，poster 为 undefined 时会渲染出
+        // `<img src="undefined">`，浏览器会去请求 ./undefined 再触发 error 回调
+        if (!poster) {
+            this.$container.replaceChildren();
             return;
         }
-        this.$container.innerHTML = '<img class="' + PREFIX_CLASS + '-poster-img" src="' + poster + '" />';
-        (_this_$container_querySelector = this.$container.querySelector("." + PREFIX_CLASS + "-poster-img")) == null ? void 0 : _this_$container_querySelector.addEventListener("error", this._imgLoadErrorEvent);
+        // 用 DOM API 而不是拼 innerHTML：封面地址可能来自远程模板接口或业务动态传入，
+        // 拼进 src="${poster}" 时 `x" onerror="...` 能闭合属性挂上事件处理器
+        var $img = document.createElement('img');
+        $img.className = "" + PREFIX_CLASS + "-poster-img";
+        $img.src = poster;
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        $img.addEventListener('error', this._imgLoadErrorEvent);
+        this.$container.replaceChildren($img);
     };
     /**
    * 展示封面 这里不对 poster 进行缓存， 如果有值优先使用， 如果没有值优先使用 初始化传入的值
@@ -817,7 +865,9 @@ var Icons = {
     var attrStr = '';
     if (attr) {
         Object.keys(attr).forEach(function(key) {
-            if (!(attr[key] === undefined || attr[key] === null)) attrStr += key + '="' + attr[key] + '"';
+            // 属性值必须转义：所有控件的 title 都来自 options.locales，
+            // 不转义时 `x" onmouseover="alert(1)` 这样的文案可以闭合属性并挂上事件
+            if (!(attr[key] === undefined || attr[key] === null)) attrStr += key + '="' + escapeHtml(attr[key]) + '"';
         });
     }
     return '<span class="' + PREFIX_CLASS + "-icon " + PREFIX_CLASS + "-icon-" + type + '" ' + attrStr + ">" + svg + "</span>";
@@ -1072,7 +1122,8 @@ var MESSAGE_DEFAULT_OPTIONS = {};
                 this._$toast = document.createElement('div');
                 this._$toast.classList.add("" + PREFIX_CLASS + "-toast");
             }
-            this._$toast.innerHTML = '<div class="' + PREFIX_CLASS + '-toast-content">' + this._getIcon(type) + '<span class="' + PREFIX_CLASS + "-toast-msg " + PREFIX_CLASS + "-toast-" + type + '">' + (msg || '') + "</span></div>";
+            // msg 是 EVENTS.message 的载荷，内核与接口的错误信息都走这个通道，必须转义
+            this._$toast.innerHTML = '<div class="' + PREFIX_CLASS + '-toast-content">' + this._getIcon(type) + '<span class="' + PREFIX_CLASS + "-toast-msg " + PREFIX_CLASS + "-toast-" + type + '">' + escapeHtml(msg) + "</span></div>";
             this.options.rootContainer.appendChild(this._$toast);
             if (duration > 0) {
                 this._toastTimer = setTimeout(function() {
@@ -1104,7 +1155,7 @@ var MESSAGE_DEFAULT_OPTIONS = {};
             //
             this.$container.innerHTML = this.options.render(msg, duration, type);
         } else {
-            this.$container.innerHTML = '<div class="' + PREFIX_CLASS + "-message-content " + PREFIX_CLASS + "-message-" + type + '">' + (msg || '') + "</div>";
+            this.$container.innerHTML = '<div class="' + PREFIX_CLASS + "-message-content " + PREFIX_CLASS + "-message-" + type + '">' + escapeHtml(msg) + "</div>";
         }
         //
         this.$container.style.display = 'flex';
@@ -2011,9 +2062,9 @@ var VOLUME_DEFAULT_OPTIONS = {
         // 这里不要用 click 事件，因为拖动音量大小时鼠标移动到图标上会触发 click
         // prettier-ignore
         delegate(this.$container, "." + PREFIX_CLASS + "-control-volume", "mousedown", function() {
-            if (!_this.$container.classList.contains("" + PREFIX_CLASS + "-disabled")) {
-                _this._toggleMute();
-            }
+            // 禁用判断交给 _toggleMute 里的 this.disabled（状态是权威来源，
+            // class 只是它的呈现），避免两处各判一遍
+            _this._toggleMute();
         });
     };
     _create_class$6(Volume, [
@@ -5385,11 +5436,14 @@ function _ts_generator$6(thisArg, body) {
  */ function getThemeDataByTemplate(theme, id) {
     return _async_to_generator$6(function() {
         var _theme_options_token_httpToken, _theme_options_token, // 中止上一个在途请求，并为本次请求创建可中止的信号（destroy 时会 abort）
-        _theme__templateAbortController, url, controller;
+        _theme__templateAbortController, accessToken, url, controller;
         return _ts_generator$6(this, function(_state) {
             switch(_state.label){
                 case 0:
-                    url = theme.options.env.domain + "/api/service/media/template/getDetail?accessToken=" + (theme.options.accessToken || ((_theme_options_token = theme.options.token) == null ? void 0 : (_theme_options_token_httpToken = _theme_options_token.httpToken) == null ? void 0 : _theme_options_token_httpToken.url)) + "&id=" + id;
+                    accessToken = theme.options.accessToken || ((_theme_options_token = theme.options.token) == null ? void 0 : (_theme_options_token_httpToken = _theme_options_token.httpToken) == null ? void 0 : _theme_options_token_httpToken.url);
+                    // 查询参数逐个 encodeURIComponent，防止 `&` `#` `=` 等字符注入额外参数或截断 URL（SECURITY_AUDIT M1）
+                    // 不用 `new URL()`：env.domain 允许为空（同源相对路径）或带路径前缀，URL 构造会抛错或丢掉前缀
+                    url = theme.options.env.domain + "/api/service/media/template/getDetail?accessToken=" + encodeURIComponent(String(accessToken)) + "&id=" + encodeURIComponent(String(id));
                     (_theme__templateAbortController = theme._templateAbortController) == null ? void 0 : _theme__templateAbortController.abort();
                     controller = new AbortController();
                     theme._templateAbortController = controller;
@@ -5717,7 +5771,9 @@ function _filterLeftRightControls(btnList) {
                     ];
                     // 渲染主题模板
                     themeData = TEMPLATES[data];
-                    if (!data) {
+                    // 修复：此前判的是 `!data`，而这个分支里 data 必然是非空字符串，告警永远不会发出，
+                    // 传了不存在的模板名只会静默返回 undefined。应当判查表结果。
+                    if (!themeData) {
                         (_theme_logger = theme.logger) == null ? void 0 : _theme_logger.warn("Theme template " + data + " is not exist!");
                         themeData = null;
                     }
@@ -6408,7 +6464,9 @@ function _set_prototype_of$k(o, p) {
             this._ptzControl.updateOptions(options);
         }
         if (this._ptzControl1) {
-            this._ptzControl.updateOptions(options);
+            // 修复：此前误写成 this._ptzControl，移动端扩展区域的云台拿不到新凭据，
+            // 换 accessToken 或切设备后移动端云台会继续用旧值请求
+            this._ptzControl1.updateOptions(options);
         }
     };
     _proto._onSpeedChange = function _onSpeedChange(speed) {
@@ -7630,7 +7688,13 @@ function _set_prototype_of$e(o, p) {
             controlType: 'button',
             classNameSuffix: 'rec-dropdown'
         })) || this;
-        _this._options = options;
+        _this._options = Object.assign({
+            list: [
+                'rec',
+                'cloudRec',
+                'cloudRecord'
+            ]
+        }, options || {});
         // H5 端不展示直播/回放切换按钮
         if (Utils.isMobile) {
             _this.$container.style.display = 'none';
@@ -7663,7 +7727,8 @@ function _set_prototype_of$e(o, p) {
         }
     };
     _proto._render = function _render() {
-        var _this_locale;
+        var _this__options_list, _this_locale;
+        if (((_this__options_list = this._options.list) == null ? void 0 : _this__options_list.length) === 0) ;
         this.$container.innerHTML = IconComponents.recDropdown({
             title: ((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_REC_DROPDOWN) || '回放'
         });
@@ -7686,8 +7751,8 @@ function _set_prototype_of$e(o, p) {
                 // 打开时按控件在视口中的位置决定对齐方式。
                 // 此时 picker 已把 $wrapperContent 设为 inline-flex（可测量宽度），
                 // 而它内部的定位计算还在 requestAnimationFrame 里，改 placement 来得及生效。
-                // 移动端 placement 不生效（弹窗固定在窗口底部）
-                if (open && !Utils.isMobile) _this._adjustPlacement();
+                // 移动端不适用的判断放在 _adjustPlacement 内部，避免两处各管一半
+                if (open) _this._adjustPlacement();
             }
         });
         this._picker.innerHTML(this._getPanelHTML());
@@ -7733,7 +7798,7 @@ function _set_prototype_of$e(o, p) {
         var cloudRecLabel = ((_this_locale = this.locale) == null ? void 0 : _this_locale.REC_DROPDOWN_CLOUD_REC) || '云存储';
         var cloudRecordLabel = ((_this_locale1 = this.locale) == null ? void 0 : _this_locale1.REC_DROPDOWN_CLOUD_RECORD) || '云录制';
         var localRecLabel = ((_this_locale2 = this.locale) == null ? void 0 : _this_locale2.REC_DROPDOWN_LOCAL_REC) || '本地回放';
-        return '<div class="' + PREFIX_CLASS + '-rec-dropdown-panel">\n      <ul class="' + PREFIX_CLASS + '-rec-dropdown-list">\n        <li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="cloudRec">\n          <span>' + cloudRecLabel + '</span>\n        </li>\n        <li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="cloudRecord">\n          <span>' + cloudRecordLabel + '</span>\n        </li>\n        <li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="rec">\n          <span>' + localRecLabel + "</span>\n        </li>\n      </ul>\n    </div>";
+        return '<div class="' + PREFIX_CLASS + '-rec-dropdown-panel">\n      <ul class="' + PREFIX_CLASS + '-rec-dropdown-list">\n        ' + (this._options.list.includes('cloudRec') ? '<li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="cloudRec">\n          <span>' + cloudRecLabel + "</span>\n        </li>" : '') + "\n        " + (this._options.list.includes('cloudRecord') ? '<li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="cloudRecord">\n          <span>' + cloudRecordLabel + "</span>\n        </li>" : '') + "\n        " + (this._options.list.includes('rec') ? '        <li class="' + PREFIX_CLASS + '-rec-dropdown-item" data-type="rec">\n          <span>' + localRecLabel + "</span>\n        </li>" : '') + "\n      </ul>\n    </div>";
     };
     _proto._bindPanelEvents = function _bindPanelEvents() {
         var _this = this;
@@ -7754,6 +7819,9 @@ function _set_prototype_of$e(o, p) {
     };
     _proto._activeOption = function _activeOption(type) {
         var _this__picker;
+        if (!this._options.list.includes(type)) {
+            return;
+        }
         if ((_this__picker = this._picker) == null ? void 0 : _this__picker.$body) {
             var items = this._picker.$body.querySelectorAll("." + PREFIX_CLASS + "-rec-dropdown-item");
             items.forEach(function(item) {
@@ -8078,8 +8146,9 @@ var SELECT_DEFAULT_OPTIONS = {
         label: 'label',
         value: 'value'
     },
+    // label 可能来自内核下发的列表，内置实现必须转义
     renderLabel: function renderLabel(label) {
-        return "<span>" + (label || '') + "</span>";
+        return "<span>" + escapeHtml(label) + "</span>";
     },
     onChange: function onChange() {},
     onOpenChange: function onOpenChange() {}
@@ -8194,9 +8263,11 @@ var SELECT_DEFAULT_OPTIONS = {
             var _this__options_fieldNames, _this__options_fieldNames1, _this_locale, _this__picker;
             var labelKey = (_ref = (_this__options_fieldNames = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.label) != null ? _ref : 'label';
             var valueKey = (_ref1 = (_this__options_fieldNames1 = this._options.fieldNames) == null ? void 0 : _this__options_fieldNames1.value) != null ? _ref1 : 'value';
-            (_this__picker = this._picker) == null ? void 0 : _this__picker.innerHTML('<div class="' + PREFIX_CLASS + '-select-panel">\n            <ul class="' + PREFIX_CLASS + '-select-list">\n              ' + list.map(function(item) {
-                return '\n                    <li class="' + PREFIX_CLASS + "-select-option " + (+item[valueKey] === _this.value ? "" + PREFIX_CLASS + "-active" : '') + '" data-value="' + item[valueKey] + '">\n                      <span>' + item[labelKey] + "</span>\n                    </li>\n                  ";
-            }).join('') + "\n            </ul>\n            " + (Utils.isMobile ? '<div class="' + PREFIX_CLASS + '-select-cancel">\n                  <span>' + (((_this_locale = this.locale) == null ? void 0 : _this_locale.cancel) || '取消') + "</span>\n                </div>" : '') + "\n            " + (Utils.isMobile ? '<span class="' + PREFIX_CLASS + '-select-close">' + IconComponents.close() + "</span>" : '') + "\n          <div>");
+            (_this__picker = this._picker) == null ? void 0 : _this__picker.innerHTML('<div class="' + PREFIX_CLASS + '-select-panel">\n            <ul class="' + PREFIX_CLASS + '-select-list">\n              ' + list.map(// 列表可能来自内核下发（如 setVideoLevelList 的清晰度列表），
+            // data-value 与标签文本都要转义
+            function(item) {
+                return '\n                    <li class="' + PREFIX_CLASS + "-select-option " + (+item[valueKey] === _this.value ? "" + PREFIX_CLASS + "-active" : '') + '" data-value="' + escapeHtml(item[valueKey]) + '">\n                      <span>' + escapeHtml(item[labelKey]) + "</span>\n                    </li>\n                  ";
+            }).join('') + "\n            </ul>\n            " + (Utils.isMobile ? '<div class="' + PREFIX_CLASS + '-select-cancel">\n                  <span>' + escapeHtml(((_this_locale = this.locale) == null ? void 0 : _this_locale.cancel) || '取消') + "</span>\n                </div>" : '') + "\n            " + (Utils.isMobile ? '<span class="' + PREFIX_CLASS + '-select-close">' + IconComponents.close() + "</span>" : '') + "\n          <div>");
             this.list = list;
             this._activeOption();
         } else if ((list == null ? void 0 : list.length) === 0) {
@@ -8428,15 +8499,16 @@ function __filter(list, locale) {
             classNameSuffix: 'definition',
             renderLabel: function renderLabel(label, item, list) {
                 var _list_;
+                // 文案来自 options.locales，name / label 来自内核下发的清晰度列表，都要转义
                 if ((item == null ? void 0 : item.level) === 'auto') {
                     var _options_locales_options_language;
                     var realItem = list.find(function(it) {
                         return it.level === _assert_this_initialized$1(_this)._level;
                     });
-                    return "<span>" + (options == null ? void 0 : (_options_locales_options_language = options.locales[options.language]) == null ? void 0 : _options_locales_options_language.VIDEO_LEVEL_AUTO) + "(" + ((realItem == null ? void 0 : realItem.name) || '') + ")</span>";
+                    return "<span>" + escapeHtml(options == null ? void 0 : (_options_locales_options_language = options.locales[options.language]) == null ? void 0 : _options_locales_options_language.VIDEO_LEVEL_AUTO) + "(" + escapeHtml((realItem == null ? void 0 : realItem.name) || '') + ")</span>";
                 }
                 // 如果 label 不存在，则不显示label，直接显示list的第一个label， 一般自定义清晰度列表可能会出现
-                return "<span>" + (label || ((_list_ = list[0]) == null ? void 0 : _list_.name) || '') + "</span>";
+                return "<span>" + escapeHtml(label || ((_list_ = list[0]) == null ? void 0 : _list_.name) || '') + "</span>";
             },
             onChange: function onChange(value, item) {
                 var _options_onChange;
@@ -8466,7 +8538,8 @@ function __filter(list, locale) {
                 var realItem = _this.list.find(function(it) {
                     return it.level === _this._level;
                 });
-                _this.$container.querySelector("." + PREFIX_CLASS + "-select-btn").innerHTML = "\n          <span>" + (options == null ? void 0 : (_options_locales_options_language = options.locales[options.language]) == null ? void 0 : _options_locales_options_language.VIDEO_LEVEL_AUTO) + "(" + ((realItem == null ? void 0 : realItem.name) || '') + ")</span>\n        ";
+                // 文案来自 options.locales，realItem.name 来自内核下发的清晰度列表，两者都要转义
+                _this.$container.querySelector("." + PREFIX_CLASS + "-select-btn").innerHTML = "\n          <span>" + escapeHtml(options == null ? void 0 : (_options_locales_options_language = options.locales[options.language]) == null ? void 0 : _options_locales_options_language.VIDEO_LEVEL_AUTO) + "(" + escapeHtml((realItem == null ? void 0 : realItem.name) || '') + ")</span>\n        ";
             } else {
                 if (_this.value !== _this._level + '') _this.value = _this._level + '';
             }
@@ -8695,7 +8768,8 @@ function _set_prototype_of$8(o, p) {
         var isMobile1 = isMobile();
         if (isMobile1) {
             var _this_locale;
-            this.$container.innerHTML = '\n        <span class="' + PREFIX_CLASS + '-mobile-date-filter" title="' + (((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_CALENDAR) || '') + '">\n          <span class="' + PREFIX_CLASS + '-mobile-date-filter-value">' + this._getDateStr() + "</span>\n          " + IconComponents.filter() + "\n        <span>";
+            // title 来自 options.locales，必须转义后再拼进属性
+            this.$container.innerHTML = '\n        <span class="' + PREFIX_CLASS + '-mobile-date-filter" title="' + escapeHtml(((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_CALENDAR) || '') + '">\n          <span class="' + PREFIX_CLASS + '-mobile-date-filter-value">' + escapeHtml(this._getDateStr()) + "</span>\n          " + IconComponents.filter() + "\n        <span>";
         } else {
             var _this_locale1;
             this.$container.innerHTML = IconComponents.date({
@@ -8729,7 +8803,8 @@ function _set_prototype_of$8(o, p) {
                     _this.options.onOk == null ? void 0 : _this.options.onOk.call(_this.options, date);
                     _this.emit(EVENTS.control.dateChange, date);
                     if (date && _this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value")) {
-                        _this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value").innerHTML = _this._getDateStr();
+                        // 纯文本，用 textContent 避免把日期字符串交给 HTML 解析器
+                        _this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value").textContent = _this._getDateStr();
                     }
                 }
             },
@@ -8776,7 +8851,7 @@ function _set_prototype_of$8(o, p) {
         if (date && !change && this._value !== DateTime.format(date, 'YYYY-MM-DD')) {
             this._value = DateTime.format(date, 'YYYY-MM-DD');
             if (date && this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value")) {
-                this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value").innerHTML = this._getDateStr();
+                this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value").textContent = this._getDateStr();
             }
         }
     };
@@ -8947,7 +9022,8 @@ function _set_prototype_of$7(o, p) {
             this._value = time;
             var valueEl = this.$container.querySelector("." + PREFIX_CLASS + "-mobile-date-filter-value");
             if (valueEl) {
-                valueEl.innerHTML = this._getTimeStr();
+                // time 由调用方传入（setTime 是公开方法），只需纯文本，走 textContent
+                valueEl.textContent = this._getTimeStr();
             }
         }
     };
@@ -9378,8 +9454,12 @@ function _set_prototype_of$5(o, p) {
         }
         this._progress.setCurrent(currentMs);
     };
-    /** 没有可用片段信息时退化为整个区间，避免进度条空转 */ _proto._fallbackToRange = function _fallbackToRange() {
-        if (!this._hasRange()) return;
+    /**
+   * 没有可用片段信息时退化为整个区间，避免进度条空转
+   *
+   * 两个调用方（`_syncCurrent` 开头、`_updateVisible` 的 `visible` 分支）都已经
+   * 判过 `_hasRange()`，这里不再重复判断。
+   */ _proto._fallbackToRange = function _fallbackToRange() {
         this._progress.setSegment(this._rangeBeginMs, this._rangeEndMs);
     };
     _proto._hasRange = function _hasRange() {
@@ -9453,7 +9533,12 @@ function _set_prototype_of$4(o, p) {
     var _proto = Device.prototype;
     _proto._render = function _render() {
         var _this___options_props_urlInfo, _this___options_props;
-        this.$container.innerHTML = '<span class="' + PREFIX_CLASS + "-text " + PREFIX_CLASS + '-text-device">' + this._splicingString(this.__options.deviceName, (_this___options_props = this.__options.props) == null ? void 0 : (_this___options_props_urlInfo = _this___options_props.urlInfo) == null ? void 0 : _this___options_props_urlInfo.deviceSerial) + "</span>";
+        // deviceSerial 由播放地址解析而来（parseEzopenUrl 对它不做字符校验），
+        // 这里只需要纯文本，用 textContent 从根上避免注入
+        var $span = document.createElement('span');
+        $span.className = PREFIX_CLASS + "-text " + PREFIX_CLASS + "-text-device";
+        $span.textContent = this._splicingString(this.__options.deviceName, (_this___options_props = this.__options.props) == null ? void 0 : (_this___options_props_urlInfo = _this___options_props.urlInfo) == null ? void 0 : _this___options_props_urlInfo.deviceSerial);
+        this.$container.replaceChildren($span);
     };
     /**
    * 更新设备序列号
@@ -9464,7 +9549,8 @@ function _set_prototype_of$4(o, p) {
             var $span = this.$container.querySelector("." + PREFIX_CLASS + "-text-device");
             var text = this._splicingString(deviceName, deviceSerial);
             $span == null ? void 0 : $span.setAttribute('title', text);
-            $span.innerHTML = text;
+            // 设备信息来自 getDeviceInfo 事件（接口/内核数据），同样走 textContent
+            $span.textContent = text;
         }
     };
     _proto._splicingString = function _splicingString(deviceName, deviceSerial) {
@@ -9860,7 +9946,11 @@ var _unmountedControls = function _unmountedControls(theme) {
         theme._footer.destroy();
         theme._footer = null;
     }
+    // 移除 header / footer 动画暂停监听（挂在 theme 上，需显式解绑）
+    // 修复：此前只置空引用没有解绑，changeTheme 每调用一次就漏一个监听器，
+    // 且引用被清掉后 _renderTheme 里的兜底解绑也永远不会执行
     if (theme._onPauseTimingFunc) {
+        theme.removeListener(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, theme._onPauseTimingFunc);
         theme._onPauseTimingFunc = null;
     }
     // 移除首帧同步监听（挂在 theme 上，需显式解绑，避免 changeTheme 累积）
@@ -10274,10 +10364,8 @@ function _renderTheme(theme, data) {
                             });
                             // 当移动端 picker 控件打开时需要关闭动画（定时器）
                             // 暂停 header footer 的动画(定时器)
-                            if (theme._onPauseTimingFunc) {
-                                theme.removeListener(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, theme._onPauseTimingFunc);
-                                theme._onPauseTimingFunc = null;
-                            }
+                            // 旧监听的解绑统一在 _unmountedControls 里做（本函数开头已无条件调用过），
+                            // 这里不再重复判断
                             theme._onPauseTimingFunc = function(open) {
                                 if (open) {
                                     var _theme__interactiveResult_clearTimeout, _theme__interactiveResult;
@@ -10670,6 +10758,17 @@ function _inherits(subClass, superClass) {
         }
     });
     if (superClass) _set_prototype_of(subClass, superClass);
+}
+function _object_without_properties_loose(source, excluded) {
+    if (source == null) return {};
+    var target = {}, sourceKeys = Object.getOwnPropertyNames(source), key, i;
+    for(i = 0; i < sourceKeys.length; i++){
+        key = sourceKeys[i];
+        if (excluded.indexOf(key) >= 0) continue;
+        if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+        target[key] = source[key];
+    }
+    return target;
 }
 function _set_prototype_of(o, p) {
     _set_prototype_of = Object.setPrototypeOf || function setPrototypeOf(o, p) {
@@ -11265,10 +11364,16 @@ var THEME_DEFAULT_OPTIONS = {
             // JSON 不能序列化dom节点, 不要使用 this.options.container, 请使用 this.container
             delete this.options.container;
         }
+        // 凭据不进日志：这条 log 在生产产物里依然存在（strip 插件只剥离 console.*，
+        // 不处理 logger 实例方法），直接打印 options 等于把 accessToken 暴露在控制台
+        var _this_options = this.options; _this_options.accessToken; _this_options.token; var loggableOptions = _object_without_properties_loose(_this_options, [
+            "accessToken",
+            "token"
+        ]);
         try {
-            this.logger.log('[options] \n', JSON.stringify(this.options));
+            this.logger.log('[options] \n', JSON.stringify(loggableOptions));
         } catch (error) {
-            this.logger.log('[options] \n', this.options);
+            this.logger.log('[options] \n', loggableOptions);
         }
         var language = this.options.language || 'zh';
         // 深拷贝内置语言包，避免与模块级 zh/en 常量共享引用（I18n 若对其做合并/修改会污染全局）
@@ -12341,6 +12446,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.8-beta.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.8-beta.2';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };

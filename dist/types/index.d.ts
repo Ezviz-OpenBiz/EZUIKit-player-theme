@@ -524,6 +524,9 @@ type MessageType = 'info' | 'warn' | 'error';
  */
 interface MessageOptions extends Omit<ControlOptions, 'tagName' | 'controlType'> {
     /** 自定义消息内容渲染函数， 默认使用内置的渲染函数
+     *
+     * @remarks 返回值会原样写入 `innerHTML`，**不做转义**。内置渲染会对 `msg`
+     * 转义（消息文本可能来自内核或接口），一旦提供本函数，转义责任转交调用方。
      * @param {string} msg 消息内容
      * @param {number} duration 认自动关闭延时，单位秒， 默认 0 不关闭， 需手动调用 hide()
      * @param {MessageType} type 消息类型
@@ -1085,7 +1088,12 @@ interface SelectOptions extends Omit<ControlOptions, 'tagName'> {
     };
     /** dom节点 title 属性值 */
     title?: string;
-    /** 自定义当前选中的 label 内容 render  */
+    /**
+     * 自定义当前选中的 label 内容 render
+     *
+     * @remarks 返回值会原样写入 `innerHTML`，**不做转义**。内置实现会转义 `label`
+     * （清晰度/倍速列表可能由内核下发），一旦提供本函数，转义责任转交调用方。
+     */
     renderLabel?: (label: string, item: SelectItem, list: SelectItem[]) => string;
     /**
      * 选中项变化回调
@@ -2830,6 +2838,20 @@ interface TimePickerControlOptions extends Omit<ControlOptions, 'tagName'>, Part
 }
 
 /**
+ * 回放下拉控件配置项
+ */
+interface RecDropdownOptions extends Omit<ControlOptions, 'tagName'> {
+    /** 当前回放类型 */
+    recType?: ThemeRecType;
+    /** 回放支持类型(['rec', 'cloudRec', 'cloudRecord']) @since 3.1.8 */
+    list?: ThemeRecType[];
+    /**
+     * 回放类型选择回调
+     */
+    onChange?: (type: ThemeRecType) => void;
+}
+
+/**
  * 主题配置项
  *
  * Theme configuration options
@@ -2936,7 +2958,9 @@ interface ThemeOptions {
     timeLineOptions?: any | null;
     /** 回放片段进度条配置（移动端，仅在设置了播放区间时渲染）， 设置 null 不渲染控件 */
     segmentProgressOptions?: any | null;
-    /** 初始化开始回调, 在内部可以添加事件(Control.beforeMountControls, Control.mountedControls)监听，设置 null 不渲染控件 @since 0.0.1 */
+    /** 下拉回放类型控件配置， 设置 null 不渲染控件 */
+    recDropdownOptions?: OmitControlOptions<RecDropdownOptions> | null;
+    /** 初始化开始回调, 在内部可以添加事件(Control.beforeMountControls, Control.mountedControls)监听 */
     onInitializing?: (theme: Theme) => void;
     /**
      * 移动端扩展 仅针对 ezopen 有效 @since 0.0.1 (2025-08-01),  默认 true, 当值为 null 不展示扩展
@@ -3146,6 +3170,9 @@ declare class Control extends EventEmitter {
 interface LoadingOptions extends Omit<ControlOptions, 'tagName' | 'controlType'> {
     /**
      * 自定义加载动画的 HTML 结构, 当 theme.loading = true 时展示
+     *
+     * @remarks 返回值会原样写入 `innerHTML`，**不做转义**。拼接的数据需由调用方
+     * 保证来源可信；若内容可能来自接口、设备或用户输入，请先自行转义。
      * @returns HTML 字符串
      */
     render?: () => string;
@@ -3160,6 +3187,8 @@ declare class Loading extends Control {
     private _html;
     /**
      * 动画展示
+     *
+     * @remarks `html` 会原样写入 `innerHTML`，**不做转义**，仅接受可信内容。
      * @param html 自定义动画内容, 如果不存在则使用默认动画
      */
     show(html?: string): void;

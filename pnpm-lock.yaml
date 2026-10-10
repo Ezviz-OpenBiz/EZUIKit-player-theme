@@ -12,8 +12,8 @@ importers:
         specifier: 2.1.2-beta.1
         version: 2.1.2-beta.1
       '@ezuikit/control-ptz':
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: 2.0.0-beta.1
+        version: 2.0.0-beta.1
       '@ezuikit/control-rec-list-modal':
         specifier: 0.0.2
         version: 0.0.2
@@ -62,8 +62,8 @@ packages:
   '@ezuikit/control-modal@0.0.2':
     resolution: {integrity: sha512-Etd2RA/iKtkhsAIXtt/sifVPsIY9Xqhe0M9LGgC0s5/DApH4/GtetZQMkCwBgk8K3nLssN0dtzObRuUaxv9+Jw==}
 
-  '@ezuikit/control-ptz@1.0.0':
-    resolution: {integrity: sha512-4N0NX3ocJxVVqyVbYwwJXhh8HIJFudBuZHmhXPShpLFS1SbO3Ej/GhYNVsPUNG7JdoiL31Bn6M3pbkbP05JBCQ==}
+  '@ezuikit/control-ptz@2.0.0-beta.1':
+    resolution: {integrity: sha512-LmqQy1Hs5aWUuzkBlA0oA9TT1Xe1gZf5TfEVX1cuKmrIT3t+iZqptAF4yZfdEZQSo9OtA7P6WNR7KcbdmU8kJA==}
 
   '@ezuikit/control-rec-list-modal@0.0.2':
     resolution: {integrity: sha512-ux2WHDUv8SJiZ7KBCGfVQxsBYA3Lu8VFRaT0VFVx0TqtsRc8G6qZKbRM6IXVrAnl5ptirAC6QvT0+Fs/45Kb3g==}
@@ -128,9 +128,8 @@ snapshots:
       deepmerge: 4.3.1
       eventemitter3: 5.0.4
 
-  '@ezuikit/control-ptz@1.0.0':
+  '@ezuikit/control-ptz@2.0.0-beta.1':
     dependencies:
-      '@ezuikit/utils-tools': 2.0.7
       deepmerge: 4.3.1
 
   '@ezuikit/control-rec-list-modal@0.0.2':
