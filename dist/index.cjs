@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.9-alpha.1
-* Copyright (c) 2026-11-06 19:06:56 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.9-beta.1
+* Copyright (c) 2026-11-06 19:43:39 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -1125,7 +1125,7 @@ var MESSAGE_DEFAULT_OPTIONS = {};
                 this._$toast.classList.add("" + PREFIX_CLASS + "-toast");
             }
             // msg 是 EVENTS.message 的载荷，内核与接口的错误信息都走这个通道，必须转义
-            this._$toast.innerHTML = '<div class="' + PREFIX_CLASS + '-toast-content">' + this._getIcon(type) + '<span class="' + PREFIX_CLASS + "-toast-msg " + PREFIX_CLASS + "-toast-" + type + '">' + escapeHtml(msg) + "</span></div>";
+            this._$toast.innerHTML = '<div class="' + PREFIX_CLASS + '-toast-content">' + this._getIcon(type) + '<span class="' + PREFIX_CLASS + "-toast-msg " + PREFIX_CLASS + "-toast-" + type + '">' + msg + "</span></div>";
             this.options.rootContainer.appendChild(this._$toast);
             if (duration > 0) {
                 this._toastTimer = setTimeout(function() {
@@ -1157,7 +1157,7 @@ var MESSAGE_DEFAULT_OPTIONS = {};
             //
             this.$container.innerHTML = this.options.render(msg, duration, type);
         } else {
-            this.$container.innerHTML = '<div class="' + PREFIX_CLASS + "-message-content " + PREFIX_CLASS + "-message-" + type + '">' + escapeHtml(msg) + "</div>";
+            this.$container.innerHTML = '<div class="' + PREFIX_CLASS + "-message-content " + PREFIX_CLASS + "-message-" + type + '">' + msg + "</div>";
         }
         //
         this.$container.style.display = 'flex';
@@ -12503,7 +12503,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.9-alpha.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.9-beta.1';
 
 exports.CONTROL_INIT_EVENTS = CONTROL_INIT_EVENTS;
 exports.Control = Control;
