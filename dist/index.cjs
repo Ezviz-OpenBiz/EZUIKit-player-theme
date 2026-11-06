@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.8-beta.3
-* Copyright (c) 2026-10-10 18:47:13 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.9-alpha.0
+* Copyright (c) 2026-11-06 15:41:35 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -661,7 +661,6 @@ var LOADING_DEFAULT_OPTIONS = {};
     var _proto = Loading.prototype;
     _proto._html = function _html() {
         if (typeof this._options.render === 'function') {
-            // 自定义节点安全由开发者自己保障
             this.$container.innerHTML = this._options.render();
         } else {
             var _this_locale;
@@ -1112,7 +1111,7 @@ var MESSAGE_DEFAULT_OPTIONS = {};
    * @param {number=} duration 认自动关闭延时，单位秒， 默认 0 不关闭， 需手动 调用 hide()
    */ _proto.error = function error(msg, duration) {
         if (duration === void 0) duration = 0;
-        this._show(this._getIcon('error') + '<div class="' + PREFIX_CLASS + '-message-msg">' + (escapeHtml(msg) || '') + "</div>", duration, 'error');
+        this._show(this._getIcon('error') + '<div class="' + PREFIX_CLASS + '-message-msg">' + (msg || '') + "</div>", duration, 'error');
     };
     _proto._toast = function _toast(msg, type, duration) {
         var _this = this;
@@ -1158,7 +1157,7 @@ var MESSAGE_DEFAULT_OPTIONS = {};
             //
             this.$container.innerHTML = this.options.render(msg, duration, type);
         } else {
-            this.$container.innerHTML = '<div class="' + PREFIX_CLASS + "-message-content " + PREFIX_CLASS + "-message-" + type + '">' + msg + "</div>";
+            this.$container.innerHTML = '<div class="' + PREFIX_CLASS + "-message-content " + PREFIX_CLASS + "-message-" + type + '">' + escapeHtml(msg) + "</div>";
         }
         //
         this.$container.style.display = 'flex';
@@ -8610,6 +8609,7 @@ var SUPPORT_SPEED = [
     8,
     16
 ]; // 8, 16
+/** 本地卡回放与标准流回放最高只支持 4x，8 倍及以上要滤掉 */ var LOCAL_MAX_SPEED = 8;
 var SPEED_DEFAULT_OPTIONS = {
     /**
    * 默认倍速 1, 如果传入的值不在列表中会使用 1 倍速，可能会没有选中
@@ -8618,13 +8618,17 @@ var SPEED_DEFAULT_OPTIONS = {
     // 这里不要设置多语言， 比较麻烦
     /**
    * 倍速列表, 需要是 2 的指数，不能小于 0.5， 最大 16 倍
-   */ list: SUPPORT_SPEED.reverse().map(function(speed) {
+   */ list: SUPPORT_SPEED.slice().reverse().map(function(speed) {
         return {
             label: "" + speed + "x",
             value: speed
         };
     })
 };
+/** 云端回放（云存储、云录制）的默认倍速列表，支持到 16x */ var DEFAULT_CLOUD_SPEED_LIST = SPEED_DEFAULT_OPTIONS.list;
+/** 本地卡回放与标准流回放的默认倍速列表，最高 4x */ var DEFAULT_LOCAL_SPEED_LIST = DEFAULT_CLOUD_SPEED_LIST.filter(function(item) {
+    return Number(item.value) < LOCAL_MAX_SPEED;
+});
 /**
  * 倍速切换控件, 不支持动态切换倍速列表
  *
@@ -8654,41 +8658,91 @@ var SPEED_DEFAULT_OPTIONS = {
                 options == null ? void 0 : (_options_onOpenChange = options.onOpenChange) == null ? void 0 : _options_onOpenChange.call(options, open, value, item);
                 _assert_this_initialized(_this).emit(EVENTS.control.speedPanelOpenChange, open, value, item);
             }
-        })) || this;
-        _this._filterSpeedList(options.list, options.props.recType, options.props.url);
+        })) || this, /** 用户按回放类型传入的倍速列表，切换回放类型时据此重新解析 */ _this._userSpeedLists = {};
+        _this._userSpeedLists = {
+            list: options.list,
+            rec: options.rec,
+            cloudRec: options.cloudRec,
+            cloudRecord: options.cloudRecord
+        };
+        var url = options.props.url;
+        _this._updateSpeedList(options.props.recType, url);
         _this.on(EVENTS.speedChange, function(speed) {
             if (_this.value !== speed + '') _this.value = speed + '';
         });
         _this.on(EVENTS.control.recTypeChange, function(type) {
-            _this._filterSpeedList(options.list, type);
+            // 切换回放类型后当前倍速可能不在新列表里，需要回落到列表内的档位
+            _this._updateSpeedList(type, url, true);
         });
         return _this;
     }
     var _proto = Speed.prototype;
     /**
-   * 滤掉本地回放不支持的倍速
-   * @param optionsList 初始化配置倍速列表
+   * 按回放类型重算倍速列表
    * @param type 回放类型
-   */ _proto._filterSpeedList = function _filterSpeedList(optionsList, type, url) {
-        if (!optionsList) {
-            // 非用户自定义  /openpb/ 是标准流回放路径
-            if (type === 'rec' || (url == null ? void 0 : url.includes('/openpb/'))) {
-                // ezopen本地回放 或 hls 回放 不支持 8 16 32 倍速
-                var list = this.list.filter(function(item) {
-                    return (item == null ? void 0 : item.value) && +item.value < 8;
-                });
-                this.updateOptions(list);
-            } else if (type === 'cloudRec' || type === 'cloudRecord') {
-                // 云端回放 支持 8 16 32 倍速
-                this.updateOptions(SPEED_DEFAULT_OPTIONS.list);
-            } else {
-                // 三方默认回放倍速设置
-                var list1 = this.list.filter(function(item) {
-                    return (item == null ? void 0 : item.value) && +item.value < 8;
-                });
-                this.updateOptions(list1);
-            }
+   * @param url 播放地址，标准流回放（/openpb/）按本地回放的上限处理
+   * @param syncValue 是否把当前倍速同步到新列表内
+   */ _proto._updateSpeedList = function _updateSpeedList(type, url, syncValue) {
+        if (syncValue === void 0) syncValue = false;
+        this.updateOptions(this._resolveSpeedList(type, url));
+        if (syncValue) this._syncValueWithList();
+    };
+    /**
+   * 解析某类回放该用哪份倍速列表
+   *
+   * 优先级：按回放类型单独配置的列表 > 通用 `list` > 内置默认列表。
+   * 用户显式配置时不做过滤，交给调用方自己决定档位。
+   */ _proto._resolveSpeedList = function _resolveSpeedList(type, url) {
+        var _this__userSpeedLists_type;
+        var userList = (_this__userSpeedLists_type = this._userSpeedLists[type]) != null ? _this__userSpeedLists_type : this._userSpeedLists.list;
+        if (userList == null ? void 0 : userList.length) {
+            return userList;
         }
+        // 非用户自定义  /openpb/ 是标准流回放路径
+        if (url == null ? void 0 : url.includes('/openpb/')) {
+            // ezopen本地回放 或 hls 回放 不支持 8 16 32 倍速
+            return DEFAULT_LOCAL_SPEED_LIST;
+        }
+        if (type === 'cloudRec' || type === 'cloudRecord') {
+            // 云端回放 支持 8 16 32 倍速
+            return DEFAULT_CLOUD_SPEED_LIST;
+        }
+        // 本地卡回放与三方默认回放按保守策略过滤
+        return DEFAULT_LOCAL_SPEED_LIST;
+    };
+    /**
+   * 当前倍速不在新列表里时，回落到不超过它的最高档位（没有则取最小档位）。
+   *
+   * 例如云存储回放停在 8x 时切到本地卡回放，8x 不在列表里，
+   * 不处理的话按钮上会渲染成空 label，且控件显示与播放器实际倍速对不上。
+   */ _proto._syncValueWithList = function _syncValueWithList() {
+        var _this = this;
+        var _this_value, _speeds_filter_pop;
+        var list = this.list || [];
+        if (list.some(function(item) {
+            return item.value + '' === _this.value;
+        })) {
+            return;
+        }
+        var speeds = list.map(function(item) {
+            return Number(item.value);
+        }).filter(function(speed) {
+            return !Number.isNaN(speed);
+        }).sort(function(a, b) {
+            return a - b;
+        });
+        var current = +((_this_value = this.value) != null ? _this_value : 0);
+        // 优先退到不超过当前值的最高档位，否则取最小档位
+        var target = (_speeds_filter_pop = speeds.filter(function(speed) {
+            return speed <= current;
+        }).pop()) != null ? _speeds_filter_pop : speeds[0];
+        if (target === undefined) {
+            return;
+        }
+        this.value = target + '';
+        this.emit(EVENTS.control.speedChange, target, list.find(function(item) {
+            return item.value + '' === _this.value;
+        }));
     };
     _proto.reset = function reset(hide) {
         this.value = 1 + '';
@@ -8699,7 +8753,7 @@ var SPEED_DEFAULT_OPTIONS = {
 /**
    * 倍速只对回放有意义；直播是实时流，没有倍速语义。
    *
-   * 三类回放都支持，但档位上限不同（见 `_filterSpeedList`）：
+   * 三类回放都支持，但档位上限不同（见 `_resolveSpeedList`）：
    * 本地卡回放与标准流 ≤ 4x，云存储 / 云录制 ≤ 16x。
    */ Speed.supportedPlayTypes = [
     'rec',
@@ -12449,7 +12503,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.8-beta.3';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.9-alpha.0';
 
 exports.CONTROL_INIT_EVENTS = CONTROL_INIT_EVENTS;
 exports.Control = Control;

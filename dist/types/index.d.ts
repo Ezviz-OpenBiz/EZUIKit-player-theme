@@ -1195,7 +1195,35 @@ interface RecordOptions extends Omit<ControlOptions, 'tagName'> {
     maxDuration?: number;
 }
 
-type SpeedOptions = SelectOptions;
+/**
+ * 倍速控件配置
+ *
+ * - `list`：通用倍速列表，某类回放没有单独配置时使用。
+ *   只配 `list` 时，三类回放（本地卡 / 云存储 / 云录制）共用这一份，行为与 9.1 之前一致。
+ * - `rec` / `cloudRec` / `cloudRecord`：按回放类型单独配置，优先级高于 `list`。
+ *
+ * @example
+ * ```ts
+ * // 三类回放共用同一份列表
+ * speedOptions: { list: [{ label: '1x', value: 1 }, { label: '2x', value: 2 }] }
+ *
+ * // 只给云存储回放单独放宽，其余沿用 list
+ * speedOptions: {
+ *   list: [{ label: '1x', value: 1 }, { label: '2x', value: 2 }],
+ *   cloudRec: [{ label: '1x', value: 1 }, { label: '4x', value: 4 }, { label: '8x', value: 8 }],
+ * }
+ * ```
+ */
+interface SpeedOptions extends SelectOptions {
+    /** 通用倍速列表，未单独配置某类回放时使用 */
+    list?: SelectItem[];
+    /** 本地卡回放倍速列表 */
+    rec?: SelectItem[];
+    /** 云存储回放倍速列表 */
+    cloudRec?: SelectItem[];
+    /** 云录制回放倍速列表 */
+    cloudRecord?: SelectItem[];
+}
 
 /**
  * 对讲控件配置项
@@ -2940,7 +2968,12 @@ interface ThemeOptions {
     recListOptions?: OmitControlOptions<RecListOptions> | null;
     /** 录制控件配置 ，设置 null 不渲染控件 @since 0.0.1 */
     recordOptions?: OmitControlOptions<RecordOptions> | null;
-    /** 倍速控件配置， 设置 null 不渲染控件 @since 0.0.1 */
+    /**
+     * 倍速控件配置， 设置 null 不渲染控件 @since 0.0.1
+     *
+     * `list` 为通用倍速列表（只配 list 时三类回放倍速一致）；
+     * `rec` / `cloudRec` / `cloudRecord` 可按回放类型单独配置，优先级高于 `list`。
+     */
     speedOptions?: OmitControlOptions<SpeedOptions> | null;
     /** 对讲控件配置， 设置 null 不渲染控件 @since 0.0.1 */
     talkOptions?: OmitControlOptions<TalkOptions> | null;
