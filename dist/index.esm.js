@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.9-alpha.0
-* Copyright (c) 2026-11-06 15:41:35 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.1.9-alpha.1
+* Copyright (c) 2026-11-06 19:06:56 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -12501,6 +12501,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.9-alpha.0';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.9-alpha.1';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };

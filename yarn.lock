@@ -22,11 +22,12 @@
     deepmerge "^4.3.1"
     eventemitter3 "^5.0.1"
 
-"@ezuikit/control-ptz@2.0.0-beta.1":
-  version "2.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@ezuikit/control-ptz/-/control-ptz-2.0.0-beta.1.tgz#7012b5893887c3596884c3140672db87960e4bdf"
-  integrity sha512-LmqQy1Hs5aWUuzkBlA0oA9TT1Xe1gZf5TfEVX1cuKmrIT3t+iZqptAF4yZfdEZQSo9OtA7P6WNR7KcbdmU8kJA==
+"@ezuikit/control-ptz@2.0.0-beta.4":
+  version "2.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@ezuikit/control-ptz/-/control-ptz-2.0.0-beta.4.tgz#6d6d58c429c36a8b5a551599d6cd7e0c9a341f98"
+  integrity sha512-xneBBKXyXWA9nNThXBf6c/Iwz8mLKYeEXlctitYpKflP8f2b0YCvRZtYR8xawZTx1R4EG0Z8KpmQG3Cod0jqpA==
   dependencies:
+    "@ezuikit/utils-logger" "2.1.0"
     deepmerge "^4.3.1"
 
 "@ezuikit/control-rec-list-modal@0.0.2":
@@ -77,7 +78,7 @@
   dependencies:
     deepmerge "^4.3.1"
 
-"@ezuikit/utils-logger@^2.1.0":
+"@ezuikit/utils-logger@2.1.0", "@ezuikit/utils-logger@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@ezuikit/utils-logger/-/utils-logger-2.1.0.tgz#d65b0277cc35a4e7f2596e7d135e5a4fd653dc3f"
   integrity sha512-Kj/vTddGWhRhOApo/QmesxqEPxkSwhwakQGZx3b3xLI8Dou2NMg8iNA+9aXU4jT5uT13TmdCn0oMC8Kbq6BMGQ==
@@ -87,10 +88,10 @@
   resolved "https://registry.yarnpkg.com/@ezuikit/utils-tools/-/utils-tools-2.0.6.tgz#a0d984f362ed9cfdc582b9426c5d651471acab08"
   integrity sha512-1XUk8IY28FpspjzgbbVEfcsRiwKx9l5ltjOYw9RYh3BK2XAKv2B2N+79RCQ1qfmjLVsHLx2H8xTwSJECSWcnqg==
 
-"@ezuikit/utils-tools@^2.0.7":
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/@ezuikit/utils-tools/-/utils-tools-2.0.7.tgz#96053009c89a894242deda4e1bd2bfed9c229603"
-  integrity sha512-phxKRP17FunG0cwLLK951V18x96EzwO5XSfZ+FfI4jv8agbujV5HtY709lpXM0H5j4XC7pZryT70wjdRFASQgA==
+"@ezuikit/utils-tools@^2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@ezuikit/utils-tools/-/utils-tools-2.0.9.tgz#17689c11b768da53ed426e7674bc823f2927badb"
+  integrity sha512-GokUQiYNHG8cJkqU4OAJD2Dm3pXiFHvlYTYm+aw3HMTAdeERSpAgGQuWX6PHhy9GaaOiZunC5c1oRfQPnZfyfQ==
 
 "@juggle/resize-observer@^3.4.0":
   version "3.4.0"
