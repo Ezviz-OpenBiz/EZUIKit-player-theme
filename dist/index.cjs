@@ -1,38 +1,64 @@
 /*
-* @ezuikit/player-theme v3.1.9-beta.1
-* Copyright (c) 2026-11-06 19:43:39 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.1
+* Copyright (c) 2026-11-17 18:55:15 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
 
 var EventEmitter = require('eventemitter3');
+var utilsTools = require('@ezuikit/utils-tools');
 var Picker = require('@skax/picker');
 var delegate = require('@skax/delegate');
 var deepmerge = require('deepmerge');
-var utilsTools = require('@ezuikit/utils-tools');
 var screenfull = require('screenfull');
 var I18n = require('@ezuikit/utils-i18n');
 var Logger = require('@ezuikit/utils-logger');
 var Zoom$1 = require('@ezuikit/control-zoom');
 var controlPtz = require('@ezuikit/control-ptz');
+var BroadcastPanel = require('@ezuikit/control-broadcast');
 var RecListModal = require('@ezuikit/control-rec-list-modal');
 var controlDatePicker = require('@ezuikit/control-date-picker');
 var controlTimeLine = require('@ezuikit/control-time-line');
 var SegmentProgress = require('@ezuikit/control-segment-progress');
 
-function _extends$z() {
-    _extends$z = Object.assign || function assign(target) {
+function _extends$D() {
+    _extends$D = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$z.apply(this, arguments);
+    return _extends$D.apply(this, arguments);
 }
 /**
  * 播放器的类名前缀
  */ var PREFIX_CLASS = 'ezplayer';
+/**
+ * streamTypeIn: 1 | 2  //  1-主码流，2-子码流
+ * 能力集没有报备的都默认使用主码流，防止没有子码流
+ */ var VIDEO_LEVEL = [
+    {
+        videoLevel: 1,
+        streamTypeIn: 2,
+        type: 'compatible'
+    },
+    {
+        videoLevel: 2,
+        streamTypeIn: 1,
+        type: 'compatible'
+    }
+];
+/** 清晰度 */ var VIDEO_LEVEL_NAME = {
+    auto: 'VIDEO_LEVEL_AUTO',
+    0: 'VIDEO_LEVEL_FLUENT',
+    1: 'VIDEO_LEVEL_STANDARD',
+    2: 'VIDEO_LEVEL_HEIGH',
+    3: 'VIDEO_LEVEL_SUPER',
+    4: 'VIDEO_LEVEL_EXTREME',
+    5: 'VIDEO_LEVEL_3K',
+    6: 'VIDEO_LEVEL_4k'
+};
 /** 填充模式 */ var THEME_SCALE_MODE_TYPE = {
     /** 画面完全填充canvas区域,画面会被拉伸 */ full: 0,
     /** 画面做等比缩放后,高或宽对齐canvas区域,画面不被拉伸,但有黑边 */ auto: 1,
@@ -47,7 +73,7 @@ var THEME_PROPS = [
     'volume',
     'muted',
     'loading',
-    'recType',
+    'playType',
     'isCurrentFullscreen',
     'orientationAngle',
     'zooming',
@@ -55,6 +81,9 @@ var THEME_PROPS = [
     'recording',
     'recordList',
     'speed',
+    // 是否支持主子码流切换（本地回放），默认 false；SDK 层通过 supportLocalRecordStreamType 事件下发。
+    // 走 props 而不是只靠事件：事件可能早于控件渲染，props 能保证后渲染的控件拿到最新状态
+    'supportLocalRecordStreamType',
     'urlInfo',
     'videoLevelList',
     'videoLevel',
@@ -96,6 +125,7 @@ var THEME_PROPS = [
     'record',
     'talk',
     'definition',
+    'streamType',
     'speed',
     'globalFullscreen'
 ];
@@ -152,6 +182,7 @@ var THEME_PROPS = [
     /** 全局全屏控件初始化完成 */ globalFullscreenControlInit: 'Control.globalFullscreenControlInit',
     /** 回放类型控件初始化完成 */ recControlInit: 'Control.recControlInit',
     /** 倍速控件初始化完成 */ speedControlInit: 'Control.speedControlInit',
+    /** 码流切换控件初始化完成 */ streamTypeControlInit: 'Control.streamTypeControlInit',
     /** 日历控件初始化完成 */ dateControlInit: 'Control.dateControlInit',
     /** 时间选择控件初始化完成 */ timeControlInit: 'Control.timeControlInit',
     /** 时间轴控件初始化完成 */ timeLineControlInit: 'Control.timeLineControlInit',
@@ -201,12 +232,18 @@ var EVENTS = {
     /** 音频编码不支持 （暂时仅支持标准流 flv） */ audioCodecUnsupported: 'audioCodecUnsupported',
     /** 切换主题 themeDate 变化时 */ changeTheme: 'changeTheme',
     /** 回放类型切换 */ recTypeChange: 'recTypeChange',
+    /** 播放类型切换（live / rec / cloudRec / cloudRecord），回调参数 type 为切换后的播放类型 */ playTypeChange: 'playTypeChange',
     /** 切换清晰度 */ definitionChange: 'definitionChange',
     /** 播放速度切换 */ speedChange: 'speedChange',
+    /** 码流切换（1: 主码流, 2: 子码流） */ streamTypeChange: 'streamTypeChange',
+    /**
+   * 设备（本地回放）支持主子码流切换，收到后才展示码流切换控件（默认不展示）。
+   * 载荷可选：省略或 true 表示支持，false 表示不支持（重新隐藏）
+   */ supportLocalRecordStreamType: 'supportLocalRecordStreamType',
     /** 控件开始录制 */ recordingChange: 'recordingChange',
     /** 对讲状态变化 */ talkingChange: 'talkingChange',
     /** 麦克风音量变化 */ talkVolumeChange: 'talkVolumeChange',
-    /** 语音广播状态变化 */ broadcastChange: 'broadcastChange',
+    /** 语音广播状态变化 */ broadcastPanelChange: 'broadcastPanelChange',
     /** AI对话框状态变化 */ aichatChange: 'aichatChange',
     /** 直播模式切换 */ liveChange: 'liveChange',
     /** 回放下拉选择变化 */ recDropdownChange: 'recDropdownChange',
@@ -223,7 +260,7 @@ var EVENTS = {
     /** 播放区间播放结束（SDK 层 playbackRange 特性） */ playbackEnd: 'playbackEnd',
     /**
    * 控件相关
-   */ control: _extends$z({}, CONTROL_INIT_EVENTS, {
+   */ control: _extends$D({}, CONTROL_INIT_EVENTS, {
         /** 点击播放播放／暂停按钮 */ play: 'Control.play',
         /** 播放控件销毁 */ playDestroy: 'Control.playDestroy',
         /** 截图 */ capturePicture: 'Control.capturePicture',
@@ -247,6 +284,9 @@ var EVENTS = {
         /** 播放速度切换 */ speedChange: 'Control.speedChange',
         /** 播放速度面板 显示隐藏变换 */ speedPanelOpenChange: 'Control.speedPanelOpenChange',
         /** 播放速度控件销毁 */ speedDestroy: 'Control.speedDestroy',
+        /** 码流切换 (streamTypeIn: 1 主码流, 2 子码流, item) */ streamTypeChange: 'Control.streamTypeChange',
+        /** 码流面板 显示隐藏变换 */ streamTypePanelOpenChange: 'Control.streamTypePanelOpenChange',
+        /** 码流切换控件销毁 */ streamTypeDestroy: 'Control.streamTypeDestroy',
         /** 云台面板 显示隐藏变换 */ ptzPanelOpenChange: 'Control.ptzPanelOpenChange',
         /** 云台速度切换 */ ptzSpeedChange: 'Control.ptzSpeedChange',
         ptzError: 'Control.ptzError',
@@ -256,8 +296,14 @@ var EVENTS = {
         /** 开始对讲 */ talkingChange: 'Control.talkingChange',
         /** 对讲错误, 一般是麦克风权限被拒绝 */ talkError: 'Control.talkError',
         /** 对讲控件销毁 */ talkDestroy: 'Control.talkDestroy',
-        /** 语音广播状态变化 */ broadcastChange: 'Control.broadcastChange',
+        /** 语音广播状态变化 */ broadcastPanelChange: 'Control.broadcastPanelChange',
         /** 语音广播控件销毁 */ broadcastDestroy: 'Control.broadcastDestroy',
+        /** 语音广播面板语音列表加载完成，参数为语音列表 `VoiceItem[]` */ broadcastVoiceListChange: 'Control.broadcastVoiceListChange',
+        /** 语音广播面板内置接口调用完成，参数 `{ api, success, code, msg, data }` */ broadcastApiResult: 'Control.broadcastApiResult',
+        /** 语音广播面板录到有效语音，参数 `{ voiceFile, deviceSerial, channelNo }`，紧挨着在下发之前派发 */ broadcastVoiceRecorded: 'Control.broadcastVoiceRecorded',
+        /** 语音广播面板开始录音 */ broadcastRecordStart: 'Control.broadcastRecordStart',
+        /** 语音广播面板停止录音并得到有效录音（随后请求下发）；关闭面板取消录音时不派发 */ broadcastRecordStop: 'Control.broadcastRecordStop',
+        /** 语音广播面板录音完成（正常停止，或达到最长时长自动停止），参数为 WAV 录音 `Blob` */ broadcastRecordComplete: 'Control.broadcastRecordComplete',
         /** AI对话框状态变化 */ aichatChange: 'Control.aichatChange',
         /** AI对话框控件销毁 */ aichatDestroy: 'Control.aichatDestroy',
         /** 直播按钮点击 */ liveChange: 'Control.liveChange',
@@ -304,7 +350,35 @@ var EVENTS = {
         /** 移动端扩展销毁 */ mobileExtendDestroy: 'Theme.mobileExtendDestroy',
         /** 回放页底部销毁 */ recFooterDestroy: 'Theme.recFooterDestroy'
     },
-    message: 'message'
+    message: 'message',
+    http: {
+        getDeviceCapacity: 'getDeviceCapacity',
+        getDeviceInfo: 'getDeviceInfo',
+        getDeviceSupportQuality: 'getDeviceSupportQuality',
+        getEzopenUrl: 'getEzopenUrl',
+        queryVoiceList: 'queryVoiceList',
+        sendVoiceOnce: 'sendVoiceOnce',
+        sendVoice: 'sendVoice',
+        postDevicePtzMirror: 'postDevicePtzMirror',
+        getRecordMonth: 'getRecordMonth',
+        getAppKey: 'getAppKey',
+        getDeviceList: 'getDeviceList',
+        setVideoLevel: 'setVideoLevel',
+        getCloudInfo: 'getCloudInfo',
+        getCloudUploadUrl: 'getCloudUploadUrl',
+        getStreamAddressList: 'getStreamAddressList',
+        getCloudRecordTimes: 'getCloudRecordTimes',
+        getCloudTimes: 'getCloudTimes',
+        getLocalRecTimes: 'getLocalRecTimes',
+        getAlarmList: 'getAlarmList',
+        captureSave: 'captureSave',
+        createCaptureTask: 'createCaptureTask',
+        getSpaceList: 'getSpaceList',
+        getAddress: 'getAddress',
+        getCDNLiveAddress: 'getCDNLiveAddress',
+        getCDNRecordAddress: 'getCDNRecordAddress',
+        getStreamInterruptInfo: 'getStreamInterruptInfo'
+    }
 };
 
 function getLocale(locales, language) {
@@ -312,7 +386,7 @@ function getLocale(locales, language) {
     return (locales == null ? void 0 : locales[language]) || (locales == null ? void 0 : locales['zh']) || {};
 }
 
-function _defineProperties$9(target, props) {
+function _defineProperties$a(target, props) {
     for(var i = 0; i < props.length; i++){
         var descriptor = props[i];
         descriptor.enumerable = descriptor.enumerable || false;
@@ -321,11 +395,11 @@ function _defineProperties$9(target, props) {
         Object.defineProperty(target, descriptor.key, descriptor);
     }
 }
-function _create_class$9(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$9(Constructor.prototype, protoProps);
+function _create_class$a(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$a(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _inherits$z(subClass, superClass) {
+function _inherits$A(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -336,14 +410,14 @@ function _inherits$z(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$z(subClass, superClass);
+    if (superClass) _set_prototype_of$A(subClass, superClass);
 }
-function _set_prototype_of$z(o, p) {
-    _set_prototype_of$z = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$A(o, p) {
+    _set_prototype_of$A = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$z(o, p);
+    return _set_prototype_of$A(o, p);
 }
 /**
  * 控件基类
@@ -357,7 +431,7 @@ function _set_prototype_of$z(o, p) {
  * const myControl = new MyControl({})
  * ```
  */ var Control = /*#__PURE__*/ function(EventEmitter) {
-    _inherits$z(Control, EventEmitter);
+    _inherits$A(Control, EventEmitter);
     function Control(options) {
         var _this;
         var _this___options;
@@ -519,7 +593,7 @@ function _set_prototype_of$z(o, p) {
         if (!playType) return true;
         return this.supportedPlayTypes.includes(playType);
     };
-    _create_class$9(Control, [
+    _create_class$a(Control, [
         {
             key: "active",
             get: /**
@@ -570,56 +644,17 @@ function _set_prototype_of$z(o, p) {
    * ```
    */ Control.supportedPlayTypes = [].concat(PLAY_TYPES);
 
-/**
- * HTML 转义
- *
- * 控件大量使用「模板字符串拼 HTML + innerHTML」的写法，只要拼进去的值来自
- * 播放地址、接口返回或多语言配置，就存在注入风险。能改用 `textContent` /
- * `createElement` 的地方应优先改用 DOM API；确实需要拼字符串时，所有外部
- * 数据都必须先过这个函数。
- *
- * 同时覆盖两种语境：
- * - 文本内容：`<span>${escapeHtml(v)}</span>`
- * - 属性值：`<span title="${escapeHtml(v)}">`
- *
- * @remarks 用一次 `replace` 扫描完成，不存在「先转 `&` 再转其他」导致的二次转义。
- */ /** 需要转义的字符与对应实体 */ var HTML_ESCAPE_MAP = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
-};
-/**
- * 转义 HTML 中有特殊含义的字符
- *
- * @param value - 任意值，`null` / `undefined` 归一成空字符串
- * @returns 可安全拼进 HTML 文本或双引号属性值的字符串
- * @since 3.1.8
- * @example
- * ```ts
- * escapeHtml('x" onerror="alert(1)');  // 'x&quot; onerror=&quot;alert(1)'
- * escapeHtml('<img src=x>');           // '&lt;img src=x&gt;'
- * escapeHtml(undefined);               // ''
- * ```
- */ function escapeHtml(value) {
-    if (value === null || value === undefined) return '';
-    return String(value).replace(/[&<>"']/g, function(char) {
-        return HTML_ESCAPE_MAP[char];
-    });
-}
-
-function _extends$y() {
-    _extends$y = Object.assign || function assign(target) {
+function _extends$C() {
+    _extends$C = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$y.apply(this, arguments);
+    return _extends$C.apply(this, arguments);
 }
-function _inherits$y(subClass, superClass) {
+function _inherits$z(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -630,25 +665,25 @@ function _inherits$y(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$y(subClass, superClass);
+    if (superClass) _set_prototype_of$z(subClass, superClass);
 }
-function _set_prototype_of$y(o, p) {
-    _set_prototype_of$y = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$z(o, p) {
+    _set_prototype_of$z = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$y(o, p);
+    return _set_prototype_of$z(o, p);
 }
 var LOADING_DEFAULT_OPTIONS = {};
 /**
  * 加载动画控件
  * @category Control
  */ var Loading = /*#__PURE__*/ function(Control) {
-    _inherits$y(Loading, Control);
+    _inherits$z(Loading, Control);
     function Loading(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$y({}, options, {
+        _this = Control.call(this, Object.assign({}, LOADING_DEFAULT_OPTIONS, _extends$C({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'loading'
@@ -664,7 +699,7 @@ var LOADING_DEFAULT_OPTIONS = {};
             this.$container.innerHTML = this._options.render();
         } else {
             var _this_locale;
-            this.$container.innerHTML = '\n          <span class="' + PREFIX_CLASS + "-loading-dot " + PREFIX_CLASS + '-loading-dot-load">\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n          </span>\n        <div class="' + PREFIX_CLASS + '-loading-text">' + escapeHtml(((_this_locale = this.locale) == null ? void 0 : _this_locale.LOADING) || 'loading...') + "</div>\n        ";
+            this.$container.innerHTML = '\n          <span class="' + PREFIX_CLASS + "-loading-dot " + PREFIX_CLASS + '-loading-dot-load">\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n            <i class="' + PREFIX_CLASS + '-loading-dot-item"></i>\n          </span>\n        <div class="' + PREFIX_CLASS + '-loading-text">' + utilsTools.escapeHtml(((_this_locale = this.locale) == null ? void 0 : _this_locale.LOADING) || 'loading...') + "</div>\n        ";
         }
     };
     /**
@@ -688,17 +723,17 @@ var LOADING_DEFAULT_OPTIONS = {};
     return Loading;
 }(Control);
 
-function _extends$x() {
-    _extends$x = Object.assign || function assign(target) {
+function _extends$B() {
+    _extends$B = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$x.apply(this, arguments);
+    return _extends$B.apply(this, arguments);
 }
-function _inherits$x(subClass, superClass) {
+function _inherits$y(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -709,14 +744,14 @@ function _inherits$x(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$x(subClass, superClass);
+    if (superClass) _set_prototype_of$y(subClass, superClass);
 }
-function _set_prototype_of$x(o, p) {
-    _set_prototype_of$x = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$y(o, p) {
+    _set_prototype_of$y = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$x(o, p);
+    return _set_prototype_of$y(o, p);
 }
 // 不放在服务器上 是因为有可能http加载失败
 // prettier-ignore
@@ -728,11 +763,11 @@ var POSTER_OPTIONS = {
  * 封面控件
  * @category Control
  */ var Poster = /*#__PURE__*/ function(Control) {
-    _inherits$x(Poster, Control);
+    _inherits$y(Poster, Control);
     function Poster(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$x({}, options, {
+        _this = Control.call(this, Object.assign({}, POSTER_OPTIONS, _extends$B({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'poster'
@@ -869,7 +904,7 @@ var Icons = {
         Object.keys(attr).forEach(function(key) {
             // 属性值必须转义：所有控件的 title 都来自 options.locales，
             // 不转义时 `x" onmouseover="alert(1)` 这样的文案可以闭合属性并挂上事件
-            if (!(attr[key] === undefined || attr[key] === null)) attrStr += key + '="' + escapeHtml(attr[key]) + '"';
+            if (!(attr[key] === undefined || attr[key] === null)) attrStr += key + '="' + utilsTools.escapeHtml(attr[key]) + '"';
         });
     }
     return '<span class="' + PREFIX_CLASS + "-icon " + PREFIX_CLASS + "-icon-" + type + '" ' + attrStr + ">" + svg + "</span>";
@@ -1033,17 +1068,17 @@ var IconComponents = {
     }
 };
 
-function _extends$w() {
-    _extends$w = Object.assign || function assign(target) {
+function _extends$A() {
+    _extends$A = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$w.apply(this, arguments);
+    return _extends$A.apply(this, arguments);
 }
-function _inherits$w(subClass, superClass) {
+function _inherits$x(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -1054,25 +1089,25 @@ function _inherits$w(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$w(subClass, superClass);
+    if (superClass) _set_prototype_of$x(subClass, superClass);
 }
-function _set_prototype_of$w(o, p) {
-    _set_prototype_of$w = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$x(o, p) {
+    _set_prototype_of$x = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$w(o, p);
+    return _set_prototype_of$x(o, p);
 }
 var MESSAGE_DEFAULT_OPTIONS = {};
 /**
  * 消息控件
  * @category Control
  */ var Message = /*#__PURE__*/ function(Control) {
-    _inherits$w(Message, Control);
+    _inherits$x(Message, Control);
     function Message(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$w({}, options, {
+        _this = Control.call(this, Object.assign({}, MESSAGE_DEFAULT_OPTIONS, _extends$A({}, options, {
             tagName: 'div',
             controlType: 'block'
         }))) || this, _this._$toast = null;
@@ -1124,7 +1159,7 @@ var MESSAGE_DEFAULT_OPTIONS = {};
                 this._$toast = document.createElement('div');
                 this._$toast.classList.add("" + PREFIX_CLASS + "-toast");
             }
-            // msg 是 EVENTS.message 的载荷，内核与接口的错误信息都走这个通道，必须转义
+            // msg 按 HTML 写入（不转义），允许消息文案携带链接、加粗等标记；来源由调用方保证可信
             this._$toast.innerHTML = '<div class="' + PREFIX_CLASS + '-toast-content">' + this._getIcon(type) + '<span class="' + PREFIX_CLASS + "-toast-msg " + PREFIX_CLASS + "-toast-" + type + '">' + msg + "</span></div>";
             this.options.rootContainer.appendChild(this._$toast);
             if (duration > 0) {
@@ -1217,7 +1252,7 @@ var MESSAGE_DEFAULT_OPTIONS = {};
     return Message;
 }(Control);
 
-function _defineProperties$8(target, props) {
+function _defineProperties$9(target, props) {
     for(var i = 0; i < props.length; i++){
         var descriptor = props[i];
         descriptor.enumerable = descriptor.enumerable || false;
@@ -1226,21 +1261,21 @@ function _defineProperties$8(target, props) {
         Object.defineProperty(target, descriptor.key, descriptor);
     }
 }
-function _create_class$8(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$8(Constructor.prototype, protoProps);
+function _create_class$9(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$9(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$v() {
-    _extends$v = Object.assign || function assign(target) {
+function _extends$z() {
+    _extends$z = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$v.apply(this, arguments);
+    return _extends$z.apply(this, arguments);
 }
-function _inherits$v(subClass, superClass) {
+function _inherits$w(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -1251,23 +1286,23 @@ function _inherits$v(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$v(subClass, superClass);
+    if (superClass) _set_prototype_of$w(subClass, superClass);
 }
-function _set_prototype_of$v(o, p) {
-    _set_prototype_of$v = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$w(o, p) {
+    _set_prototype_of$w = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$v(o, p);
+    return _set_prototype_of$w(o, p);
 }
 /**
  * 播放/暂停控件
  * @category Control
  */ var Play = /*#__PURE__*/ function(Control) {
-    _inherits$v(Play, Control);
+    _inherits$w(Play, Control);
     function Play(options) {
         var _this;
-        _this = Control.call(this, _extends$v({}, options, {
+        _this = Control.call(this, _extends$z({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'play'
@@ -1305,7 +1340,7 @@ function _set_prototype_of$v(o, p) {
             });
         }
     };
-    _create_class$8(Play, [
+    _create_class$9(Play, [
         {
             key: "playing",
             get: /**
@@ -1544,7 +1579,7 @@ function _unsupported_iterable_to_array$2(o, minLen) {
    * ```
    */ Utils.isMobile = utilsTools.isMobile();
 
-function _defineProperties$7(target, props) {
+function _defineProperties$8(target, props) {
     for(var i = 0; i < props.length; i++){
         var descriptor = props[i];
         descriptor.enumerable = descriptor.enumerable || false;
@@ -1553,8 +1588,8 @@ function _defineProperties$7(target, props) {
         Object.defineProperty(target, descriptor.key, descriptor);
     }
 }
-function _create_class$7(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$7(Constructor.prototype, protoProps);
+function _create_class$8(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$8(Constructor.prototype, protoProps);
     return Constructor;
 }
 var PROGRESS_DEFAULT_OPTIONS = {
@@ -1820,7 +1855,7 @@ var PROGRESS_DEFAULT_OPTIONS = {
             });
         });
     };
-    _create_class$7(Progress, [
+    _create_class$8(Progress, [
         {
             key: "disabled",
             get: function get() {
@@ -1868,7 +1903,7 @@ var PROGRESS_DEFAULT_OPTIONS = {
     return Progress;
 }();
 
-function _defineProperties$6(target, props) {
+function _defineProperties$7(target, props) {
     for(var i = 0; i < props.length; i++){
         var descriptor = props[i];
         descriptor.enumerable = descriptor.enumerable || false;
@@ -1877,21 +1912,21 @@ function _defineProperties$6(target, props) {
         Object.defineProperty(target, descriptor.key, descriptor);
     }
 }
-function _create_class$6(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties$6(Constructor.prototype, protoProps);
+function _create_class$7(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$7(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$u() {
-    _extends$u = Object.assign || function assign(target) {
+function _extends$y() {
+    _extends$y = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$u.apply(this, arguments);
+    return _extends$y.apply(this, arguments);
 }
-function _inherits$u(subClass, superClass) {
+function _inherits$v(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -1902,14 +1937,14 @@ function _inherits$u(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$u(subClass, superClass);
+    if (superClass) _set_prototype_of$v(subClass, superClass);
 }
-function _set_prototype_of$u(o, p) {
-    _set_prototype_of$u = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$v(o, p) {
+    _set_prototype_of$v = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$u(o, p);
+    return _set_prototype_of$v(o, p);
 }
 var VOLUME_DEFAULT_OPTIONS = {
     volume: 0.8,
@@ -1923,12 +1958,12 @@ var VOLUME_DEFAULT_OPTIONS = {
  * 音量调节控件
  * @category Control
  */ var Volume = /*#__PURE__*/ function(Control) {
-    _inherits$u(Volume, Control);
+    _inherits$v(Volume, Control);
     function Volume(options) {
         if (options === void 0) options = {};
         var _this;
         var _this__options_props, _this__options_props1, _this__options_props2, _this__options_props3;
-        _this = Control.call(this, _extends$u({}, options, {
+        _this = Control.call(this, _extends$y({}, options, {
             tagName: 'span',
             classNameSuffix: 'volume',
             controlType: 'button'
@@ -1936,6 +1971,7 @@ var VOLUME_DEFAULT_OPTIONS = {
         _this._options = deepmerge(VOLUME_DEFAULT_OPTIONS, options, {
             clone: false
         });
+        // console.warn('==== Volume options', this._options);
         _this._render();
         // prettier-ignore
         _this._volume = ((_this__options_props = _this._options.props) == null ? void 0 : _this__options_props.volume) >= 1 ? 1 : ((_this__options_props1 = _this._options.props) == null ? void 0 : _this__options_props1.volume) <= 0 ? 0 : +((_this__options_props2 = _this._options.props) == null ? void 0 : _this__options_props2.volume.toFixed(2)); // 音量范围 [0-1]
@@ -1984,6 +2020,7 @@ var VOLUME_DEFAULT_OPTIONS = {
         _this._updateUI();
         _this._addEventListener();
         _this.on(EVENTS.audioCodecUnsupported, function(flag) {
+            // console.warn('audio codec unsupported', flag);
             flag = flag != null ? flag : true;
             _this.disabled = flag;
         });
@@ -2069,7 +2106,7 @@ var VOLUME_DEFAULT_OPTIONS = {
             _this._toggleMute();
         });
     };
-    _create_class$6(Volume, [
+    _create_class$7(Volume, [
         {
             key: "muted",
             get: /**
@@ -2145,7 +2182,7 @@ var VOLUME_DEFAULT_OPTIONS = {
     return Volume;
 }(Control);
 
-function asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep$9(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
         var value = info.value;
@@ -2156,22 +2193,22 @@ function asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, key, arg) {
     if (info.done) resolve(value);
     else Promise.resolve(value).then(_next, _throw);
 }
-function _async_to_generator$7(fn) {
+function _async_to_generator$9(fn) {
     return function() {
         var self = this, args = arguments;
         return new Promise(function(resolve, reject) {
             var gen = fn.apply(self, args);
             function _next(value) {
-                asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, "next", value);
+                asyncGeneratorStep$9(gen, resolve, reject, _next, _throw, "next", value);
             }
             function _throw(err) {
-                asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, "throw", err);
+                asyncGeneratorStep$9(gen, resolve, reject, _next, _throw, "throw", err);
             }
             _next(undefined);
         });
     };
 }
-function _ts_generator$7(thisArg, body) {
+function _ts_generator$9(thisArg, body) {
     var f, y, t, _ = {
         label: 0,
         sent: function() {
@@ -2392,8 +2429,8 @@ var __fullscreenProvider__ = Provider.getInstance();
    * 全屏
    * @returns Promise<void>
    */ _proto.fullscreen = function fullscreen() {
-        return _async_to_generator$7(function() {
-            return _ts_generator$7(this, function(_state) {
+        return _async_to_generator$9(function() {
+            return _ts_generator$9(this, function(_state) {
                 switch(_state.label){
                     case 0:
                         if (!Utils.isMobile) return [
@@ -2428,8 +2465,8 @@ var __fullscreenProvider__ = Provider.getInstance();
    * 退出全屏
    * @returns Promise<void>
    */ _proto.exitFullscreen = function exitFullscreen() {
-        return _async_to_generator$7(function() {
-            return _ts_generator$7(this, function(_state) {
+        return _async_to_generator$9(function() {
+            return _ts_generator$9(this, function(_state) {
                 switch(_state.label){
                     case 0:
                         if (!Utils.isMobile) return [
@@ -2468,8 +2505,8 @@ var __fullscreenProvider__ = Provider.getInstance();
    * 全屏切换
    * @returns Promise<void>
    */ _proto.toggle = function toggle() {
-        return _async_to_generator$7(function() {
-            return _ts_generator$7(this, function(_state) {
+        return _async_to_generator$9(function() {
+            return _ts_generator$9(this, function(_state) {
                 switch(_state.label){
                     case 0:
                         if (!Utils.isMobile) return [
@@ -2592,17 +2629,17 @@ var __fullscreenProvider__ = Provider.getInstance();
     return Fullscreen;
 }();
 
-function _extends$t() {
-    _extends$t = Object.assign || function assign(target) {
+function _extends$x() {
+    _extends$x = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$t.apply(this, arguments);
+    return _extends$x.apply(this, arguments);
 }
-function _inherits$t(subClass, superClass) {
+function _inherits$u(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -2613,24 +2650,24 @@ function _inherits$t(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$t(subClass, superClass);
+    if (superClass) _set_prototype_of$u(subClass, superClass);
 }
-function _set_prototype_of$t(o, p) {
-    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$u(o, p) {
+    _set_prototype_of$u = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$t(o, p);
+    return _set_prototype_of$u(o, p);
 }
 /**
  * 全屏控件
  * @category Control
  */ var Fullscreen = /*#__PURE__*/ function(Control) {
-    _inherits$t(Fullscreen, Control);
+    _inherits$u(Fullscreen, Control);
     function Fullscreen(options) {
         var _this;
         var _options_props, _this_options;
-        _this = Control.call(this, _extends$t({
+        _this = Control.call(this, _extends$x({
             tagName: 'span',
             classNameSuffix: 'fullscreen',
             controlType: 'button'
@@ -2695,17 +2732,17 @@ function _set_prototype_of$t(o, p) {
     return Fullscreen;
 }(Control);
 
-function _extends$s() {
-    _extends$s = Object.assign || function assign(target) {
+function _extends$w() {
+    _extends$w = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$s.apply(this, arguments);
+    return _extends$w.apply(this, arguments);
 }
-function _inherits$s(subClass, superClass) {
+function _inherits$t(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -2716,30 +2753,30 @@ function _inherits$s(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$s(subClass, superClass);
+    if (superClass) _set_prototype_of$t(subClass, superClass);
 }
-function _set_prototype_of$s(o, p) {
-    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$t(o, p) {
+    _set_prototype_of$t = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$s(o, p);
+    return _set_prototype_of$t(o, p);
 }
 /**
  * 回放类型切换（本地回放(sdk 卡)， 云存储回放， 云录制回放）控件
  * @category Control
  */ var Rec = /*#__PURE__*/ function(Control) {
-    _inherits$s(Rec, Control);
+    _inherits$t(Rec, Control);
     function Rec(options) {
         var _this;
         var _options_props;
-        _this = Control.call(this, _extends$s({}, options, {
+        _this = Control.call(this, _extends$w({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'rec'
         })) || this;
         _this._options = options;
-        _this.recType = ((_options_props = options.props) == null ? void 0 : _options_props.recType) || 'rec';
+        _this.recType = options.playType || ((_options_props = options.props) == null ? void 0 : _options_props.playType) || 'rec';
         _this._onClickIcon();
         _this._onDBlClick = _this._onDBlClick.bind(_this);
         _this.$container.addEventListener('dblclick', _this._onDBlClick);
@@ -3037,6 +3074,9 @@ var zh = {
     BTN_EXIR_FULLSCREEN: '退出全屏',
     BTN_HD: '画面清晰度',
     BTN_SPEED: '回放倍速',
+    BTN_STREAM_TYPE: '码流切换',
+    STREAM_TYPE_MAIN: '主码流',
+    STREAM_TYPE_SUB: '子码流',
     BTN_CLOUDREC: '云存储回放',
     BTN_CLOUDRECORD: '云录制',
     BTN_REC: '本地存储',
@@ -3082,7 +3122,50 @@ var zh = {
     WEB_FULLSCREEN: '开启网页全屏',
     WEB_FULLSCREEN_EXIT: '退出网页全屏',
     DESTROY: '销毁',
-    GET_CAPACITY: '获取设备能力级',
+    GET_CAPACITY_SUCCESS: '设备能力集查询成功',
+    GET_CAPACITY_FAILED: '设备能力集查询失败',
+    GET_DEVICE_INFO_SUCCESS: '设备信息查询成功',
+    GET_DEVICE_INFO_FAILED: '设备信息查询失败',
+    GET_DEVICE_SUPPORT_QUALITY_SUCCESS: '清晰度列表查询成功',
+    GET_DEVICE_SUPPORT_QUALITY_FAILED: '清晰度列表查询失败',
+    GET_EZOPEN_URL_SUCCESS: '获取取流地址成功',
+    GET_EZOPEN_URL_FAILED: '获取取流地址失败',
+    QUERY_VOICE_LIST_SUCCESS: '语音列表查询成功',
+    QUERY_VOICE_LIST_FAILED: '语音列表查询失败',
+    SEND_VOICE_SUCCESS: '语音下发成功',
+    SEND_VOICE_FAILED: '语音下发失败',
+    PTZ_MIRROR_SUCCESS: '镜像翻转成功',
+    PTZ_MIRROR_FAILED: '镜像翻转失败',
+    GET_RECORD_MONTH_SUCCESS: '录像日历查询成功',
+    GET_RECORD_MONTH_FAILED: '录像日历查询失败',
+    GET_APP_KEY_SUCCESS: '获取 appKey 成功',
+    GET_APP_KEY_FAILED: '获取 appKey 失败',
+    GET_DEVICE_LIST_SUCCESS: '设备通道信息查询成功',
+    GET_DEVICE_LIST_FAILED: '设备通道信息查询失败',
+    SET_VIDEO_LEVEL_SUCCESS: '清晰度设置成功',
+    SET_VIDEO_LEVEL_FAILED: '清晰度设置失败',
+    GET_CLOUD_INFO_SUCCESS: '云存储信息查询成功',
+    GET_CLOUD_INFO_FAILED: '云存储信息查询失败',
+    GET_CLOUD_UPLOAD_URL_SUCCESS: '获取上传地址成功',
+    GET_CLOUD_UPLOAD_URL_FAILED: '获取上传地址失败',
+    GET_STREAM_ADDRESS_LIST_SUCCESS: '备用地址查询成功',
+    GET_STREAM_ADDRESS_LIST_FAILED: '备用地址查询失败',
+    GET_REC_TIMES_SUCCESS: '回放片段查询成功',
+    GET_REC_TIMES_FAILED: '回放片段查询失败',
+    GET_ALARM_LIST_SUCCESS: '告警消息查询成功',
+    GET_ALARM_LIST_FAILED: '告警消息查询失败',
+    CAPTURE_SAVE_SUCCESS: '云抓拍成功',
+    CAPTURE_SAVE_FAILED: '云抓拍失败',
+    CREATE_CAPTURE_TASK_SUCCESS: '抓图任务创建成功',
+    CREATE_CAPTURE_TASK_FAILED: '抓图任务创建失败',
+    GET_SPACE_LIST_SUCCESS: '存储空间查询成功',
+    GET_SPACE_LIST_FAILED: '存储空间查询失败',
+    GET_ADDRESS_SUCCESS: '获取播放地址成功',
+    GET_ADDRESS_FAILED: '获取播放地址失败',
+    GET_CDN_ADDRESS_SUCCESS: '获取 CDN 播放地址成功',
+    GET_CDN_ADDRESS_FAILED: '获取 CDN 播放地址失败',
+    GET_STREAM_INTERRUPT_INFO_SUCCESS: '断流信息查询成功',
+    GET_STREAM_INTERRUPT_INFO_FAILED: '断流信息查询失败',
     GET_PTZ_STATUS: '获取当前云台状态',
     GET_PTZ_STATUS_FAILED: '未加载Theme模块，无法获取云台状态',
     MOBILE_HIDE_PTZ: '移动端，非全屏状态不展示云台',
@@ -3114,7 +3197,65 @@ var zh = {
     ok: '确定',
     close: '关闭',
     BTN_REC_LIST_TITLE: '录像片段',
-    UNKOWN_ISSUE: '未知问题 【{{scope}}】'
+    UNKOWN_ISSUE: '未知问题 【{{scope}}】',
+    // play: 'Play',
+    // pause: 'Pause',
+    // fullscreen: 'Fullscreen',
+    // exitFullscreen: 'ExitFullscreen',
+    // globalFullscreen: 'GlobalFullscreen',
+    // exitGlobalFullscreen: 'ExitGlobalFullscreen',
+    // volume: 'Volume',
+    // muted: 'Muted',
+    // loading: 'Loading...',
+    // sdkRec: 'SDK',
+    // cloudRec: 'Cloud',
+    // cloudRecord: 'CloudRecord',
+    // definition: 'Definition',
+    // capturePicture: 'Screenshot',
+    // talk: 'Talk',
+    // ptz: 'Ptz',
+    // record: 'Record',
+    // zoom: 'Zoom',
+    // speed: 'Speed',
+    // // error
+    // fetchError: 'Stream retrieval failed, please check the network',
+    // controlNotSupport: 'Control {{name}} not supported',
+    //
+    //   play: '播放',
+    // pause: '暂停',
+    // fullscreen: '全屏',
+    // exitFullscreen: '退出全屏',
+    // globalFullscreen: '全局全屏',
+    // exitGlobalFullscreen: '退出全局全屏',
+    // volume: '音量',
+    // muted: '静音',
+    // loading: '加载中，请稍等...',
+    // sdkRec: 'SDK存储',
+    // cloudRec: '云存储',
+    // cloudRecord: '云录像',
+    // definition: '清晰度',
+    // capturePicture: '截图',
+    // talk: '对讲',
+    // ptz: '云台',
+    // record: '录像',
+    // zoom: '放大',
+    // speed: '倍速',
+    // // error
+    // fetchError: '取流失败,请检查网络',
+    // cancel: '取消',
+    // ok: '确定',
+    // close: '关闭',
+    // controlNotSupport: '控件{{name}}不支持',
+    // 清晰度
+    // 从 ezuikit_js/player/src/ezopen/locales 同步
+    391004: '连接到流媒体服务失败',
+    SEEK_NOT_SUPPORT: '当前设备不支持seek',
+    VIDEO_LEVEL_SATNDARD: '标清',
+    VIDEO_LEVEL_SPUER: '超清',
+    BTN_SOUND: '声音',
+    BTN_EXPEND: '全局全屏',
+    BTN_WEBEXPEND: '网页全屏',
+    SOUND_DISABLED_WHEN_TALKING: '对讲进行中，不能开启视频声音'
 };
 
 // 不要出现多层的的数据, 数据铺平
@@ -3322,6 +3463,9 @@ var en = {
     BTN_WEBEXPEND: 'Web page full screen',
     BTN_HD: 'Image definition',
     BTN_SPEED: 'Playback speed',
+    BTN_STREAM_TYPE: 'Stream type',
+    STREAM_TYPE_MAIN: 'Main stream',
+    STREAM_TYPE_SUB: 'Sub-stream',
     BTN_CLOUDREC: 'Cloud storage playback',
     BTN_CLOUDRECORD: 'Cloud recording',
     BTN_REC: 'Local storage',
@@ -3367,7 +3511,50 @@ var en = {
     WEB_FULLSCREEN: 'Turn on web page full screen',
     WEB_FULLSCREEN_EXIT: 'Exit full screen webpage',
     DESTROY: 'Destroy',
-    GET_CAPACITY: 'Get device capability level',
+    GET_CAPACITY_SUCCESS: 'Device capabilities loaded',
+    GET_CAPACITY_FAILED: 'Failed to load device capabilities',
+    GET_DEVICE_INFO_SUCCESS: 'Device info loaded',
+    GET_DEVICE_INFO_FAILED: 'Failed to load device info',
+    GET_DEVICE_SUPPORT_QUALITY_SUCCESS: 'Quality list loaded',
+    GET_DEVICE_SUPPORT_QUALITY_FAILED: 'Failed to load quality list',
+    GET_EZOPEN_URL_SUCCESS: 'Stream address obtained',
+    GET_EZOPEN_URL_FAILED: 'Failed to get stream address',
+    QUERY_VOICE_LIST_SUCCESS: 'Voice list loaded',
+    QUERY_VOICE_LIST_FAILED: 'Failed to load voice list',
+    SEND_VOICE_SUCCESS: 'Voice sent',
+    SEND_VOICE_FAILED: 'Failed to send voice',
+    PTZ_MIRROR_SUCCESS: 'Image flipped',
+    PTZ_MIRROR_FAILED: 'Failed to flip image',
+    GET_RECORD_MONTH_SUCCESS: 'Recording calendar loaded',
+    GET_RECORD_MONTH_FAILED: 'Failed to load recording calendar',
+    GET_APP_KEY_SUCCESS: 'appKey obtained',
+    GET_APP_KEY_FAILED: 'Failed to get appKey',
+    GET_DEVICE_LIST_SUCCESS: 'Device channels loaded',
+    GET_DEVICE_LIST_FAILED: 'Failed to load device channels',
+    SET_VIDEO_LEVEL_SUCCESS: 'Video quality set',
+    SET_VIDEO_LEVEL_FAILED: 'Failed to set video quality',
+    GET_CLOUD_INFO_SUCCESS: 'Cloud storage info loaded',
+    GET_CLOUD_INFO_FAILED: 'Failed to load cloud storage info',
+    GET_CLOUD_UPLOAD_URL_SUCCESS: 'Upload URL obtained',
+    GET_CLOUD_UPLOAD_URL_FAILED: 'Failed to get upload URL',
+    GET_STREAM_ADDRESS_LIST_SUCCESS: 'Backup addresses loaded',
+    GET_STREAM_ADDRESS_LIST_FAILED: 'Failed to load backup addresses',
+    GET_REC_TIMES_SUCCESS: 'Recording segments loaded',
+    GET_REC_TIMES_FAILED: 'Failed to load recording segments',
+    GET_ALARM_LIST_SUCCESS: 'Alarm messages loaded',
+    GET_ALARM_LIST_FAILED: 'Failed to load alarm messages',
+    CAPTURE_SAVE_SUCCESS: 'Cloud capture succeeded',
+    CAPTURE_SAVE_FAILED: 'Cloud capture failed',
+    CREATE_CAPTURE_TASK_SUCCESS: 'Capture task created',
+    CREATE_CAPTURE_TASK_FAILED: 'Failed to create capture task',
+    GET_SPACE_LIST_SUCCESS: 'Storage spaces loaded',
+    GET_SPACE_LIST_FAILED: 'Failed to load storage spaces',
+    GET_ADDRESS_SUCCESS: 'Play address obtained',
+    GET_ADDRESS_FAILED: 'Failed to get play address',
+    GET_CDN_ADDRESS_SUCCESS: 'CDN play address obtained',
+    GET_CDN_ADDRESS_FAILED: 'Failed to get CDN play address',
+    GET_STREAM_INTERRUPT_INFO_SUCCESS: 'Stream interruption info loaded',
+    GET_STREAM_INTERRUPT_INFO_FAILED: 'Failed to load stream interruption info',
     GET_PTZ_STATUS: 'Get current PTZ status',
     GET_PTZ_STATUS_FAILED: 'Theme module is not loaded, PTZ status cannot be obtained',
     MOBILE_HIDE_PTZ: 'Mobile terminal, PTZ is not displayed in non-full screen state',
@@ -3399,7 +3586,14 @@ var en = {
     ok: 'Ok',
     close: 'Close',
     BTN_REC_LIST_TITLE: 'Records',
-    UNKOWN_ISSUE: 'Unknown issue [{{scope}}]'
+    UNKOWN_ISSUE: 'Unknown issue [{{scope}}]',
+    // 从 ezuikit_js/player/src/ezopen/locales 同步
+    391004: 'Failed to connect to streaming service',
+    SEEK_NOT_SUPPORT: 'The current device does not support seek',
+    VIDEO_LEVEL_SATNDARD: 'Standard',
+    VIDEO_LEVEL_SPUER: 'Super',
+    BTN_SOUND: 'Sound',
+    SOUND_DISABLED_WHEN_TALKING: 'Cannot turn on video sound while talking'
 };
 
 /**
@@ -3412,46 +3606,33 @@ var en = {
         btnList: [
             {
                 iconId: 'play',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'capturePicture',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'volume',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 // flv 录制 2.1.0 新增
                 iconId: 'record',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 // flv 录制 2.1.2 新增
                 iconId: 'zoom',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'fullscreen',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'globalFullscreen',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     }
@@ -3467,50 +3648,39 @@ var en = {
         btnList: [
             {
                 iconId: 'play',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'capturePicture',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'volume',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'recordvideo',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'zoom',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
+            },
+            {
+                iconId: 'streamType',
+                part: 'right'
             },
             {
                 iconId: 'speed',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'fullscreen',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'globalFullscreen',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     }
@@ -3526,44 +3696,31 @@ var en = {
         btnList: [
             {
                 iconId: 'play',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'capturePicture',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'volume',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'recordvideo',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'zoom',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'fullscreen',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'globalFullscreen',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     }
@@ -3579,50 +3736,39 @@ var en = {
         btnList: [
             {
                 iconId: 'play',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'capturePicture',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'volume',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'recordvideo',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'zoom',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
+            },
+            {
+                iconId: 'streamType',
+                part: 'right'
             },
             {
                 iconId: 'speed',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'fullscreen',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'globalFullscreen',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     }
@@ -3639,28 +3785,23 @@ var en = {
         btnList: [
             {
                 iconId: 'deviceID',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'deviceName',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'live',
-                part: 'right',
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'recDropdown',
-                part: 'right',
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'alarmMessage',
-                part: 'right',
-                isrender: 1
+                part: 'right'
             }
         ]
     },
@@ -3671,58 +3812,47 @@ var en = {
         btnList: [
             {
                 iconId: 'play',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'capturePicture',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'sound',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'pantile',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'recordvideo',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'talk',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'broadcast',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'zoom',
-                part: 'left',
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'hd',
-                part: 'right',
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'webExpend',
-                part: 'right',
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'expend',
-                part: 'right',
-                isrender: 1
+                part: 'right'
             }
         ]
     }
@@ -3737,38 +3867,27 @@ var en = {
         btnList: [
             {
                 iconId: 'deviceID',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'deviceName',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'live',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'recDropdown',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'recList',
-                part: 'right',
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'alarmMessage',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     },
@@ -3778,63 +3897,48 @@ var en = {
         btnList: [
             {
                 iconId: 'play',
-                part: 'left',
-                defaultActive: 1,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'capturePicture',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'sound',
-                part: 'left',
-                defaultActive: 1,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'pantile',
                 part: 'left',
-                defaultActive: 0,
                 isrender: 0
             },
             {
                 iconId: 'recordvideo',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'zoom',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'aiChat',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
+            },
+            {
+                iconId: 'streamType',
+                part: 'right'
             },
             {
                 iconId: 'speed',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'webExpend',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'expend',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     }
@@ -3849,15 +3953,11 @@ var en = {
         btnList: [
             {
                 iconId: 'deviceID',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'deviceName',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             }
         ]
     },
@@ -3867,63 +3967,43 @@ var en = {
         btnList: [
             {
                 iconId: 'play',
-                part: 'left',
-                defaultActive: 1,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'capturePicture',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'sound',
-                part: 'left',
-                defaultActive: 1,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'pantile',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'recordvideo',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'talk',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'broadcast',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'zoom',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'hd',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'webExpend',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     }
@@ -3938,33 +4018,23 @@ var en = {
         btnList: [
             {
                 iconId: 'deviceID',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'deviceName',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'rec',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'cloudRec',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'cloudRecord',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     },
@@ -3974,51 +4044,39 @@ var en = {
         btnList: [
             {
                 iconId: 'play',
-                part: 'left',
-                defaultActive: 1,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'capturePicture',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'sound',
-                part: 'left',
-                defaultActive: 1,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'recordvideo',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'zoom',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'aiChat',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
+            },
+            {
+                iconId: 'streamType',
+                part: 'right'
             },
             {
                 iconId: 'speed',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'webExpend',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     }
@@ -4033,15 +4091,11 @@ var en = {
         btnList: [
             {
                 iconId: 'deviceID',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'deviceName',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             }
         ]
     },
@@ -4051,51 +4105,35 @@ var en = {
         btnList: [
             {
                 iconId: 'play',
-                part: 'left',
-                defaultActive: 1,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'talk',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'sound',
-                part: 'left',
-                defaultActive: 1,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'capturePicture',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'recordvideo',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'zoom',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'hd',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             },
             {
                 iconId: 'webExpend',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     }
@@ -4110,15 +4148,11 @@ var en = {
         btnList: [
             {
                 iconId: 'deviceID',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'deviceName',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             }
         ]
     },
@@ -4128,27 +4162,19 @@ var en = {
         btnList: [
             {
                 iconId: 'play',
-                part: 'left',
-                defaultActive: 1,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'talk',
-                part: 'left',
-                defaultActive: 0,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'sound',
-                part: 'left',
-                defaultActive: 1,
-                isrender: 1
+                part: 'left'
             },
             {
                 iconId: 'webExpend',
-                part: 'right',
-                defaultActive: 0,
-                isrender: 1
+                part: 'right'
             }
         ]
     }
@@ -4168,7 +4194,7 @@ var en = {
     voice: voice
 };
 
-function _inherits$r(subClass, superClass) {
+function _inherits$s(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -4179,20 +4205,20 @@ function _inherits$r(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$r(subClass, superClass);
+    if (superClass) _set_prototype_of$s(subClass, superClass);
 }
-function _set_prototype_of$r(o, p) {
-    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$s(o, p) {
+    _set_prototype_of$s = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$r(o, p);
+    return _set_prototype_of$s(o, p);
 }
 /**
  * 截图控件
  * @category Content
  */ var Content = /*#__PURE__*/ function(EventEmitter) {
-    _inherits$r(Content, EventEmitter);
+    _inherits$s(Content, EventEmitter);
     function Content(options) {
         var _this;
         _this = EventEmitter.call(this) || this, _this._scaleMode = 0, _this._cleanUpResizeObserver = null, _this._originWidth = 0, _this._originHeight = 0, _this._width = 0, _this._height = 0;
@@ -4307,17 +4333,17 @@ function _set_prototype_of$r(o, p) {
     return Content;
 }(EventEmitter);
 
-function _extends$r() {
-    _extends$r = Object.assign || function assign(target) {
+function _extends$v() {
+    _extends$v = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$r.apply(this, arguments);
+    return _extends$v.apply(this, arguments);
 }
-function _inherits$q(subClass, superClass) {
+function _inherits$r(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -4328,23 +4354,23 @@ function _inherits$q(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$q(subClass, superClass);
+    if (superClass) _set_prototype_of$r(subClass, superClass);
 }
-function _set_prototype_of$q(o, p) {
-    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$r(o, p) {
+    _set_prototype_of$r = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$q(o, p);
+    return _set_prototype_of$r(o, p);
 }
 /**
  * 更多控件
  * @category Control
  */ var More = /*#__PURE__*/ function(Control) {
-    _inherits$q(More, Control);
+    _inherits$r(More, Control);
     function More(options) {
         var _this;
-        _this = Control.call(this, _extends$r({}, options, {
+        _this = Control.call(this, _extends$v({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'more'
@@ -4450,6 +4476,2767 @@ function debounce(func, wait) {
 }
 
 /**
+ * UUID 生成（RFC 4122 v4）
+ *
+ * 按可用性三级降级：
+ *
+ * | 顺序 | 实现                     | 说明                                                          |
+ * | ---- | ------------------------ | ------------------------------------------------------------- |
+ * | 1    | `crypto.randomUUID()`    | 原生实现，最快；**仅在安全上下文（HTTPS / localhost）可用**   |
+ * | 2    | `crypto.getRandomValues` | 密码学强度随机数手工组装；HTTP 页面下也可用                   |
+ * | 3    | `Math.random()`          | 兜底，**不具密码学强度**，只适合做 DOM id 这类无安全要求的标识 |
+ *
+ * 之所以不能只用 `crypto.randomUUID()`：播放器会被嵌到 HTTP 页面里，
+ * 那种场景下它是 `undefined`，必须有降级路径。
+ *
+ * @remarks 用 `crypto` 而非 `window.crypto`，以便在 worker 中也能工作（worker 里没有 `window`）。
+ */ /** 0~255 对应的两位十六进制查表，避免每个字节都做一次 toString + 手工补零 */ var HEX_BY_BYTE = [];
+for(var i = 0; i < 256; i++){
+    // + 0x100 保证结果是三位，再切掉首位，等价于补零到两位（不用 padStart，es5 目标下它需要 polyfill）
+    HEX_BY_BYTE.push((i + 0x100).toString(16).slice(1));
+}
+/**
+ * 取 16 个随机字节
+ *
+ * @returns 长度为 16 的字节数组，每项 0~255
+ */ function randomBytes() {
+    var bytes = [];
+    if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+        var buffer = new Uint8Array(16);
+        crypto.getRandomValues(buffer);
+        for(var i = 0; i < 16; i++){
+            bytes.push(buffer[i]);
+        }
+        return bytes;
+    }
+    // 兜底：不具密码学强度，不要用于 token / 密钥一类场景
+    for(var i1 = 0; i1 < 16; i1++){
+        bytes.push(Math.floor(Math.random() * 256));
+    }
+    return bytes;
+}
+/**
+ * 把 16 个字节按 v4 规范格式化成 `8-4-4-4-12`
+ *
+ * 会就地改写第 6、8 个字节以写入版本号与变体位。
+ *
+ * @param bytes - 长度为 16 的字节数组
+ * @returns 形如 `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx` 的字符串，`y` 为 8/9/a/b
+ */ function bytesToUuid(bytes) {
+    // 版本号固定为 4（高 4 位置为 0100）
+    bytes[6] = bytes[6] & 0x0f | 0x40;
+    // 变体固定为 RFC 4122（高 2 位置为 10）
+    bytes[8] = bytes[8] & 0x3f | 0x80;
+    var out = '';
+    for(var i = 0; i < 16; i++){
+        // 8-4-4-4-12 的分组位置
+        if (i === 4 || i === 6 || i === 8 || i === 10) out += '-';
+        out += HEX_BY_BYTE[bytes[i]];
+    }
+    return out;
+}
+/**
+ * 生成一个 v4 UUID
+ *
+ * @returns 36 位小写 UUID，形如 `f47ac10b-58cc-4372-a567-0e02b2c3d479`
+ * @example
+ * ```ts
+ * import uuid from '@/utils/uuid';
+ *
+ * uuid(); // '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+ * ```
+ */ function uuid() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+    return bytesToUuid(randomBytes());
+}
+
+function _extends$u() {
+    _extends$u = Object.assign || function assign(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends$u.apply(this, arguments);
+}
+// const EVENTENUM = {
+//   // ALRAM报警录像 TIMIING定时录像 CAR车 HD人形
+//   ALRAM: 0,
+//   TIMIING: 1,
+//   CAR: 2,
+//   HD: 3,
+// }
+/**
+ * @description 合并相邻两个片段（结束时间 = 下一个片段的开始时间）
+ * @param {any[]} list 回放片段
+ * @param {number} timeZone 时区
+ */ function mergeTimes(list, timeZone) {
+    if (timeZone === void 0) timeZone = 0;
+    // prettier-ignore
+    return (list || []).map(function(item) {
+        var _item_videoType;
+        return _extends$u({}, item, {
+            // 防止字段重复
+            EVENT_TYPE: (_item_videoType = item.videoType) != null ? _item_videoType : item.type,
+            // 加上时区差（中国以外的地区设备）
+            startTime: item.startTime - (timeZone || 0) * 3600,
+            endTime: item.endTime - (timeZone || 0) * 3600
+        });
+    }).sort(function(a, b) {
+        return a.startTime - b.startTime;
+    });
+// 因为要展示卡片和个数
+// .reduce((acc, current) => {
+//   // 合并相邻没有间隔的片段
+//   const last = acc[acc.length - 1];
+//   if (last && last.endTime >= current.startTime) {
+//     // 合并相邻的区间
+//     last.endTime = current.endTime;
+//   } else {
+//     // 添加新的区间
+//     acc.push(current);
+//   }
+//   return acc;
+// }, []);
+}
+
+/**
+ * @file wss 取流地址拼装器
+ * @since 9.0.14 (OPOOL-11457)
+ *
+ * 设计要点：
+ *  - 系统参数 (ssn / auth / biz / cln / stream / devecdh) 无条件写入
+ *  - 业务参数 (wsParams) 命中系统参数白名单时被忽略并 warn
+ *  - key / value 走 encodeURIComponent
+ *  - 拼接后去除多余的 &&
+ */ /**
+ * 系统参数白名单：业务自定义 wsParams 命中此列表的 key 会被过滤丢弃
+ *
+ * 保留字含义：
+ *   - ssn / auth / biz / cln / stream : 服务端参数，业务不能篡改 SDK 决策
+ *   - devecdh                          : 全链路加密拼接结果，由 SDK 内部生成
+ */ var SYSTEM_PARAM_KEYS = [
+    'ssn',
+    'auth',
+    'biz',
+    'cln',
+    'stream',
+    'devecdh'
+];
+var SYSTEM_PARAM_SET = new Set(SYSTEM_PARAM_KEYS);
+/**
+ * 过滤掉命中白名单的业务 key（防止业务覆盖系统参数）
+ */ function filterUserParams(userParams, onConflict) {
+    var result = {};
+    Object.keys(userParams).forEach(function(key) {
+        if (SYSTEM_PARAM_SET.has(key)) {
+            return;
+        }
+        result[key] = userParams[key];
+    });
+    return result;
+}
+/**
+ * 将 value 安全转字符串
+ *  - undefined / null → ''
+ *  - object → JSON.stringify 兜底（实际不期望传入对象，作防御）
+ */ function stringifyValue(v) {
+    if (v === undefined || v === null) return '';
+    if (typeof v === 'string') return v;
+    if (typeof v === 'number' || typeof v === 'boolean') return String(v);
+    try {
+        return JSON.stringify(v);
+    } catch (unused) {
+        return '';
+    }
+}
+/**
+ * 单条 key=value 编码
+ */ function encodeKV(key, value) {
+    return encodeURIComponent(key) + "=" + encodeURIComponent(stringifyValue(value));
+}
+/**
+ * 把 wsParams 归一为 object，非对象一律视作空
+ */ function normalizeUserParams(raw) {
+    if (raw === undefined || raw === null) return {};
+    if (Object.prototype.toString.call(raw) === '[object Object]') {
+        return raw;
+    }
+    return {};
+}
+/**
+ * 拼接 wss 取流地址
+ *
+ *  - 先写 base
+ *  - 再追加 systemParams（无条件）
+ *  - 最后追加业务 userParams（过滤白名单）
+ *  - 整体走 encodeURIComponent，结果去重 &&，去掉末尾 ?/&
+ *
+ * @example
+ *   buildStreamUrl({
+ *     baseUrl: 'wss://xx.com/live?',
+ *     systemParams: { ssn: 'tk', auth: 1, biz: 4, cln: 100, devecdh: '1' },
+ *     userParams: { trace: 'pageA' },
+ *   });
+ *   // -> wss://xx.com/live?ssn=tk&auth=1&biz=4&cln=100&devecdh=1&trace=pageA
+ */ function buildStreamUrl(opts) {
+    var baseUrl = opts.baseUrl, systemParams = opts.systemParams, userParams = opts.userParams;
+    var segments = [];
+    // 1) 系统参数：无条件写入（undefined / null 跳过，空字符串保留）
+    Object.keys(systemParams).forEach(function(key) {
+        var v = systemParams[key];
+        if (v === undefined || v === null) return;
+        segments.push(encodeKV(key, v));
+    });
+    // 2) 业务参数：白名单过滤 + 编码
+    var userObj = normalizeUserParams(userParams);
+    var filtered = filterUserParams(userObj);
+    Object.keys(filtered).forEach(function(key) {
+        segments.push(encodeKV(key, filtered[key]));
+    });
+    if (segments.length === 0) return baseUrl;
+    // 3) 拼接：根据 baseUrl 是否已有 ? 决定连接符
+    var sep = baseUrl.includes('?') ? '&' : '?';
+    var url = baseUrl + sep + segments.join('&');
+    // 4) 收尾：去重 &&、去除末尾 ? 或 &
+    url = url.replace(/&{2,}/g, '&').replace(/[?&]+$/, '');
+    return url;
+}
+
+function asyncGeneratorStep$8(gen, resolve, reject, _next, _throw, key, arg) {
+    try {
+        var info = gen[key](arg);
+        var value = info.value;
+    } catch (error) {
+        reject(error);
+        return;
+    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
+}
+function _async_to_generator$8(fn) {
+    return function() {
+        var self = this, args = arguments;
+        return new Promise(function(resolve, reject) {
+            var gen = fn.apply(self, args);
+            function _next(value) {
+                asyncGeneratorStep$8(gen, resolve, reject, _next, _throw, "next", value);
+            }
+            function _throw(err) {
+                asyncGeneratorStep$8(gen, resolve, reject, _next, _throw, "throw", err);
+            }
+            _next(undefined);
+        });
+    };
+}
+function _defineProperties$6(target, props) {
+    for(var i = 0; i < props.length; i++){
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+    }
+}
+function _create_class$6(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties$6(Constructor.prototype, protoProps);
+    return Constructor;
+}
+function _extends$t() {
+    _extends$t = Object.assign || function assign(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends$t.apply(this, arguments);
+}
+function _instanceof$1(left, right) {
+    "@swc/helpers - instanceof";
+    if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
+        return !!right[Symbol.hasInstance](left);
+    } else return left instanceof right;
+}
+function _ts_generator$8(thisArg, body) {
+    var f, y, t, _ = {
+        label: 0,
+        sent: function() {
+            if (t[0] & 1) throw t[1];
+            return t[1];
+        },
+        trys: [],
+        ops: []
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
+    }), g;
+    function verb(n) {
+        return function(v) {
+            return step([
+                n,
+                v
+            ]);
+        };
+    }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while(g && (g = 0, op[0] && (_ = 0)), _)try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [
+                op[0] & 2,
+                t.value
+            ];
+            switch(op[0]){
+                case 0:
+                case 1:
+                    t = op;
+                    break;
+                case 4:
+                    _.label++;
+                    return {
+                        value: op[1],
+                        done: false
+                    };
+                case 5:
+                    _.label++;
+                    y = op[1];
+                    op = [
+                        0
+                    ];
+                    continue;
+                case 7:
+                    op = _.ops.pop();
+                    _.trys.pop();
+                    continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                        _ = 0;
+                        continue;
+                    }
+                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                        _.label = op[1];
+                        break;
+                    }
+                    if (op[0] === 6 && _.label < t[1]) {
+                        _.label = t[1];
+                        t = op;
+                        break;
+                    }
+                    if (t && _.label < t[2]) {
+                        _.label = t[2];
+                        _.ops.push(op);
+                        break;
+                    }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop();
+                    continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) {
+            op = [
+                6,
+                e
+            ];
+            y = 0;
+        } finally{
+            f = t = 0;
+        }
+        if (op[0] & 5) throw op[1];
+        return {
+            value: op[0] ? op[1] : void 0,
+            done: true
+        };
+    }
+}
+var DOMAIN = 'https://open.ys7.com';
+var API = {
+    getAppKey: '/api/service/appKey/get',
+    /** 获取单个设备信息 https://open.ys7.com/help/672 */ getDeviceInfo: '/api/lapp/device/info',
+    /** 获取备用地址 */ getStreamAddressList: '/api/service/media/stream/server/info?version=2.0&protocol=4',
+    /** 获取设备能力集 https://open.ys7.com/help/678 */ getDeviceCapacity: '/api/lapp/device/capacity',
+    /** 设置视频清晰度 https://open.ys7.com/help/2286 */ setVideoLevel: '/api/v3/device/setVideoLevel',
+    /** 私有协议换 wss 协议取流地址 */ ezopen: '/api/lapp/live/url/ezopen',
+    /** 获取云录制回放片段 https://open.ys7.com/help/2043 */ getCloudRecordTimes: '/api/service/cloudrecord/video/info/list',
+    /** 获取云录制文件上传地址 */ getCloudUploadUrl: '/api/service/cloud/upload/url',
+    /** 获取云存储回放片段 https://open.ys7.com/help/1422 */ getCloudTimes: '/api/lapp/video/by/time',
+    /** 获取本地回放片段 https://open.ys7.com/help/3922 */ getLocalRecTimes: '/api/v3/device/local/video/unify/query',
+    /** 获取设备视频质量查询接口 https://open.ys7.com/help/1478 */ getDeviceList: '/api/lapp/device/camera/list',
+    /** 镜像翻转 https://open.ys7.com/help/681 */ ptzMirror: '/api/lapp/device/ptz/mirror',
+    /** 获取设备清晰度列表 */ getDeviceSupportQuality: '/api/service/device/capacity/video/quality',
+    /* 本地回放 / 云存储 按月查询是否有数据 https://open.ys7.com/help/4329 */ getSdkCloudMonth: '/api/v3/open/cloud/video/exist/query/month',
+    /* 云录制 按月查询是否有数据 https://open.ys7.com/help/2042 */ getCloudRecordMonth: '/api/service/cloudrecord/video/exist/month',
+    /** 查询默认语音列表 https://open.ys7.com/help/1247 */ queryVoiceList: '/api/lapp/voice/query',
+    /** 临时语音下发 https://open.ys7.com/help/1252 */ sendVoiceOnce: '/api/lapp/voice/sendonce',
+    /** 语音文件下发 https://open.ys7.com/help/1253 */ sendVoice: '/api/lapp/voice/send',
+    /** 查询设备云存储信息 https://open.ys7.com/help/1404 */ getCloudInfo: '/api/lapp/cloud/v2/storage/device/info',
+    /** 按设备获取告警消息列表 https://open.ys7.com/help/987 */ getAlarmList: '/api/lapp/alarm/device/list',
+    /** 即时云抓拍(设备抓拍图片,支持生命周期) https://open.ys7.com/help/5235  */ captureSave: '/api/service/open/capture/device/capture',
+    /** 创建抓图任务(批量/定时抓拍计划)  https://open.ys7.com/help/1390 */ createCaptureTask: '/api/service/cloudrecord/pic/capture/task',
+    /** 查询存储空间列表(云抓拍/设备抓图等空间) https://open.ys7.com/help/5230 */ getSpaceList: '/api/service/open/storage/engine/space/listById',
+    /** 获取播放地址 https://open.ys7.com/help/1414 */ getAddress: '/api/lapp/v2/live/address/get',
+    /** 获取 CDN 加速直播地址 */ getCDNLiveAddress: '/api/service/media/live/cdn/config',
+    /** 获取 CDN 加速回放地址 */ getCDNRecordAddress: '/api/service/media/live/record/cdn/config',
+    /** 查询直播间断流信息（仅萤石直播间地址，单用户 QPS 限制 5 次/秒） */ getStreamInterruptInfo: '/api/service/media/streammanage/interrupt/info'
+};
+/**
+ * 客户端自动切换清晰度
+ */ var EZVIZ_CLIENT_AUTO_VIDEO_LEVEL = {
+    level: 'auto',
+    name: 'VIDEO_LEVEL_AUTO',
+    streamTypeIn: 1
+};
+var Services = /*#__PURE__*/ function() {
+    function Services(options) {
+        // 对切换 host  domain 等会有问题
+        this.deviceCapacity = {};
+        this.deviceInfo = {};
+        this.videoLevelList = {};
+        /** 取流机房地址（主机房在第一个），按设备通道缓存 */ this.streamAddressList = {};
+        this._options = {};
+        this._controllers = [];
+        /** 在途的模板请求，新请求发起前中止上一个 */ this._templateAbortController = null;
+        this._url = '';
+        /** 在飞的能力集请求，key 同 {@link getKeyName} */ this._capacityPromises = new Map();
+        this.updateOptions(options);
+        this.videoLevelList[this.getKeyName] = this._options.videoLevelList || [];
+    }
+    var _proto = Services.prototype;
+    /**
+   * @param {ServicesOptions} options 配置
+   */ _proto.updateOptions = function updateOptions(options) {
+        this._options = deepmerge.all([
+            {
+                baseURL: DOMAIN
+            },
+            this._options,
+            options || {}
+        ], {
+            clone: false
+        });
+        if (this._options.url) this.url = this._options.url;
+        if (!this._options.baseURL) {
+            this._options.baseURL = DOMAIN;
+        }
+        this._options.baseURL = this._options.baseURL.replace(/\/$/, '');
+    };
+    /**
+   * @description fetch请求
+   * @param {string} url  请求地址
+   * @param {RequestInit} options  请求参数
+   * @private
+   */ _proto._fetch = function _fetch() {
+        return _async_to_generator$8(function(url, options) {
+            var _this, fetchUrl, controller, signal, outerSignal, headers, fetchOptions;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _this = this;
+                        if (options === void 0) options = {};
+                        fetchUrl = /http[s]?:\/\//.test(url) ? url : "" + this._options.baseURL + url;
+                        controller = new AbortController();
+                        signal = controller.signal;
+                        this._controllers.push(controller);
+                        // 调用方传入的 signal 与内部 controller 联动：任一方中止都会中止本次请求（abortAll 仍然有效）
+                        outerSignal = options == null ? void 0 : options.signal;
+                        if (outerSignal) {
+                            if (outerSignal.aborted) controller.abort(outerSignal.reason);
+                            else outerSignal.addEventListener('abort', function() {
+                                return controller.abort(outerSignal.reason);
+                            }, {
+                                once: true
+                            });
+                        }
+                        // 当headers为null时，不构造headers对象
+                        // 当sdkType不为'base'时，不构造headers对象
+                        headers = (options == null ? void 0 : options.headers) === null ? {} : _extends$t({
+                            clientType: this._options.clientType || 'ezuikit'
+                        }, this._options.accessToken ? {
+                            accessToken: this._options.accessToken
+                        } : {}, {
+                            deviceSerial: this.urlInfo.deviceSerial,
+                            localIndex: this.urlInfo.channelNo
+                        }, (options == null ? void 0 : options.headers) || {});
+                        fetchOptions = _extends$t({}, options || {}, {
+                            headers: _extends$t({}, headers),
+                            signal: signal
+                        });
+                        // 除云录制日历查询接口以外，物联云其他接口都不携带headers
+                        if (this._options.sdkType !== 'base' && !url.includes('/api/service/cloudrecord/video/exist/month')) {
+                            delete fetchOptions.headers;
+                            delete fetchOptions.signal;
+                        }
+                        return [
+                            4,
+                            fetch(fetchUrl, fetchOptions).finally(function() {
+                                var index = _this._controllers.findIndex(function(item) {
+                                    return item === controller;
+                                });
+                                if (index > -1) {
+                                    _this._controllers.splice(index, 1);
+                                }
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * @description get请求
+   * @param {string} url 请求地址
+   */ _proto.get = function get() {
+        return _async_to_generator$8(function(url, options) {
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (options === void 0) options = {};
+                        return [
+                            4,
+                            this._fetch(url, _extends$t({}, options || {}, {
+                                method: 'get'
+                            }))
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * @description post请求
+   * @param {string} url 请求地址
+   */ _proto.post = function post() {
+        return _async_to_generator$8(function(url, options) {
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (options === void 0) options = {};
+                        return [
+                            4,
+                            this._fetch(url, _extends$t({}, options || {}, {
+                                method: 'post'
+                            }))
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * @description pust请求
+   * @param {string} url 请求地址
+   */ _proto.put = function put() {
+        return _async_to_generator$8(function(url, options) {
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (options === void 0) options = {};
+                        return [
+                            4,
+                            this._fetch(url, _extends$t({}, options || {}, {
+                                method: 'put'
+                            }))
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * @description delete请求
+   * @param {string} url 请求地址
+   */ _proto.delete = function _delete() {
+        return _async_to_generator$8(function(url, options) {
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (options === void 0) options = {};
+                        return [
+                            4,
+                            this._fetch(url, _extends$t({}, options || {}, {
+                                method: 'delete'
+                            }))
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    // ------------------------------------------------------------------------------------------------------------
+    //  API
+    // ------------------------------------------------------------------------------------------------------------
+    /**
+   * 获取开放平台轻应用模板数据
+   * @param id 开放平台轻应用模板id （https://open.ys7.com/console/ezuikit/template.html）
+   * @returns
+   */ _proto.getThemeDataByTemplate = function getThemeDataByTemplate(id) {
+        return _async_to_generator$8(function() {
+            var _this__options_token_httpToken, _this__options_token, // 中止上一个在途的模板请求（重复渲染 / 切换模板时只保留最后一次）；destroy 时由 abortAll 中止
+            _this__templateAbortController, accessToken, url, controller;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        accessToken = this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_httpToken = _this__options_token.httpToken) == null ? void 0 : _this__options_token_httpToken.url);
+                        // 查询参数逐个 encodeURIComponent，防止 `&` `#` `=` 等字符注入额外参数或截断 URL（SECURITY_AUDIT M1）
+                        // 不用 `new URL()`：env.domain 允许为空（同源相对路径）或带路径前缀，URL 构造会抛错或丢掉前缀
+                        url = "/api/service/media/template/getDetail?accessToken=" + encodeURIComponent(String(accessToken)) + "&id=" + encodeURIComponent(String(id));
+                        (_this__templateAbortController = this._templateAbortController) == null ? void 0 : _this__templateAbortController.abort();
+                        controller = new AbortController();
+                        this._templateAbortController = controller;
+                        return [
+                            4,
+                            this.get(url, {
+                                signal: controller.signal
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).then(function(res) {
+                                if (res.meta) {
+                                    var _res_data_footer, _res_data;
+                                    if (((_res_data = res.data) == null ? void 0 : (_res_data_footer = _res_data.footer) == null ? void 0 : _res_data_footer.btnList) && utilsTools.isMobile()) {
+                                        var // 兼容已经更新的新规范， 9.x 中不在支持
+                                        _res_data_footer1, _res_data1;
+                                        (_res_data1 = res.data) == null ? void 0 : (_res_data_footer1 = _res_data1.footer) == null ? void 0 : _res_data_footer1.btnList.forEach(function(btn, index) {
+                                            if (btn.iconId === 'webExpend') {
+                                                var _res_data_footer, _res_data;
+                                                ((_res_data = res.data) == null ? void 0 : (_res_data_footer = _res_data.footer) == null ? void 0 : _res_data_footer.btnList)[index] = {};
+                                            } else if (btn.iconId === 'expend') {
+                                                btn.iconId = 'webExpend';
+                                            }
+                                        });
+                                    }
+                                    return res.data || null;
+                                }
+                                return null;
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 获取设备能力集 https://open.ys7.com/help/678
+   * @returns {Promise<EzvizDeviceCapacity>}
+   *
+   * 9.0.14 (OPOOL-11457): 在飞 Promise 去重
+   *   - 同一时刻多个 caller (getEzopenUrl 前置 await + _deviceSerialChangeServices) 复用同一次 HTTP
+   *   - 请求结束（无论成功失败）后清空缓存，允许后续新一轮调用重新发起
+   *   - 成功后自动把结果回填到 this._options.deviceCapacity，供 ECDH 判定复用
+   */ _proto.getDeviceCapacity = function getDeviceCapacity() {
+        return _async_to_generator$8(function() {
+            var _this, key, pending;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _this = this;
+                        key = this.getKeyName;
+                        if (this.deviceCapacity[key] && Object.keys(this.deviceCapacity[key]).length) {
+                            return [
+                                2,
+                                this.deviceCapacity[key]
+                            ];
+                        }
+                        // 在飞请求去重：同一设备通道的并发调用复用同一次 HTTP，请求结束后清除
+                        pending = this._capacityPromises.get(key);
+                        if (!pending) {
+                            pending = this._fetchDeviceCapacity().finally(function() {
+                                _this._capacityPromises.delete(key);
+                            });
+                            this._capacityPromises.set(key, pending);
+                        }
+                        return [
+                            4,
+                            pending
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    _proto._fetchDeviceCapacity = function _fetchDeviceCapacity() {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, formData, response, res, cap, clientAutoVideoLevel;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        formData = new FormData();
+                        formData.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video) || '');
+                        formData.append('deviceSerial', this.urlInfo.deviceSerial);
+                        _state.label = 1;
+                    case 1:
+                        _state.trys.push([
+                            1,
+                            4,
+                            ,
+                            5
+                        ]);
+                        return [
+                            4,
+                            this.post(API.getDeviceCapacity, {
+                                body: formData,
+                                headers: null
+                            })
+                        ];
+                    case 2:
+                        response = _state.sent();
+                        return [
+                            4,
+                            response.json()
+                        ];
+                    case 3:
+                        res = _state.sent();
+                        cap = +res.code === 200 ? res.data : {};
+                        this.deviceCapacity[this.getKeyName] = cap; // 副作用：回填 options 供 ECDH 判定复用
+                        if ((cap == null ? void 0 : cap.support_device_auto_video_level) === '1' && /^ezopen:\/\//i.test(this._url)) {
+                            // 客户端检查到卡顿时可以自动切换清晰度 和 设备端自动切换清晰度（level: 255）不一样 (只有私有流才会有)
+                            clientAutoVideoLevel = (this.videoLevelList[this.getKeyName] || []).find(function(item) {
+                                return item.level === EZVIZ_CLIENT_AUTO_VIDEO_LEVEL.level;
+                            });
+                            if (!clientAutoVideoLevel) {
+                                if ((this.videoLevelList[this.getKeyName] || []).length > 0) {
+                                    this.videoLevelList[this.getKeyName].push(EZVIZ_CLIENT_AUTO_VIDEO_LEVEL);
+                                } else {
+                                    this.videoLevelList[this.getKeyName] = [
+                                        EZVIZ_CLIENT_AUTO_VIDEO_LEVEL
+                                    ];
+                                }
+                            }
+                        }
+                        return [
+                            2,
+                            cap
+                        ];
+                    case 4:
+                        _state.sent();
+                        if (Object.keys(this.deviceCapacity[this.getKeyName] || {}).length === 0) this.deviceCapacity[this.getKeyName] = {};
+                        // 失败降级为空能力集（不会被 isEcdhSupported 消费）
+                        return [
+                            2,
+                            this.deviceCapacity[this.getKeyName]
+                        ];
+                    case 5:
+                        return [
+                            2
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 获取设备信息 https://open.ys7.com/help/672
+   */ _proto.getDeviceInfo = function getDeviceInfo() {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, formData, response, res, info;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (this.deviceInfo[this.getKeyName] && Object.keys(this.deviceInfo[this.getKeyName]).length) {
+                            return [
+                                2,
+                                this.deviceInfo[this.getKeyName]
+                            ];
+                        }
+                        formData = new FormData();
+                        formData.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.global) || '');
+                        formData.append('deviceSerial', this.urlInfo.deviceSerial);
+                        _state.label = 1;
+                    case 1:
+                        _state.trys.push([
+                            1,
+                            4,
+                            ,
+                            5
+                        ]);
+                        return [
+                            4,
+                            this.post(API.getDeviceInfo, {
+                                body: formData,
+                                headers: null
+                            })
+                        ];
+                    case 2:
+                        response = _state.sent();
+                        return [
+                            4,
+                            response.json()
+                        ];
+                    case 3:
+                        res = _state.sent();
+                        info = +res.code === 200 ? res.data : {};
+                        this.deviceInfo[this.getKeyName] = info;
+                        return [
+                            2,
+                            info
+                        ];
+                    case 4:
+                        _state.sent();
+                        if (Object.keys(this.deviceInfo[this.getKeyName] || {}).length === 0) this.deviceInfo[this.getKeyName] = {};
+                        return [
+                            2,
+                            this.deviceInfo[this.getKeyName]
+                        ];
+                    case 5:
+                        return [
+                            2
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 获取设备清晰度列表接口
+   * @returns {Promise<Array<EzvizVideoLevel>>}
+   */ _proto.getDeviceSupportQuality = function getDeviceSupportQuality() {
+        return _async_to_generator$8(function() {
+            var _this, _this_videoLevelList_this_getKeyName, _this__options_token_deviceToken, _this__options_token, token, channelNo, deviceSerial, result;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _this = this;
+                        if ((_this_videoLevelList_this_getKeyName = this.videoLevelList[this.getKeyName]) == null ? void 0 : _this_videoLevelList_this_getKeyName.length) {
+                            return [
+                                2,
+                                this.videoLevelList[this.getKeyName]
+                            ];
+                        }
+                        token = this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video);
+                        channelNo = this.urlInfo.channelNo;
+                        deviceSerial = this.urlInfo.deviceSerial;
+                        result = [];
+                        return [
+                            4,
+                            this.get(API.getDeviceSupportQuality + ("?accessToken=" + token + "&deviceSerial=" + deviceSerial + "&channelNo=" + channelNo), {
+                                headers: null
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).then(function(res) {
+                                var tmpList = res.meta && res.meta.code === 200 && res.data && res.data.length > 0 ? res.data : VIDEO_LEVEL; // 没值默认未上报能力集, 设置默认值
+                                tmpList.forEach(function(item) {
+                                    // js sdk 仅支持 [0-6], 如果有新的值需要重新开发补充， 更高的清晰度设置需要 服务端支持才可以
+                                    if (item.videoLevel > 6 || item.videoLevel < 0) return;
+                                    result.push({
+                                        name: VIDEO_LEVEL_NAME[item.videoLevel],
+                                        level: item.videoLevel,
+                                        streamTypeIn: item.streamTypeIn,
+                                        type: item.type
+                                    });
+                                });
+                                var list = result.sort(function(a, b) {
+                                    return a.level > b.level ? 1 : -1;
+                                });
+                                var clientAutoVideoLevel = (_this.videoLevelList[_this.getKeyName] || []).find(function(item) {
+                                    return item.level === EZVIZ_CLIENT_AUTO_VIDEO_LEVEL.level;
+                                });
+                                // 客户端检查到卡顿时  可以自动切换清晰度 和 设备端自动切换清晰度（level: 255）不一样 (只有私有流才会有)
+                                if (clientAutoVideoLevel) list.push(clientAutoVideoLevel);
+                                _this.videoLevelList[_this.getKeyName] = list;
+                                return list;
+                            }).catch(function() {
+                                // 兼容接口失败的情况
+                                VIDEO_LEVEL.forEach(function(item) {
+                                    result.push({
+                                        name: VIDEO_LEVEL_NAME[item.videoLevel],
+                                        level: item.videoLevel,
+                                        streamTypeIn: item.streamTypeIn,
+                                        type: 'compatible'
+                                    });
+                                });
+                                _this.videoLevelList[_this.getKeyName] = result;
+                                return result;
+                            })
+                        ];
+                    case 1:
+                        // prettier-ignore
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 镜像翻转 https://open.ys7.com/help/681
+   * @param {number} command 镜像方向：0-上下, 1-左右, 2-中心 , 和设备报备的能力集有关，即使设备支持，但是没有报备也一样不支持
+   * @returns 不等待接口结果，始终 resolve undefined
+   */ _proto.postDevicePtzMirror = function postDevicePtzMirror(command) {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, data;
+            return _ts_generator$8(this, function(_state) {
+                data = new FormData();
+                data.append('command', command + '');
+                data.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video) || '');
+                data.append('deviceSerial', this.urlInfo.deviceSerial);
+                data.append('channelNo', this.urlInfo.channelNo + '');
+                this.post(API.ptzMirror, {
+                    body: data
+                });
+                return [
+                    2
+                ];
+            });
+        }).call(this);
+    };
+    /**
+   * 按月查询录像日历 （本地存储、云存储和云录制）
+   * - 本地存储 / 云存储 https://open.ys7.com/help/4329
+   * - 云录制 https://open.ys7.com/help/2042
+   * @param recType 录像类型 -1 云录制 1-云存储，2-本地录像，3-关联录像
+   * @param month 查询的月份，时间格式为：yyyy-MM
+   * @param spaceId 云录制空间的 spaceId， 仅云录制需要
+   * @returns 有录像的日期列表，如 `["2025-08-14", "2025-08-16"]`（云录制为接口原始 data）；失败时为 `[]`
+   */ _proto.getRecordMonth = function getRecordMonth(recType, month, spaceId) {
+        return _async_to_generator$8(function() {
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (!(recType === -1)) return [
+                            3,
+                            2
+                        ];
+                        return [
+                            4,
+                            this._getCloudRecordMonth(spaceId, month)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                    case 2:
+                        return [
+                            4,
+                            this._getSdkCloudMonth(recType, month)
+                        ];
+                    case 3:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 按月查询录像日历(本地存储和云存储)
+   *
+   * 录像日历查询 {@link https://open.ys7.com/help/4329}
+   * @param recType 回放源，0-云存储和本地录像，1-云存储，2-本地录像，3-关联录像
+   * @param queryMonth 查询的月份，时间格式为：yyyy-MM
+   * @returns
+   */ _proto._getSdkCloudMonth = function _getSdkCloudMonth(recType, month) {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, key;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        key = [
+                            'all',
+                            'cloud',
+                            'local',
+                            'relation'
+                        ][recType];
+                        return [
+                            4,
+                            this.get(API.getSdkCloudMonth + ("?accessToken=" + (this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video)) + "&deviceSerial=" + this.urlInfo.deviceSerial + "&channelNo=" + this.urlInfo.channelNo + "&recType=" + recType + "&queryMonth=" + month)).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).then(function(res) {
+                                var _res_meta, _res_data;
+                                if ((res == null ? void 0 : (_res_meta = res.meta) == null ? void 0 : _res_meta.code) === 200 && (res == null ? void 0 : (_res_data = res.data) == null ? void 0 : _res_data.length)) {
+                                    return res.data.filter(function(item) {
+                                        return item[key] === 1;
+                                    }).reduce(function(acc, cur) {
+                                        acc.push(cur.recDay);
+                                        return acc;
+                                    }, []);
+                                }
+                                return [];
+                            }).catch(function() {
+                                return [];
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 按月查询云录制日历查询接口 https://open.ys7.com/help/2042
+   * @param spaceId 空间id,不填默认查询主空间下录像日历
+   * @param month 查询的月份，时间格式为：yyyyMM / yyyy-MM / yyyy-MM
+   * @returns
+   */ _proto._getCloudRecordMonth = function _getCloudRecordMonth(spaceId, month) {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        month = month.replace(/-|\//gi, '');
+                        return [
+                            4,
+                            this.get(API.getCloudRecordMonth + ("?month=" + month + (spaceId ? "&spaceId=" + spaceId : '')), {
+                                headers: {
+                                    accessToken: this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.global)
+                                }
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).then(function(res) {
+                                var _res_meta, _res_data;
+                                if ((res == null ? void 0 : (_res_meta = res.meta) == null ? void 0 : _res_meta.code) === 200 && (res == null ? void 0 : (_res_data = res.data) == null ? void 0 : _res_data.length)) {
+                                    return res.data;
+                                }
+                                return [];
+                            }).catch(function() {
+                                return [];
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取appkey 用来上报
+   * @returns 接口原始返回 `{ meta, data: { appKey } }`；请求失败时为空串
+   */ _proto.getAppKey = function getAppKey() {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (!(this._options.sdkType === 'custom')) return [
+                            3,
+                            2
+                        ];
+                        return [
+                            4,
+                            new Promise(function(resolve) {
+                                resolve({
+                                    meta: {
+                                        code: 200,
+                                        message: '操作成功',
+                                        moreInfo: {}
+                                    },
+                                    data: {
+                                        appKey: 'ezuikit-custom'
+                                    }
+                                });
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                    case 2:
+                        return [
+                            4,
+                            this.get(API.getAppKey + "?checkToken=" + (this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video)) + "&sn=" + this.urlInfo.deviceSerial + "&cno=" + this.urlInfo.channelNo, {
+                                headers: null
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).catch(function() {
+                                return '';
+                            })
+                        ];
+                    case 3:
+                        // prettier-ignore
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 获取指定设备的通道信息 https://open.ys7.com/help/1478
+   * @returns 通道列表；失败时为 `[]`
+   */ _proto.getDeviceList = function getDeviceList() {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, token, deviceSerial;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        token = this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video);
+                        deviceSerial = this.urlInfo.deviceSerial;
+                        return [
+                            4,
+                            this.post("/api/lapp/device/camera/list?accessToken=" + token + "&deviceSerial=" + deviceSerial).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).then(function(res) {
+                                if (+(res == null ? void 0 : res.code) === 200) {
+                                    return res.data;
+                                }
+                                return [];
+                            }).catch(function() {
+                                return [];
+                            })
+                        ];
+                    case 1:
+                        // prettier-ignore
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 设置设备视频质量（清晰度）接口 https://open.ys7.com/help/2286
+   * @param {string | number} videoLevel 设备视频清晰度等级 0-流畅 1-均衡 2-高清 3-超清 4-极清 5-3K 6-4K
+   * @param {string=} clientLid 直播取流会话标识（无缝切换用，9.0.22 OPOOL-12269）。
+   *   传入时服务端据此定位当前推流通道，在同一条流上完成切档（不断流）；
+   *   不传则走旧逻辑（仅下发切档指令到设备），保持对老版本服务端与回放场景的兼容。
+   * @param {number | string=} prevVideoLevel 切换前清晰度，用于计算 adaptive 方向（升/降/保持）
+   * @returns 接口原始返回；videoLevel 小于 0 时不发请求，返回 `{}`
+   */ _proto.setVideoLevel = function setVideoLevel(videoLevel, clientLid, prevVideoLevel) {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, _this__options_token_deviceToken1, _this__options_token1, data, adaptive;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (+videoLevel < 0) {
+                            return [
+                                2,
+                                {}
+                            ];
+                        }
+                        data = new FormData();
+                        data.append('videoLevel', videoLevel + '');
+                        // 9.0.22 (OPOOL-12269): 无缝清晰度切换 —— clientLid 非空时走 V2 命令，携带 adaptive + clientLid
+                        // clientLid 为空走 V1 命令（旧路径），不含 adaptive / clientLid
+                        if (clientLid) {
+                            // adaptive 自适应调整方向 — -1 降档, 0 保持, 1 升档；无 prevVideoLevel 时以空串下发（兼容）
+                            adaptive = prevVideoLevel != null ? +videoLevel > +prevVideoLevel ? '1' : +videoLevel < +prevVideoLevel ? '-1' : '0' : '';
+                            data.append('adaptive', adaptive);
+                            data.append('clientLid', clientLid);
+                        }
+                        if (this._options.sdkType === 'custom') {
+                            data.append('accessToken', this._options.accessToken + '');
+                            data.append('deviceSerial', this.urlInfo.deviceSerial + '');
+                            data.append('localIndex', this.urlInfo.channelNo + '');
+                        }
+                        return [
+                            4,
+                            this.post(API.setVideoLevel + "?accessToken=" + (this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video)), {
+                                headers: {
+                                    accessToken: this._options.accessToken || ((_this__options_token1 = this._options.token) == null ? void 0 : (_this__options_token_deviceToken1 = _this__options_token1.deviceToken) == null ? void 0 : _this__options_token_deviceToken1.video)
+                                },
+                                body: data
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).then(function(res) {
+                                return res;
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 查询设备云存储信息 https://open.ys7.com/help/1404
+   * @returns 当前通道的云存储信息（接口 data 的第一项）；接口失败或无数据时为 `{}`
+   */ _proto.getCloudInfo = function getCloudInfo() {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, data;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        data = new FormData();
+                        data.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video) || '');
+                        data.append('deviceSerial', this.urlInfo.deviceSerial + '');
+                        data.append('channelNo', this.urlInfo.channelNo + '');
+                        return [
+                            4,
+                            this.post("" + API.getCloudInfo, {
+                                headers: null,
+                                body: data
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).then(function(res) {
+                                // eslint-disable-next-line eqeqeq
+                                if (+(res == null ? void 0 : res.code) === 200 || res.retcode == 0) {
+                                    if (Array.isArray(res.data) && res.data.length > 0) {
+                                        return res.data[0];
+                                    }
+                                }
+                                return {};
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 获取云录制截图上传地址
+   * @param fileName 截图文件名
+   * @returns 接口原始返回 `{ meta, data }`
+   */ _proto.getCloudUploadUrl = function getCloudUploadUrl(fileName) {
+        return _async_to_generator$8(function() {
+            var _this__options_token_httpToken, _this__options_token, query;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        query = "fileName=" + encodeURIComponent(fileName) + "&fileType=pic&expireDays=-1&urlExpireTime=1&bizType=ezuikit&accessToken=" + encodeURIComponent(this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_httpToken = _this__options_token.httpToken) == null ? void 0 : _this__options_token_httpToken.url) || '');
+                        return [
+                            4,
+                            this.get(API.getCloudUploadUrl + "?" + query).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 获取服务备用地址接口
+   *
+   * 机房地址按设备通道缓存在 {@link streamAddressList}，12 小时过期；
+   * 接口返回的机房集合与缓存不一致、或缓存已过期时，以接口结果为准。
+   *
+   * @returns `[地址个数, 接口原始 data, 归一化后的地址列表（主机房在第一个）]`；
+   *   接口非 200 时**不给第三位**，调用方保持已有列表不动，避免一次接口抖动把备用地址清空
+   */ _proto.getStreamAddressList = function getStreamAddressList() {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, _res_meta, response, res, key, list, data, _ref, _list_, expire, remoteList, sortedDomains, isSame;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (this._options.sdkType === 'custom') {
+                            // 定制版无备用机房：第三位给明确的空列表，与「接口失败、不给第三位」区分开
+                            return [
+                                2,
+                                [
+                                    0,
+                                    {
+                                        domain: '',
+                                        port: 0,
+                                        backups: []
+                                    },
+                                    []
+                                ]
+                            ];
+                        }
+                        return [
+                            4,
+                            this.get(API.getStreamAddressList, {
+                                headers: {
+                                    accessToken: this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video)
+                                }
+                            })
+                        ];
+                    case 1:
+                        response = _state.sent();
+                        return [
+                            4,
+                            response.json()
+                        ];
+                    case 2:
+                        res = _state.sent();
+                        if (+(res == null ? void 0 : (_res_meta = res.meta) == null ? void 0 : _res_meta.code) !== 200) return [
+                            2,
+                            [
+                                0,
+                                {}
+                            ]
+                        ];
+                        key = this.getKeyName;
+                        list = this.streamAddressList[key] || [];
+                        data = res.data;
+                        if (data) {
+                            expire = Date.now() + 12 * 60 * 60 * 1000;
+                            // 兼容海外返回的域名字段为 addr，国内为 domain
+                            remoteList = [].concat([
+                                data
+                            ], Array.isArray(data.backups) ? data.backups : []).map(function(item) {
+                                return {
+                                    domain: item.domain || item.addr || '',
+                                    port: item.port,
+                                    expire: expire
+                                };
+                            });
+                            sortedDomains = function sortedDomains(arr) {
+                                return arr.map(function(item) {
+                                    return item.domain;
+                                }).sort().join(',');
+                            };
+                            isSame = sortedDomains(list) === sortedDomains(remoteList);
+                            if (!isSame || ((_ref = (_list_ = list[0]) == null ? void 0 : _list_.expire) != null ? _ref : 0) <= Date.now()) {
+                                list = remoteList;
+                                this.streamAddressList[key] = list;
+                            }
+                        }
+                        return [
+                            2,
+                            [
+                                list.length,
+                                data || {},
+                                list
+                            ]
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 获取播放地址接口（私有协议 ezopen 换 wss 取流地址）
+   * @returns {string | Object} wss 取流地址；接口返回错误码时原样返回接口结果，请求失败返回空串
+   * FIXME: 服务端接口有问题  预览 和 本地回放、 云存储 、云录制 同等条件下返回不一样， 海外和国内也是
+   */ _proto.getEzopenUrl = function getEzopenUrl(url) {
+        return _async_to_generator$8(function() {
+            var _this, _window_navigator, _window, _this__options, _this__options_token_deviceToken, _this__options_token, formData;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _this = this;
+                        if (url) this._url = url;
+                        formData = new FormData();
+                        formData.append('isFlv', 'false');
+                        formData.append('userAgent', ((_window = window) == null ? void 0 : (_window_navigator = _window.navigator) == null ? void 0 : _window_navigator.userAgent) || '');
+                        formData.append('isHttp', 'false');
+                        formData.append('needStreamToken', ((_this__options = this._options) == null ? void 0 : _this__options.accessToken) ? '1' : '0');
+                        formData.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video) || '');
+                        formData.append('ezopen', url != null ? url : this._url);
+                        // 扩展参数拼接
+                        if (this._options.ezopenParams && Object.prototype.toString.call(this._options.ezopenParams) === '[object Object]') {
+                            for(var key in this._options.ezopenParams){
+                                formData.append(key, String(this._options.ezopenParams[key]));
+                            }
+                        }
+                        return [
+                            4,
+                            this.post(API.ezopen, {
+                                body: formData,
+                                headers: {
+                                    sdkVersion: '3.2.0-beta.1'
+                                }
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).then(function(res) {
+                                // eslint-disable-next-line eqeqeq
+                                if (+(res == null ? void 0 : res.code) === 200 || res.retcode == 0) {
+                                    var _this__options_token_streamToken, _this__options_token, _this__options, _this__options_token_streamToken1, _this__options_token1, _this__options1, _res_ext;
+                                    var baseUrl = '';
+                                    var token = '';
+                                    // 云录制场景判定:url 含 .cloud 且 busType=7(对齐 ezopen.js 中云录制识别规则)
+                                    var isCloudRecord = _this._url.includes('.cloud') && _this._url.includes('busType=7');
+                                    // 小权限 token 选择:
+                                    //   云录制取流 → streamToken.rec(回放取流token)
+                                    //   其他场景(直播/本地回放/云存储)→ 维持原 streamToken[live|rec] 路径
+                                    var streamToken = isCloudRecord ? (_this__options = _this._options) == null ? void 0 : (_this__options_token = _this__options.token) == null ? void 0 : (_this__options_token_streamToken = _this__options_token.streamToken) == null ? void 0 : _this__options_token_streamToken.rec : (_this__options1 = _this._options) == null ? void 0 : (_this__options_token1 = _this__options1.token) == null ? void 0 : (_this__options_token_streamToken1 = _this__options_token1.streamToken) == null ? void 0 : _this__options_token_streamToken1[res.data.indexOf('live') > -1 || res.data.indexOf('cloud') > -1 ? 'live' : 'rec'];
+                                    // 若使用accessToken，则用接口返回的取流token取流，否则使用小权限token取流
+                                    if ((_res_ext = res.ext) == null ? void 0 : _res_ext.token) {
+                                        baseUrl += res.data;
+                                        token = _this._options.accessToken ? res.ext.token : streamToken;
+                                    } else if (res.data) {
+                                        // 海外接口返回值，
+                                        if (typeof res.data === 'string' && streamToken) {
+                                            // 小权限token取流
+                                            baseUrl += res.data;
+                                            token = streamToken;
+                                        } else {
+                                            var _res_data;
+                                            baseUrl += ((_res_data = res.data) == null ? void 0 : _res_data.url) || '';
+                                            token = _this._options.accessToken ? res.data.token : streamToken;
+                                        }
+                                    }
+                                    var type = _this._url.includes('live') ? 'live' : 'playback';
+                                    // 9.0.14: 统一通过 urlBuilder 拼接系统参数 + 业务 wsParams (OPOOL-11457)
+                                    //   - 系统参数白名单保护 ssn/auth/biz/cln/stream/devecdh 不被业务覆盖
+                                    //   - key/value 自动 encodeURIComponent
+                                    var systemParams = {
+                                        ssn: token || '',
+                                        auth: 1,
+                                        cln: utilsTools.isRealMobile() ? '99' : '100'
+                                    };
+                                    if (type === 'live') {
+                                        systemParams.biz = 4;
+                                    }
+                                    // ECDH 的 devecdh 由 Theme.getEzopenUrl 判定后追加
+                                    return buildStreamUrl({
+                                        baseUrl: baseUrl,
+                                        systemParams: systemParams,
+                                        userParams: _this._options.wsParams
+                                    });
+                                }
+                                // 单独处理错误 处理token过期等错误
+                                return res;
+                            }).catch(function() {
+                                return '';
+                            })
+                        ];
+                    case 1:
+                        // prettier-ignore
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 获取云录制片段接口 (云录制返回的时间不需要转时区) https://open.ys7.com/help/2043
+   * @param {EzvizFetchCloudRecordRecParams} body 开始时间和结束时间 支持 时间字符串和时间戳 和 存储空间ID
+   * ezopen://open.ys7.com/BC7799091/1.cloud.rec?begin=20250401000000&busType=7&spaceId=21536
+   * @returns {Promise<EzvizFetchRecItem[]>}
+   */ _proto.getCloudRecordTimes = function getCloudRecordTimes(body) {
+        return _async_to_generator$8(function() {
+            var _this, _this__options_token_deviceToken, _this__options_token, query, _this__options_token_deviceToken1, _this__options_token1, queryStr;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _this = this;
+                        query = {
+                            startTime: body.begin ? utilsTools.DateTime.format(body.begin, 'YYYY-MM-DD hh:mm:ss') : undefined,
+                            endTime: body.end ? utilsTools.DateTime.format(body.end, 'YYYY-MM-DD hh:mm:ss') : undefined,
+                            spaceId: body.spaceId || undefined
+                        };
+                        if (this._options.sdkType === 'custom') {
+                            query.accessToken = this._options.accessToken || ((_this__options_token1 = this._options.token) == null ? void 0 : (_this__options_token_deviceToken1 = _this__options_token1.deviceToken) == null ? void 0 : _this__options_token_deviceToken1.global);
+                            query.deviceSerial = this.urlInfo.deviceSerial;
+                            query.localIndex = this.urlInfo.channelNo;
+                        }
+                        queryStr = Object.keys(query).filter(function(key) {
+                            return query[key] !== undefined && query[key] !== null;
+                        }).map(function(key) {
+                            return key + "=" + encodeURIComponent(query[key]);
+                        }).join('&');
+                        return [
+                            4,
+                            this.get(API.getCloudRecordTimes + ("?" + queryStr), {
+                                headers: {
+                                    accessToken: this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.global)
+                                }
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).then(function(res) {
+                                var _res_meta;
+                                if (+(res == null ? void 0 : (_res_meta = res.meta) == null ? void 0 : _res_meta.code) === 200) {
+                                    // 云录制返回的时间字符串（YYYYMMDDhhmmss） 不需要转时区，换算成秒级时间戳
+                                    var records = res.data || [];
+                                    var mergeList = mergeTimes(records.map(function(item) {
+                                        item.endTime = parseInt(utilsTools.DateTime.toDate(item.stopTime).getTime() / 1000 + '', 10);
+                                        item.startTime = parseInt(utilsTools.DateTime.toDate(item.startTime).getTime() / 1000 + '', 10);
+                                        item.busType = 7;
+                                        item.iStorageVersion = item.istorageVersion;
+                                        return item;
+                                    }));
+                                    return _this._clampTimes(mergeList, _this._toSeconds(utilsTools.DateTime.format(body.begin, 'YYYY-MM-DD hh:mm:ss')), _this._toSeconds(utilsTools.DateTime.format(body.end, 'YYYY-MM-DD hh:mm:ss')));
+                                }
+                                return [];
+                            }).catch(function() {
+                                return [];
+                            })
+                        ];
+                    case 1:
+                        // prettier-ignore
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 获取云存储片段接口 (已处理时区问题) https://open.ys7.com/help/1422
+   * ezopen://open.ys7.com/BD3664803/1.cloud.rec?begin=20250430050000
+   * @param {EzvizFetchCloudRecParams} body 开始时间和结束时间 支持 时间字符串和时间戳
+   * @returns {Promise<EzvizFetchRecItem[]>} (已处理时区问题)
+   */ _proto.getCloudTimes = function getCloudTimes(body) {
+        return _async_to_generator$8(function() {
+            var recType;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        // url 不是云存储地址时按本地录像查
+                        recType = !!body.url && !body.url.includes('.cloud') ? '2' : '1';
+                        return [
+                            4,
+                            this._getVideoByTime(recType, body)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 获取查询设备本地录像 (开始结束时间必须在同一天, 有时区问题) https://open.ys7.com/help/3922
+   * @param {EzvizFetchLocalRecParams | EzvizFetchCloudRecParams} params 开始时间和结束时间 支持 时间字符串和时间戳
+   * @returns {EzvizFetchRecItem[]} (已处理时区问题)
+   */ _proto.getLocalRecTimes = function getLocalRecTimes(params) {
+        return _async_to_generator$8(function() {
+            var _this, startTime, endTime, getLocalVideoUnifyQueryHttp, list;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _this = this;
+                        if (!(this._options.sdkType === 'custom')) return [
+                            3,
+                            2
+                        ];
+                        return [
+                            4,
+                            this._getVideoByTime('2', params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                    case 2:
+                        startTime = this._toSeconds(params.begin);
+                        endTime = this._toSeconds(params.end);
+                        getLocalVideoUnifyQueryHttp = function getLocalVideoUnifyQueryHttp1(query) {
+                            return _async_to_generator$8(function() {
+                                var list, _this__options_token_deviceToken, _this__options_token, _data_meta, _data_data_records, _data_data, _data_data1, data, _data_data2, _;
+                                return _ts_generator$8(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            list = [];
+                                            _state.label = 1;
+                                        case 1:
+                                            _state.trys.push([
+                                                1,
+                                                5,
+                                                ,
+                                                6
+                                            ]);
+                                            return [
+                                                4,
+                                                this.get(API.getLocalRecTimes + "?startTime=" + query.startTime + "&endTime=" + query.endTime + "&pageSize=" + (query.pageSize || 200), {
+                                                    headers: {
+                                                        accessToken: this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video),
+                                                        deviceSerial: this.urlInfo.deviceSerial
+                                                    }
+                                                }).then(function(res) {
+                                                    return _async_to_generator$8(function() {
+                                                        return _ts_generator$8(this, function(_state) {
+                                                            switch(_state.label){
+                                                                case 0:
+                                                                    return [
+                                                                        4,
+                                                                        res.json()
+                                                                    ];
+                                                                case 1:
+                                                                    return [
+                                                                        2,
+                                                                        _state.sent()
+                                                                    ];
+                                                            }
+                                                        });
+                                                    })();
+                                                })
+                                            ];
+                                        case 2:
+                                            data = _state.sent();
+                                            if (+(data == null ? void 0 : (_data_meta = data.meta) == null ? void 0 : _data_meta.code) !== 200) {
+                                                return [
+                                                    2,
+                                                    list
+                                                ];
+                                            }
+                                            if (data == null ? void 0 : (_data_data = data.data) == null ? void 0 : (_data_data_records = _data_data.records) == null ? void 0 : _data_data_records.length) list = list.concat(data.data.records || []);
+                                            if (!(data == null ? void 0 : (_data_data1 = data.data) == null ? void 0 : _data_data1.hasMore)) return [
+                                                3,
+                                                4
+                                            ];
+                                            _ = list.concat;
+                                            return [
+                                                4,
+                                                getLocalVideoUnifyQueryHttp(_extends$t({}, query, {
+                                                    startTime: data == null ? void 0 : (_data_data2 = data.data) == null ? void 0 : _data_data2.nextFileTime
+                                                }))
+                                            ];
+                                        case 3:
+                                            list = _.apply(list, [
+                                                _state.sent()
+                                            ]);
+                                            _state.label = 4;
+                                        case 4:
+                                            return [
+                                                3,
+                                                6
+                                            ];
+                                        case 5:
+                                            _state.sent();
+                                            return [
+                                                3,
+                                                6
+                                            ];
+                                        case 6:
+                                            return [
+                                                2,
+                                                list
+                                            ];
+                                    }
+                                });
+                            }).call(_this);
+                        };
+                        return [
+                            4,
+                            getLocalVideoUnifyQueryHttp({
+                                startTime: startTime,
+                                endTime: endTime
+                            })
+                        ];
+                    case 3:
+                        list = _state.sent() || [];
+                        // 片段会跨天，裁剪到查询区间
+                        return [
+                            2,
+                            this._clampTimes(mergeTimes(list, this.timeZone), startTime, endTime)
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 查询默认语音列表
+   * @link https://open.ys7.com/help/1247
+   * @param {Object} params 查询参数
+   * @param {string} params.voiceName 模糊匹配语音名称（可选）
+   * @param {number} params.pageStart 分页起始页，从0开始（可选）
+   * @param {number} params.pageSize 分页大小，默认为10，最大为50（可选）
+   * @returns `{ data, page }`；非 base 版本或接口失败时为空列表
+   */ _proto.queryVoiceList = function queryVoiceList() {
+        return _async_to_generator$8(function(params) {
+            var _this__options_token_httpToken, _this__options_token, empty, data;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (params === void 0) params = {};
+                        empty = {
+                            data: [],
+                            page: {
+                                total: 0,
+                                size: 10,
+                                page: 0
+                            }
+                        };
+                        if (this._options.sdkType !== 'base') {
+                            return [
+                                2,
+                                empty
+                            ];
+                        }
+                        data = new FormData();
+                        // voice/query 属于「非设备类」接口，小权限 token 必须使用非设备类 token（httpToken.url），
+                        // 不能用设备类 deviceToken.video，否则小权限模式下会返回 10031「子账户或萤石用户没有权限」。
+                        data.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_httpToken = _this__options_token.httpToken) == null ? void 0 : _this__options_token_httpToken.url) || '');
+                        if (params.voiceName) data.append('voiceName', params.voiceName);
+                        if (params.pageStart !== undefined) data.append('pageStart', params.pageStart + '');
+                        if (params.pageSize !== undefined) data.append('pageSize', params.pageSize + '');
+                        return [
+                            4,
+                            this.post(API.queryVoiceList, {
+                                body: data,
+                                headers: null
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).then(function(res) {
+                                if (+res.code === 200) {
+                                    return {
+                                        data: res.data || [],
+                                        page: res.page || empty.page
+                                    };
+                                }
+                                return empty;
+                            }).catch(function() {
+                                return empty;
+                            })
+                        ];
+                    case 1:
+                        // prettier-ignore
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * @description 临时语音下发（一次性自定义语音下发到设备，不保存到语音列表）
+   * @link https://open.ys7.com/help/1252
+   * @param {File | Blob} voiceFile 语音文件，支持wav、mp3、aac格式，最大20M，最长60s
+   * @param {number} channelNo 通道号，默认取播放地址里的通道号（可选）
+   * @returns 接口原始返回 `{ code, msg }`；非 base 版本为 `{}`，请求失败为 `{ code: '500', msg, error }`
+   * @description 需要设备支持能力集 support_talk=1或3
+   */ _proto.sendVoiceOnce = function sendVoiceOnce(voiceFile, channelNo) {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, file, data;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (this._options.sdkType !== 'base') {
+                            return [
+                                2,
+                                {}
+                            ];
+                        }
+                        if (_instanceof$1(voiceFile, File)) {
+                            // 如果已经是 File 对象，确保是 WAV 格式
+                            file = voiceFile.name.endsWith('.wav') ? voiceFile : new File([
+                                voiceFile
+                            ], "voice_" + Date.now() + ".wav", {
+                                type: 'audio/wav'
+                            });
+                        } else if (_instanceof$1(voiceFile, Blob)) {
+                            // Blob 转换为 WAV 格式的 File 对象
+                            file = new File([
+                                voiceFile
+                            ], "voice_" + Date.now() + ".wav", {
+                                type: 'audio/wav'
+                            });
+                        } else {
+                            throw new Error('voiceFile must be a File or Blob object');
+                        }
+                        data = new FormData();
+                        data.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video) || '');
+                        data.append('voiceFile', file);
+                        data.append('deviceSerial', this.urlInfo.deviceSerial);
+                        data.append('channelNo', (channelNo != null ? channelNo : this.urlInfo.channelNo) + '');
+                        return [
+                            4,
+                            this.post(API.sendVoiceOnce, {
+                                body: data,
+                                headers: null
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).catch(function(error) {
+                                return {
+                                    code: '500',
+                                    msg: '临时语音下发失败',
+                                    error: error
+                                };
+                            })
+                        ];
+                    case 1:
+                        // prettier-ignore
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 语音文件下发（指定设备播放已上传的语音文件）
+   * @link https://open.ys7.com/help/1253
+   * @param {string} fileUrl 下载音频文件的url（从查询接口返回的url）
+   * @param {number} channelNo 通道号，默认取播放地址里的通道号（可选）
+   * @returns 接口原始返回 `{ code, msg }`；非 base 版本为 `{}`，请求失败为 `{ code: '500', msg, error }`
+   * @description 需要设备支持能力集 support_talk=1或3
+   */ _proto.sendVoice = function sendVoice(fileUrl, channelNo) {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, data;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (this._options.sdkType !== 'base') {
+                            return [
+                                2,
+                                {}
+                            ];
+                        }
+                        data = new FormData();
+                        data.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video) || '');
+                        data.append('deviceSerial', this.urlInfo.deviceSerial);
+                        data.append('channelNo', (channelNo != null ? channelNo : this.urlInfo.channelNo) + '');
+                        data.append('fileUrl', fileUrl);
+                        return [
+                            4,
+                            this.post(API.sendVoice, {
+                                body: data,
+                                headers: null
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }).catch(function(error) {
+                                return {
+                                    code: '500',
+                                    msg: '语音文件下发失败',
+                                    error: error
+                                };
+                            })
+                        ];
+                    case 1:
+                        // prettier-ignore
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 按设备获取告警消息列表 https://open.ys7.com/help/987
+   * @param params.startTime 告警查询开始时间（毫秒时间戳），默认今日0点
+   * @param params.endTime 告警查询结束时间（毫秒时间戳），默认当前时间
+   * @param params.pageStart 分页起始页，从0开始
+   * @param params.pageSize 分页大小，默认20，最大50
+   * @param params.status 告警状态：2-所有，1-已读，0-未读，默认2
+   * @param params.alarmType 告警类型，默认-1（全部）
+   * @returns `{ data, page }`；非 base 版本为空列表；接口非 200 时 reject 接口原始结果
+   */ _proto.getAlarmList = function getAlarmList() {
+        return _async_to_generator$8(function(params) {
+            var _params_status, _params_alarmType, _this__options_token_deviceToken, _this__options_token, data, response, res;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (params === void 0) params = {};
+                        if (this._options.sdkType !== 'base') {
+                            return [
+                                2,
+                                {
+                                    data: [],
+                                    page: {
+                                        total: 0,
+                                        size: 20,
+                                        page: 0
+                                    }
+                                }
+                            ];
+                        }
+                        data = new FormData();
+                        data.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video) || '');
+                        data.append('deviceSerial', this.urlInfo.deviceSerial);
+                        if (params.startTime !== undefined) data.append('startTime', params.startTime + '');
+                        if (params.endTime !== undefined) data.append('endTime', params.endTime + '');
+                        if (params.pageStart !== undefined) data.append('pageStart', params.pageStart + '');
+                        if (params.pageSize !== undefined) data.append('pageSize', (params.pageSize || 20) + '');
+                        data.append('status', ((_params_status = params.status) != null ? _params_status : 2) + '');
+                        data.append('alarmType', ((_params_alarmType = params.alarmType) != null ? _params_alarmType : -1) + '');
+                        return [
+                            4,
+                            this.post(API.getAlarmList, {
+                                body: data,
+                                headers: null
+                            })
+                        ];
+                    case 1:
+                        response = _state.sent();
+                        return [
+                            4,
+                            response.json()
+                        ];
+                    case 2:
+                        res = _state.sent();
+                        if (+res.code === 200) {
+                            return [
+                                2,
+                                {
+                                    data: res.data || [],
+                                    page: res.page || {
+                                        total: 0,
+                                        size: 20,
+                                        page: 0
+                                    }
+                                }
+                            ];
+                        }
+                        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                        throw res;
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * @description 即时云抓拍(设备抓拍图片,支持生命周期) https://open.ys7.com/help/5235
+   * 接口依据:《云抓拍接口.md》 POST /api/service/open/capture/device/capture (form)
+   * @param params.resultSpaceId 抓图业务存储空间 id(由空间列表查询接口获取,必填)
+   * @param params.quality 视频清晰度:0-流畅,1-高清(720P),2-FCIF,3-1080P,4-400w(可选)
+   * @param params.channelNo 通道号,默认取播放地址里的通道号
+   * @returns 接口原始返回 `{ meta, data: { picUrl, fileNodeId } }`
+   */ _proto.captureSave = function captureSave(params) {
+        return _async_to_generator$8(function() {
+            var _params_channelNo, _this__options_token_deviceToken, _this__options_token, _this__options_token_deviceToken1, _this__options_token1, data;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        data = new FormData();
+                        data.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video) || '');
+                        data.append('deviceSerial', this.urlInfo.deviceSerial);
+                        data.append('channelNo', ((_params_channelNo = params.channelNo) != null ? _params_channelNo : this.urlInfo.channelNo) + '');
+                        data.append('resultSpaceId', params.resultSpaceId + '');
+                        if (typeof params.quality !== 'undefined' && params.quality !== '') data.append('quality', params.quality + '');
+                        return [
+                            4,
+                            this.post(API.captureSave, {
+                                headers: {
+                                    accessToken: this._options.accessToken || ((_this__options_token1 = this._options.token) == null ? void 0 : (_this__options_token_deviceToken1 = _this__options_token1.deviceToken) == null ? void 0 : _this__options_token_deviceToken1.video)
+                                },
+                                body: data
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            })
+                        ];
+                    case 1:
+                        // accessToken 放 headers(随 _fetch 带默认头 clientType/deviceSerial/localIndex),避免跨域问题
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 创建抓图任务(批量/定时抓拍计划),返回 taskId https://open.ys7.com/help/1390
+   * 接口依据:《创建云抓拍计划接口.md》 POST /api/service/cloudrecord/pic/capture/task
+   * header:accessToken/deviceSerial/localIndex;body:application/x-www-form-urlencoded
+   * @param params.resultSpaceId 云抓拍业务空间 id(由空间列表查询接口获取,必填)
+   * @param params.captureType 抓图模式:1 按时间点 / 2 按时间间隔(必填)
+   * @param params.captureInterval 时间间隔(秒),captureType=2 必填
+   * @param params.timingPoints 时间点列表 yyyyMMddHHmmss,英文逗号分隔,captureType=1 必填
+   * @param params.startTime 开始时间 yyyyMMddHHmmss,captureType=2 必填
+   * @param params.endTime 结束时间 yyyyMMddHHmmss,captureType=2 必填
+   * @param params.frameSwitch 抽帧补偿开关,默认 false
+   * @param params.filePrefix 文件 id 前缀
+   * @param params.validateCode 视频解密密钥(加密设备必填)
+   * @returns 接口原始返回 `{ meta, data: { taskId } }`
+   */ _proto.createCaptureTask = function createCaptureTask(params) {
+        return _async_to_generator$8(function() {
+            var _this__options_token_deviceToken, _this__options_token, data;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        data = new FormData();
+                        data.append('resultSpaceId', params.resultSpaceId + '');
+                        data.append('captureType', params.captureType + '');
+                        if (params.validateCode) data.append('validateCode', params.validateCode);
+                        if (params.timingPoints) data.append('timingPoints', params.timingPoints);
+                        if (typeof params.captureInterval === 'number') data.append('captureInterval', params.captureInterval + '');
+                        if (params.startTime) data.append('startTime', params.startTime);
+                        if (params.endTime) data.append('endTime', params.endTime);
+                        if (typeof params.frameSwitch === 'boolean') data.append('frameSwitch', params.frameSwitch + '');
+                        if (params.filePrefix) data.append('filePrefix', params.filePrefix);
+                        return [
+                            4,
+                            this.post(API.createCaptureTask, {
+                                headers: {
+                                    accessToken: this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video),
+                                    deviceSerial: this.urlInfo.deviceSerial,
+                                    localIndex: this.urlInfo.channelNo
+                                },
+                                body: data
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 查询存储空间列表(默认查询云抓拍 cloudCapture 空间),用于获取 resultSpaceId https://open.ys7.com/help/5230
+   * 接口依据:《查询空间列表.md》 GET /api/service/open/storage/engine/space/listById
+   * header:accessToken;query:startTime/endTime(必填,30天内)/lastSpaceId/pageSize/bizTypeList
+   * @param params.startTime 查询开始时间 yyyy-MM-dd HH:mm:ss,默认近 30 天
+   * @param params.endTime 查询结束时间 yyyy-MM-dd HH:mm:ss,默认当前时间
+   * @param params.lastSpaceId 上一页最后空间 id,用于翻页
+   * @param params.pageSize 分页大小,默认 10,范围 1-50
+   * @param params.bizTypeList 存储空间类型,默认 cloudCapture
+   * @returns 接口原始返回 `{ meta, data: { result, lastId, pageSize, hasNext } }`
+   */ _proto.getSpaceList = function getSpaceList() {
+        return _async_to_generator$8(function(params) {
+            var _this__options_token_deviceToken, _this__options_token, fmt, now, query, queryStr;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (params === void 0) params = {};
+                        fmt = function fmt(d) {
+                            var p = function p(n) {
+                                return n < 10 ? '0' + n : '' + n;
+                            };
+                            return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
+                        };
+                        now = new Date();
+                        query = {
+                            startTime: params.startTime || fmt(new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000)),
+                            endTime: params.endTime || fmt(now),
+                            pageSize: (typeof params.pageSize === 'number' ? params.pageSize : 10) + '',
+                            bizTypeList: params.bizTypeList || 'cloudCapture'
+                        };
+                        if (typeof params.lastSpaceId !== 'undefined' && params.lastSpaceId !== '') query.lastSpaceId = params.lastSpaceId + '';
+                        queryStr = Object.keys(query).map(function(k) {
+                            return k + "=" + encodeURIComponent(query[k]);
+                        }).join('&');
+                        return [
+                            4,
+                            this.get(API.getSpaceList + "?" + queryStr, {
+                                headers: {
+                                    accessToken: this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video)
+                                }
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            })
+                        ];
+                    case 1:
+                        // accessToken 放 headers(随 _fetch 带默认头),避免跨域问题
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * 获取播放地址 https://open.ys7.com/help/1414
+   * @remarks
+   * 所有参数均可选，不传时默认取自当前播放地址 / 播放器配置，默认生成标准流 LL-HLS（protocol=5）地址
+   *
+   * @warning 每次生成的地址实效不做变更，即第一次传入的地址是时效是多久， 新生成的地址也是一样的时效（不过是从当前时间开始计算）
+   *
+   * @param params 请求参数，见 {@link EzvizFetchAddressParams}
+   * @returns 接口原始返回 `{ code, msg, data: { id, url, expireTime } }`；响应体解析失败时返回 undefined
+   * @throws 请求失败（非 2xx）时抛错
+   * @example
+   * ```typescript
+   * const res = await services.getAddress({ begin: '20260804000000', end: '20260804235959', playbackSpeed: 2 });
+   * ```
+   */ _proto.getAddress = function getAddress() {
+        return _async_to_generator$8(function(params) {
+            var _ref, _params_begin, _ref1, _params_end, _params_type, _params_expireTime, _params_mute, _ref2, _params_accessToken, _params_deviceSerial, _params_channelNo, _params_protocol, _params_code, _params_supportH265, _params_playbackSpeed, urlInfo, searchParams, begin, end, type, expireTime, mute, body, formdata, response;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (params === void 0) params = {};
+                        urlInfo = this.urlInfo;
+                        // 统一转成字符串，方便下面判断和拼接
+                        searchParams = {};
+                        Object.entries(urlInfo.searchParams || {}).forEach(function(param) {
+                            var key = param[0], value = param[1];
+                            searchParams[key] = value == null ? undefined : String(value);
+                        });
+                        begin = String((_ref = (_params_begin = params.begin) != null ? _params_begin : searchParams.begin) != null ? _ref : '').replace(/T|Z/gi, '');
+                        end = String((_ref1 = (_params_end = params.end) != null ? _params_end : searchParams.end) != null ? _ref1 : '').replace(/T|Z/gi, '');
+                        // 地址的类型，1-预览，2-本地录像回放，3-云存储录像回放；回放地址未标注 rec 时按本地录像
+                        type = (_params_type = params.type) != null ? _params_type : urlInfo.type === 'live' ? '1' : searchParams.rec === 'cloud' ? '3' : '2';
+                        // 过期时长（秒）：未显式传入时按当前播放地址的 expire（秒级时间戳）计算剩余时长
+                        expireTime = (_params_expireTime = params.expireTime) != null ? _params_expireTime : searchParams.expire ? Math.floor((+searchParams.expire * 1000 - Date.now()) / 1000) : undefined;
+                        mute = (_params_mute = params.mute) != null ? _params_mute : [
+                            '0',
+                            '1'
+                        ].includes(searchParams.mute || '') ? searchParams.mute : undefined;
+                        body = {
+                            accessToken: (_ref2 = (_params_accessToken = params.accessToken) != null ? _params_accessToken : this._options.accessToken) != null ? _ref2 : '',
+                            deviceSerial: (_params_deviceSerial = params.deviceSerial) != null ? _params_deviceSerial : urlInfo.deviceSerial,
+                            channelNo: (_params_channelNo = params.channelNo) != null ? _params_channelNo : urlInfo.channelNo || 1,
+                            type: type,
+                            protocol: (_params_protocol = params.protocol) != null ? _params_protocol : 5,
+                            code: (_params_code = params.code) != null ? _params_code : searchParams.code,
+                            expireTime: expireTime,
+                            quality: params.quality,
+                            startTime: begin ? utilsTools.DateTime.format(begin, 'yyyy-MM-dd HH:mm:ss') : undefined,
+                            stopTime: end ? utilsTools.DateTime.format(end, 'yyyy-MM-dd HH:mm:ss') : undefined,
+                            supportH265: (_params_supportH265 = params.supportH265) != null ? _params_supportH265 : 1,
+                            playbackSpeed: (_params_playbackSpeed = params.playbackSpeed) != null ? _params_playbackSpeed : searchParams.playbackSpeed,
+                            mute: mute,
+                            gbchannel: params.gbchannel
+                        };
+                        formdata = new FormData();
+                        Object.entries(body).forEach(function(param) {
+                            var key = param[0], value = param[1];
+                            if (value !== undefined && value !== null && value !== '') formdata.append(key, String(value));
+                        });
+                        // accessToken 为空也要传，保持与之前一致
+                        if (!formdata.has('accessToken')) formdata.append('accessToken', '');
+                        return [
+                            4,
+                            this.post(API.getAddress, {
+                                body: formdata,
+                                headers: null
+                            })
+                        ];
+                    case 1:
+                        response = _state.sent();
+                        if (!response.ok) {
+                            throw new Error("Failed to fetch address: " + response.status + " " + response.statusText);
+                        }
+                        _state.label = 2;
+                    case 2:
+                        _state.trys.push([
+                            2,
+                            4,
+                            ,
+                            5
+                        ]);
+                        return [
+                            4,
+                            response.json()
+                        ];
+                    case 3:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                    case 4:
+                        _state.sent();
+                        return [
+                            2,
+                            undefined
+                        ];
+                    case 5:
+                        return [
+                            2
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * 获取 CDN 加速直播地址（地址有效期为当天 00:00:00 - 23:59:59）
+   * @param params 请求参数，见 {@link EzvizFetchCDNAddressParams}
+   * @returns 接口原始返回 `{ meta, data: { cdnUrl } }`
+   * @since 3.2.0
+   */ _proto.getCDNLiveAddress = function getCDNLiveAddress(params) {
+        return _async_to_generator$8(function() {
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            this._getCDNAddress(API.getCDNLiveAddress, params, {
+                                quality: params.quality
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取 CDN 加速回放地址（地址有效期为当天 00:00:00 - 23:59:59）
+   * @param params 请求参数，见 {@link EzvizFetchCDNRecordAddressParams}
+   * @returns 接口原始返回 `{ meta, data: { cdnUrl } }`
+   * @since 3.2.0
+   */ _proto.getCDNRecordAddress = function getCDNRecordAddress(params) {
+        return _async_to_generator$8(function() {
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            this._getCDNAddress(API.getCDNRecordAddress, params, {
+                                recordStartTime: utilsTools.DateTime.format(params.begin, 'yyyy-MM-dd HH:mm:ss'),
+                                recordEndTime: utilsTools.DateTime.format(params.end, 'yyyy-MM-dd HH:mm:ss'),
+                                quality: params.quality,
+                                type: params.type || 1
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 查询直播间断流信息（仅萤石直播间地址，地址里的 `sid` 即直播间流 ID）
+   * @param streamId 直播间流 ID
+   * @returns 接口原始返回 `{ meta, data: { intrCode } }`，`intrCode` 可作为多语言 key 取中断原因文案
+   * @since 3.2.0
+   */ _proto.getStreamInterruptInfo = function getStreamInterruptInfo(streamId) {
+        return _async_to_generator$8(function() {
+            var formdata;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        formdata = new FormData();
+                        formdata.append('streamId', streamId + '');
+                        return [
+                            4,
+                            this.post(API.getStreamInterruptInfo, {
+                                body: formdata,
+                                headers: null
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    // ------------------------------------------------------------------------------------------------------------
+    //  内部工具
+    // ------------------------------------------------------------------------------------------------------------
+    /** CDN 加速地址的公共请求：有效期固定为当天，播放协议固定为 2 */ _proto._getCDNAddress = function _getCDNAddress(path, params, body) {
+        return _async_to_generator$8(function() {
+            var today, formdata;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        today = utilsTools.DateTime.format(new Date(), 'yyyy-MM-dd');
+                        formdata = new FormData();
+                        formdata.append('startTime', "" + today + " 00:00:00");
+                        formdata.append('endTime', "" + today + " 23:59:59");
+                        formdata.append('playProtocol', '2');
+                        formdata.append('streamName', params.streamName || uuid().replace(/-/g, ''));
+                        formdata.append('supportH265', '1');
+                        formdata.append('appName', params.appName);
+                        Object.entries(body).forEach(function(param) {
+                            var key = param[0], value = param[1];
+                            if (value !== undefined && value !== null && value !== '') formdata.append(key, String(value));
+                        });
+                        return [
+                            4,
+                            this.post(path, {
+                                body: formdata
+                            }).then(function(response) {
+                                return _async_to_generator$8(function() {
+                                    return _ts_generator$8(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    response.json()
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            })
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /** 时间字符串 / 时间戳 转秒级时间戳 */ _proto._toSeconds = function _toSeconds(time) {
+        return parseInt(utilsTools.DateTime.toDate(time + '').getTime() / 1000 + '', 10);
+    };
+    /** 把首尾片段裁剪到查询区间内（片段会跨天） */ _proto._clampTimes = function _clampTimes(list, startTime, endTime) {
+        if (list.length > 0) {
+            if (list[0].startTime < startTime) list[0].startTime = startTime;
+            if (list[list.length - 1].endTime > endTime) list[list.length - 1].endTime = endTime;
+        }
+        return list;
+    };
+    /**
+   * 按时间查询录像片段（/api/lapp/video/by/time），自动翻页，已处理时区
+   * @param recType 1-云存储，2-本地录像
+   */ _proto._getVideoByTime = function _getVideoByTime(recType, params) {
+        return _async_to_generator$8(function() {
+            var _this, _this__options_token_deviceToken, _this__options_token, data, list, fetchPage;
+            return _ts_generator$8(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        _this = this;
+                        data = new FormData();
+                        data.append('recType', recType);
+                        data.append('version', '2.0');
+                        data.append('deviceSerial', this.urlInfo.deviceSerial);
+                        data.append('channelNo', this.urlInfo.channelNo + '');
+                        data.append('accessToken', this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video) || '');
+                        if (params.begin) data.append('startTime', utilsTools.DateTime.toDate(params.begin + '').getTime() + ''); // 毫秒
+                        if (params.end) data.append('endTime', utilsTools.DateTime.toDate(params.end + '').getTime() + ''); // 毫秒
+                        list = [];
+                        fetchPage = function fetchPage1() {
+                            return _async_to_generator$8(function() {
+                                var response, res, _res_data, _res_data1, _res_data2, files;
+                                return _ts_generator$8(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            _state.trys.push([
+                                                0,
+                                                5,
+                                                ,
+                                                6
+                                            ]);
+                                            return [
+                                                4,
+                                                this.post(API.getCloudTimes, {
+                                                    headers: null,
+                                                    body: data
+                                                })
+                                            ];
+                                        case 1:
+                                            response = _state.sent();
+                                            return [
+                                                4,
+                                                response.json()
+                                            ];
+                                        case 2:
+                                            res = _state.sent();
+                                            if (!(+res.code === 200 && res.data)) return [
+                                                3,
+                                                4
+                                            ];
+                                            // WARN：海外接口直接返回数组
+                                            files = Array.isArray(res.data) ? res.data : ((_res_data = res.data) == null ? void 0 : _res_data.files) || [];
+                                            list = list.concat(files);
+                                            if (!(!((_res_data1 = res.data) == null ? void 0 : _res_data1.isAll) && ((_res_data2 = res.data) == null ? void 0 : _res_data2.nextFileTime))) return [
+                                                3,
+                                                4
+                                            ];
+                                            data.set('startTime', String(res.data.nextFileTime));
+                                            return [
+                                                4,
+                                                fetchPage()
+                                            ];
+                                        case 3:
+                                            _state.sent();
+                                            _state.label = 4;
+                                        case 4:
+                                            return [
+                                                3,
+                                                6
+                                            ];
+                                        case 5:
+                                            _state.sent();
+                                            return [
+                                                3,
+                                                6
+                                            ];
+                                        case 6:
+                                            return [
+                                                2
+                                            ];
+                                    }
+                                });
+                            }).call(_this);
+                        };
+                        return [
+                            4,
+                            fetchPage()
+                        ];
+                    case 1:
+                        _state.sent();
+                        // 接口返回毫秒，换算成秒
+                        list = list.map(function(item) {
+                            return _extends$t({}, item, {
+                                endTime: parseInt(item.endTime / 1000 + '', 10),
+                                startTime: parseInt(item.startTime / 1000 + '', 10)
+                            });
+                        });
+                        return [
+                            2,
+                            this._clampTimes(mergeTimes(list, this.timeZone), this._toSeconds(params.begin), this._toSeconds(params.end))
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    //
+    _proto.abortAll = function abortAll() {
+        if (this._controllers.length) {
+            this._controllers.forEach(function(controller) {
+                controller.abort('abort fetch');
+            });
+            this._controllers = [];
+        }
+    };
+    _proto.destroy = function destroy() {
+        this.abortAll();
+        this._templateAbortController = null;
+        this._capacityPromises.clear();
+        this.deviceCapacity = {};
+        this.deviceInfo = {};
+        this.videoLevelList = {};
+        this.streamAddressList = {};
+    };
+    _create_class$6(Services, [
+        {
+            key: "url",
+            get: function get() {
+                return this._url;
+            },
+            set: function set(url) {
+                this._url = url;
+            }
+        },
+        {
+            key: "urlInfo",
+            get: function get() {
+                return utilsTools.isEzvizUrl(this._url) ? utilsTools.parseEzopenUrl(this._url) : {};
+            }
+        },
+        {
+            key: "timeZone",
+            get: /** 时区偏移（小时），优先读取播放地址的 timeZone 参数，其次是配置项 timeZone；中国以外的地区设备才有 */ function get() {
+                var _ref, _ref1;
+                var _this_urlInfo_searchParams;
+                return +((_ref = (_ref1 = (_this_urlInfo_searchParams = this.urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.timeZone) != null ? _ref1 : this._options.timeZone) != null ? _ref : 0) || 0;
+            }
+        },
+        {
+            key: "getKeyName",
+            get: function get() {
+                return this.urlInfo.deviceSerial + "_" + this.urlInfo.channelNo;
+            }
+        }
+    ]);
+    return Services;
+}();
+
+/**
  * 事件监听
  * @param theme - Theme
  */ function _themeEventemitter(theme) {
@@ -4543,12 +7330,22 @@ function debounce(func, wait) {
     // =======================================================
     // 语音广播
     // =======================================================
-    theme.on(EVENTS.broadcastChange, function(active) {
+    theme.on(EVENTS.broadcastPanelChange, function(active) {
         var _theme_controls, _theme_controls_broadcastControl, _theme_controls1;
         if (((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.broadcastControl) && active !== ((_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_broadcastControl = _theme_controls1.broadcastControl) == null ? void 0 : _theme_controls_broadcastControl.active)) {
             var _theme_controls_broadcastControl1, _theme_controls2;
-            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_broadcastControl1 = _theme_controls2.broadcastControl) == null ? void 0 : _theme_controls_broadcastControl1.emit(EVENTS.broadcastChange, active);
+            (_theme_controls2 = theme.controls) == null ? void 0 : (_theme_controls_broadcastControl1 = _theme_controls2.broadcastControl) == null ? void 0 : _theme_controls_broadcastControl1.emit(EVENTS.broadcastPanelChange, active);
         }
+    });
+    // 语音接口结果统一出口：广播面板内置接口与 theme.queryVoiceListService / sendVoiceService / sendVoiceOnceService
+    // 都会派发 Control.broadcastApiResult，这里按 EVENTS.http 规则只派发一次
+    theme.on(EVENTS.control.broadcastApiResult, function(result) {
+        var _result_data;
+        var i18nPrefix = result.api === 'queryVoiceList' ? 'QUERY_VOICE_LIST' : 'SEND_VOICE';
+        theme.builderEvent(EVENTS.http[result.api], result.success ? 'http' : 'httpError', {
+            data: (_result_data = result.data) != null ? _result_data : result,
+            path: API[result.api]
+        }, i18nPrefix + "_" + (result.success ? 'SUCCESS' : 'FAILED'));
     });
     // =======================================================
     // AI对话框
@@ -4623,6 +7420,19 @@ function debounce(func, wait) {
         (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_speedControl = _theme_controls.speedControl) == null ? void 0 : (_theme_controls_speedControl_emit = _theme_controls_speedControl.emit) == null ? void 0 : _theme_controls_speedControl_emit.call(_theme_controls_speedControl, EVENTS.speedChange, speed);
     });
     // =======================================================
+    // 码流（主码流 / 子码流）
+    // =======================================================
+    theme.on(EVENTS.streamTypeChange, function(streamTypeIn) {
+        var _theme_controls_streamTypeControl_emit, _theme_controls_streamTypeControl, _theme_controls;
+        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_streamTypeControl = _theme_controls.streamTypeControl) == null ? void 0 : (_theme_controls_streamTypeControl_emit = _theme_controls_streamTypeControl.emit) == null ? void 0 : _theme_controls_streamTypeControl_emit.call(_theme_controls_streamTypeControl, EVENTS.streamTypeChange, streamTypeIn);
+    });
+    // 默认不支持（不展示）；收到事件才展示。先记在 theme 上，控件晚于事件渲染时也能从 props 拿到
+    theme.on(EVENTS.supportLocalRecordStreamType, function(support, streamTypeIn) {
+        var _theme_controls_streamTypeControl_setSupported, _theme_controls_streamTypeControl, _theme_controls;
+        theme.supportLocalRecordStreamType = support !== false;
+        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_streamTypeControl = _theme_controls.streamTypeControl) == null ? void 0 : (_theme_controls_streamTypeControl_setSupported = _theme_controls_streamTypeControl.setSupported) == null ? void 0 : _theme_controls_streamTypeControl_setSupported.call(_theme_controls_streamTypeControl, theme.supportLocalRecordStreamType, streamTypeIn);
+    });
+    // =======================================================
     // 回放片段
     // =======================================================
     theme.on(EVENTS.setAllDayRecTimes, function(list) {
@@ -4647,6 +7457,9 @@ function debounce(func, wait) {
     // 全屏
     // =======================================================
     theme == null ? void 0 : theme.on(EVENTS.fullscreenChange, function(info) {
+        var // 语音广播面板按全屏状态调整挂载节点与弹出方向
+        _theme_controls_broadcastControl_emit, _theme_controls_broadcastControl, _theme_controls;
+        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_broadcastControl = _theme_controls.broadcastControl) == null ? void 0 : (_theme_controls_broadcastControl_emit = _theme_controls_broadcastControl.emit) == null ? void 0 : _theme_controls_broadcastControl_emit.call(_theme_controls_broadcastControl, EVENTS.fullscreenChange, info);
         if (theme.zoomUtil) {
             if ([
                 0,
@@ -4662,6 +7475,8 @@ function debounce(func, wait) {
         }
     });
     theme == null ? void 0 : theme.on(EVENTS.orientationChange, function(angle) {
+        var _theme_controls_broadcastControl_emit, _theme_controls_broadcastControl, _theme_controls;
+        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_broadcastControl = _theme_controls.broadcastControl) == null ? void 0 : (_theme_controls_broadcastControl_emit = _theme_controls_broadcastControl.emit) == null ? void 0 : _theme_controls_broadcastControl_emit.call(_theme_controls_broadcastControl, EVENTS.orientationChange, angle);
         if (theme.zoomUtil) {
             if ([
                 0,
@@ -4687,7 +7502,7 @@ function debounce(func, wait) {
  *
  * @param theme - Theme
  */ function _controlEventemitter(theme) {
-    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16, _theme_controls17, _theme_controls18, _theme_controls19, _theme_controls20, _theme_controls21, _theme_controls22, _theme_controls23, _theme_controls24, _theme_controls25;
+    var _theme_controls, _theme_controls1, _theme_controls2, _theme_controls3, _theme_controls4, _theme_controls5, _theme_controls6, _theme_controls7, _theme_controls8, _theme_controls9, _theme_controls10, _theme_controls11, _theme_controls12, _theme_controls13, _theme_controls14, _theme_controls15, _theme_controls16, _theme_controls17, _theme_controls18, _theme_controls19, _theme_controls20, _theme_controls21, _theme_controls22, _theme_controls23, _theme_controls24, _theme_controls25, _theme_controls26, _theme_controls27;
     // Controls
     if (theme._recFooter) {
         theme._recFooter.on(EVENTS.theme.recFooterDestroy, function() {
@@ -4782,11 +7597,31 @@ function debounce(func, wait) {
     }
     // 语音广播控件
     if ((_theme_controls5 = theme.controls) == null ? void 0 : _theme_controls5.broadcastControl) {
-        theme.controls.broadcastControl.on(EVENTS.control.broadcastChange, function(active) {
-            theme.emit(EVENTS.control.broadcastChange, active);
+        theme.controls.broadcastControl.on(EVENTS.control.broadcastPanelChange, function(active) {
+            theme.emit(EVENTS.control.broadcastPanelChange, active);
         });
         theme.controls.broadcastControl.on(EVENTS.control.broadcastDestroy, function() {
             theme.emit(EVENTS.control.broadcastDestroy);
+        });
+        // 广播面板自带接口：转发语音列表与接口结果（EVENTS.http 的派发见 _themeEventemitter，与 theme.xxxService 共用）
+        theme.controls.broadcastControl.on(EVENTS.control.broadcastVoiceListChange, function(list) {
+            theme.emit(EVENTS.control.broadcastVoiceListChange, list);
+        });
+        theme.controls.broadcastControl.on(EVENTS.control.broadcastApiResult, function(result) {
+            theme.emit(EVENTS.control.broadcastApiResult, result);
+        });
+        // 广播面板录音：转发录音过程事件
+        theme.controls.broadcastControl.on(EVENTS.control.broadcastVoiceRecorded, function(data) {
+            theme.emit(EVENTS.control.broadcastVoiceRecorded, data);
+        });
+        theme.controls.broadcastControl.on(EVENTS.control.broadcastRecordStart, function() {
+            theme.emit(EVENTS.control.broadcastRecordStart);
+        });
+        theme.controls.broadcastControl.on(EVENTS.control.broadcastRecordStop, function() {
+            theme.emit(EVENTS.control.broadcastRecordStop);
+        });
+        theme.controls.broadcastControl.on(EVENTS.control.broadcastRecordComplete, function(voiceFile) {
+            theme.emit(EVENTS.control.broadcastRecordComplete, voiceFile);
         });
     }
     // AI对话框
@@ -4807,6 +7642,7 @@ function debounce(func, wait) {
                 theme.controls.recDropdownControl.active = false;
             }
             theme.emit(EVENTS.control.liveChange);
+            theme.emit(EVENTS.playTypeChange, 'live');
         });
     }
     // 回放下拉
@@ -4818,6 +7654,7 @@ function debounce(func, wait) {
                 theme.controls.liveControl.active = false;
             }
             theme.emit(EVENTS.control.recDropdownChange, type);
+            theme.emit(EVENTS.playTypeChange, type);
         });
     }
     // 告警消息
@@ -4843,21 +7680,28 @@ function debounce(func, wait) {
         theme.removeListener(EVENTS.firstFrameDisplay, theme._onFirstFrameSync);
         theme._onFirstFrameSync = null;
     }
-    if (((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.liveControl) || ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.recDropdownControl)) {
+    if (((_theme_controls11 = theme.controls) == null ? void 0 : _theme_controls11.liveControl) || ((_theme_controls12 = theme.controls) == null ? void 0 : _theme_controls12.recDropdownControl) || ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.streamTypeControl)) {
         theme._onFirstFrameSync = function() {
-            var _theme_controls, _theme_controls1;
+            var _theme_controls, _theme_controls1, _theme_controls2;
             var urlInfo = theme.urlInfo;
-            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.liveControl) {
+            // 码流切换只在本地回放显示；地址里带了码流信息时一并同步当前码流
+            if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.streamTypeControl) {
+                var _ref;
+                theme.controls.streamTypeControl.syncByRecType(theme.playType);
+                var streamTypeIn = +((_ref = urlInfo == null ? void 0 : urlInfo.streamTypeIn) != null ? _ref : 0);
+                if (streamTypeIn === 1 || streamTypeIn === 2) theme.controls.streamTypeControl.emit(EVENTS.streamTypeChange, streamTypeIn);
+            }
+            if ((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1.liveControl) {
                 theme.controls.liveControl._syncActiveByUrlInfo(urlInfo);
             }
-            if ((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1.recDropdownControl) {
+            if ((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2.recDropdownControl) {
                 theme.controls.recDropdownControl._syncActiveByUrlInfo(urlInfo);
             }
         };
         theme.on(EVENTS.firstFrameDisplay, theme._onFirstFrameSync);
     }
     // 缩放控件
-    if ((_theme_controls13 = theme.controls) == null ? void 0 : _theme_controls13.zoomControl) {
+    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.zoomControl) {
         theme.controls.zoomControl.on(EVENTS.control.zoomChange, function(value, _percent, _range) {
             if (theme.zoom !== value) {
                 theme.zoom = value;
@@ -4879,7 +7723,7 @@ function debounce(func, wait) {
         });
     }
     // 清晰度控件
-    if ((_theme_controls14 = theme.controls) == null ? void 0 : _theme_controls14.definitionControl) {
+    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.definitionControl) {
         theme.controls.definitionControl.on(EVENTS.control.definitionPanelOpenChange, function(open, definition, item) {
             theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, definition);
             theme.emit(EVENTS.control.definitionPanelOpenChange, open, definition, item);
@@ -4892,7 +7736,7 @@ function debounce(func, wait) {
         });
     }
     // 倍速控件
-    if ((_theme_controls15 = theme.controls) == null ? void 0 : _theme_controls15.speedControl) {
+    if ((_theme_controls16 = theme.controls) == null ? void 0 : _theme_controls16.speedControl) {
         theme.controls.speedControl.on(EVENTS.control.speedPanelOpenChange, function(open, speed, item) {
             theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, speed);
             theme.emit(EVENTS.control.speedPanelOpenChange, open, speed, item);
@@ -4904,8 +7748,21 @@ function debounce(func, wait) {
             theme.emit(EVENTS.control.speedDestroy);
         });
     }
+    // 码流切换控件
+    if ((_theme_controls17 = theme.controls) == null ? void 0 : _theme_controls17.streamTypeControl) {
+        theme.controls.streamTypeControl.on(EVENTS.control.streamTypePanelOpenChange, function(open, streamTypeIn, item) {
+            theme.emit(CLEAR_TIMER_HEADER_FOOTER_ANIMATION, open, streamTypeIn);
+            theme.emit(EVENTS.control.streamTypePanelOpenChange, open, streamTypeIn, item);
+        });
+        theme.controls.streamTypeControl.on(EVENTS.control.streamTypeChange, function(streamTypeIn, item) {
+            theme.emit(EVENTS.control.streamTypeChange, streamTypeIn, item);
+        });
+        theme.controls.streamTypeControl.on(EVENTS.control.streamTypeDestroy, function() {
+            theme.emit(EVENTS.control.streamTypeDestroy);
+        });
+    }
     // 截图控件
-    if ((_theme_controls16 = theme.controls) == null ? void 0 : _theme_controls16.capturePictureControl) {
+    if ((_theme_controls18 = theme.controls) == null ? void 0 : _theme_controls18.capturePictureControl) {
         theme.controls.capturePictureControl.on(EVENTS.control.capturePicture, function(options) {
             theme.emit(EVENTS.control.capturePicture, options);
         });
@@ -4914,38 +7771,36 @@ function debounce(func, wait) {
         });
     }
     // 全屏控件
-    if ((_theme_controls17 = theme.controls) == null ? void 0 : _theme_controls17.fullscreenControl) {
+    if ((_theme_controls19 = theme.controls) == null ? void 0 : _theme_controls19.fullscreenControl) {
         theme.controls.fullscreenControl.on(EVENTS.control.fullscreenDestroy, function() {
             theme.emit(EVENTS.control.fullscreenDestroy);
         });
     }
     // 全局全屏控件
-    if ((_theme_controls18 = theme.controls) == null ? void 0 : _theme_controls18.globalFullscreenControl) {
+    if ((_theme_controls20 = theme.controls) == null ? void 0 : _theme_controls20.globalFullscreenControl) {
         theme.controls.globalFullscreenControl.on(EVENTS.control.globalFullscreenDestroy, function() {
             theme.emit(EVENTS.control.globalFullscreenDestroy);
         });
     }
     // 设备信息控件
-    if ((_theme_controls19 = theme.controls) == null ? void 0 : _theme_controls19.deviceControl) {
+    if ((_theme_controls21 = theme.controls) == null ? void 0 : _theme_controls21.deviceControl) {
         theme.controls.deviceControl.on(EVENTS.control.deviceDestroy, function() {
             theme.emit(EVENTS.control.deviceDestroy);
         });
     }
     // 回放类型切换控件
-    if ((_theme_controls20 = theme.controls) == null ? void 0 : _theme_controls20.recControl) {
+    if ((_theme_controls22 = theme.controls) == null ? void 0 : _theme_controls22.recControl) {
         // prettier-ignore
         theme.controls.recControl.on(EVENTS.control.recTypeChange, function(type) {
-            if (theme.recType !== type) {
-                var _theme__headerMoreControl, _theme_controls;
-                theme.recType = type;
+            if (theme.playType !== type) {
+                var _theme__headerMoreControl, _theme_controls_speedControl_emit, _theme_controls_speedControl, _theme_controls, _theme_controls_streamTypeControl_emit, _theme_controls_streamTypeControl, _theme_controls1;
                 theme.emit(EVENTS.control.recTypeChange, type);
-                // theme.emit(EVENTS.recTypeChange, type);
+                theme.emit(EVENTS.playTypeChange, type);
                 if ((_theme__headerMoreControl = theme._headerMoreControl) == null ? void 0 : _theme__headerMoreControl.picker) {
                     theme._headerMoreControl.picker.open = false;
                 }
-                if ((_theme_controls = theme.controls) == null ? void 0 : _theme_controls.speedControl) {
-                    theme.controls.speedControl.emit(EVENTS.control.recTypeChange, type);
-                }
+                (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_speedControl = _theme_controls.speedControl) == null ? void 0 : (_theme_controls_speedControl_emit = _theme_controls_speedControl.emit) == null ? void 0 : _theme_controls_speedControl_emit.call(_theme_controls_speedControl, EVENTS.control.recTypeChange, type);
+                (_theme_controls1 = theme.controls) == null ? void 0 : (_theme_controls_streamTypeControl = _theme_controls1.streamTypeControl) == null ? void 0 : (_theme_controls_streamTypeControl_emit = _theme_controls_streamTypeControl.emit) == null ? void 0 : _theme_controls_streamTypeControl_emit.call(_theme_controls_streamTypeControl, EVENTS.control.recTypeChange, type);
             }
         });
         theme.controls.recControl.on(EVENTS.control.recDestroy, function() {
@@ -4954,13 +7809,13 @@ function debounce(func, wait) {
     }
     // 回放片段进度条控件：拖动/点击后与时间轴共用同一条 seek 通道，
     // 这里必须把控件实例上的事件中继到 theme，否则 SDK 层收不到（拖动看似生效但不会 seek）
-    if ((_theme_controls21 = theme.controls) == null ? void 0 : _theme_controls21.segmentProgressControl) {
+    if ((_theme_controls23 = theme.controls) == null ? void 0 : _theme_controls23.segmentProgressControl) {
         theme.controls.segmentProgressControl.on(EVENTS.control.timeLineChange, function(date) {
             theme.emit(EVENTS.control.timeLineChange, date);
         });
     }
     // 时间轴控件
-    if ((_theme_controls22 = theme.controls) == null ? void 0 : _theme_controls22.timeLineControl) {
+    if ((_theme_controls24 = theme.controls) == null ? void 0 : _theme_controls24.timeLineControl) {
         theme.controls.timeLineControl.on(EVENTS.control.timeLineChange, function(date) {
             theme.emit(EVENTS.control.timeLineChange, date);
         });
@@ -4990,7 +7845,7 @@ function debounce(func, wait) {
         });
     }
     // 日历控件
-    if ((_theme_controls23 = theme.controls) == null ? void 0 : _theme_controls23.dateControl) {
+    if ((_theme_controls25 = theme.controls) == null ? void 0 : _theme_controls25.dateControl) {
         theme.controls.dateControl.on(EVENTS.control.datePanelOpenChange, function(open, date) {
             theme.emit(EVENTS.control.datePanelOpenChange, open, date);
         });
@@ -5008,7 +7863,7 @@ function debounce(func, wait) {
         });
     }
     // 时间控件
-    if ((_theme_controls24 = theme.controls) == null ? void 0 : _theme_controls24.timeControl) {
+    if ((_theme_controls26 = theme.controls) == null ? void 0 : _theme_controls26.timeControl) {
         theme.controls.timeControl.on(EVENTS.control.timePanelOpenChange, function(open, time) {
             theme.emit(EVENTS.control.timePanelOpenChange, open, time);
         });
@@ -5017,7 +7872,7 @@ function debounce(func, wait) {
         });
     }
     // 回放片段列表
-    if ((_theme_controls25 = theme.controls) == null ? void 0 : _theme_controls25.recListControl) {
+    if ((_theme_controls27 = theme.controls) == null ? void 0 : _theme_controls27.recListControl) {
         theme.controls.recListControl.on(EVENTS.control.recListCardClick, function(section, index, sections) {
             theme.emit(EVENTS.control.recListCardClick, section, index, sections);
         });
@@ -5107,17 +7962,17 @@ function _create_class$5(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$5(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$q() {
-    _extends$q = Object.assign || function assign(target) {
+function _extends$s() {
+    _extends$s = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$q.apply(this, arguments);
+    return _extends$s.apply(this, arguments);
 }
-function _inherits$p(subClass, superClass) {
+function _inherits$q(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -5128,14 +7983,14 @@ function _inherits$p(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$p(subClass, superClass);
+    if (superClass) _set_prototype_of$q(subClass, superClass);
 }
-function _set_prototype_of$p(o, p) {
-    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$q(o, p) {
+    _set_prototype_of$q = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$p(o, p);
+    return _set_prototype_of$q(o, p);
 }
 var ZOOM_DEFAULT_OPTIONS = {
     open: false,
@@ -5145,10 +8000,10 @@ var ZOOM_DEFAULT_OPTIONS = {
  * 电子放大控件
  * @category Control
  */ var Zoom = /*#__PURE__*/ function(Control) {
-    _inherits$p(Zoom, Control);
+    _inherits$q(Zoom, Control);
     function Zoom(options) {
         var _this;
-        _this = Control.call(this, _extends$q({}, options, {
+        _this = Control.call(this, _extends$s({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'zoom'
@@ -5276,18 +8131,18 @@ var ZOOM_DEFAULT_OPTIONS = {
     return Zoom;
 }(Control);
 
-function _extends$p() {
-    _extends$p = Object.assign || function assign(target) {
+function _extends$r() {
+    _extends$r = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$p.apply(this, arguments);
+    return _extends$r.apply(this, arguments);
 }
 function __zoom(theme, container, options) {
-    theme.zoomUtil = new Zoom$1(container, _extends$p({}, options || {}, {
+    theme.zoomUtil = new Zoom$1(container, _extends$r({}, options || {}, {
         min: 1,
         onChange: function onChange(zoom, reset) {
             if (zoom !== theme._zoom) {
@@ -5305,7 +8160,7 @@ function __zoom(theme, container, options) {
     }));
 }
 
-function asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
         var value = info.value;
@@ -5316,228 +8171,32 @@ function asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, key, arg) {
     if (info.done) resolve(value);
     else Promise.resolve(value).then(_next, _throw);
 }
-function _async_to_generator$6(fn) {
+function _async_to_generator$7(fn) {
     return function() {
         var self = this, args = arguments;
         return new Promise(function(resolve, reject) {
             var gen = fn.apply(self, args);
             function _next(value) {
-                asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, "next", value);
+                asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, "next", value);
             }
             function _throw(err) {
-                asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, "throw", err);
+                asyncGeneratorStep$7(gen, resolve, reject, _next, _throw, "throw", err);
             }
             _next(undefined);
         });
     };
 }
-function _ts_generator$6(thisArg, body) {
-    var f, y, t, _ = {
-        label: 0,
-        sent: function() {
-            if (t[0] & 1) throw t[1];
-            return t[1];
-        },
-        trys: [],
-        ops: []
-    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
-    return d(g, "next", {
-        value: verb(0)
-    }), d(g, "throw", {
-        value: verb(1)
-    }), d(g, "return", {
-        value: verb(2)
-    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
-        value: function() {
-            return this;
-        }
-    }), g;
-    function verb(n) {
-        return function(v) {
-            return step([
-                n,
-                v
-            ]);
-        };
-    }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while(g && (g = 0, op[0] && (_ = 0)), _)try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [
-                op[0] & 2,
-                t.value
-            ];
-            switch(op[0]){
-                case 0:
-                case 1:
-                    t = op;
-                    break;
-                case 4:
-                    _.label++;
-                    return {
-                        value: op[1],
-                        done: false
-                    };
-                case 5:
-                    _.label++;
-                    y = op[1];
-                    op = [
-                        0
-                    ];
-                    continue;
-                case 7:
-                    op = _.ops.pop();
-                    _.trys.pop();
-                    continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-                        _ = 0;
-                        continue;
-                    }
-                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-                        _.label = op[1];
-                        break;
-                    }
-                    if (op[0] === 6 && _.label < t[1]) {
-                        _.label = t[1];
-                        t = op;
-                        break;
-                    }
-                    if (t && _.label < t[2]) {
-                        _.label = t[2];
-                        _.ops.push(op);
-                        break;
-                    }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop();
-                    continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) {
-            op = [
-                6,
-                e
-            ];
-            y = 0;
-        } finally{
-            f = t = 0;
-        }
-        if (op[0] & 5) throw op[1];
-        return {
-            value: op[0] ? op[1] : void 0,
-            done: true
-        };
-    }
-}
-/**
- * 获取开放平台轻应用模板数据
- * @param theme
- * @param id 开放平台轻应用模板id （https://open.ys7.com/console/ezuikit/template.html）
- * @returns
- */ function getThemeDataByTemplate(theme, id) {
-    return _async_to_generator$6(function() {
-        var _theme_options_token_httpToken, _theme_options_token, // 中止上一个在途请求，并为本次请求创建可中止的信号（destroy 时会 abort）
-        _theme__templateAbortController, accessToken, url, controller;
-        return _ts_generator$6(this, function(_state) {
-            switch(_state.label){
-                case 0:
-                    accessToken = theme.options.accessToken || ((_theme_options_token = theme.options.token) == null ? void 0 : (_theme_options_token_httpToken = _theme_options_token.httpToken) == null ? void 0 : _theme_options_token_httpToken.url);
-                    // 查询参数逐个 encodeURIComponent，防止 `&` `#` `=` 等字符注入额外参数或截断 URL（SECURITY_AUDIT M1）
-                    // 不用 `new URL()`：env.domain 允许为空（同源相对路径）或带路径前缀，URL 构造会抛错或丢掉前缀
-                    url = theme.options.env.domain + "/api/service/media/template/getDetail?accessToken=" + encodeURIComponent(String(accessToken)) + "&id=" + encodeURIComponent(String(id));
-                    (_theme__templateAbortController = theme._templateAbortController) == null ? void 0 : _theme__templateAbortController.abort();
-                    controller = new AbortController();
-                    theme._templateAbortController = controller;
-                    return [
-                        4,
-                        fetch(url, {
-                            method: 'GET',
-                            signal: controller == null ? void 0 : controller.signal
-                        }).then(function(response) {
-                            return _async_to_generator$6(function() {
-                                return _ts_generator$6(this, function(_state) {
-                                    switch(_state.label){
-                                        case 0:
-                                            return [
-                                                4,
-                                                response.json()
-                                            ];
-                                        case 1:
-                                            return [
-                                                2,
-                                                _state.sent()
-                                            ];
-                                    }
-                                });
-                            })();
-                        }).then(function(res) {
-                            if (res.meta) {
-                                var _res_data_footer, _res_data;
-                                if (((_res_data = res.data) == null ? void 0 : (_res_data_footer = _res_data.footer) == null ? void 0 : _res_data_footer.btnList) && Utils.isMobile) {
-                                    var // 兼容已经更新的新规范， 9.x 中不在支持
-                                    _res_data_footer1, _res_data1;
-                                    (_res_data1 = res.data) == null ? void 0 : (_res_data_footer1 = _res_data1.footer) == null ? void 0 : _res_data_footer1.btnList.forEach(function(btn, index) {
-                                        if (btn.iconId === 'webExpend') {
-                                            var _res_data_footer, _res_data;
-                                            ((_res_data = res.data) == null ? void 0 : (_res_data_footer = _res_data.footer) == null ? void 0 : _res_data_footer.btnList)[index] = {};
-                                        } else if (btn.iconId === 'expend') {
-                                            btn.iconId = 'webExpend';
-                                        }
-                                    });
-                                }
-                                return res.data || null;
-                            }
-                            return null;
-                        })
-                    ];
-                case 1:
-                    return [
-                        2,
-                        _state.sent()
-                    ];
-            }
-        });
-    })();
-}
-
-function asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, key, arg) {
-    try {
-        var info = gen[key](arg);
-        var value = info.value;
-    } catch (error) {
-        reject(error);
-        return;
-    }
-    if (info.done) resolve(value);
-    else Promise.resolve(value).then(_next, _throw);
-}
-function _async_to_generator$5(fn) {
-    return function() {
-        var self = this, args = arguments;
-        return new Promise(function(resolve, reject) {
-            var gen = fn.apply(self, args);
-            function _next(value) {
-                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "next", value);
-            }
-            function _throw(err) {
-                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "throw", err);
-            }
-            _next(undefined);
-        });
-    };
-}
-function _extends$o() {
-    _extends$o = Object.assign || function assign(target) {
+function _extends$q() {
+    _extends$q = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$o.apply(this, arguments);
+    return _extends$q.apply(this, arguments);
 }
-function _ts_generator$5(thisArg, body) {
+function _ts_generator$7(thisArg, body) {
     var f, y, t, _ = {
         label: 0,
         sent: function() {
@@ -5662,7 +8321,7 @@ function _ts_generator$5(thisArg, body) {
     var headerBtnList = ((themeData == null ? void 0 : (_themeData_header = themeData.header) == null ? void 0 : _themeData_header.btnList) || []).filter(function(item) {
         // TODO: 因为 'deviceID', 'deviceName'， 'rec', 'cloudRec', 'cloudRecord' 是两个组， 并且要在头部（移动端特殊处理）
         // prettier-ignore
-        if (item.isrender === 1 && [
+        if (item.isrender !== 0 && [
             "deviceID",
             "deviceName"
         ].includes(item.iconId)) {
@@ -5671,7 +8330,7 @@ function _ts_generator$5(thisArg, body) {
         }
         if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
-            recControls.push(recControls[0] ? _extends$o({}, item, {
+            recControls.push(recControls[0] ? _extends$q({}, item, {
                 part: recControls[0].part
             }) : item);
             return false;
@@ -5694,7 +8353,7 @@ function _ts_generator$5(thisArg, body) {
         }
         if (item.isrender !== 0 && REC_GROUP.includes(item.iconId)) {
             // TODO: 因为回放是一组， 位置以第一个位置为准
-            recControls.push(recControls[0] ? _extends$o({}, item, {
+            recControls.push(recControls[0] ? _extends$q({}, item, {
                 part: recControls[0].part
             }) : item);
             return false;
@@ -5757,9 +8416,9 @@ function _filterLeftRightControls(btnList) {
  * @param data 主题数据或模板id(萤石开放平台轻应用32位模板字符串)或模板名称
  * @returns
  */ function getThemeData(theme, data) {
-    return _async_to_generator$5(function() {
+    return _async_to_generator$7(function() {
         var themeData, _theme_logger, template, e;
-        return _ts_generator$5(this, function(_state) {
+        return _ts_generator$7(this, function(_state) {
             switch(_state.label){
                 case 0:
                     themeData = data;
@@ -5786,19 +8445,23 @@ function _filterLeftRightControls(btnList) {
                 case 1:
                     if (!(typeof data === 'string' && data.length === 32)) return [
                         3,
-                        6
+                        7
                     ];
                     _state.label = 2;
                 case 2:
                     _state.trys.push([
                         2,
-                        4,
+                        5,
                         ,
-                        5
+                        6
                     ]);
+                    if (!theme.services) return [
+                        3,
+                        4
+                    ];
                     return [
                         4,
-                        getThemeDataByTemplate(theme, data)
+                        theme.services.getThemeDataByTemplate(data)
                     ];
                 case 3:
                     template = _state.sent();
@@ -5817,6 +8480,11 @@ function _filterLeftRightControls(btnList) {
                         null
                     ];
                 case 4:
+                    return [
+                        2,
+                        null
+                    ];
+                case 5:
                     e = _state.sent();
                     // 请求被中止（destroy/重新渲染）或已销毁：静默返回
                     if (theme.destroyed || (e == null ? void 0 : e.name) === 'AbortError') return [
@@ -5828,12 +8496,12 @@ function _filterLeftRightControls(btnList) {
                         2,
                         null
                     ];
-                case 5:
+                case 6:
                     return [
                         3,
-                        7
+                        8
                     ];
-                case 6:
+                case 7:
                     if (Object.prototype.toString.call(data) === '[object Object]') {
                         // 渲染主题数据
                         return [
@@ -5847,7 +8515,7 @@ function _filterLeftRightControls(btnList) {
                             null
                         ];
                     }
-                case 7:
+                case 8:
                     return [
                         2
                     ];
@@ -5958,15 +8626,56 @@ function rgbOrHexToRgbaWithOpacity(color, opacity) {
     return Component;
 }();
 
-function _extends$n() {
-    _extends$n = Object.assign || function assign(target) {
+function _extends$p() {
+    _extends$p = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$n.apply(this, arguments);
+    return _extends$p.apply(this, arguments);
+}
+function _inherits$p(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$p(subClass, superClass);
+}
+function _set_prototype_of$p(o, p) {
+    _set_prototype_of$p = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$p(o, p);
+}
+var Footer = /*#__PURE__*/ function(Component) {
+    _inherits$p(Footer, Component);
+    function Footer(options) {
+        if (options === void 0) options = {};
+        return Component.call(this, _extends$p({}, options, {
+            cType: 'footer'
+        })) || this;
+    }
+    return Footer;
+}(Component);
+
+function _extends$o() {
+    _extends$o = Object.assign || function assign(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends$o.apply(this, arguments);
 }
 function _inherits$o(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
@@ -5988,52 +8697,11 @@ function _set_prototype_of$o(o, p) {
     };
     return _set_prototype_of$o(o, p);
 }
-var Footer = /*#__PURE__*/ function(Component) {
-    _inherits$o(Footer, Component);
-    function Footer(options) {
-        if (options === void 0) options = {};
-        return Component.call(this, _extends$n({}, options, {
-            cType: 'footer'
-        })) || this;
-    }
-    return Footer;
-}(Component);
-
-function _extends$m() {
-    _extends$m = Object.assign || function assign(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
-        }
-        return target;
-    };
-    return _extends$m.apply(this, arguments);
-}
-function _inherits$n(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-        constructor: {
-            value: subClass,
-            writable: true,
-            configurable: true
-        }
-    });
-    if (superClass) _set_prototype_of$n(subClass, superClass);
-}
-function _set_prototype_of$n(o, p) {
-    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
-        o.__proto__ = p;
-        return o;
-    };
-    return _set_prototype_of$n(o, p);
-}
 var Header = /*#__PURE__*/ function(Component) {
-    _inherits$n(Header, Component);
+    _inherits$o(Header, Component);
     function Header(options) {
         if (options === void 0) options = {};
-        return Component.call(this, _extends$m({}, options, {
+        return Component.call(this, _extends$o({}, options, {
             cType: 'header'
         })) || this;
     }
@@ -6196,17 +8864,17 @@ function interactiveHF($container, second, callback) {
     };
 }
 
-function _extends$l() {
-    _extends$l = Object.assign || function assign(target) {
+function _extends$n() {
+    _extends$n = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$l.apply(this, arguments);
+    return _extends$n.apply(this, arguments);
 }
-function _inherits$m(subClass, superClass) {
+function _inherits$n(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6217,23 +8885,23 @@ function _inherits$m(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$m(subClass, superClass);
+    if (superClass) _set_prototype_of$n(subClass, superClass);
 }
-function _set_prototype_of$m(o, p) {
-    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$n(o, p) {
+    _set_prototype_of$n = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$m(o, p);
+    return _set_prototype_of$n(o, p);
 }
 /**
  * 全局全屏
  * 主题和播放器不提供全局全屏的api， 如果开发者想要可以参考这个组件自己实现
  * @category Control
  */ var GlobalFullscreen = /*#__PURE__*/ function(Fullscreen) {
-    _inherits$m(GlobalFullscreen, Fullscreen);
+    _inherits$n(GlobalFullscreen, Fullscreen);
     function GlobalFullscreen(options) {
-        return Fullscreen.call(this, _extends$l({}, options, {
+        return Fullscreen.call(this, _extends$n({}, options, {
             controlType: 'button',
             classNameSuffix: 'global-fullscreen'
         })) || this;
@@ -6264,17 +8932,17 @@ function _set_prototype_of$m(o, p) {
     return GlobalFullscreen;
 }(Fullscreen);
 
-function _extends$k() {
-    _extends$k = Object.assign || function assign(target) {
+function _extends$m() {
+    _extends$m = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$k.apply(this, arguments);
+    return _extends$m.apply(this, arguments);
 }
-function _inherits$l(subClass, superClass) {
+function _inherits$m(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6285,23 +8953,23 @@ function _inherits$l(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$l(subClass, superClass);
+    if (superClass) _set_prototype_of$m(subClass, superClass);
 }
-function _set_prototype_of$l(o, p) {
-    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$m(o, p) {
+    _set_prototype_of$m = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$l(o, p);
+    return _set_prototype_of$m(o, p);
 }
 /**
  * 截图控件，点击后会触发截图事件， 截图数据会通过 onCapture 回调函数返回
  * @category Control
  */ var CapturePicture = /*#__PURE__*/ function(Control) {
-    _inherits$l(CapturePicture, Control);
+    _inherits$m(CapturePicture, Control);
     function CapturePicture(options) {
         var _this;
-        _this = Control.call(this, _extends$k({}, options, {
+        _this = Control.call(this, _extends$m({}, options, {
             tagName: 'span',
             classNameSuffix: 'capture-picture'
         })) || this, _this._timer = null;
@@ -6367,17 +9035,17 @@ function _create_class$4(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$4(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$j() {
-    _extends$j = Object.assign || function assign(target) {
+function _extends$l() {
+    _extends$l = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$j.apply(this, arguments);
+    return _extends$l.apply(this, arguments);
 }
-function _inherits$k(subClass, superClass) {
+function _inherits$l(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6388,23 +9056,23 @@ function _inherits$k(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$k(subClass, superClass);
+    if (superClass) _set_prototype_of$l(subClass, superClass);
 }
-function _set_prototype_of$k(o, p) {
-    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$l(o, p) {
+    _set_prototype_of$l = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$k(o, p);
+    return _set_prototype_of$l(o, p);
 }
 /**
  * 云台控件
  * @category Control
  */ var Ptz = /*#__PURE__*/ function(Control) {
-    _inherits$k(Ptz, Control);
+    _inherits$l(Ptz, Control);
     function Ptz(options) {
         var _this;
-        _this = Control.call(this, _extends$j({}, options, {
+        _this = Control.call(this, _extends$l({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'ptz'
@@ -6447,7 +9115,7 @@ function _set_prototype_of$k(o, p) {
             this.$turntable.classList.add("" + PREFIX_CLASS + "-ptz-turntable");
             this.$panel.appendChild(this.$turntable);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            this._ptzControl = new controlPtz.Ptz(this.$turntable, _extends$j({}, this._options, {
+            this._ptzControl = new controlPtz.Ptz(this.$turntable, _extends$l({}, this._options, {
                 onSpeedChange: this._onSpeedChange.bind(this),
                 onDirection: this._onDirection.bind(this)
             }));
@@ -6456,7 +9124,7 @@ function _set_prototype_of$k(o, p) {
     };
     _proto.renderMobileExtend = function renderMobileExtend($container) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        if (!this._ptzControl1) this._ptzControl1 = new controlPtz.MobilePtz($container, _extends$j({}, this._options, {
+        if (!this._ptzControl1) this._ptzControl1 = new controlPtz.MobilePtz($container, _extends$l({}, this._options, {
             onSpeedChange: this._onSpeedChange.bind(this),
             onDirection: this._onDirection.bind(this)
         }));
@@ -6569,17 +9237,17 @@ function _create_class$3(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$3(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$i() {
-    _extends$i = Object.assign || function assign(target) {
+function _extends$k() {
+    _extends$k = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$i.apply(this, arguments);
+    return _extends$k.apply(this, arguments);
 }
-function _inherits$j(subClass, superClass) {
+function _inherits$k(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6590,14 +9258,14 @@ function _inherits$j(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$j(subClass, superClass);
+    if (superClass) _set_prototype_of$k(subClass, superClass);
 }
-function _set_prototype_of$j(o, p) {
-    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$k(o, p) {
+    _set_prototype_of$k = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$j(o, p);
+    return _set_prototype_of$k(o, p);
 }
 var RECORD_DEFAULT_OPTIONS = {
     maxDuration: 3600
@@ -6611,10 +9279,10 @@ var RECORD_DEFAULT_OPTIONS = {
  *  2. 录制时间很短可能会因为浏览器的限制或没有I帧而无法生成有效的视频文件
  * @category Control
  */ var Record = /*#__PURE__*/ function(Control) {
-    _inherits$j(Record, Control);
+    _inherits$k(Record, Control);
     function Record(options) {
         var _this;
-        _this = Control.call(this, _extends$i({}, options, {
+        _this = Control.call(this, _extends$k({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'record'
@@ -6713,7 +9381,7 @@ var RECORD_DEFAULT_OPTIONS = {
     return Record;
 }(Control);
 
-function asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
         var value = info.value;
@@ -6724,16 +9392,16 @@ function asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, key, arg) {
     if (info.done) resolve(value);
     else Promise.resolve(value).then(_next, _throw);
 }
-function _async_to_generator$4(fn) {
+function _async_to_generator$6(fn) {
     return function() {
         var self = this, args = arguments;
         return new Promise(function(resolve, reject) {
             var gen = fn.apply(self, args);
             function _next(value) {
-                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "next", value);
+                asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, "next", value);
             }
             function _throw(err) {
-                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "throw", err);
+                asyncGeneratorStep$6(gen, resolve, reject, _next, _throw, "throw", err);
             }
             _next(undefined);
         });
@@ -6752,17 +9420,17 @@ function _create_class$2(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$2(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$h() {
-    _extends$h = Object.assign || function assign(target) {
+function _extends$j() {
+    _extends$j = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$h.apply(this, arguments);
+    return _extends$j.apply(this, arguments);
 }
-function _inherits$i(subClass, superClass) {
+function _inherits$j(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -6773,16 +9441,16 @@ function _inherits$i(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$i(subClass, superClass);
+    if (superClass) _set_prototype_of$j(subClass, superClass);
 }
-function _set_prototype_of$i(o, p) {
-    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$j(o, p) {
+    _set_prototype_of$j = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$i(o, p);
+    return _set_prototype_of$j(o, p);
 }
-function _ts_generator$4(thisArg, body) {
+function _ts_generator$6(thisArg, body) {
     var f, y, t, _ = {
         label: 0,
         sent: function() {
@@ -6890,10 +9558,10 @@ function _ts_generator$4(thisArg, body) {
  *
  * @category Control
  */ var Talk = /*#__PURE__*/ function(Control) {
-    _inherits$i(Talk, Control);
+    _inherits$j(Talk, Control);
     function Talk(options) {
         var _this;
-        _this = Control.call(this, _extends$h({}, options, {
+        _this = Control.call(this, _extends$j({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'talk'
@@ -6945,8 +9613,8 @@ function _ts_generator$4(thisArg, body) {
         var _this = this, _superprop_get__onControlClick = function _superprop_get__onControlClick() {
             return Control.prototype._onControlClick;
         };
-        return _async_to_generator$4(function() {
-            return _ts_generator$4(this, function(_state) {
+        return _async_to_generator$6(function() {
+            return _ts_generator$6(this, function(_state) {
                 _superprop_get__onControlClick().call(_this, e);
                 this.active = !this.active;
                 this.emit(EVENTS.control.talkingChange, this.active);
@@ -7000,7 +9668,7 @@ function _ts_generator$4(thisArg, body) {
     'live'
 ];
 
-function asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
         var value = info.value;
@@ -7011,32 +9679,32 @@ function asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, key, arg) {
     if (info.done) resolve(value);
     else Promise.resolve(value).then(_next, _throw);
 }
-function _async_to_generator$3(fn) {
+function _async_to_generator$5(fn) {
     return function() {
         var self = this, args = arguments;
         return new Promise(function(resolve, reject) {
             var gen = fn.apply(self, args);
             function _next(value) {
-                asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, "next", value);
+                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "next", value);
             }
             function _throw(err) {
-                asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, "throw", err);
+                asyncGeneratorStep$5(gen, resolve, reject, _next, _throw, "throw", err);
             }
             _next(undefined);
         });
     };
 }
-function _extends$g() {
-    _extends$g = Object.assign || function assign(target) {
+function _extends$i() {
+    _extends$i = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$g.apply(this, arguments);
+    return _extends$i.apply(this, arguments);
 }
-function _inherits$h(subClass, superClass) {
+function _inherits$i(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7047,16 +9715,16 @@ function _inherits$h(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$h(subClass, superClass);
+    if (superClass) _set_prototype_of$i(subClass, superClass);
 }
-function _set_prototype_of$h(o, p) {
-    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$i(o, p) {
+    _set_prototype_of$i = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$h(o, p);
+    return _set_prototype_of$i(o, p);
 }
-function _ts_generator$3(thisArg, body) {
+function _ts_generator$5(thisArg, body) {
     var f, y, t, _ = {
         label: 0,
         sent: function() {
@@ -7155,27 +9823,60 @@ function _ts_generator$3(thisArg, body) {
         };
     }
 }
+/** 移动端非全屏：挂 body，底部弹出 */ var MOBILE_PANEL_HEIGHT = '60%';
+/** 移动端全屏：挂播放器窗口，右侧弹出（窗口已横屏） */ var MOBILE_FULLSCREEN_PANEL_WIDTH = '50%';
+/**
+ * 沿原型链找到 Drawer 的 `updateOptions`（第一个不是 Broadcast 自身的实现），按布局重建面板 DOM。
+ * Drawer 重建后保持开合状态，内容节点原样挂回，不影响面板内的语音列表与录音状态。
+ */ function updateDrawerLayout(panel, options) {
+    var _proto_updateOptions;
+    var proto = Object.getPrototypeOf(Object.getPrototypeOf(panel));
+    while(proto && !Object.prototype.hasOwnProperty.call(proto, 'updateOptions'))proto = Object.getPrototypeOf(proto);
+    proto == null ? void 0 : (_proto_updateOptions = proto.updateOptions) == null ? void 0 : _proto_updateOptions.call(panel, options);
+}
 /**
  * 语音广播控件
  *
- * 用于触发语音广播功能的按钮控件
+ * 按钮控件，点击打开 / 关闭云广播面板（`@ezuikit/control-broadcast`）。
+ *
+ * 面板自带开放平台接口：打开时自动查询语音列表（自动翻页），点击语音项 / 录音结束后自动下发。
+ * 控件把面板的结果转成控件事件，由主题转发：
+ * - 语音列表加载完：`Control.broadcastVoiceListChange(list)`
+ * - 内置接口每次调用完成：`Control.broadcastApiResult({ api, success, code, msg, data })`
+ * - 录到有效语音：`Control.broadcastVoiceRecorded({ voiceFile, deviceSerial, channelNo })`
+ * - 开始录音 / 停止录音：`Control.broadcastRecordStart()` / `Control.broadcastRecordStop()`
+ * - 录音完成：`Control.broadcastRecordComplete(voiceFile)`
  *
  * @category Control
  */ var Broadcast = /*#__PURE__*/ function(Control) {
-    _inherits$h(Broadcast, Control);
+    _inherits$i(Broadcast, Control);
     function Broadcast(options) {
         var _this;
-        _this = Control.call(this, _extends$g({}, options, {
+        var _options_props;
+        _this = Control.call(this, _extends$i({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'broadcast'
-        })) || this;
+        })) || this, /**
+   * 云广播面板，首次打开时才创建：
+   * 面板会直接访问麦克风与 DOM，放到渲染阶段会在页面加载时就做这些事
+   */ _this._panel = null, /** 外部同步状态（`broadcastPanelChange`）期间不再向外派发，避免回环 */ _this._syncing = false, /** 播放器窗口是否全屏（移动端为模拟全屏，窗口旋转横屏） */ _this._isCurrentFullscreen = false, /** 面板当前应用的布局，用来判断全屏 / 旋转后是否需要重建 */ _this._layout = null;
         _this._options = options;
         _this._render();
-        _this.on(EVENTS.broadcastChange, function(active) {
-            if (_this.active !== active) {
-                _this.active = active;
-                _this._render();
+        // 外部（SDK）同步广播状态：打开 / 关闭面板，不再向外派发
+        _this.on(EVENTS.broadcastPanelChange, function(active) {
+            if (_this.active === active) return;
+            _this._syncing = true;
+            try {
+                if (active) {
+                    _this._getPanel().open = true;
+                } else {
+                    var _this__panel;
+                    (_this__panel = _this._panel) == null ? void 0 : _this__panel.close();
+                }
+                _this._setActive(active);
+            } finally{
+                _this._syncing = false;
             }
         });
         if (options.sdkType === 'base') {
@@ -7183,45 +9884,179 @@ function _ts_generator$3(thisArg, body) {
         } else {
             _this.$container.style.display = 'none';
         }
+        // 移动端全屏或旋转：重置面板的挂载节点和位置
+        // 移动端非全屏挂 body、底部弹出；全屏挂播放器窗口、右侧弹出（PC 始终挂播放器窗口、右侧弹出）
+        _this._isCurrentFullscreen = !!((_options_props = options.props) == null ? void 0 : _options_props.isCurrentFullscreen);
+        _this.on(EVENTS.fullscreenChange, function(info) {
+            _this._isCurrentFullscreen = !!(info == null ? void 0 : info.isCurrentFullscreen);
+            _this._syncPanelLayout();
+        });
+        _this.on(EVENTS.orientationChange, function() {
+            return _this._syncPanelLayout();
+        });
         return _this;
     }
     var _proto = Broadcast.prototype;
+    /**
+   * 按当前端与全屏状态计算面板布局
+   */ _proto._resolveLayout = function _resolveLayout() {
+        var rootContainer = this._options.rootContainer || document.body;
+        if (!Utils.isMobile) return {
+            container: rootContainer,
+            placement: 'right'
+        };
+        if (this._isCurrentFullscreen) return {
+            container: rootContainer,
+            placement: 'right',
+            width: MOBILE_FULLSCREEN_PANEL_WIDTH
+        };
+        return {
+            container: document.body,
+            placement: 'bottom',
+            height: MOBILE_PANEL_HEIGHT
+        };
+    };
+    /**
+   * 把布局应用到面板：挂载节点交给 Drawer 的 `getContainer`（每次打开时解析），方向 / 尺寸需重建 DOM。
+   * 面板打开中布局变化时先关再开，让面板挂到新节点上（会取消进行中的录音，开合不向外派发）。
+   */ _proto._syncPanelLayout = function _syncPanelLayout() {
+        var panel = this._panel;
+        if (!panel) return; // 面板首次打开时才创建，创建时会按当前布局应用
+        var layout = this._resolveLayout();
+        var prev = this._layout;
+        if (prev && prev.container === layout.container && prev.placement === layout.placement && prev.width === layout.width && prev.height === layout.height) return;
+        var wasOpen = panel.open;
+        this._syncing = true;
+        try {
+            if (wasOpen) panel.open = false;
+            this._applyLayout(panel, layout);
+            if (wasOpen) panel.open = true;
+        } finally{
+            this._syncing = false;
+        }
+    };
+    /**
+   * 应用布局（不处理开合）
+   */ _proto._applyLayout = function _applyLayout(panel, layout) {
+        var _this = this;
+        panel.options.getContainer = function() {
+            return _this._resolveLayout().container;
+        };
+        var sizeKey = layout.placement === 'left' || layout.placement === 'right' ? 'width' : 'height';
+        var size = layout[sizeKey];
+        var changed = {};
+        if (panel.options.placement !== layout.placement) changed.placement = layout.placement;
+        // 未指定尺寸时沿用面板默认值
+        if (size !== undefined && panel.options[sizeKey] !== size) changed[sizeKey] = size;
+        if (Object.keys(changed).length) updateDrawerLayout(panel, changed);
+        this._layout = layout;
+    };
     _proto._render = function _render() {
         var _this_locale;
         this.$container.innerHTML = IconComponents.broadcast({
             title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_BROADCAST
         });
     };
+    /**
+   * 创建（或取已创建的）云广播面板
+   */ _proto._getPanel = function _getPanel() {
+        var _this = this;
+        if (this._panel) return this._panel;
+        var _this__options = this._options, onVoiceListChange = _this__options.onVoiceListChange, onApiResult = _this__options.onApiResult; _this__options.onRequestSendVoice; _this__options.onRequestSendVoiceOnce; var onVoiceRecorded = _this__options.onVoiceRecorded, onRecordStart = _this__options.onRecordStart, onRecordStop = _this__options.onRecordStop, onRecordComplete = _this__options.onRecordComplete, onError = _this__options.onError;
+        var layout = this._resolveLayout();
+        var panelOptions = {
+            deviceSerial: this._options.deviceSerial,
+            channelNo: this._options.channelNo,
+            accessToken: this._options.accessToken,
+            token: this._options.token,
+            env: this._options.env,
+            language: this._options.language === 'en' ? 'en' : 'zh',
+            isMobile: Utils.isMobile,
+            direction: layout.placement,
+            onVoiceRecorded: function onVoiceRecorded1(data) {
+                _this.emit(EVENTS.control.broadcastVoiceRecorded, data);
+                onVoiceRecorded == null ? void 0 : onVoiceRecorded(data);
+            },
+            onRecordStart: function onRecordStart1() {
+                _this.emit(EVENTS.control.broadcastRecordStart);
+                onRecordStart == null ? void 0 : onRecordStart();
+            },
+            onRecordStop: function onRecordStop1() {
+                _this.emit(EVENTS.control.broadcastRecordStop);
+                onRecordStop == null ? void 0 : onRecordStop();
+            },
+            onRecordComplete: function onRecordComplete1(voiceFile) {
+                _this.emit(EVENTS.control.broadcastRecordComplete, voiceFile);
+                onRecordComplete == null ? void 0 : onRecordComplete(voiceFile);
+            },
+            onError: onError,
+            onOpen: function onOpen() {
+                return _this._setActive(true);
+            },
+            onClose: function onClose() {
+                return _this._setActive(false);
+            },
+            onVoiceListChange: function onVoiceListChange1(list) {
+                _this.emit(EVENTS.control.broadcastVoiceListChange, list);
+                onVoiceListChange == null ? void 0 : onVoiceListChange(list);
+            },
+            onApiResult: function onApiResult1(result) {
+                _this.emit(EVENTS.control.broadcastApiResult, result);
+                onApiResult == null ? void 0 : onApiResult(result);
+            }
+        };
+        // 初始挂载节点按当前布局；之后每次打开由 getContainer 解析（全屏 / 旋转后会变）
+        this._panel = new BroadcastPanel(layout.container, panelOptions);
+        this._applyLayout(this._panel, layout);
+        return this._panel;
+    };
+    /**
+   * 同步激活态；状态变化且不是外部同步时向外派发并回调
+   */ _proto._setActive = function _setActive(active) {
+        var _this__options_onChange, _this__options;
+        if (this.active === active) return;
+        this.active = active;
+        this._render();
+        if (this._syncing) return;
+        this.emit(EVENTS.control.broadcastPanelChange, active);
+        (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, active);
+    };
     _proto.reset = function reset(hide) {
         if (this.active) {
+            var _this__panel;
+            // 先改状态再关面板，onClose 回调里 _setActive 不会重复派发
             this.active = false;
+            (_this__panel = this._panel) == null ? void 0 : _this__panel.close();
             this._render();
-            this.emit(EVENTS.control.broadcastChange, false);
+            this.emit(EVENTS.control.broadcastPanelChange, false);
             Control.prototype.reset.call(this, hide);
         }
     };
     /**
-   * 销毁语音广播控件
+   * 销毁语音广播控件：面板销毁会释放麦克风、取消请求、移除 DOM
    */ _proto.destroy = function destroy() {
+        var _this__panel;
         if (this.active) {
             this.reset();
         }
+        (_this__panel = this._panel) == null ? void 0 : _this__panel.destroy();
+        this._panel = null;
         Control.prototype.destroy.call(this);
     };
     /**
-   * 点击 Control 会触发
+   * 点击 Control 会触发：打开 / 关闭云广播面板（打开时没有语音列表会自动查询）
    */ _proto._onControlClick = function _onControlClick(e) {
         var _this = this, _superprop_get__onControlClick = function _superprop_get__onControlClick() {
             return Control.prototype._onControlClick;
         };
-        return _async_to_generator$3(function() {
-            var _this__options_onChange, _this__options;
-            return _ts_generator$3(this, function(_state) {
+        return _async_to_generator$5(function() {
+            var panel;
+            return _ts_generator$5(this, function(_state) {
                 _superprop_get__onControlClick().call(_this, e);
-                this.active = !this.active;
-                this.emit(EVENTS.control.broadcastChange, this.active);
-                (_this__options = this._options) == null ? void 0 : (_this__options_onChange = _this__options.onChange) == null ? void 0 : _this__options_onChange.call(_this__options, this.active);
-                this._render();
+                panel = this._getPanel();
+                panel.open = !this.active;
+                // 面板开合会经 onOpen / onClose 回调同步；这里兜底一次，状态已一致时不会重复派发
+                this._setActive(panel.open);
                 return [
                     2
                 ];
@@ -7234,84 +10069,7 @@ function _ts_generator$3(thisArg, body) {
     'live'
 ];
 
-/**
- * UUID 生成（RFC 4122 v4）
- *
- * 按可用性三级降级：
- *
- * | 顺序 | 实现                     | 说明                                                          |
- * | ---- | ------------------------ | ------------------------------------------------------------- |
- * | 1    | `crypto.randomUUID()`    | 原生实现，最快；**仅在安全上下文（HTTPS / localhost）可用**   |
- * | 2    | `crypto.getRandomValues` | 密码学强度随机数手工组装；HTTP 页面下也可用                   |
- * | 3    | `Math.random()`          | 兜底，**不具密码学强度**，只适合做 DOM id 这类无安全要求的标识 |
- *
- * 之所以不能只用 `crypto.randomUUID()`：播放器会被嵌到 HTTP 页面里，
- * 那种场景下它是 `undefined`，必须有降级路径。
- *
- * @remarks 用 `crypto` 而非 `window.crypto`，以便在 worker 中也能工作（worker 里没有 `window`）。
- */ /** 0~255 对应的两位十六进制查表，避免每个字节都做一次 toString + 手工补零 */ var HEX_BY_BYTE = [];
-for(var i = 0; i < 256; i++){
-    // + 0x100 保证结果是三位，再切掉首位，等价于补零到两位（不用 padStart，es5 目标下它需要 polyfill）
-    HEX_BY_BYTE.push((i + 0x100).toString(16).slice(1));
-}
-/**
- * 取 16 个随机字节
- *
- * @returns 长度为 16 的字节数组，每项 0~255
- */ function randomBytes() {
-    var bytes = [];
-    if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
-        var buffer = new Uint8Array(16);
-        crypto.getRandomValues(buffer);
-        for(var i = 0; i < 16; i++){
-            bytes.push(buffer[i]);
-        }
-        return bytes;
-    }
-    // 兜底：不具密码学强度，不要用于 token / 密钥一类场景
-    for(var i1 = 0; i1 < 16; i1++){
-        bytes.push(Math.floor(Math.random() * 256));
-    }
-    return bytes;
-}
-/**
- * 把 16 个字节按 v4 规范格式化成 `8-4-4-4-12`
- *
- * 会就地改写第 6、8 个字节以写入版本号与变体位。
- *
- * @param bytes - 长度为 16 的字节数组
- * @returns 形如 `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx` 的字符串，`y` 为 8/9/a/b
- */ function bytesToUuid(bytes) {
-    // 版本号固定为 4（高 4 位置为 0100）
-    bytes[6] = bytes[6] & 0x0f | 0x40;
-    // 变体固定为 RFC 4122（高 2 位置为 10）
-    bytes[8] = bytes[8] & 0x3f | 0x80;
-    var out = '';
-    for(var i = 0; i < 16; i++){
-        // 8-4-4-4-12 的分组位置
-        if (i === 4 || i === 6 || i === 8 || i === 10) out += '-';
-        out += HEX_BY_BYTE[bytes[i]];
-    }
-    return out;
-}
-/**
- * 生成一个 v4 UUID
- *
- * @returns 36 位小写 UUID，形如 `f47ac10b-58cc-4372-a567-0e02b2c3d479`
- * @example
- * ```ts
- * import uuid from '@/utils/uuid';
- *
- * uuid(); // '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
- * ```
- */ function uuid() {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-        return crypto.randomUUID();
-    }
-    return bytesToUuid(randomBytes());
-}
-
-function asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
         var value = info.value;
@@ -7322,32 +10080,32 @@ function asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, key, arg) {
     if (info.done) resolve(value);
     else Promise.resolve(value).then(_next, _throw);
 }
-function _async_to_generator$2(fn) {
+function _async_to_generator$4(fn) {
     return function() {
         var self = this, args = arguments;
         return new Promise(function(resolve, reject) {
             var gen = fn.apply(self, args);
             function _next(value) {
-                asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, "next", value);
+                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "next", value);
             }
             function _throw(err) {
-                asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, "throw", err);
+                asyncGeneratorStep$4(gen, resolve, reject, _next, _throw, "throw", err);
             }
             _next(undefined);
         });
     };
 }
-function _extends$f() {
-    _extends$f = Object.assign || function assign(target) {
+function _extends$h() {
+    _extends$h = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$f.apply(this, arguments);
+    return _extends$h.apply(this, arguments);
 }
-function _inherits$g(subClass, superClass) {
+function _inherits$h(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7358,16 +10116,16 @@ function _inherits$g(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$g(subClass, superClass);
+    if (superClass) _set_prototype_of$h(subClass, superClass);
 }
-function _set_prototype_of$g(o, p) {
-    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$h(o, p) {
+    _set_prototype_of$h = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$g(o, p);
+    return _set_prototype_of$h(o, p);
 }
-function _ts_generator$2(thisArg, body) {
+function _ts_generator$4(thisArg, body) {
     var f, y, t, _ = {
         label: 0,
         sent: function() {
@@ -7473,11 +10231,11 @@ function _ts_generator$2(thisArg, body) {
  *
  * @category Control
  */ var AIChat = /*#__PURE__*/ function(Control) {
-    _inherits$g(AIChat, Control);
+    _inherits$h(AIChat, Control);
     function AIChat(options) {
         var _this;
         var _options_urlInfo_searchParams, _options_urlInfo, _options_urlInfo1;
-        _this = Control.call(this, _extends$f({}, options, {
+        _this = Control.call(this, _extends$h({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'aichat'
@@ -7527,9 +10285,9 @@ function _ts_generator$2(thisArg, body) {
         var _this = this, _superprop_get__onControlClick = function _superprop_get__onControlClick() {
             return Control.prototype._onControlClick;
         };
-        return _async_to_generator$2(function() {
+        return _async_to_generator$4(function() {
             var _this__options_onChange, _this__options;
-            return _ts_generator$2(this, function(_state) {
+            return _ts_generator$4(this, function(_state) {
                 _superprop_get__onControlClick().call(_this, e);
                 this.active = !this.active;
                 this.emit(EVENTS.control.aichatChange, this.active);
@@ -7552,17 +10310,17 @@ function _ts_generator$2(thisArg, body) {
     'cloudRec'
 ];
 
-function _extends$e() {
-    _extends$e = Object.assign || function assign(target) {
+function _extends$g() {
+    _extends$g = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$e.apply(this, arguments);
+    return _extends$g.apply(this, arguments);
 }
-function _inherits$f(subClass, superClass) {
+function _inherits$g(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7573,14 +10331,14 @@ function _inherits$f(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$f(subClass, superClass);
+    if (superClass) _set_prototype_of$g(subClass, superClass);
 }
-function _set_prototype_of$f(o, p) {
-    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$g(o, p) {
+    _set_prototype_of$g = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$f(o, p);
+    return _set_prototype_of$g(o, p);
 }
 /**
  * 直播按钮控件
@@ -7589,11 +10347,11 @@ function _set_prototype_of$f(o, p) {
  *
  * @category Control
  */ var Live = /*#__PURE__*/ function(Control) {
-    _inherits$f(Live, Control);
+    _inherits$g(Live, Control);
     function Live(options) {
         var _this;
         var _this___options_props1;
-        _this = Control.call(this, _extends$e({}, options, {
+        _this = Control.call(this, _extends$g({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'live'
@@ -7643,17 +10401,17 @@ function _set_prototype_of$f(o, p) {
     return Live;
 }(Control);
 
-function _extends$d() {
-    _extends$d = Object.assign || function assign(target) {
+function _extends$f() {
+    _extends$f = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$d.apply(this, arguments);
+    return _extends$f.apply(this, arguments);
 }
-function _inherits$e(subClass, superClass) {
+function _inherits$f(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7664,14 +10422,14 @@ function _inherits$e(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$e(subClass, superClass);
+    if (superClass) _set_prototype_of$f(subClass, superClass);
 }
-function _set_prototype_of$e(o, p) {
-    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$f(o, p) {
+    _set_prototype_of$f = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$e(o, p);
+    return _set_prototype_of$f(o, p);
 }
 /** 判定「贴近边缘」的安全距离（CSS px），弹窗右边缘与播放器右侧的间距小于它就换对齐方式 */ var REC_DROPDOWN_EDGE_GAP = 10;
 /**
@@ -7681,11 +10439,11 @@ function _set_prototype_of$e(o, p) {
  *
  * @category Control
  */ var RecDropdown = /*#__PURE__*/ function(Control) {
-    _inherits$e(RecDropdown, Control);
+    _inherits$f(RecDropdown, Control);
     function RecDropdown(options) {
         var _this;
         var _options_props, _this___options_props1;
-        _this = Control.call(this, _extends$d({}, options, {
+        _this = Control.call(this, _extends$f({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'rec-dropdown'
@@ -7702,7 +10460,7 @@ function _set_prototype_of$e(o, p) {
             _this.$container.style.display = 'none';
         }
         // 初始化时根据 urlInfo 确定当前回放类型和激活状态
-        _this._recType = options.recType || ((_options_props = options.props) == null ? void 0 : _options_props.recType) || '';
+        _this._recType = options.playType || ((_options_props = options.props) == null ? void 0 : _options_props.playType) || '';
         _this._syncActiveByUrlInfo((_this___options_props1 = _this.__options.props) == null ? void 0 : _this___options_props1.urlInfo);
         _this._render();
         _this._initPicker();
@@ -7724,9 +10482,25 @@ function _set_prototype_of$e(o, p) {
                 this._recType = 'rec';
             }
             this._activeOption(this._recType);
+            this._syncRootClass(this._recType);
         } else {
             this.active = false;
+            this._syncRootClass('');
         }
+    };
+    /**
+   * 在根节点上同步当前回放类型的样式类名：`{PREFIX}-rec-type-{rec|cloudRec|cloudRecord}`
+   * 先移除旧的 rec-type 类名再添加新的，传空串则只移除（非回放状态）。
+   */ _proto._syncRootClass = function _syncRootClass(type) {
+        var $root = this.__options.rootContainer;
+        if (!($root == null ? void 0 : $root.classList)) return;
+        var prefix = "" + PREFIX_CLASS + "-rec-type-";
+        Array.from($root.classList).filter(function(name) {
+            return name.startsWith(prefix);
+        }).forEach(function(name) {
+            return $root.classList.remove(name);
+        });
+        if (type) $root.classList.add("" + prefix + type);
     };
     _proto._render = function _render() {
         var _this__options_list, _this_locale;
@@ -7811,6 +10585,7 @@ function _set_prototype_of$e(o, p) {
                 var _this__options_onChange, _this__options;
                 _this._recType = type;
                 _this._activeOption(type);
+                _this._syncRootClass(type);
                 // 设置自身为激活状态
                 _this.active = true;
                 _this.emit(EVENTS.control.recDropdownChange, type);
@@ -7837,6 +10612,7 @@ function _set_prototype_of$e(o, p) {
    * 销毁
    */ _proto.destroy = function destroy() {
         var _this__delegation_destroy, _this__delegation;
+        this._syncRootClass('');
         (_this__delegation = this._delegation) == null ? void 0 : (_this__delegation_destroy = _this__delegation.destroy) == null ? void 0 : _this__delegation_destroy.call(_this__delegation);
         this._delegation = null;
         if (this._picker) {
@@ -7855,17 +10631,17 @@ function _set_prototype_of$e(o, p) {
     return RecDropdown;
 }(Control);
 
-function _extends$c() {
-    _extends$c = Object.assign || function assign(target) {
+function _extends$e() {
+    _extends$e = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$c.apply(this, arguments);
+    return _extends$e.apply(this, arguments);
 }
-function _inherits$d(subClass, superClass) {
+function _inherits$e(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -7876,14 +10652,14 @@ function _inherits$d(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$d(subClass, superClass);
+    if (superClass) _set_prototype_of$e(subClass, superClass);
 }
-function _set_prototype_of$d(o, p) {
-    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$e(o, p) {
+    _set_prototype_of$e = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$d(o, p);
+    return _set_prototype_of$e(o, p);
 }
 /**
  * 录像列表按钮控件
@@ -7892,12 +10668,12 @@ function _set_prototype_of$d(o, p) {
  *
  * @category Control
  */ var RecList = /*#__PURE__*/ function(Control) {
-    _inherits$d(RecList, Control);
+    _inherits$e(RecList, Control);
     function RecList(options) {
         var _this;
         var _this__options_props, _this__options, _this_locale;
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        _this = Control.call(this, _extends$c({}, options, {
+        _this = Control.call(this, _extends$e({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'rec-list'
@@ -7905,7 +10681,7 @@ function _set_prototype_of$d(o, p) {
         _this._options = options;
         _this.records = ((_this__options = _this._options) == null ? void 0 : (_this__options_props = _this__options.props) == null ? void 0 : _this__options_props.recordList) || [];
         _this._render();
-        _this._modal = new RecListModal(_this._options.rootContainer, _extends$c({
+        _this._modal = new RecListModal(_this._options.rootContainer, _extends$e({
             showMask: false,
             title: (_this_locale = _this.locale) == null ? void 0 : _this_locale.BTN_REC_LIST_TITLE
         }, options, {
@@ -7931,7 +10707,7 @@ function _set_prototype_of$d(o, p) {
             if ((_this__options = _this._options) == null ? void 0 : (_this__options_props = _this__options.props) == null ? void 0 : (_this__options_props_urlInfo = _this__options_props.urlInfo) == null ? void 0 : _this__options_props_urlInfo.validateCode) {
                 _this.records = records.map(function(item) {
                     var _this__options_props_urlInfo, _this__options_props, _this__options;
-                    return _extends$c({}, item, {
+                    return _extends$e({}, item, {
                         // 加密图片的地址是有时效的
                         coverPic: item.coverPic ? item.coverPic + "&decodekey=" + ((_this__options = _this._options) == null ? void 0 : (_this__options_props = _this__options.props) == null ? void 0 : (_this__options_props_urlInfo = _this__options_props.urlInfo) == null ? void 0 : _this__options_props_urlInfo.validateCode) : ''
                     });
@@ -8021,17 +10797,17 @@ function _set_prototype_of$d(o, p) {
     'cloudRecord'
 ];
 
-function _extends$b() {
-    _extends$b = Object.assign || function assign(target) {
+function _extends$d() {
+    _extends$d = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$b.apply(this, arguments);
+    return _extends$d.apply(this, arguments);
 }
-function _inherits$c(subClass, superClass) {
+function _inherits$d(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -8042,14 +10818,14 @@ function _inherits$c(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$c(subClass, superClass);
+    if (superClass) _set_prototype_of$d(subClass, superClass);
 }
-function _set_prototype_of$c(o, p) {
-    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$d(o, p) {
+    _set_prototype_of$d = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$c(o, p);
+    return _set_prototype_of$d(o, p);
 }
 /**
  * 告警消息按钮控件
@@ -8058,10 +10834,10 @@ function _set_prototype_of$c(o, p) {
  *
  * @category Control
  */ var AlarmMessage = /*#__PURE__*/ function(Control) {
-    _inherits$c(AlarmMessage, Control);
+    _inherits$d(AlarmMessage, Control);
     function AlarmMessage(options) {
         var _this;
-        _this = Control.call(this, _extends$b({}, options, {
+        _this = Control.call(this, _extends$d({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'alarm-message'
@@ -8113,17 +10889,17 @@ function _create_class$1(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties$1(Constructor.prototype, protoProps);
     return Constructor;
 }
-function _extends$a() {
-    _extends$a = Object.assign || function assign(target) {
+function _extends$c() {
+    _extends$c = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$a.apply(this, arguments);
+    return _extends$c.apply(this, arguments);
 }
-function _inherits$b(subClass, superClass) {
+function _inherits$c(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -8134,14 +10910,14 @@ function _inherits$b(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$b(subClass, superClass);
+    if (superClass) _set_prototype_of$c(subClass, superClass);
 }
-function _set_prototype_of$b(o, p) {
-    _set_prototype_of$b = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$c(o, p) {
+    _set_prototype_of$c = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$b(o, p);
+    return _set_prototype_of$c(o, p);
 }
 var SELECT_DEFAULT_OPTIONS = {
     fieldNames: {
@@ -8150,7 +10926,7 @@ var SELECT_DEFAULT_OPTIONS = {
     },
     // label 可能来自内核下发的列表，内置实现必须转义
     renderLabel: function renderLabel(label) {
-        return "<span>" + escapeHtml(label) + "</span>";
+        return "<span>" + utilsTools.escapeHtml(label) + "</span>";
     },
     onChange: function onChange() {},
     onOpenChange: function onOpenChange() {}
@@ -8204,12 +10980,12 @@ var SELECT_DEFAULT_OPTIONS = {
  * }
  * ```
  */ var Select = /*#__PURE__*/ function(Control) {
-    _inherits$b(Select, Control);
+    _inherits$c(Select, Control);
     function Select(options) {
         var _this;
         var _ref;
         var _this__options_fieldNames, _this__picker_$body;
-        _this = Control.call(this, _extends$a({
+        _this = Control.call(this, _extends$c({
             tagName: 'span',
             type: 'button',
             controlType: 'button'
@@ -8268,8 +11044,8 @@ var SELECT_DEFAULT_OPTIONS = {
             (_this__picker = this._picker) == null ? void 0 : _this__picker.innerHTML('<div class="' + PREFIX_CLASS + '-select-panel">\n            <ul class="' + PREFIX_CLASS + '-select-list">\n              ' + list.map(// 列表可能来自内核下发（如 setVideoLevelList 的清晰度列表），
             // data-value 与标签文本都要转义
             function(item) {
-                return '\n                    <li class="' + PREFIX_CLASS + "-select-option " + (+item[valueKey] === _this.value ? "" + PREFIX_CLASS + "-active" : '') + '" data-value="' + escapeHtml(item[valueKey]) + '">\n                      <span>' + escapeHtml(item[labelKey]) + "</span>\n                    </li>\n                  ";
-            }).join('') + "\n            </ul>\n            " + (Utils.isMobile ? '<div class="' + PREFIX_CLASS + '-select-cancel">\n                  <span>' + escapeHtml(((_this_locale = this.locale) == null ? void 0 : _this_locale.cancel) || '取消') + "</span>\n                </div>" : '') + "\n            " + (Utils.isMobile ? '<span class="' + PREFIX_CLASS + '-select-close">' + IconComponents.close() + "</span>" : '') + "\n          <div>");
+                return '\n                    <li class="' + PREFIX_CLASS + "-select-option " + (+item[valueKey] === _this.value ? "" + PREFIX_CLASS + "-active" : '') + '" data-value="' + utilsTools.escapeHtml(item[valueKey]) + '">\n                      <span>' + utilsTools.escapeHtml(item[labelKey]) + "</span>\n                    </li>\n                  ";
+            }).join('') + "\n            </ul>\n            " + (Utils.isMobile ? '<div class="' + PREFIX_CLASS + '-select-cancel">\n                  <span>' + utilsTools.escapeHtml(((_this_locale = this.locale) == null ? void 0 : _this_locale.cancel) || '取消') + "</span>\n                </div>" : '') + "\n            " + (Utils.isMobile ? '<span class="' + PREFIX_CLASS + '-select-close">' + IconComponents.close() + "</span>" : '') + "\n          <div>");
             this.list = list;
             this._activeOption();
         } else if ((list == null ? void 0 : list.length) === 0) {
@@ -8401,21 +11177,21 @@ var SELECT_DEFAULT_OPTIONS = {
     return Select;
 }(Control);
 
-function _assert_this_initialized$1(self) {
+function _assert_this_initialized$2(self) {
     if (self === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     return self;
 }
-function _extends$9() {
-    _extends$9 = Object.assign || function assign(target) {
+function _extends$b() {
+    _extends$b = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$9.apply(this, arguments);
+    return _extends$b.apply(this, arguments);
 }
-function _inherits$a(subClass, superClass) {
+function _inherits$b(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -8426,28 +11202,29 @@ function _inherits$a(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$a(subClass, superClass);
+    if (superClass) _set_prototype_of$b(subClass, superClass);
 }
-function _set_prototype_of$a(o, p) {
-    _set_prototype_of$a = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$b(o, p) {
+    _set_prototype_of$b = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$a(o, p);
+    return _set_prototype_of$b(o, p);
 }
-function _type_of(obj) {
+function _type_of$1(obj) {
     "@swc/helpers - typeof";
     return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
 }
-var DEFINITION_LEVELS_LOCALE = [
-    'VIDEO_LEVEL_FLUENT',
-    'VIDEO_LEVEL_STANDARD',
-    'VIDEO_LEVEL_HEIGH',
-    'VIDEO_LEVEL_SUPER',
-    'VIDEO_LEVEL_EXTREME',
-    'VIDEO_LEVEL_3K',
-    'VIDEO_LEVEL_4k'
-];
+/**
+ * 数字清晰度对应的 locale key，下标即清晰度等级（0 流畅 … 6 4K），不含 auto。
+ * 来源 VIDEO_LEVEL_NAME：整数键按升序枚举，过滤掉 'auto' 后下标与等级一一对应。
+ */ var DEFINITION_LEVELS_LOCALE = Object.entries(VIDEO_LEVEL_NAME).filter(function(param) {
+    var key = param[0];
+    return key !== 'auto';
+}).map(function(param) {
+    var localeKey = param[1];
+    return localeKey;
+});
 var DEFINITION_DEFAULT_OPTIONS = {
     value: 1,
     list: []
@@ -8483,12 +11260,12 @@ function __filter(list, locale) {
  *
  * @category Control
  */ var Definition = /*#__PURE__*/ function(Select) {
-    _inherits$a(Definition, Select);
+    _inherits$b(Definition, Select);
     function Definition(options) {
         if (options === void 0) options = {};
         var _this;
         var _options_props, _options_props1, _options_locales_options_language;
-        _this = Select.call(this, _extends$9({}, DEFINITION_DEFAULT_OPTIONS, {
+        _this = Select.call(this, _extends$b({}, DEFINITION_DEFAULT_OPTIONS, {
             value: (_options_props = options.props) == null ? void 0 : _options_props.videoLevel
         }, options, {
             fieldNames: {
@@ -8505,35 +11282,36 @@ function __filter(list, locale) {
                 if ((item == null ? void 0 : item.level) === 'auto') {
                     var _options_locales_options_language;
                     var realItem = list.find(function(it) {
-                        return it.level === _assert_this_initialized$1(_this)._level;
+                        return it.level === _assert_this_initialized$2(_this)._level;
                     });
-                    return "<span>" + escapeHtml(options == null ? void 0 : (_options_locales_options_language = options.locales[options.language]) == null ? void 0 : _options_locales_options_language.VIDEO_LEVEL_AUTO) + "(" + escapeHtml((realItem == null ? void 0 : realItem.name) || '') + ")</span>";
+                    return "<span>" + utilsTools.escapeHtml(options == null ? void 0 : (_options_locales_options_language = options.locales[options.language]) == null ? void 0 : _options_locales_options_language.VIDEO_LEVEL_AUTO) + "(" + utilsTools.escapeHtml((realItem == null ? void 0 : realItem.name) || '') + ")</span>";
                 }
                 // 如果 label 不存在，则不显示label，直接显示list的第一个label， 一般自定义清晰度列表可能会出现
-                return "<span>" + escapeHtml(label || ((_list_ = list[0]) == null ? void 0 : _list_.name) || '') + "</span>";
+                return "<span>" + utilsTools.escapeHtml(label || ((_list_ = list[0]) == null ? void 0 : _list_.name) || '') + "</span>";
             },
             onChange: function onChange(value, item) {
                 var _options_onChange;
                 options == null ? void 0 : (_options_onChange = options.onChange) == null ? void 0 : _options_onChange.call(options, value, item);
                 if (value === 'auto') {
-                    _assert_this_initialized$1(_this).emit(EVENTS.control.definitionChange, 'auto', _assert_this_initialized$1(_this)._level);
+                    _assert_this_initialized$2(_this).emit(EVENTS.control.definitionChange, 'auto', _assert_this_initialized$2(_this)._level);
                 } else {
-                    _assert_this_initialized$1(_this)._level = value;
-                    _assert_this_initialized$1(_this).emit(EVENTS.control.definitionChange, value, item);
+                    _assert_this_initialized$2(_this)._level = value;
+                    _assert_this_initialized$2(_this).emit(EVENTS.control.definitionChange, value, item);
                 }
             },
             onOpenChange: function onOpenChange(open, value, item) {
                 var _options_onOpenChange;
                 options == null ? void 0 : (_options_onOpenChange = options.onOpenChange) == null ? void 0 : _options_onOpenChange.call(options, open, value, item);
-                _assert_this_initialized$1(_this).emit(EVENTS.control.definitionPanelOpenChange, open, value, item);
+                _assert_this_initialized$2(_this).emit(EVENTS.control.definitionPanelOpenChange, open, value, item);
             }
         })) || this, _this._level = '';
         _this.options = options || {};
+        // 清晰度列表更新（设备清晰度 / 能力集查询完成后，主题经 _themeEventemitter 转发过来）
         _this.on(EVENTS.setVideoLevelList, function(list) {
-            Select.prototype.updateOptions.call(_assert_this_initialized$1(_this), __filter(list, _this.locale));
+            Select.prototype.updateOptions.call(_assert_this_initialized$2(_this), __filter(list || [], _this.locale));
         });
         _this.on(EVENTS.currentVideoLevel, function(item, realLevel) {
-            var l = (typeof item === "undefined" ? "undefined" : _type_of(item)) === 'object' ? item.level : item;
+            var l = (typeof item === "undefined" ? "undefined" : _type_of$1(item)) === 'object' ? item.level : item;
             _this._level = realLevel + '';
             if (l === 'auto') {
                 var _options_locales_options_language;
@@ -8541,7 +11319,7 @@ function __filter(list, locale) {
                     return it.level === _this._level;
                 });
                 // 文案来自 options.locales，realItem.name 来自内核下发的清晰度列表，两者都要转义
-                _this.$container.querySelector("." + PREFIX_CLASS + "-select-btn").innerHTML = "\n          <span>" + escapeHtml(options == null ? void 0 : (_options_locales_options_language = options.locales[options.language]) == null ? void 0 : _options_locales_options_language.VIDEO_LEVEL_AUTO) + "(" + escapeHtml((realItem == null ? void 0 : realItem.name) || '') + ")</span>\n        ";
+                _this.$container.querySelector("." + PREFIX_CLASS + "-select-btn").innerHTML = "\n          <span>" + utilsTools.escapeHtml(options == null ? void 0 : (_options_locales_options_language = options.locales[options.language]) == null ? void 0 : _options_locales_options_language.VIDEO_LEVEL_AUTO) + "(" + utilsTools.escapeHtml((realItem == null ? void 0 : realItem.name) || '') + ")</span>\n        ";
             } else {
                 if (_this.value !== _this._level + '') _this.value = _this._level + '';
             }
@@ -8566,21 +11344,21 @@ function __filter(list, locale) {
     'live'
 ];
 
-function _assert_this_initialized(self) {
+function _assert_this_initialized$1(self) {
     if (self === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     return self;
 }
-function _extends$8() {
-    _extends$8 = Object.assign || function assign(target) {
+function _extends$a() {
+    _extends$a = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$8.apply(this, arguments);
+    return _extends$a.apply(this, arguments);
 }
-function _inherits$9(subClass, superClass) {
+function _inherits$a(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function");
     }
@@ -8591,14 +11369,14 @@ function _inherits$9(subClass, superClass) {
             configurable: true
         }
     });
-    if (superClass) _set_prototype_of$9(subClass, superClass);
+    if (superClass) _set_prototype_of$a(subClass, superClass);
 }
-function _set_prototype_of$9(o, p) {
-    _set_prototype_of$9 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+function _set_prototype_of$a(o, p) {
+    _set_prototype_of$a = Object.setPrototypeOf || function setPrototypeOf(o, p) {
         o.__proto__ = p;
         return o;
     };
-    return _set_prototype_of$9(o, p);
+    return _set_prototype_of$a(o, p);
 }
 // 支持的倍速列表, 需要是 2 的指数，不能小于 0.5， 最大 16 倍
 var SUPPORT_SPEED = [
@@ -8637,11 +11415,11 @@ var SPEED_DEFAULT_OPTIONS = {
  *   2. 标准流不支持；
  * @category Control
  */ var Speed = /*#__PURE__*/ function(Select) {
-    _inherits$9(Speed, Select);
+    _inherits$a(Speed, Select);
     function Speed(options) {
         var _this;
         var _options_locales_options_language, _options_locales;
-        _this = Select.call(this, _extends$8({}, SPEED_DEFAULT_OPTIONS, options, {
+        _this = Select.call(this, _extends$a({}, SPEED_DEFAULT_OPTIONS, options, {
             value: (options.props.speed || 1) + '',
             classNameSuffix: 'speed',
             controlType: 'button',
@@ -8650,13 +11428,13 @@ var SPEED_DEFAULT_OPTIONS = {
                 var _options_onChange;
                 value = +value;
                 options == null ? void 0 : (_options_onChange = options.onChange) == null ? void 0 : _options_onChange.call(options, value, item);
-                _assert_this_initialized(_this).emit(EVENTS.control.speedChange, value, item);
+                _assert_this_initialized$1(_this).emit(EVENTS.control.speedChange, value, item);
             },
             onOpenChange: function onOpenChange(open, value, item) {
                 var _options_onOpenChange;
                 value = +value;
                 options == null ? void 0 : (_options_onOpenChange = options.onOpenChange) == null ? void 0 : _options_onOpenChange.call(options, open, value, item);
-                _assert_this_initialized(_this).emit(EVENTS.control.speedPanelOpenChange, open, value, item);
+                _assert_this_initialized$1(_this).emit(EVENTS.control.speedPanelOpenChange, open, value, item);
             }
         })) || this, /** 用户按回放类型传入的倍速列表，切换回放类型时据此重新解析 */ _this._userSpeedLists = {};
         _this._userSpeedLists = {
@@ -8666,7 +11444,7 @@ var SPEED_DEFAULT_OPTIONS = {
             cloudRecord: options.cloudRecord
         };
         var url = options.props.url;
-        _this._updateSpeedList(options.props.recType, url);
+        _this._updateSpeedList(options.props.playType, url);
         _this.on(EVENTS.speedChange, function(speed) {
             if (_this.value !== speed + '') _this.value = speed + '';
         });
@@ -8761,15 +11539,200 @@ var SPEED_DEFAULT_OPTIONS = {
     'cloudRecord'
 ];
 
-function _extends$7() {
-    _extends$7 = Object.assign || function assign(target) {
+function _assert_this_initialized(self) {
+    if (self === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    return self;
+}
+function _extends$9() {
+    _extends$9 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$7.apply(this, arguments);
+    return _extends$9.apply(this, arguments);
+}
+function _inherits$9(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) _set_prototype_of$9(subClass, superClass);
+}
+function _set_prototype_of$9(o, p) {
+    _set_prototype_of$9 = Object.setPrototypeOf || function setPrototypeOf(o, p) {
+        o.__proto__ = p;
+        return o;
+    };
+    return _set_prototype_of$9(o, p);
+}
+/** 默认的码流顺序 */ var DEFAULT_STREAM_TYPES = [
+    {
+        streamTypeIn: 1
+    },
+    {
+        streamTypeIn: 2
+    }
+];
+/** 码流对应的 locale key */ var STREAM_TYPE_LOCALE = {
+    1: 'STREAM_TYPE_MAIN',
+    2: 'STREAM_TYPE_SUB'
+};
+/** 码流对应的兜底文案（locale 缺失时使用） */ var STREAM_TYPE_FALLBACK = {
+    1: '主码流',
+    2: '子码流'
+};
+function isStreamTypeIn(value) {
+    return value === 1 || value === 2;
+}
+/** 把用户传入的码流列表转成 Select 的列表项 */ function toSelectList(list, locale) {
+    if (locale === void 0) locale = {};
+    return ((list == null ? void 0 : list.length) ? list : DEFAULT_STREAM_TYPES).filter(function(item) {
+        return isStreamTypeIn(+(item == null ? void 0 : item.streamTypeIn));
+    }).map(function(item) {
+        var streamTypeIn = +item.streamTypeIn;
+        return {
+            label: item.name || locale[STREAM_TYPE_LOCALE[streamTypeIn]] || STREAM_TYPE_FALLBACK[streamTypeIn],
+            value: streamTypeIn
+        };
+    });
+}
+/**
+ * 码流切换控件（主码流 / 子码流）
+ *
+ * 用于本地回放：设备同时支持主、子码流时，让用户选择回放哪一路码流。
+ * 切换后派发 `Control.streamTypeChange`，参数为 1（主码流）或 2（子码流），由 SDK 层负责实际切换。
+ *
+ * @category Control
+ */ var StreamType = /*#__PURE__*/ function(Select) {
+    _inherits$9(StreamType, Select);
+    function StreamType(options) {
+        if (options === void 0) options = {};
+        var _this;
+        var _ref, _ref1;
+        var _options_locales, _options_props_urlInfo, _options_props, _list_, _options_props1, _options_props2;
+        var locale = (options == null ? void 0 : (_options_locales = options.locales) == null ? void 0 : _options_locales[options.language]) || {};
+        // list 在 StreamTypeOptions 中被 Omit 掉后会退化为 any，这里显式收窄为码流列表
+        var list = toSelectList(options.list, locale);
+        var urlStreamTypeIn = +((_ref = (_options_props = options.props) == null ? void 0 : (_options_props_urlInfo = _options_props.urlInfo) == null ? void 0 : _options_props_urlInfo.streamTypeIn) != null ? _ref : 0);
+        var initial = [
+            options.value,
+            urlStreamTypeIn
+        ].find(function(v) {
+            return isStreamTypeIn(v) && list.some(function(item) {
+                return item.value === v;
+            });
+        });
+        _this = Select.call(this, _extends$9({}, options, {
+            // 列表里没有的码流不能作为初始值，否则按钮上会渲染成空 label
+            value: String((_ref1 = initial != null ? initial : (_list_ = list[0]) == null ? void 0 : _list_.value) != null ? _ref1 : 1),
+            list: list,
+            fieldNames: {
+                label: 'label',
+                value: 'value'
+            },
+            title: locale.BTN_STREAM_TYPE,
+            controlType: 'button',
+            classNameSuffix: 'stream-type',
+            onChange: function onChange(value, item) {
+                var _options_onChange;
+                var streamTypeIn = +value;
+                options == null ? void 0 : (_options_onChange = options.onChange) == null ? void 0 : _options_onChange.call(options, streamTypeIn, item);
+                _assert_this_initialized(_this).emit(EVENTS.control.streamTypeChange, streamTypeIn, item);
+            },
+            onOpenChange: function onOpenChange(open, value, item) {
+                var _options_onOpenChange;
+                var streamTypeIn = +value;
+                options == null ? void 0 : (_options_onOpenChange = options.onOpenChange) == null ? void 0 : _options_onOpenChange.call(options, open, streamTypeIn, item);
+                _assert_this_initialized(_this).emit(EVENTS.control.streamTypePanelOpenChange, open, streamTypeIn, item);
+            }
+        })) || this, /** 设备是否支持主子码流，默认 false */ _this._supported = false, /** 当前回放类型 */ _this._recType = '';
+        // SDK / 外部同步当前码流（例如切换地址后），只改显示，不再派发 Control.streamTypeChange
+        _this.on(EVENTS.streamTypeChange, function(streamTypeIn) {
+            if (_this.list.some(function(item) {
+                return item.value + '' === streamTypeIn + '';
+            }) && _this.value !== streamTypeIn + '') {
+                _this.value = streamTypeIn + '';
+            }
+        });
+        // 手动切换回放类型（Rec 控件）后同步显隐
+        _this.on(EVENTS.control.recTypeChange, function(type) {
+            return _this.syncByRecType(type);
+        });
+        // 初始状态：默认不支持（隐藏），props.supportLocalRecordStreamType 为 true（事件早于控件渲染）时才展示
+        _this._supported = ((_options_props1 = options.props) == null ? void 0 : _options_props1.supportLocalRecordStreamType) === true;
+        _this.syncByRecType((_options_props2 = options.props) == null ? void 0 : _options_props2.playType);
+        return _this;
+    }
+    var _proto = StreamType.prototype;
+    /**
+   * 设置是否支持主子码流切换。默认不支持（控件隐藏），收到 `supportLocalRecordStreamType` 事件后调用。
+   * @param support 默认 true
+   * @param streamTypeIn 可选，同时同步当前码流（1 主码流 / 2 子码流），列表里没有的值会被忽略
+   */ _proto.setSupported = function setSupported(support, streamTypeIn) {
+        if (support === void 0) support = true;
+        this._supported = support;
+        if ((streamTypeIn === 1 || streamTypeIn === 2) && this.list.some(function(item) {
+            return item.value + '' === streamTypeIn + '';
+        }) && this.value !== streamTypeIn + '') {
+            this.value = streamTypeIn + '';
+        }
+        this._updateVisible();
+    };
+    /**
+   * 按回放类型更新显隐：只有本地回放（`rec`）才有主、子码流，直播、云存储、云录制下隐藏。
+   *
+   * 在初始化、手动切换回放类型、播放地址切换（首帧）后调用。
+   * @param recType 回放类型，直播 / 未知时为空
+   */ _proto.syncByRecType = function syncByRecType(recType) {
+        this._recType = recType || '';
+        this._updateVisible();
+    };
+    /** 显示条件：设备支持主子码流 且 当前是本地回放 */ _proto._updateVisible = function _updateVisible() {
+        var visible = this._supported && this._recType === 'rec';
+        this.$container.style.display = visible ? '' : 'none';
+        this.$container.classList.toggle("" + PREFIX_CLASS + "-hide", !visible);
+    };
+    /**
+   * 重置，恢复默认码流（列表第一项，通常是主码流）
+   * @param hide 默认不隐藏
+   */ _proto.reset = function reset(hide) {
+        var _this_list_, _this_list;
+        var first = (_this_list = this.list) == null ? void 0 : (_this_list_ = _this_list[0]) == null ? void 0 : _this_list_.value;
+        if (first !== undefined) this.value = first + '';
+        Select.prototype.reset.call(this, hide);
+    };
+    return StreamType;
+}(Select);
+/**
+   * 码流切换只对本地回放有意义（设备存储的录像分主、子码流两路），
+   * 直播的主子码流由清晰度控件（`definition`）承担；云存储 / 云录制没有这个概念。
+   *
+   * 这里仍声明三类回放都「支持」：内置回放模板（pcRec / mobileRec）是三类回放共用的，
+   * 控件自己会在非本地回放时隐藏（见 {@link syncByRecType}），不需要再对云回放告警；
+   * 直播地址配回放模板时依然会提示。
+   */ StreamType.supportedPlayTypes = [
+    'rec',
+    'cloudRec',
+    'cloudRecord'
+];
+
+function _extends$8() {
+    _extends$8 = Object.assign || function assign(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends$8.apply(this, arguments);
 }
 function _inherits$8(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
@@ -8799,7 +11762,7 @@ function _set_prototype_of$8(o, p) {
     function DatePickerControl(options) {
         var _this;
         var _this_options_props_urlInfo_searchParams, _this_options_props_urlInfo, _this_options_props;
-        _this = Control.call(this, _extends$7({
+        _this = Control.call(this, _extends$8({
             maxDate: new Date()
         }, options, {
             tagName: 'span',
@@ -8826,14 +11789,14 @@ function _set_prototype_of$8(o, p) {
         if (isMobile1) {
             var _this_locale;
             // title 来自 options.locales，必须转义后再拼进属性
-            this.$container.innerHTML = '\n        <span class="' + PREFIX_CLASS + '-mobile-date-filter" title="' + escapeHtml(((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_CALENDAR) || '') + '">\n          <span class="' + PREFIX_CLASS + '-mobile-date-filter-value">' + escapeHtml(this._getDateStr()) + "</span>\n          " + IconComponents.filter() + "\n        <span>";
+            this.$container.innerHTML = '\n        <span class="' + PREFIX_CLASS + '-mobile-date-filter" title="' + utilsTools.escapeHtml(((_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_CALENDAR) || '') + '">\n          <span class="' + PREFIX_CLASS + '-mobile-date-filter-value">' + utilsTools.escapeHtml(this._getDateStr()) + "</span>\n          " + IconComponents.filter() + "\n        <span>";
         } else {
             var _this_locale1;
             this.$container.innerHTML = IconComponents.date({
                 title: (_this_locale1 = this.locale) == null ? void 0 : _this_locale1.BTN_CALENDAR
             });
         }
-        this.datePicker = new controlDatePicker.DatePicker(this.$container, _extends$7({
+        this.datePicker = new controlDatePicker.DatePicker(this.$container, _extends$8({
             isMobile: isMobile1,
             mode: 'date',
             offset: [
@@ -8975,15 +11938,15 @@ function _set_prototype_of$8(o, p) {
     'cloudRecord'
 ];
 
-function _extends$6() {
-    _extends$6 = Object.assign || function assign(target) {
+function _extends$7() {
+    _extends$7 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$6.apply(this, arguments);
+    return _extends$7.apply(this, arguments);
 }
 function _inherits$7(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
@@ -9014,7 +11977,7 @@ function _set_prototype_of$7(o, p) {
     function TimePickerControl(options) {
         var _this;
         var _this_options_props_urlInfo_searchParams, _this_options_props_urlInfo, _this_options_props;
-        _this = Control.call(this, _extends$6({}, options, {
+        _this = Control.call(this, _extends$7({}, options, {
             tagName: 'span',
             controlType: 'button',
             classNameSuffix: 'time'
@@ -9040,7 +12003,7 @@ function _set_prototype_of$7(o, p) {
             title: (_this_locale = this.locale) == null ? void 0 : _this_locale.BTN_TIME
         });
         // }
-        this.timePicker = new controlDatePicker.TimePicker(this.$container, _extends$6({
+        this.timePicker = new controlDatePicker.TimePicker(this.$container, _extends$7({
             showHeader: false,
             isMobile: false,
             offset: [
@@ -9116,15 +12079,15 @@ function _set_prototype_of$7(o, p) {
     'cloudRecord'
 ];
 
-function _extends$5() {
-    _extends$5 = Object.assign || function assign(target) {
+function _extends$6() {
+    _extends$6 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$5.apply(this, arguments);
+    return _extends$6.apply(this, arguments);
 }
 function _inherits$6(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
@@ -9153,7 +12116,7 @@ function _set_prototype_of$6(o, p) {
     function TimeLineControl(options) {
         var _this;
         var _this__options_props, _this__options;
-        _this = Control.call(this, _extends$5({}, options, {
+        _this = Control.call(this, _extends$6({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'time-line'
@@ -9191,7 +12154,7 @@ function _set_prototype_of$6(o, p) {
         var _this = this;
         var _this__options_showTimeWidthBtn, _this__options_showCoverFold;
         var _this_timeLineUtil_updateTimeSections, _this_timeLineUtil;
-        var _timeLineOptions = _extends$5({
+        var _timeLineOptions = _extends$6({
             language: this._options.language || 'zh',
             coverQuery: this._options.coverQuery || '',
             showTimeWidthBtn: (_this__options_showTimeWidthBtn = this._options.showTimeWidthBtn) != null ? _this__options_showTimeWidthBtn : true,
@@ -9320,15 +12283,15 @@ function _set_prototype_of$6(o, p) {
     'cloudRecord'
 ];
 
-function _extends$4() {
-    _extends$4 = Object.assign || function assign(target) {
+function _extends$5() {
+    _extends$5 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$4.apply(this, arguments);
+    return _extends$5.apply(this, arguments);
 }
 function _inherits$5(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
@@ -9386,7 +12349,7 @@ function _set_prototype_of$5(o, p) {
     function SegmentProgressControl(options) {
         var _this;
         var _this__options_props, _this__options_props1;
-        _this = Control.call(this, _extends$4({}, options, {
+        _this = Control.call(this, _extends$5({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'segment-progress'
@@ -9542,15 +12505,15 @@ function _set_prototype_of$5(o, p) {
     'cloudRecord'
 ];
 
-function _extends$3() {
-    _extends$3 = Object.assign || function assign(target) {
+function _extends$4() {
+    _extends$4 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$3.apply(this, arguments);
+    return _extends$4.apply(this, arguments);
 }
 function _inherits$4(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
@@ -9579,7 +12542,7 @@ function _set_prototype_of$4(o, p) {
     _inherits$4(Device, Control);
     function Device(options) {
         var _this;
-        _this = Control.call(this, _extends$3({}, options, {
+        _this = Control.call(this, _extends$4({}, options, {
             tagName: 'span',
             controlType: 'text',
             classNameSuffix: 'device'
@@ -9636,6 +12599,7 @@ var Controls = {
     globalFullscreen: GlobalFullscreen,
     rec: Rec,
     speed: Speed,
+    streamType: StreamType,
     date: DatePickerControl,
     time: TimePickerControl,
     timeLine: TimeLineControl,
@@ -9806,15 +12770,15 @@ function _set_prototype_of$2(o, p) {
     return MobileExtend;
 }(EventEmitter);
 
-function _extends$2() {
-    _extends$2 = Object.assign || function assign(target) {
+function _extends$3() {
+    _extends$3 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$2.apply(this, arguments);
+    return _extends$3.apply(this, arguments);
 }
 function _inherits$1(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
@@ -9845,7 +12809,7 @@ var PAUSE_DEFAULT_OPTIONS = {};
     function Pause(options) {
         if (options === void 0) options = {};
         var _this;
-        _this = Control.call(this, Object.assign({}, PAUSE_DEFAULT_OPTIONS, _extends$2({}, options, {
+        _this = Control.call(this, Object.assign({}, PAUSE_DEFAULT_OPTIONS, _extends$3({}, options, {
             tagName: 'div',
             controlType: 'block',
             classNameSuffix: 'pause'
@@ -10025,7 +12989,7 @@ function _array_like_to_array$1(arr, len) {
     for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
     return arr2;
 }
-function asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
         var value = info.value;
@@ -10036,16 +13000,16 @@ function asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, key, arg) {
     if (info.done) resolve(value);
     else Promise.resolve(value).then(_next, _throw);
 }
-function _async_to_generator$1(fn) {
+function _async_to_generator$3(fn) {
     return function() {
         var self = this, args = arguments;
         return new Promise(function(resolve, reject) {
             var gen = fn.apply(self, args);
             function _next(value) {
-                asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, "next", value);
+                asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, "next", value);
             }
             function _throw(err) {
-                asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, "throw", err);
+                asyncGeneratorStep$3(gen, resolve, reject, _next, _throw, "throw", err);
             }
             _next(undefined);
         });
@@ -10069,17 +13033,17 @@ function _create_for_of_iterator_helper_loose$1(o, allowArrayLike) {
     }
     throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _extends$1() {
-    _extends$1 = Object.assign || function assign(target) {
+function _extends$2() {
+    _extends$2 = Object.assign || function assign(target) {
         for(var i = 1; i < arguments.length; i++){
             var source = arguments[i];
             for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
         }
         return target;
     };
-    return _extends$1.apply(this, arguments);
+    return _extends$2.apply(this, arguments);
 }
-function _ts_generator$1(thisArg, body) {
+function _ts_generator$3(thisArg, body) {
     var f, y, t, _ = {
         label: 0,
         sent: function() {
@@ -10192,7 +13156,8 @@ var AUTH_KEY = [
     'aiChat',
     'live',
     'recDropdown',
-    'alarmMessage'
+    'alarmMessage',
+    'broadcast'
 ];
 /**
  * 校验控件是否支持当前播放类型，不支持只提示、**不阻止渲染**
@@ -10242,12 +13207,12 @@ function _renderControls(theme, $container, btnList, props) {
                     if (!((_theme_controls = theme.controls) == null ? void 0 : _theme_controls["deviceControl"])) {
                         var _theme_urlInfo, _theme_urlInfo1, _theme_options;
                         // eslint-disable-next-line @typescript-eslint/dot-notation, new-cap, @typescript-eslint/no-unsafe-argument
-                        theme.controls["deviceControl"] = new Controls["device"](_extends$1({
+                        theme.controls["deviceControl"] = new Controls["device"](_extends$2({
                             rootContainer: theme.$container,
                             getPopupContainer: function getPopupContainer() {
                                 return $container;
                             },
-                            recType: theme.recType,
+                            playType: theme.playType,
                             language: theme.options.language,
                             locales: theme.i18n.translations,
                             type: theme.options.type,
@@ -10273,7 +13238,7 @@ function _renderControls(theme, $container, btnList, props) {
                         continue;
                     }
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                    theme.controls["" + item.iconId + "Control"] = new Controls[item.iconId](_extends$1({
+                    theme.controls["" + item.iconId + "Control"] = new Controls[item.iconId](_extends$2({
                         rootContainer: theme.$container,
                         getPopupContainer: function getPopupContainer() {
                             return $container;
@@ -10304,9 +13269,9 @@ function _renderControls(theme, $container, btnList, props) {
     }
 }
 function _renderTheme(theme, data) {
-    return _async_to_generator$1(function() {
+    return _async_to_generator$3(function() {
         var _ref, _theme_posterControl, _filterThemeData_header, _filterThemeData_footer, _theme_urlInfo, _theme_playbackRange, _theme_playbackRange1, _theme_options_mobileExtendOptions_controls, _theme_options_mobileExtendOptions, themeData, filterThemeData, props, _$_filterLeftRightControls, leftBtns, rightBtns, _theme_controls, _theme_controls1, _$_filterLeftRightControls1, leftBtns1, rightBtns1, list, _needTimeLine, _hasPlaybackRange, _needDatePicker, hasPtz, _theme_options_mobileExtendOptions1, _theme_options_mobileExtendOptions2, _theme_options_mobileExtendOptions3, _theme_options_mobileExtendOptions4, _theme_controls2, _theme_options_mobileExtendOptions5, _theme_options_mobileExtendOptions_controls1, _theme_options_mobileExtendOptions6, _ref1, _filterThemeData_header1, _filterThemeData_footer1, _theme_options;
-        return _ts_generator$1(this, function(_state) {
+        return _ts_generator$3(this, function(_state) {
             switch(_state.label){
                 case 0:
                     return [
@@ -10327,7 +13292,7 @@ function _renderTheme(theme, data) {
                         ];
                     }
                     if (theme.options.loadingOptions !== null) {
-                        theme._loadingControl = new Loading(_extends$1({
+                        theme._loadingControl = new Loading(_extends$2({
                             language: theme.options.language,
                             locales: theme.i18n.translations
                         }, theme.options.loadingOptions || {}, {
@@ -10337,7 +13302,7 @@ function _renderTheme(theme, data) {
                         }));
                     }
                     if (theme.options.pauseOptions !== null) {
-                        theme._pauseControl = new Pause(_extends$1({
+                        theme._pauseControl = new Pause(_extends$2({
                             language: theme.options.language,
                             locales: theme.i18n.translations
                         }, theme.options.pauseOptions || {}, {
@@ -10350,7 +13315,7 @@ function _renderTheme(theme, data) {
                         }
                     }
                     if (theme.options.messageOptions !== null) {
-                        theme.messageControl = new Message(_extends$1({
+                        theme.messageControl = new Message(_extends$2({
                             rootContainer: theme.$container
                         }, theme.options.messageOptions || {}, {
                             getPopupContainer: function getPopupContainer() {
@@ -10359,7 +13324,7 @@ function _renderTheme(theme, data) {
                         }));
                     }
                     if (theme.options.posterOptions !== null) {
-                        theme.posterControl = new Poster(_extends$1({}, theme.options.posterOptions || {}, {
+                        theme.posterControl = new Poster(_extends$2({}, theme.options.posterOptions || {}, {
                             getPopupContainer: function getPopupContainer() {
                                 return theme.contentControl.$video;
                             }
@@ -10504,7 +13469,7 @@ function _renderTheme(theme, data) {
                             // 移动端：在 rec 控件旁渲染 alarmMessage 按钮
                             if (theme.options.alarmMessageOptions !== null && !((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2['alarmMessageControl']) && theme.options.sdkType === 'base') {
                                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                                theme.controls['alarmMessageControl'] = new Controls['alarmMessage'](_extends$1({
+                                theme.controls['alarmMessageControl'] = new Controls['alarmMessage'](_extends$2({
                                     rootContainer: theme.$container,
                                     getPopupContainer: function getPopupContainer() {
                                         var _theme__mobileExtend;
@@ -10548,7 +13513,7 @@ var _renderTimeLine = function _renderTimeLine(theme, container, props) {
         var _ref;
         var _theme_urlInfo, _theme_urlInfo1, _theme_options, _theme_options1, _this, _theme_options2;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        theme.controls.timeLineControl = new Controls['timeLine'](_extends$1({
+        theme.controls.timeLineControl = new Controls['timeLine'](_extends$2({
             getPopupContainer: function getPopupContainer() {
                 return container;
             },
@@ -10568,7 +13533,7 @@ var _renderSegmentProgress = function _renderSegmentProgress(theme, container, p
     if (!theme.controls.segmentProgressControl && theme.options.segmentProgressOptions !== null) {
         var _theme_options;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        theme.controls.segmentProgressControl = new Controls['segmentProgress'](_extends$1({
+        theme.controls.segmentProgressControl = new Controls['segmentProgress'](_extends$2({
             rootContainer: theme.$container,
             getPopupContainer: function getPopupContainer() {
                 return container;
@@ -10587,7 +13552,7 @@ var _renderDatePicker = function _renderDatePicker(theme, container, props) {
     if (!theme.controls.dateControl && theme.options.dateOptions !== null) {
         var _theme_options;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        theme.controls.dateControl = new Controls['date'](_extends$1({
+        theme.controls.dateControl = new Controls['date'](_extends$2({
             getPopupContainer: function getPopupContainer() {
                 return container;
             },
@@ -10605,7 +13570,7 @@ var _renderTimePicker = function _renderTimePicker(theme, container, props) {
     if (!theme.controls.timeControl && theme.options.timeOptions !== null) {
         var _theme_options;
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        theme.controls.timeControl = new Controls['time'](_extends$1({
+        theme.controls.timeControl = new Controls['time'](_extends$2({
             getPopupContainer: function getPopupContainer() {
                 return container;
             },
@@ -10618,17 +13583,17 @@ var _renderTimePicker = function _renderTimePicker(theme, container, props) {
         _checkPlayTypeSupport(theme, 'time', Controls['time']);
     }
 };
-var _renderRecType = function _renderRecType(theme, container, recType, props) {
+var _renderRecType = function _renderRecType(theme, container, playType, props) {
     if (props === void 0) props = {};
     var _theme_controls, _theme_controls1, _theme_controls2;
     if (!((_theme_controls = theme.controls) == null ? void 0 : _theme_controls['recControl']) && theme.options.recOptions !== null && container) {
         var _theme_options;
         // eslint-disable-next-line @typescript-eslint/dot-notation, new-cap, @typescript-eslint/no-unsafe-argument
-        theme.controls['recControl'] = new Controls['rec'](_extends$1({
+        theme.controls['recControl'] = new Controls['rec'](_extends$2({
             getPopupContainer: function getPopupContainer() {
                 return container;
             },
-            recType: theme.recType,
+            playType: theme.playType,
             language: theme.options.language,
             locales: theme.i18n.translations
         }, ((_theme_options = theme.options) == null ? void 0 : _theme_options["recOptions"]) || {}, {
@@ -10637,7 +13602,7 @@ var _renderRecType = function _renderRecType(theme, container, recType, props) {
         theme.emit(EVENTS.control.recControlInit);
         _checkPlayTypeSupport(theme, 'rec', Controls['rec']);
     }
-    if ((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1['recControl']) ((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2['recControl']).addRecType(recType);
+    if ((_theme_controls1 = theme.controls) == null ? void 0 : _theme_controls1['recControl']) ((_theme_controls2 = theme.controls) == null ? void 0 : _theme_controls2['recControl']).addRecType(playType);
 };
 
 /**
@@ -10729,6 +13694,1803 @@ var _renderRecType = function _renderRecType(theme, container, recType, props) {
  * footer 剩余空间是否足够把一个控件从 More 释放回工具栏。
  */ function shouldExpandFooter(width, leftWidth, rightWidth, offset) {
     return width - leftWidth - rightWidth > offset;
+}
+
+/**
+ * 归一化用户 ECDH 启用意愿
+ *   严格布尔判定：true → 启用，其他（含缺失、false、undefined）→ 不启用
+ *
+ * 业务侧使用：
+ *   new EZUIKitPlayer({ useEcdh: true })
+ *
+ * @param v 用户传入的 opts.useEcdh 值
+ */ function normalizeEcdhIntent(v) {
+    return v === true;
+}
+/**
+ * 把能力集字段归一化为数字数组
+ *   - 数组         : 元素逐个 Number() → 过滤 NaN
+ *   - 字符串       : "1" / "1,2" / "1，2" 按 , 或 中文逗号 切分 → Number()
+ *   - 数字         : 包成单元素数组
+ *   - 其他 / 缺失  : 空数组
+ *
+ * 服务端实测返回（open.ys7.com /api/lapp/device/capacity）：
+ *   支持预览:                "support_ecdh_v2": "1"
+ *   支持预览+回放:            "support_ecdh_v2": "1,2"
+ *   多数设备:                (字段缺失)
+ */ function normalizeCapArray(cap) {
+    if (cap === undefined || cap === null || cap === '') return [];
+    if (Array.isArray(cap)) {
+        return cap.map(function(v) {
+            return Number(v);
+        }).filter(function(v) {
+            return !Number.isNaN(v);
+        });
+    }
+    if (typeof cap === 'string') {
+        return cap.split(/[,，]/).map(function(s) {
+            return s.trim();
+        }).filter(function(s) {
+            return s !== '';
+        }).map(function(s) {
+            return Number(s);
+        }).filter(function(v) {
+            return !Number.isNaN(v);
+        });
+    }
+    if (typeof cap === 'number') {
+        return Number.isNaN(cap) ? [] : [
+            cap
+        ];
+    }
+    return [];
+}
+/**
+ * 判定设备能力集是否支持指定的 ECDH 场景值
+ *
+ * 判定规则：
+ *   1. 归一化后为空 → 不支持（保守策略）
+ *   2. 包含 0 → 一票否决，即使同时包含其他值也不启用
+ *      （0 = 服务端明确标记「设备不支持 ECDH」）
+ *   3. 包含 wanted 值 → 支持
+ *
+ * @param cap deviceCapacity.support_ecdh_v2（数组 / 字符串 / 数字 / 缺失均可）
+ * @param wanted 期望匹配的场景值（预览=1 / 回放=2）
+ * @returns 支持则返回 true
+ */ function isEcdhSupported(cap, wanted) {
+    var values = normalizeCapArray(cap);
+    if (values.length === 0) return false;
+    // 0 = 明确不支持标识，一票否决
+    if (values.includes(0)) return false;
+    return values.includes(wanted);
+}
+
+function asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, key, arg) {
+    try {
+        var info = gen[key](arg);
+        var value = info.value;
+    } catch (error) {
+        reject(error);
+        return;
+    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
+}
+function _async_to_generator$2(fn) {
+    return function() {
+        var self = this, args = arguments;
+        return new Promise(function(resolve, reject) {
+            var gen = fn.apply(self, args);
+            function _next(value) {
+                asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, "next", value);
+            }
+            function _throw(err) {
+                asyncGeneratorStep$2(gen, resolve, reject, _next, _throw, "throw", err);
+            }
+            _next(undefined);
+        });
+    };
+}
+function _instanceof(left, right) {
+    "@swc/helpers - instanceof";
+    if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
+        return !!right[Symbol.hasInstance](left);
+    } else return left instanceof right;
+}
+function _ts_generator$2(thisArg, body) {
+    var f, y, t, _ = {
+        label: 0,
+        sent: function() {
+            if (t[0] & 1) throw t[1];
+            return t[1];
+        },
+        trys: [],
+        ops: []
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
+    }), g;
+    function verb(n) {
+        return function(v) {
+            return step([
+                n,
+                v
+            ]);
+        };
+    }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while(g && (g = 0, op[0] && (_ = 0)), _)try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [
+                op[0] & 2,
+                t.value
+            ];
+            switch(op[0]){
+                case 0:
+                case 1:
+                    t = op;
+                    break;
+                case 4:
+                    _.label++;
+                    return {
+                        value: op[1],
+                        done: false
+                    };
+                case 5:
+                    _.label++;
+                    y = op[1];
+                    op = [
+                        0
+                    ];
+                    continue;
+                case 7:
+                    op = _.ops.pop();
+                    _.trys.pop();
+                    continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                        _ = 0;
+                        continue;
+                    }
+                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                        _.label = op[1];
+                        break;
+                    }
+                    if (op[0] === 6 && _.label < t[1]) {
+                        _.label = t[1];
+                        t = op;
+                        break;
+                    }
+                    if (t && _.label < t[2]) {
+                        _.label = t[2];
+                        _.ops.push(op);
+                        break;
+                    }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop();
+                    continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) {
+            op = [
+                6,
+                e
+            ];
+            y = 0;
+        } finally{
+            f = t = 0;
+        }
+        if (op[0] & 5) throw op[1];
+        return {
+            value: op[0] ? op[1] : void 0,
+            done: true
+        };
+    }
+}
+function _type_of(obj) {
+    "@swc/helpers - typeof";
+    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
+}
+/**
+ * 接口返回体是否表示成功：
+ * - 带 `code`（开放平台 lapp 接口）或 `meta.code`（service 接口）时，以 200 为成功
+ * - 两者都没有（services 已处理成列表 / 对象的结果）时视为成功
+ */ function _isSuccess(res) {
+    var _r_meta;
+    if (res === null || (typeof res === "undefined" ? "undefined" : _type_of(res)) !== 'object' || Array.isArray(res)) return true;
+    var r = res;
+    if (r.code !== undefined) return +r.code === 200;
+    if (((_r_meta = r.meta) == null ? void 0 : _r_meta.code) !== undefined) return +r.meta.code === 200;
+    return true;
+}
+/**
+ * 主题层调用 services 接口的统一规则：
+ * 1. 未初始化 services 时直接返回 `undefined`，不发请求
+ * 2. 打印 `[https request] <name>Service()` 日志
+ * 3. 请求成功派发 `type: 'http'` 事件（文案 `<I18N>_SUCCESS`），返回体为错误码时派发 `type: 'httpError'`（文案 `<I18N>_FAILED`）；
+ *    载荷带 `data`（接口结果）与 `path`（接口路径），事件名为 `EVENTS.http[name]`
+ * 4. 请求抛错时派发 `type: 'httpError'`（`data` 为空串），**不向外抛出**，返回 `undefined`
+ *
+ * @param theme 主题实例
+ * @param name 接口名，同时是 `EVENTS.http` 的 key 与 services 的方法名
+ * @param path 接口路径，放进事件载荷的 `path`
+ * @param i18nKey 文案前缀，成功 / 失败分别拼 `_SUCCESS` / `_FAILED`
+ * @param request 实际调用 services 的函数
+ * @param isSuccess 自定义成功判定，默认 {@link _isSuccess}（如取流地址以「非空字符串」为成功）
+ */ function _request() {
+    return _async_to_generator$2(function(theme, name, path, i18nKey, request, isSuccess) {
+        var _theme_logger, res, error, _theme_logger1;
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (isSuccess === void 0) isSuccess = _isSuccess;
+                    if (!theme.services) return [
+                        2,
+                        undefined
+                    ];
+                    (_theme_logger = theme.logger) == null ? void 0 : _theme_logger.log("[https request] " + name + "Service()");
+                    _state.label = 1;
+                case 1:
+                    _state.trys.push([
+                        1,
+                        3,
+                        ,
+                        4
+                    ]);
+                    return [
+                        4,
+                        request(theme.services)
+                    ];
+                case 2:
+                    res = _state.sent();
+                    if (isSuccess(res)) {
+                        theme.builderEvent(EVENTS.http[name], 'http', {
+                            data: res,
+                            path: path
+                        }, "" + i18nKey + "_SUCCESS");
+                    } else {
+                        theme.builderEvent(EVENTS.http[name], 'httpError', {
+                            data: res,
+                            path: path
+                        }, "" + i18nKey + "_FAILED");
+                    }
+                    return [
+                        2,
+                        res
+                    ];
+                case 3:
+                    error = _state.sent();
+                    (_theme_logger1 = theme.logger) == null ? void 0 : _theme_logger1.error("" + name + " failed:", error);
+                    theme.builderEvent(EVENTS.http[name], 'httpError', {
+                        data: '',
+                        path: path
+                    }, "" + i18nKey + "_FAILED");
+                    return [
+                        2,
+                        undefined
+                    ];
+                case 4:
+                    return [
+                        2
+                    ];
+            }
+        });
+    }).apply(this, arguments);
+}
+/**
+ * 获取 ezopen 私有流的 wss 取流地址 + 能力集接口
+ *
+ * 9.0.14 (OPOOL-11457) ECDH 全链路加密判定在这里完成，判定结果以 `devecdh` 系统参数追加到取流地址：
+ *   1. 用户意愿 `options.useEcdh` 为真值（顶层开关字段，与 wsParams 语义解耦）
+ *   2. 设备能力集 `support_ecdh_v2` 包含当前场景对应值（预览=1 / 回放=2）
+ *   两者都满足才追加 `devecdh=<场景值>`；对讲(3)/套包(4-6)/UDP(7) 暂不实现。
+ *   能力集查询自带缓存，失败降级为空能力集，此时按不支持处理，走非加密链路。
+ *
+ * 取流地址为非空字符串时派发 `http` 事件，接口返回错误码 / 空串时派发 `httpError`。
+ *
+ * @returns wss 取流地址；接口返回错误码时为接口原始结果，请求失败为空串；
+ *   非 ezopen 地址、未初始化 services 或请求异常时为 undefined
+ */ function _getEzopenUrlService(theme, url) {
+    return _async_to_generator$2(function() {
+        var useEcdh, _ref, streamUrl, capacity, wantedEcdh;
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (!theme.isEzopen) return [
+                        2,
+                        undefined
+                    ];
+                    useEcdh = normalizeEcdhIntent(theme.options.useEcdh);
+                    return [
+                        4,
+                        Promise.all([
+                            _request(theme, 'getEzopenUrl', API.ezopen, 'GET_EZOPEN_URL', function(services) {
+                                return _async_to_generator$2(function() {
+                                    return _ts_generator$2(this, function(_state) {
+                                        switch(_state.label){
+                                            case 0:
+                                                return [
+                                                    4,
+                                                    services.getEzopenUrl(url)
+                                                ];
+                                            case 1:
+                                                return [
+                                                    2,
+                                                    _state.sent()
+                                                ];
+                                        }
+                                    });
+                                })();
+                            }, function(res) {
+                                return typeof res === 'string' && !!res;
+                            }),
+                            _getDeviceCapacityService(theme)
+                        ])
+                    ];
+                case 1:
+                    _ref = _state.sent(), streamUrl = _ref[0], capacity = _ref[1];
+                    // 只有拿到了取流地址（字符串）才追加 devecdh；错误码对象 / 空串 / undefined 原样返回
+                    if (!useEcdh || typeof streamUrl !== 'string' || !streamUrl) return [
+                        2,
+                        streamUrl
+                    ];
+                    // 场景判定与 services 拼 biz 参数的规则保持一致
+                    wantedEcdh = (theme.url || '').includes('.live') ? 1 : 2;
+                    if (!isEcdhSupported(capacity == null ? void 0 : capacity.support_ecdh_v2, wantedEcdh)) return [
+                        2,
+                        streamUrl
+                    ];
+                    return [
+                        2,
+                        buildStreamUrl({
+                            baseUrl: streamUrl,
+                            systemParams: {
+                                devecdh: String(wantedEcdh)
+                            }
+                        })
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取设备能力集；能力集支持客户端自动清晰度时，同步刷新清晰度列表 https://open.ys7.com/help/678
+ * @since 3.2.0
+ */ function _getDeviceCapacityService(theme) {
+    return _async_to_generator$2(function() {
+        var res;
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getDeviceCapacity', API.getDeviceCapacity, 'GET_CAPACITY', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getDeviceCapacity()
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    res = _state.sent();
+                    if (res && theme.videoLevelList.find(function(item) {
+                        return item.level === 'auto';
+                    })) {
+                        theme.emit(EVENTS.setVideoLevelList, theme.videoLevelList);
+                    }
+                    return [
+                        2,
+                        res
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取设备信息，并同步到设备信息控件 https://open.ys7.com/help/672
+ * @since 3.2.0
+ */ function _getDeviceInfoService(theme) {
+    return _async_to_generator$2(function() {
+        var res, _theme_controls_deviceControl_update, _theme_controls_deviceControl, _theme_controls;
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getDeviceInfo', API.getDeviceInfo, 'GET_DEVICE_INFO', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getDeviceInfo()
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    res = _state.sent();
+                    if (res) {
+                        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_deviceControl = _theme_controls.deviceControl) == null ? void 0 : (_theme_controls_deviceControl_update = _theme_controls_deviceControl.update) == null ? void 0 : _theme_controls_deviceControl_update.call(_theme_controls_deviceControl, res.deviceName, res.deviceSerial);
+                    }
+                    return [
+                        2,
+                        res
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取设备支持清晰度列表，并刷新清晰度列表
+ * @since 3.2.0
+ */ function _getDeviceSupportQualityService(theme) {
+    return _async_to_generator$2(function() {
+        var res;
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getDeviceSupportQuality', API.getDeviceSupportQuality, 'GET_DEVICE_SUPPORT_QUALITY', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getDeviceSupportQuality()
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    res = _state.sent();
+                    if (res) {
+                        theme.emit(EVENTS.setVideoLevelList, theme.videoLevelList);
+                    }
+                    return [
+                        2,
+                        res
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 语音广播三个接口（`queryVoiceList` / `sendVoice` / `sendVoiceOnce`）的统一规则，与广播面板内置接口同一通道：
+ * 1. 未初始化 services 时直接返回 `undefined`，不发请求
+ * 2. 打印 `[https request] <api>Service()` 日志
+ * 3. 把结果组装成 `{ api, success, code, msg, data }` 并派发 `EVENTS.control.broadcastApiResult`；
+ *    `EVENTS.http` 事件不在这里派发，由 `_themeEventemitter` 监听 `broadcastApiResult` 统一派发（面板路径同样如此，不会重复）
+ * 4. 请求抛错时 `success: false`、`data` 为原始错误，**不向外抛出**，返回 `undefined`
+ *
+ * @param theme 主题实例
+ * @param api 接口名，同时是 services 的方法名
+ * @param request 实际调用 services 的函数
+ */ function _voiceRequest(theme, api, request) {
+    return _async_to_generator$2(function() {
+        var _theme_logger, res, result, _ref, _body_code, _body_meta, body, error, _theme_logger1;
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (!theme.services) return [
+                        2,
+                        undefined
+                    ];
+                    (_theme_logger = theme.logger) == null ? void 0 : _theme_logger.log("[https request] " + api + "Service()");
+                    _state.label = 1;
+                case 1:
+                    _state.trys.push([
+                        1,
+                        3,
+                        ,
+                        4
+                    ]);
+                    return [
+                        4,
+                        request(theme.services)
+                    ];
+                case 2:
+                    res = _state.sent();
+                    body = res !== null && (typeof res === "undefined" ? "undefined" : _type_of(res)) === 'object' ? res : {};
+                    result = {
+                        api: api,
+                        success: _isSuccess(res),
+                        code: String((_ref = (_body_code = body.code) != null ? _body_code : (_body_meta = body.meta) == null ? void 0 : _body_meta.code) != null ? _ref : ''),
+                        msg: typeof body.msg === 'string' ? body.msg : '',
+                        data: res
+                    };
+                    return [
+                        3,
+                        4
+                    ];
+                case 3:
+                    error = _state.sent();
+                    (_theme_logger1 = theme.logger) == null ? void 0 : _theme_logger1.error("" + api + " failed:", error);
+                    res = undefined;
+                    result = {
+                        api: api,
+                        success: false,
+                        code: '',
+                        msg: _instanceof(error, Error) ? error.message : String(error),
+                        data: error
+                    };
+                    return [
+                        3,
+                        4
+                    ];
+                case 4:
+                    theme.emit(EVENTS.control.broadcastApiResult, result);
+                    return [
+                        2,
+                        res
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 查询默认语音列表（仅 ezopen 地址） https://open.ys7.com/help/1247
+ * @param params 查询参数（voiceName / pageStart / pageSize）
+ * @returns `{ data, page }`；非 ezopen 地址、未初始化 services 或请求异常时为 undefined
+ * @since 3.2.0
+ */ function _queryVoiceListService() {
+    return _async_to_generator$2(function(theme, params) {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (params === void 0) params = {};
+                    if (!theme.isEzopen) return [
+                        2,
+                        undefined
+                    ];
+                    return [
+                        4,
+                        _voiceRequest(theme, 'queryVoiceList', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.queryVoiceList(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    }).apply(this, arguments);
+}
+/**
+ * 临时语音下发（一次性自定义语音下发到设备，不保存到语音列表；仅 ezopen 地址） https://open.ys7.com/help/1252
+ * @param voiceFile 语音文件，支持wav、mp3、aac格式，最大20M，最长60s
+ * @param channelNo 通道号，默认使用播放地址里的通道号（可选）
+ * @returns 接口结果 `{ code, msg }`；非 ezopen 地址、未初始化 services 或请求异常时为 undefined
+ * @since 3.2.0
+ */ function _sendVoiceOnceService(theme, voiceFile, channelNo) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (!theme.isEzopen) return [
+                        2,
+                        undefined
+                    ];
+                    return [
+                        4,
+                        _voiceRequest(theme, 'sendVoiceOnce', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.sendVoiceOnce(voiceFile, channelNo)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 语音文件下发（指定设备播放已上传的语音文件；仅 ezopen 地址） https://open.ys7.com/help/1253
+ * @param fileUrl 下载音频文件的url（从查询接口返回的url）
+ * @param channelNo 通道号，默认使用播放地址里的通道号（可选）
+ * @returns 接口结果 `{ code, msg }`；非 ezopen 地址、未初始化 services 或请求异常时为 undefined
+ * @since 3.2.0
+ */ function _sendVoiceService(theme, fileUrl, channelNo) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (!theme.isEzopen) return [
+                        2,
+                        undefined
+                    ];
+                    return [
+                        4,
+                        _voiceRequest(theme, 'sendVoice', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.sendVoice(fileUrl, channelNo)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+// 以下接口为 services 的直接映射，无额外逻辑
+/**
+ * 镜像翻转（需要设备支持） https://open.ys7.com/help/681
+ * @param command 镜像方向：0-上下, 1-左右, 2-中心
+ * @since 3.2.0
+ */ function _postDevicePtzMirrorService(theme, command) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'postDevicePtzMirror', API.ptzMirror, 'PTZ_MIRROR', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.postDevicePtzMirror(command)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 按月查询录像日历（本地存储、云存储和云录制）
+ * - 本地存储 / 云存储 https://open.ys7.com/help/4329
+ * - 云录制 https://open.ys7.com/help/2042
+ * @param recType 录像类型 -1 云录制 1-云存储，2-本地录像，3-关联录像
+ * @param month 查询的月份，格式 yyyy-MM
+ * @param spaceId 云录制空间的 spaceId，仅云录制需要
+ * @since 3.2.0
+ */ function _getRecordMonthService(theme, recType, month, spaceId) {
+    return _async_to_generator$2(function() {
+        var path;
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    path = recType === -1 ? API.getCloudRecordMonth : API.getSdkCloudMonth;
+                    return [
+                        4,
+                        _request(theme, 'getRecordMonth', path, 'GET_RECORD_MONTH', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getRecordMonth(recType, month, spaceId)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取 appKey（用于上报）
+ * @since 3.2.0
+ */ function _getAppKeyService(theme) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getAppKey', API.getAppKey, 'GET_APP_KEY', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getAppKey()
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取设备的通道信息 https://open.ys7.com/help/1478
+ * @since 3.2.0
+ */ function _getDeviceListService(theme) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getDeviceList', API.getDeviceList, 'GET_DEVICE_LIST', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getDeviceList()
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 设置设备视频质量（清晰度） https://open.ys7.com/help/2286
+ * @param videoLevel 清晰度等级 0-流畅 1-均衡 2-高清 3-超清 4-极清 5-3K 6-4K
+ * @param clientLid 直播取流会话标识（无缝切换用）
+ * @param prevVideoLevel 切换前清晰度，用于计算 adaptive 方向
+ * @since 3.2.0
+ */ function _setVideoLevelService(theme, videoLevel, clientLid, prevVideoLevel) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'setVideoLevel', API.setVideoLevel, 'SET_VIDEO_LEVEL', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.setVideoLevel(videoLevel, clientLid, prevVideoLevel)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 查询设备云存储信息 https://open.ys7.com/help/1404
+ * @since 3.2.0
+ */ function _getCloudInfoService(theme) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getCloudInfo', API.getCloudInfo, 'GET_CLOUD_INFO', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getCloudInfo()
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取云录制截图上传地址
+ * @param fileName 截图文件名
+ * @since 3.2.0
+ */ function _getCloudUploadUrlService(theme, fileName) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getCloudUploadUrl', API.getCloudUploadUrl, 'GET_CLOUD_UPLOAD_URL', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getCloudUploadUrl(fileName)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取取流备用地址
+ * @since 3.2.0
+ */ function _getStreamAddressListService(theme) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getStreamAddressList', API.getStreamAddressList, 'GET_STREAM_ADDRESS_LIST', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getStreamAddressList()
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取云录制回放片段 https://open.ys7.com/help/2043
+ * @since 3.2.0
+ */ function _getCloudRecordTimesService(theme, params) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getCloudRecordTimes', API.getCloudRecordTimes, 'GET_REC_TIMES', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getCloudRecordTimes(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取云存储回放片段 https://open.ys7.com/help/1422
+ * @since 3.2.0
+ */ function _getCloudTimesService(theme, params) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getCloudTimes', API.getCloudTimes, 'GET_REC_TIMES', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getCloudTimes(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取本地回放片段 https://open.ys7.com/help/3922
+ * @since 3.2.0
+ */ function _getLocalRecTimesService(theme, params) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getLocalRecTimes', API.getLocalRecTimes, 'GET_REC_TIMES', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getLocalRecTimes(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 按设备获取告警消息列表（接口非 200 时 services 会抛错，这里按 httpError 事件处理） https://open.ys7.com/help/987
+ * @since 3.2.0
+ */ function _getAlarmListService() {
+    return _async_to_generator$2(function(theme, params) {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (params === void 0) params = {};
+                    return [
+                        4,
+                        _request(theme, 'getAlarmList', API.getAlarmList, 'GET_ALARM_LIST', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getAlarmList(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    }).apply(this, arguments);
+}
+/**
+ * 即时云抓拍 https://open.ys7.com/help/5235
+ * @since 3.2.0
+ */ function _captureSaveService(theme, params) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'captureSave', API.captureSave, 'CAPTURE_SAVE', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.captureSave(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 创建抓图任务（批量 / 定时抓拍计划） https://open.ys7.com/help/1390
+ * @since 3.2.0
+ */ function _createCaptureTaskService(theme, params) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'createCaptureTask', API.createCaptureTask, 'CREATE_CAPTURE_TASK', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.createCaptureTask(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 查询存储空间列表 https://open.ys7.com/help/5230
+ * @since 3.2.0
+ */ function _getSpaceListService() {
+    return _async_to_generator$2(function(theme, params) {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (params === void 0) params = {};
+                    return [
+                        4,
+                        _request(theme, 'getSpaceList', API.getSpaceList, 'GET_SPACE_LIST', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getSpaceList(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    }).apply(this, arguments);
+}
+/**
+ * 获取播放地址（默认标准流 LL-HLS），不传的参数默认取自当前播放地址 https://open.ys7.com/help/1414
+ * @param params 请求参数，见 {@link EzvizFetchAddressParams}
+ * @since 3.2.0
+ */ function _getAddressService() {
+    return _async_to_generator$2(function(theme, params) {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (params === void 0) params = {};
+                    return [
+                        4,
+                        _request(theme, 'getAddress', API.getAddress, 'GET_ADDRESS', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getAddress(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    }).apply(this, arguments);
+}
+/**
+ * 获取 CDN 加速直播地址（有效期为当天）
+ * @param params 请求参数，见 {@link EzvizFetchCDNAddressParams}
+ * @since 3.2.0
+ */ function _getCDNLiveAddressService(theme, params) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getCDNLiveAddress', API.getCDNLiveAddress, 'GET_CDN_ADDRESS', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getCDNLiveAddress(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 获取 CDN 加速回放地址（有效期为当天）
+ * @param params 请求参数，见 {@link EzvizFetchCDNRecordAddressParams}
+ * @since 3.2.0
+ */ function _getCDNRecordAddressService(theme, params) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getCDNRecordAddress', API.getCDNRecordAddress, 'GET_CDN_ADDRESS', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getCDNRecordAddress(params)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 查询直播间断流信息（仅萤石直播间地址）
+ * @param streamId 直播间流 ID（播放地址里的 `sid`）
+ * @since 3.2.0
+ */ function _getStreamInterruptInfoService(theme, streamId) {
+    return _async_to_generator$2(function() {
+        return _ts_generator$2(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        _request(theme, 'getStreamInterruptInfo', API.getStreamInterruptInfo, 'GET_STREAM_INTERRUPT_INFO', function(services) {
+                            return _async_to_generator$2(function() {
+                                return _ts_generator$2(this, function(_state) {
+                                    switch(_state.label){
+                                        case 0:
+                                            return [
+                                                4,
+                                                services.getStreamInterruptInfo(streamId)
+                                            ];
+                                        case 1:
+                                            return [
+                                                2,
+                                                _state.sent()
+                                            ];
+                                    }
+                                });
+                            })();
+                        })
+                    ];
+                case 1:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+            }
+        });
+    })();
+}
+
+/**
+ * 云抓拍相关 API 编排（迁移自 ezuikit-js `ezopen/api/_cloudCapture.ts`，原 @since 9.0.9）
+ *
+ * - 即时云抓拍:POST /api/service/open/capture/device/capture(服务端字段 resultSpaceId)
+ * - 创建抓拍计划:POST /api/service/cloudrecord/pic/capture/task(服务端字段 resultSpaceId)
+ * - 空间列表查询:GET /api/service/open/storage/engine/space/listById
+ *
+ * 对外统一以 `spaceId` 表达"萤石云存储空间 id"概念,与云录制的 `spaceId` 共用同一个实例字段
+ * （`theme.spaceId`，即 `options.spaceId`）；到 services 层时再映射成服务端协议字段 resultSpaceId。
+ *
+ * 接口请求走 `theme.xxxService()`：请求结果统一派发 `EVENTS.http.*` 事件，请求异常时返回 undefined（不抛错）。
+ *
+ * @since 3.2.0
+ */ function asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, key, arg) {
+    try {
+        var info = gen[key](arg);
+        var value = info.value;
+    } catch (error) {
+        reject(error);
+        return;
+    }
+    if (info.done) resolve(value);
+    else Promise.resolve(value).then(_next, _throw);
+}
+function _async_to_generator$1(fn) {
+    return function() {
+        var self = this, args = arguments;
+        return new Promise(function(resolve, reject) {
+            var gen = fn.apply(self, args);
+            function _next(value) {
+                asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, "next", value);
+            }
+            function _throw(err) {
+                asyncGeneratorStep$1(gen, resolve, reject, _next, _throw, "throw", err);
+            }
+            _next(undefined);
+        });
+    };
+}
+function _extends$1() {
+    _extends$1 = Object.assign || function assign(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends$1.apply(this, arguments);
+}
+function _object_without_properties_loose$1(source, excluded) {
+    if (source == null) return {};
+    var target = {}, sourceKeys = Object.getOwnPropertyNames(source), key, i;
+    for(i = 0; i < sourceKeys.length; i++){
+        key = sourceKeys[i];
+        if (excluded.indexOf(key) >= 0) continue;
+        if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+        target[key] = source[key];
+    }
+    return target;
+}
+function _ts_generator$1(thisArg, body) {
+    var f, y, t, _ = {
+        label: 0,
+        sent: function() {
+            if (t[0] & 1) throw t[1];
+            return t[1];
+        },
+        trys: [],
+        ops: []
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
+    }), g;
+    function verb(n) {
+        return function(v) {
+            return step([
+                n,
+                v
+            ]);
+        };
+    }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while(g && (g = 0, op[0] && (_ = 0)), _)try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [
+                op[0] & 2,
+                t.value
+            ];
+            switch(op[0]){
+                case 0:
+                case 1:
+                    t = op;
+                    break;
+                case 4:
+                    _.label++;
+                    return {
+                        value: op[1],
+                        done: false
+                    };
+                case 5:
+                    _.label++;
+                    y = op[1];
+                    op = [
+                        0
+                    ];
+                    continue;
+                case 7:
+                    op = _.ops.pop();
+                    _.trys.pop();
+                    continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                        _ = 0;
+                        continue;
+                    }
+                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                        _.label = op[1];
+                        break;
+                    }
+                    if (op[0] === 6 && _.label < t[1]) {
+                        _.label = t[1];
+                        t = op;
+                        break;
+                    }
+                    if (t && _.label < t[2]) {
+                        _.label = t[2];
+                        _.ops.push(op);
+                        break;
+                    }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop();
+                    continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) {
+            op = [
+                6,
+                e
+            ];
+            y = 0;
+        } finally{
+            f = t = 0;
+        }
+        if (op[0] & 5) throw op[1];
+        return {
+            value: op[0] ? op[1] : void 0,
+            done: true
+        };
+    }
+}
+/**
+ * 解析 spaceId,优先级:调用时传入 > 实例(theme.spaceId,与云录制共用)。
+ * @returns spaceId 或 undefined(两者都没有)
+ */ function resolveSpaceId(theme, options) {
+    var _ref;
+    return (_ref = options == null ? void 0 : options.spaceId) != null ? _ref : theme.spaceId;
+}
+function isEmptySpaceId(spaceId) {
+    return typeof spaceId === 'undefined' || spaceId === '';
+}
+/** 把接口返回体转换成统一返回结构；请求异常（res 为 undefined）时使用 i18n 兜底文案 */ function toResult(theme, res, failedI18nKey, pick) {
+    if (pick === void 0) pick = function pick(data) {
+        return data;
+    };
+    var _ref;
+    var _res_meta, _res_meta1, _res_meta2;
+    if (res && +((_res_meta = res.meta) == null ? void 0 : _res_meta.code) === 200) {
+        return {
+            code: 0,
+            data: pick(res.data)
+        };
+    }
+    return {
+        code: (_ref = res == null ? void 0 : (_res_meta1 = res.meta) == null ? void 0 : _res_meta1.code) != null ? _ref : -1,
+        msg: (res == null ? void 0 : (_res_meta2 = res.meta) == null ? void 0 : _res_meta2.message) || theme.t(failedI18nKey)
+    };
+}
+/**
+ * 即时云抓拍(设备抓拍图片,支持生命周期)
+ * @param theme 主题实例
+ * @param options 抓拍参数
+ * @returns data 含图片链接 picUrl、文件节点 fileNodeId
+ */ function _captureCamera() {
+    return _async_to_generator$1(function(theme, options) {
+        var _options_quality, spaceId, _theme_logger_warn, _theme_logger, msg, res;
+        return _ts_generator$1(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (options === void 0) options = {};
+                    spaceId = resolveSpaceId(theme, options);
+                    if (isEmptySpaceId(spaceId)) {
+                        msg = 'spaceId is required for captureCamera';
+                        (_theme_logger = theme.logger) == null ? void 0 : (_theme_logger_warn = _theme_logger.warn) == null ? void 0 : _theme_logger_warn.call(_theme_logger, msg);
+                        return [
+                            2,
+                            {
+                                code: -1,
+                                msg: msg
+                            }
+                        ];
+                    }
+                    return [
+                        4,
+                        theme.captureSaveService({
+                            resultSpaceId: spaceId,
+                            quality: (_options_quality = options.quality) != null ? _options_quality : theme.options.quality,
+                            channelNo: options.channelNo
+                        })
+                    ];
+                case 1:
+                    res = _state.sent();
+                    return [
+                        2,
+                        toResult(theme, res, 'CAPTURE_SAVE_FAILED')
+                    ];
+            }
+        });
+    }).apply(this, arguments);
+}
+/**
+ * 创建抓拍计划任务(批量/定时)
+ * @param theme 主题实例
+ * @param options 抓拍计划参数
+ */ function _createCaptureTask(theme, options) {
+    return _async_to_generator$1(function() {
+        var spaceId, _theme_logger_warn, _theme_logger, msg, _theme_logger_warn1, _theme_logger1, msg1, _theme_logger_warn2, _theme_logger2, msg2, missing, _theme_logger_warn3, _theme_logger3, msg3, rest, res;
+        return _ts_generator$1(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    spaceId = resolveSpaceId(theme, options);
+                    if (isEmptySpaceId(spaceId)) {
+                        msg = 'spaceId is required for createCaptureTask';
+                        (_theme_logger = theme.logger) == null ? void 0 : (_theme_logger_warn = _theme_logger.warn) == null ? void 0 : _theme_logger_warn.call(_theme_logger, msg);
+                        return [
+                            2,
+                            {
+                                code: -1,
+                                msg: msg
+                            }
+                        ];
+                    }
+                    if (![
+                        1,
+                        2
+                    ].includes(options == null ? void 0 : options.captureType)) {
+                        msg1 = 'captureType must be 1 or 2';
+                        (_theme_logger1 = theme.logger) == null ? void 0 : (_theme_logger_warn1 = _theme_logger1.warn) == null ? void 0 : _theme_logger_warn1.call(_theme_logger1, msg1);
+                        return [
+                            2,
+                            {
+                                code: -1,
+                                msg: msg1
+                            }
+                        ];
+                    }
+                    // 必填校验:captureType=1 需 timingPoints;captureType=2 需 startTime/endTime/captureInterval
+                    if (options.captureType === 1) {
+                        if (!options.timingPoints) {
+                            msg2 = 'timingPoints required when captureType=1';
+                            (_theme_logger2 = theme.logger) == null ? void 0 : (_theme_logger_warn2 = _theme_logger2.warn) == null ? void 0 : _theme_logger_warn2.call(_theme_logger2, msg2);
+                            return [
+                                2,
+                                {
+                                    code: -1,
+                                    msg: msg2
+                                }
+                            ];
+                        }
+                    } else {
+                        missing = [];
+                        if (!options.startTime) missing.push('startTime');
+                        if (!options.endTime) missing.push('endTime');
+                        if (typeof options.captureInterval !== 'number') missing.push('captureInterval');
+                        if (missing.length) {
+                            msg3 = "" + missing.join('/') + " required when captureType=2";
+                            (_theme_logger3 = theme.logger) == null ? void 0 : (_theme_logger_warn3 = _theme_logger3.warn) == null ? void 0 : _theme_logger_warn3.call(_theme_logger3, msg3);
+                            return [
+                                2,
+                                {
+                                    code: -1,
+                                    msg: msg3
+                                }
+                            ];
+                        }
+                    }
+                    // 透传时把 spaceId 映射到服务端协议字段 resultSpaceId
+                    options.spaceId, rest = _object_without_properties_loose$1(options, [
+                        "spaceId"
+                    ]);
+                    return [
+                        4,
+                        theme.createCaptureTaskService(_extends$1({}, rest, {
+                            resultSpaceId: spaceId
+                        }))
+                    ];
+                case 1:
+                    res = _state.sent();
+                    return [
+                        2,
+                        toResult(theme, res, 'CREATE_CAPTURE_TASK_FAILED')
+                    ];
+            }
+        });
+    })();
+}
+/**
+ * 查询存储空间列表(默认查询云抓拍 cloudCapture 空间),用于获取 spaceId
+ * @param theme 主题实例
+ * @param options 查询参数
+ * @returns data 含空间列表 result、翻页信息
+ */ function _getSpaceList() {
+    return _async_to_generator$1(function(theme, options) {
+        var res;
+        return _ts_generator$1(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    if (options === void 0) options = {};
+                    return [
+                        4,
+                        theme.getSpaceListService(options)
+                    ];
+                case 1:
+                    res = _state.sent();
+                    return [
+                        2,
+                        toResult(theme, res, 'GET_SPACE_LIST_FAILED', function(data) {
+                            if (data === void 0) data = {};
+                            return {
+                                result: Array.isArray(data.result) ? data.result : [],
+                                lastId: data.lastId,
+                                pageSize: data.pageSize,
+                                hasNext: data.hasNext
+                            };
+                        })
+                    ];
+            }
+        });
+    }).apply(this, arguments);
 }
 
 function _array_like_to_array(arr, len) {
@@ -11007,11 +15769,6 @@ var THEME_DEFAULT_OPTIONS = {
    * @since 0.0.1
    * @private
    */ _this._seekDate = null, /**
-   * @type { "rec" | "cloudRec" | "cloudRecord" } recType 回放类型
-   * ```ts
-   * theme.recType // 回放类型
-   * ```
-   */ _this.recType = '', /**
    * 更多控件（header more）
    * @since 0.0.1
    * @private
@@ -11022,7 +15779,10 @@ var THEME_DEFAULT_OPTIONS = {
    */ _this._footerMoreControl = null, /** 头部控件 @since 0.0.1 @private */ _this._header = null, /** 低部控件 @since 0.0.1 @private */ _this._footer = null, /** 回放底部时间轴 @since 0.0.1 @private */ _this._recFooter = null, /**
    * 移动端扩展容器, 扩展的控件渲染在指定容器以外， 仅只用端适用， 为了可以放置大的控件和方便开发接入
    * @private
-   */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, _this._url = '', /** 是否播放中 @private */ _this._playing = false, /** @private 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 正在兜底的原始 scope，非 null 表示处于兜底取值中（用于避免 customizeMissing 无限递归） */ _this._missingScope = null, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /** 清晰度列表 */ _this.videoLevelList = [], /** 回放片段列表 */ _this.recordList = [], /**
+   */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, _this._url = '', /** 是否播放中 @private */ _this._playing = false, /** @private 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 正在兜底的原始 scope，非 null 表示处于兜底取值中（用于避免 customizeMissing 无限递归） */ _this._missingScope = null, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /**
+   * 是否支持主子码流切换（本地回放），默认 false。
+   * 由 SDK 层通过 `EVENTS.supportLocalRecordStreamType` 事件设置；为 true 且当前是本地回放时才展示码流切换控件。
+   */ _this.supportLocalRecordStreamType = false, /** 回放片段列表 */ _this.recordList = [], /**
    * 播放区间（片段分享），null 表示不约束。
    * 由 SDK 层在初始化时通过 props 下发，主题层据此决定日历/回放类型按钮
    * 是否渲染、片段进度条是否渲染。区间没有运行时变更入口。
@@ -11045,7 +15805,7 @@ var THEME_DEFAULT_OPTIONS = {
    * 模板请求（getDetail）的中止控制器。
    * 重新渲染或销毁时中止在途请求，避免请求返回后在已销毁/已切换的 theme 上继续操作。
    * @private
-   */ _this._templateAbortController = null, /** 销毁标识  @readonly */ _this.destroyed = false, _this.scaleMode = 0, _this._videoInfo = {};
+   */ _this._templateAbortController = null, /** 销毁标识  @readonly */ _this.destroyed = false, _this.scaleMode = 0, _this._videoInfo = {}, _this.services = null;
         _this._initOptions(options);
         if (_this.options.type === 'ezopen') {
             var _this_urlInfo_searchParams1, _this_urlInfo1, _this_urlInfo2;
@@ -11058,7 +15818,6 @@ var THEME_DEFAULT_OPTIONS = {
                 _this._seekDate = ((_this_urlInfo4 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams3 = _this_urlInfo4.searchParams) == null ? void 0 : _this_urlInfo_searchParams3.begin) ? utilsTools.DateTime.toDate((_this_urlInfo5 = _this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams4 = _this_urlInfo5.searchParams) == null ? void 0 : _this_urlInfo_searchParams4.begin) : utilsTools.DateTime.toDate(utilsTools.DateTime.format(new Date(), 'YYYY/MM/DD') + ' 00:00:00');
             }
         }
-        _this._getRecType(_this.options.url);
         _bindEventLogger(_this, EVENTS);
         options.onInitializing == null ? void 0 : options.onInitializing.call(options, _this); // 在初始化时，执行回调 支持 i18n logger
         if (_this.options.autoPlay) {
@@ -11103,17 +15862,15 @@ var THEME_DEFAULT_OPTIONS = {
         var initialThemeData;
         // hls ezhls flv mp4 不支持 template
         if (options.type === 'hls' || options.type === 'ezhls') {
-            var _options_url;
             // hls / ezhls：@3.1.1 起支持自定义 themeData，但不支持标准提供的模板；未传时回退 hlsLiveTemplate
             // FIXME: themeData 部分控件在 hls 下不生效，开发者需自行斟酌
-            initialThemeData = themeData !== undefined ? themeData : ((_options_url = options.url) == null ? void 0 : _options_url.includes('/openpb/')) ? hlsRecTemplate : hlsLiveTemplate;
+            initialThemeData = themeData !== undefined ? themeData : _this.isEzvizPlaybackUrl(options.url) ? hlsRecTemplate : hlsLiveTemplate;
         } else if ([
             'flv',
             'mp4'
         ].includes(options.type)) {
-            var _options_url1;
             // flv / mp4：支持自定义 themeData，未传时回退到标准直播模板 LiveTemplate（2026-01-19 起支持自定义）
-            initialThemeData = themeData !== undefined ? themeData : ((_options_url1 = options.url) == null ? void 0 : _options_url1.includes('/openpb/')) ? RecTemplate : LiveTemplate;
+            initialThemeData = themeData !== undefined ? themeData : _this.isEzvizPlaybackUrl(options.url) ? RecTemplate : LiveTemplate;
         } else {
             var _ref6;
             // 其余类型（如 ezopen 私有流）：template 优先级高于 themeData，二者都未设置时为 null
@@ -11370,9 +16127,7 @@ var THEME_DEFAULT_OPTIONS = {
         this.$container.classList.remove("" + PREFIX_CLASS);
         this._themeData = null;
         // if (this.i18n) this.i18n = null!; // 注释是为了防止出错
-        this.recType = '';
         this.recMonth = []; // 清空数据
-        // 重置
         this._videoInfo = {};
         this.emit(EVENTS.theme.destroyed);
         this.removeAllListeners();
@@ -11380,13 +16135,69 @@ var THEME_DEFAULT_OPTIONS = {
         // 销毁后，将 destroyed 设置为 true
         this.destroyed = true;
     };
+    /**
+   * 判断是否为萤石播放地址（直播或回放，私有流 `ezopen://` 与标准流 flv / hls 都算）
+   *
+   * 只校验 `?` 之前的部分，查询参数不参与判断。判定规则见 `@ezuikit/utils-tools` 的 `isEzvizUrl`。
+   *
+   * 注意：`options.isEzviz` 为 `true`（默认值）时直接返回 `true`，不再看地址；
+   * 需要按地址判定时请显式传 `isEzviz: false`。
+   *
+   * @param url - 待判断的地址，省略时使用当前播放地址 `theme.url`
+   * @returns 是萤石播放地址返回 `true`，否则返回 `false`
+   * @sine 3.2.0
+   * @example
+   * ```ts
+   * theme.isEzvizUrl(); // 判断当前 theme.url
+   * theme.isEzvizUrl('ezopen://open.ys7.com/BW3143164/1.hd.live'); // true
+   * theme.isEzvizUrl('https://example.com/a.flv'); // false
+   * ```
+   */ _proto.isEzvizUrl = function isEzvizUrl1(url) {
+        if (this.options.isEzviz) return true;
+        return utilsTools.isEzvizUrl(url || this._url || '');
+    };
+    /**
+   * 判断是否为萤石直播（预览）地址，包括私有流与标准流
+   *
+   * - `ezopen://` 地址：路径以 `.live` 结尾
+   * - `http(s)://` 地址：路径包含 `/openlive/`
+   *
+   * @param url - 待判断的地址，省略时使用当前播放地址 `theme.url`
+   * @returns 是萤石直播地址返回 `true`，否则返回 `false`
+   * @sine 3.2.0
+   * @example
+   * ```ts
+   * theme.isEzvizLiveUrl('ezopen://open.ys7.com/BW3143164/1.hd.live'); // true
+   * theme.isEzvizLiveUrl('ezopen://open.ys7.com/BW3143164/1.rec'); // false
+   * ```
+   */ _proto.isEzvizLiveUrl = function isEzvizLiveUrl1(url) {
+        return utilsTools.isEzvizLiveUrl(url || this._url || '');
+    };
+    /**
+   * 判断是否为萤石回放地址，包括私有流与标准流
+   *
+   * - `ezopen://` 地址：路径以 `.rec` 结尾（如 `1.rec`、`1.cloud.rec`、`1.hd.local.rec`）
+   * - `http(s)://` 地址：路径包含 `/openpb/`
+   *
+   * @param url - 待判断的地址，省略时使用当前播放地址 `theme.url`
+   * @returns 是萤石回放地址返回 `true`，否则返回 `false`
+   * @sine 3.2.0
+   * @example
+   * ```ts
+   * theme.isEzvizPlaybackUrl('ezopen://open.ys7.com/BW3143164/1.cloud.rec'); // true
+   * theme.isEzvizPlaybackUrl('ezopen://open.ys7.com/BW3143164/1.hd.live'); // false
+   * ```
+   */ _proto.isEzvizPlaybackUrl = function isEzvizPlaybackUrl1(url) {
+        // 未设置地址时 utils-tools 内部会对 undefined 调 split 而抛错，这里兜底成空串
+        return utilsTools.isEzvizPlaybackUrl(url || this._url || '');
+    };
     // ==============================================================================================
     // 私有方法
     // ==============================================================================================
     /** 初始化配置项 */ _proto._initOptions = function _initOptions(options) {
         var _this = this;
         if (options === void 0) options = {};
-        var _this_options_loggerOptions, _this_options_definitionOptions_list, _this_options_definitionOptions, _this_options_videoLevelList;
+        var _this_options_loggerOptions, _this_options_extraParams, _this_options_extraParams1, _this_options_definitionOptions;
         // 先对模块级默认配置做一次深拷贝，得到全新的嵌套对象/数组，
         // 避免 this.options 与 THEME_DEFAULT_OPTIONS（如 mobileExtendOptions.controls、env、loggerOptions）
         // 共享引用而在多实例间相互污染。
@@ -11451,11 +16262,23 @@ var THEME_DEFAULT_OPTIONS = {
                 return _this._missingText(scope, variables);
             }
         });
-        // 默认清晰度列表
-        if (((_this_options_definitionOptions = this.options.definitionOptions) == null ? void 0 : (_this_options_definitionOptions_list = _this_options_definitionOptions.list) == null ? void 0 : _this_options_definitionOptions_list.length) > 0 || ((_this_options_videoLevelList = this.options.videoLevelList) == null ? void 0 : _this_options_videoLevelList.length) > 0) {
-            var _this_options_definitionOptions1;
-            this.videoLevelList = ((_this_options_definitionOptions1 = this.options.definitionOptions) == null ? void 0 : _this_options_definitionOptions1.list) || this.options.videoLevelList;
-        }
+        this.services = new Services({
+            sdkType: this.options.sdkType,
+            baseURL: this.options.env ? this.options.env.domain : null,
+            accessToken: this.options.accessToken,
+            token: this.options.token || {},
+            // ezopen 接口扩展参数
+            ezopenParams: ((_this_options_extraParams = this.options.extraParams) == null ? void 0 : _this_options_extraParams.ezopenParams) || {},
+            // 取流扩展参数
+            // 9.0.14 (OPOOL-11457): wsParams 历史已声明但透传断链，本版本接通
+            //   业务通过 extraParams.wsParams 传自定义 URL query 键值对，透传拼到 wss URL
+            wsParams: ((_this_options_extraParams1 = this.options.extraParams) == null ? void 0 : _this_options_extraParams1.wsParams) || {},
+            // 播放地址里没有 timeZone 参数时（如 flv / hls 标准流）回退到配置项
+            timeZone: this.options.timeZone,
+            url: this.options.url,
+            videoLevelList: ((_this_options_definitionOptions = this.options.definitionOptions) == null ? void 0 : _this_options_definitionOptions.list) || this.options.videoLevelList || [],
+            clientType: this.options.clientType
+        });
         this.setScaleMode(this.options.scaleMode);
     };
     /**
@@ -11870,11 +16693,6 @@ var THEME_DEFAULT_OPTIONS = {
         }
     };
     /**
-   * 设置清晰度列表（临时方案，后期会有改动）
-   */ _proto._setVideoLevelList = function _setVideoLevelList(list) {
-        this.videoLevelList = list;
-    };
-    /**
    * 禁用按钮
    * @private
    */ _proto._disabled = function _disabled(disabled) {
@@ -11894,42 +16712,7 @@ var THEME_DEFAULT_OPTIONS = {
             this.fullscreen();
         }
     };
-    /**
-   * 获取录像类型， 仅 ezopen 支持
-   * @param url 录像 url
-   * @returns {"rec" | "cloudRecord" | "cloudRec" | ""} 录像类型， rec: 录像， cloudRec: 云录像， cloudRecord: 云录制
-   */ _proto._getRecType = function _getRecType(url) {
-        if (this.options.type === 'ezopen' && /^ezopen:\/\//.test(url)) {
-            var _this_urlInfo;
-            if (((_this_urlInfo = this.urlInfo) == null ? void 0 : _this_urlInfo.type) === 'rec') {
-                var _this_urlInfo1, _this_urlInfo_searchParams, _this_urlInfo2, _this_urlInfo3;
-                if (((_this_urlInfo1 = this.urlInfo) == null ? void 0 : _this_urlInfo1.recType) === 'cloud' && ((_this_urlInfo2 = this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo2.searchParams) == null ? void 0 : _this_urlInfo_searchParams.busType) === '7') {
-                    this.recType = 'cloudRecord';
-                    return 'cloudRecord';
-                } else if (((_this_urlInfo3 = this.urlInfo) == null ? void 0 : _this_urlInfo3.recType) === 'cloud') {
-                    this.recType = 'cloudRec';
-                    return 'cloudRec';
-                } else {
-                    this.recType = 'rec';
-                    return 'rec';
-                }
-            }
-        } else if (utilsTools.isHttp(url) && url.includes('/openpb/')) {
-            // 萤石 ll-hls/flv 回放
-            if (url.includes('rec=cloud')) {
-                // 云存储
-                this.recType = 'cloudRec';
-                return 'cloudRec';
-            } else if (url.includes('rec=local')) {
-                // 本地存储
-                this.recType = 'rec';
-                return 'rec';
-            }
-        // 不支持云录制
-        }
-        this.recType = '';
-        return '';
-    };
+    // 不要删除 这个很重要
     _proto.resetControl = function resetControl() {
         var _this = this;
         if (this.zooming) {
@@ -11967,6 +16750,765 @@ var THEME_DEFAULT_OPTIONS = {
             }
         }
     };
+    /**
+   * 设置 / 更新存储空间 id（与云录制 spaceId 共用，支持实例化后更新）
+   * @param spaceId 存储空间 id（由 {@link getSpaceList} 获取）
+   * @since 3.2.0
+   */ _proto.setSpaceId = function setSpaceId(spaceId) {
+        this.options.spaceId = spaceId;
+    };
+    /**
+   * @deprecated 请使用 {@link setSpaceId}，此别名仅作兼容保留
+   * @param resultSpaceId 存储空间 id
+   */ _proto.setResultSpaceId = function setResultSpaceId(resultSpaceId) {
+        this.setSpaceId(resultSpaceId);
+    };
+    /**
+   * 即时云抓拍（设备抓拍图片，支持生命周期）
+   * @param options 抓拍参数，`spaceId` 不传时取实例 {@link spaceId}
+   * @returns `{ code: 0, data: { picUrl, fileNodeId } }`；失败时 code 非 0（透传服务端 meta.code 或 -1），不会 reject
+   * @since 3.2.0
+   * @example
+   * ```ts
+   * await theme.captureCamera({ spaceId: 270328 }) // { code: 0, data: { picUrl, fileNodeId } }
+   * ```
+   */ _proto.captureCamera = function captureCamera(options) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _captureCamera(this, options)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 创建抓拍计划任务（批量 / 定时）
+   * @param options 抓拍计划参数，`spaceId` 不传时取实例 {@link spaceId}
+   * @returns `{ code: 0, data: { taskId } }`；失败时 code 非 0，不会 reject
+   * @since 3.2.0
+   * @example
+   * ```ts
+   * await theme.createCaptureTask({ spaceId: 270328, captureType: 1, timingPoints: '20260101120000' })
+   * ```
+   */ _proto.createCaptureTask = function createCaptureTask(options) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _createCaptureTask(this, options)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 查询存储空间列表（默认云抓拍 cloudCapture 空间），供用户选择 spaceId
+   * @param options 查询参数 `{ startTime, endTime, lastSpaceId, pageSize, bizTypeList }`
+   * @returns `{ code: 0, data: { result, lastId, pageSize, hasNext } }`；失败时 code 非 0，不会 reject
+   * @since 3.2.0
+   * @example
+   * ```ts
+   * const res = await theme.getSpaceList();
+   * // res.data.result => [{ spaceId, spaceName, bizType, ... }]
+   * ```
+   */ _proto.getSpaceList = function getSpaceList(options) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getSpaceList(this, options)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    // http（接口实现见 api/_services.ts） --------------------------------------
+    /**
+   * 构造并派发统一结构的业务事件（接口请求结果、api 调用、取流等通知）
+   *
+   * 事件载荷为 `{ name, code, msg, type, ...data }`：
+   * - `name`：事件名，同时作为第一个参数传给 `emit`
+   * - `code`：结果码，`type` 以 `Error` 结尾（`'httpError'` / `'streamError'`）时为 `-1`，其余为 `0`
+   * - `msg`：当前语言下的提示文案，由 `i18nKey` 翻译得到；未传 `i18nKey` 时为空串
+   * - `type`：事件来源分类，同 `type` 参数
+   * - `data` 的字段会展开合并到载荷里（如接口结果 `data`、接口路径 `path`），同名字段会覆盖前面的 `name` / `code` / `msg` / `type`
+   *
+   * @param name 事件名，如 `EVENTS.http.getDeviceCapacity`
+   * @param type 事件来源：`'http'` 接口请求成功、`'httpError'` 接口请求失败、`'api'` 对外 api 调用、
+   *   `'stream'` 取流、`'streamError'` 取流失败、`'message'` 提示消息
+   * @param data 附加到载荷上的字段，可为空
+   * @param i18nKey 多语言 key，用于生成 `msg`
+   * @since 3.2.0
+   * @example
+   * ```ts
+   * theme.on(EVENTS.http.sendVoice, ({ code, msg, data, path }) => {
+   *   if (code === -1) console.error(msg, path, data);
+   * });
+   * ```
+   */ _proto.builderEvent = function builderEvent(name, type, data, i18nKey) {
+        var code = 0;
+        if (/Error$/.test(type)) code = -1;
+        this.emit == null ? void 0 : this.emit.call(this, name, _extends({
+            name: name,
+            code: code,
+            msg: i18nKey ? this.t == null ? void 0 : this.t.call(this, i18nKey) : '',
+            type: type
+        }, data || {}));
+    };
+    /**
+   * 获取 ezopen 私有流的 wss 取流地址（含 ECDH 全链路加密判定，见 api/_services.ts `_getEzopenUrlService`）
+   * @param url ezopen 地址，默认当前播放地址
+   * @returns wss 取流地址；接口返回错误码时为接口原始结果，请求失败为空串，未初始化 services 时为 undefined
+   * @since 3.2.0
+   */ _proto.getEzopenUrlService = function getEzopenUrlService(url) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getEzopenUrlService(this, url)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取设备能力集 https://open.ys7.com/help/678
+   * @since 3.2.0
+   */ _proto.getDeviceCapacityService = function getDeviceCapacityService() {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getDeviceCapacityService(this)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取设备信息 https://open.ys7.com/help/672
+   * @since 3.2.0
+   */ _proto.getDeviceInfoService = function getDeviceInfoService() {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getDeviceInfoService(this)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取设备支持清晰度列表
+   * @since 3.2.0
+   */ _proto.getDeviceSupportQualityService = function getDeviceSupportQualityService() {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getDeviceSupportQualityService(this)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 查询默认语音列表 https://open.ys7.com/help/1247
+   * @param {Object} params 查询参数
+   * @param {string} params.voiceName 模糊匹配语音名称（可选）
+   * @param {number} params.pageStart 分页起始页，从0开始（可选）
+   * @param {number} params.pageSize 分页大小，默认为10，最大为50（可选）
+   * @returns {Promise<{data: Array, page: Object}>}
+   * @since v3.2.0
+   * @example
+   * player.queryVoiceList({ pageSize: 20 }).then(res => {
+   *   console.log(res.data); // 语音列表
+   *   console.log(res.page); // 分页信息
+   * });
+   */ _proto.queryVoiceListService = function queryVoiceListService() {
+        return _async_to_generator(function(params) {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (params === void 0) params = {};
+                        return [
+                            4,
+                            _queryVoiceListService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * @description 临时语音下发（一次性自定义语音下发到设备，不保存到语音列表） https://open.ys7.com/help/1252
+   * @param {File | Blob} voiceFile 语音文件，支持wav、mp3、aac格式，最大20M，最长60s
+   * @param {number} channelNo 通道号，默认使用播放器配置的通道号（可选）
+   * @returns {Promise<{code: number, msg: string}>}
+   * @since 3.2.0
+   * @example
+   * player.sendVoiceOnce(audioFile).then(res => {
+   *   console.log('语音下发成功');
+   * }).catch(err => {
+   *   console.error('语音下发失败', err);
+   * });
+   */ _proto.sendVoiceOnceService = function sendVoiceOnceService(voiceFile, channelNo) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _sendVoiceOnceService(this, voiceFile, channelNo)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * @description 语音文件下发（指定设备播放已上传的语音文件） https://open.ys7.com/help/1253
+   * @param {string} fileUrl 下载音频文件的url（从查询接口返回的url）
+   * @param {number=} channelNo 通道号，默认使用播放器配置的通道号（可选）
+   * @returns {Promise<{code: number, msg: string}>}
+   * @since 3.2.0
+   * @example
+   * player.sendVoice(fileUrl).then(res => {
+   *   console.log('语音下发成功');
+   * }).catch(err => {
+   *   console.error('语音下发失败', err);
+   * });
+   */ _proto.sendVoiceService = function sendVoiceService(fileUrl, channelNo) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _sendVoiceService(this, fileUrl, channelNo)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    // 以下接口统一规则：成功 / 失败都派发 EVENTS.http 对应事件，请求异常不向外抛出，返回 undefined（见 api/_services.ts `_request`）
+    /**
+   * 镜像翻转（需设备报备对应能力集） https://open.ys7.com/help/681
+   * @param command 镜像方向：0-上下, 1-左右, 2-中心
+   * @since 3.2.0
+   */ _proto.postDevicePtzMirrorService = function postDevicePtzMirrorService(command) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _postDevicePtzMirrorService(this, command)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 按月查询录像日历（本地存储、云存储和云录制）
+   * - 本地存储 / 云存储 https://open.ys7.com/help/4329
+   * - 云录制 https://open.ys7.com/help/2042
+   * @param recType 录像类型 -1 云录制 1-云存储，2-本地录像，3-关联录像
+   * @param month 查询的月份，格式 yyyy-MM
+   * @param spaceId 云录制空间的 spaceId，仅云录制需要
+   * @returns 有录像的日期列表，如 `["2025-08-14", "2025-08-16"]`
+   * @since 3.2.0
+   */ _proto.getRecordMonthService = function getRecordMonthService(recType, month, spaceId) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getRecordMonthService(this, recType, month, spaceId)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取 appKey（用于上报）
+   * @since 3.2.0
+   */ _proto.getAppKeyService = function getAppKeyService() {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getAppKeyService(this)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取设备的通道信息 https://open.ys7.com/help/1478
+   * @since 3.2.0
+   */ _proto.getDeviceListService = function getDeviceListService() {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getDeviceListService(this)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 设置设备视频质量（清晰度） https://open.ys7.com/help/2286
+   * @param videoLevel 清晰度等级 0-流畅 1-均衡 2-高清 3-超清 4-极清 5-3K 6-4K
+   * @param clientLid 直播取流会话标识（无缝切换用）
+   * @param prevVideoLevel 切换前清晰度，用于计算 adaptive 方向
+   * @since 3.2.0
+   */ _proto.setVideoLevelService = function setVideoLevelService(videoLevel, clientLid, prevVideoLevel) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _setVideoLevelService(this, videoLevel, clientLid, prevVideoLevel)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 查询设备云存储信息 https://open.ys7.com/help/1404
+   * @since 3.2.0
+   */ _proto.getCloudInfoService = function getCloudInfoService() {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getCloudInfoService(this)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取云录制截图上传地址
+   * @param fileName 截图文件名
+   * @since 3.2.0
+   */ _proto.getCloudUploadUrlService = function getCloudUploadUrlService(fileName) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getCloudUploadUrlService(this, fileName)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取取流备用地址
+   * @returns `[地址个数, 接口原始 data, 归一化后的地址列表]`
+   * @since 3.2.0
+   */ _proto.getStreamAddressListService = function getStreamAddressListService() {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getStreamAddressListService(this)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取云录制回放片段 https://open.ys7.com/help/2043
+   * @param params 查询参数
+   * @param params.begin 开始时间，格式 `YYYY-MM-DD HH:mm:ss`，不允许跨天，内部会自动转化为接口的 startTime
+   * @param params.end 结束时间，格式 `YYYY-MM-DD HH:mm:ss`，不允许跨天，内部会自动转化为接口的 endTime
+   * @param params.spaceId 云录制空间 ID
+   * @returns 回放片段列表（时间单位：秒）
+   * @since 3.2.0
+   */ _proto.getCloudRecordTimesService = function getCloudRecordTimesService(params) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getCloudRecordTimesService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取云存储回放片段 https://open.ys7.com/help/1422
+   * @param params 查询参数
+   * @param params.begin 开始时间（毫秒时间戳），内部会自动转化为接口的 startTime
+   * @param params.end 结束时间（毫秒时间戳），内部会自动转化为接口的 endTime
+   * @returns 回放片段列表（时间单位：秒，已处理时区）
+   * @since 3.2.0
+   */ _proto.getCloudTimesService = function getCloudTimesService(params) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getCloudTimesService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取本地回放片段 https://open.ys7.com/help/3922
+   * @param params 查询参数；custom 版本与云存储共用 /api/lapp/video/by/time，按 {@link EzvizFetchCloudRecParams} 传参
+   * @param params.begin 开始时间（秒级时间戳），开始结束时间需在同一天，内部会自动转化为接口的 startTime
+   * @param params.end 结束时间（秒级时间戳），内部会自动转化为接口的 endTime
+   * @param params.streamType 主子码流，仅本地回放支持 （3.2.0 开始支持）
+   * @returns 回放片段列表（时间单位：秒，已处理时区）
+   * @since 3.2.0
+   */ _proto.getLocalRecTimesService = function getLocalRecTimesService(params) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getLocalRecTimesService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 按设备获取告警消息列表 https://open.ys7.com/help/987
+   * @since 3.2.0
+   */ _proto.getAlarmListService = function getAlarmListService() {
+        return _async_to_generator(function(params) {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (params === void 0) params = {};
+                        return [
+                            4,
+                            _getAlarmListService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * 即时云抓拍 https://open.ys7.com/help/5235
+   * @since 3.2.0
+   */ _proto.captureSaveService = function captureSaveService(params) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _captureSaveService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 创建抓图任务（批量 / 定时抓拍计划） https://open.ys7.com/help/1390
+   * @since 3.2.0
+   */ _proto.createCaptureTaskService = function createCaptureTaskService(params) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _createCaptureTaskService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 查询存储空间列表 https://open.ys7.com/help/5230
+   * @since 3.2.0
+   */ _proto.getSpaceListService = function getSpaceListService() {
+        return _async_to_generator(function(params) {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (params === void 0) params = {};
+                        return [
+                            4,
+                            _getSpaceListService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * 获取播放地址 https://open.ys7.com/help/1414
+   * @param params 请求参数，均可选，不传时默认取自当前播放地址 / 播放器配置
+   * @param params.begin 回放开始时间，支持时间字符串和时间戳，默认取当前播放地址的 begin，内部会自动转化为接口的 startTime
+   * @param params.end 回放结束时间，支持时间字符串和时间戳，默认取当前播放地址的 end，内部会自动转化为接口的 stopTime
+   * @param params.playbackSpeed 回放倍速，默认取当前播放地址的 playbackSpeed
+   * @param params.protocol 流播放协议：1-ezopen，2-hls，3-rtmp，4-flv，5-ll-hls，默认 5
+   * @param params.type 地址类型：1-预览，2-本地录像回放，3-云存储录像回放，默认按当前播放地址判断
+   * @param params.quality 视频清晰度：1-高清（主码流），2-流畅（子码流）
+   * @param params.expireTime 过期时长（秒），默认按当前播放地址的 expire 计算剩余时长
+   * @returns 接口原始返回 `{ code, msg, data: { id, url, expireTime } }`
+   * @since 3.2.0
+   * @example
+   * ```typescript
+   * const res = await theme.getAddressService({ begin: '20260804000000', playbackSpeed: 2 });
+   * ```
+   */ _proto.getAddressService = function getAddressService() {
+        return _async_to_generator(function(params) {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        if (params === void 0) params = {};
+                        return [
+                            4,
+                            _getAddressService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).apply(this, arguments);
+    };
+    /**
+   * 获取 CDN 加速直播地址（有效期为当天 00:00:00 - 23:59:59）
+   * @param params 请求参数，`appName` 必填，见 {@link EzvizFetchCDNAddressParams}
+   * @returns 接口原始返回 `{ meta, data: { cdnUrl } }`
+   * @since 3.2.0
+   */ _proto.getCDNLiveAddressService = function getCDNLiveAddressService(params) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getCDNLiveAddressService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 获取 CDN 加速回放地址（有效期为当天 00:00:00 - 23:59:59）
+   * @param params 请求参数，`appName` / `begin` / `end` 必填，见 {@link EzvizFetchCDNRecordAddressParams}
+   * @returns 接口原始返回 `{ meta, data: { cdnUrl } }`
+   * @since 3.2.0
+   */ _proto.getCDNRecordAddressService = function getCDNRecordAddressService(params) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getCDNRecordAddressService(this, params)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    /**
+   * 查询直播间断流信息（仅萤石直播间地址）
+   * @param streamId 直播间流 ID，即播放地址里的 `sid`
+   * @returns 接口原始返回 `{ meta, data: { intrCode } }`
+   * @since 3.2.0
+   */ _proto.getStreamInterruptInfoService = function getStreamInterruptInfoService(streamId) {
+        return _async_to_generator(function() {
+            return _ts_generator(this, function(_state) {
+                switch(_state.label){
+                    case 0:
+                        return [
+                            4,
+                            _getStreamInterruptInfoService(this, streamId)
+                        ];
+                    case 1:
+                        return [
+                            2,
+                            _state.sent()
+                        ];
+                }
+            });
+        }).call(this);
+    };
+    // 更新 service 配置 @since 3.2.0
+    _proto._updateServicesOptions = function _updateServicesOptions(options) {
+        var _this_services_updateOptions, _this_services;
+        (_this_services = this.services) == null ? void 0 : (_this_services_updateOptions = _this_services.updateOptions) == null ? void 0 : _this_services_updateOptions.call(_this_services, options);
+    };
     _create_class(Theme, [
         {
             key: "url",
@@ -11974,10 +17516,30 @@ var THEME_DEFAULT_OPTIONS = {
                 return this._url;
             },
             set: function set(url) {
-                this._url = url;
-                // 地址变了回放类型也要跟着变，否则 recType / playType 会停留在上一个地址的结果，
-                // 进而影响倍速档位过滤、回放类型控件激活态与控件支持性校验
-                this._getRecType(url);
+                if (this._url !== url) {
+                    var _this_options;
+                    // 注意：URLSearchParams.get() 缺失时返回 null 而不是 undefined，必须用 has() 判断；
+                    // 只在确实需要补参数时才重新序列化 url，避免无谓地改写原始地址的编码
+                    if (this.isEzopen && this.isEzvizPlaybackUrl(url) && /\d+/.test(((_this_options = this.options) == null ? void 0 : _this_options.timeZone) + '')) {
+                        var urlObj = new URL(url);
+                        if (!urlObj.searchParams.has('timeZone')) {
+                            urlObj.searchParams.set('timeZone', this.options.timeZone + '');
+                            url = urlObj.toString();
+                        }
+                    }
+                    // spaceId 只对云录制（busType=7）有意义，其他回放类型不追加
+                    if (this.isEzopen && this.isEzvizPlaybackUrl(url) && this.options.spaceId) {
+                        var urlObj1 = new URL(url);
+                        if (urlObj1.searchParams.get('busType') === '7' && !urlObj1.searchParams.has('spaceId')) {
+                            urlObj1.searchParams.set('spaceId', this.options.spaceId + '');
+                            url = urlObj1.toString();
+                        }
+                    }
+                    this._updateServicesOptions({
+                        url: url
+                    });
+                    this._url = url;
+                }
             }
         },
         {
@@ -11989,6 +17551,15 @@ var THEME_DEFAULT_OPTIONS = {
                     return utilsTools.parseEzopenUrl(this._url);
                 }
                 return {};
+            }
+        },
+        {
+            key: "currentStreamTypeIn",
+            get: /**
+   * 主子码流 1 | 2
+   */ function get() {
+                var _this_urlInfo;
+                return (_this_urlInfo = this.urlInfo) == null ? void 0 : _this_urlInfo.streamTypeIn;
             }
         },
         {
@@ -12008,13 +17579,44 @@ var THEME_DEFAULT_OPTIONS = {
    * theme.playType // 'cloudRec'
    * ```
    */ function get() {
-                var _this_urlInfo;
-                // 回放三类由 _getRecType 解析（含 busType=7 → cloudRecord 的区分）
-                if (this.recType) return this.recType;
-                if (((_this_urlInfo = this.urlInfo) == null ? void 0 : _this_urlInfo.type) === 'live') return 'live';
-                // 标准流直播：http(s) 且不走回放路径 /openpb/
-                if (this._url && utilsTools.isHttp(this._url) && !this._url.includes('/openpb/')) return 'live';
+                if (this.isEzvizPlaybackUrl(this._url)) {
+                    var _this_urlInfo, _this_urlInfo_searchParams, _this_urlInfo1, _this_urlInfo2;
+                    if (((_this_urlInfo = this.urlInfo) == null ? void 0 : _this_urlInfo.recType) === 'cloud' && ((_this_urlInfo1 = this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo1.searchParams) == null ? void 0 : _this_urlInfo_searchParams.busType) === '7') {
+                        // 标准流不支持云录制
+                        return 'cloudRecord';
+                    } else if (((_this_urlInfo2 = this.urlInfo) == null ? void 0 : _this_urlInfo2.recType) === 'cloud') {
+                        return 'cloudRec';
+                    } else {
+                        return 'rec';
+                    }
+                } else if (this.isEzvizLiveUrl(this._url)) {
+                    return 'live';
+                }
                 return '';
+            }
+        },
+        {
+            key: "isEzvizLive",
+            get: /** 萤石直播 */ function get() {
+                return this.playType === 'live';
+            }
+        },
+        {
+            key: "isLocalRec",
+            get: /** 萤石本地存储 */ function get() {
+                return this.playType === 'rec';
+            }
+        },
+        {
+            key: "isCloudRec",
+            get: /** 萤石云存储 */ function get() {
+                return this.playType === 'cloudRec';
+            }
+        },
+        {
+            key: "isCloudRecord",
+            get: /** 萤石云录制 */ function get() {
+                return this.playType === 'cloudRecord';
             }
         },
         {
@@ -12460,38 +18062,104 @@ var THEME_DEFAULT_OPTIONS = {
             get: /**
    * 私有流地址
    */ function get() {
-                // 私有流地址
-                return /^ezopen:\/\//.test(this._url);
+                // 私有流地址（协议名大小写不敏感，与 ezuikit-js 的 _isEzopen 保持一致）
+                return /^ezopen:\/\//i.test(this._url);
             }
         },
         {
             key: "isEzviz",
             get: /**
    * 判断播放地址是萤石的播放地址
-   * @since 3.1.2
+   * @since 3.2.0
    */ function get() {
                 if (this.options.isEzviz) return true;
-                try {
-                    var _this__url_split, _this__url_split1, _path_split;
-                    var path = (_this__url_split = this._url.split('?')) == null ? void 0 : _this__url_split[0];
-                    var queryStr = (_this__url_split1 = this._url.split('?')) == null ? void 0 : _this__url_split1[1];
-                    var lastPath = (_path_split = path.split('/')) == null ? void 0 : _path_split[path.split('/').length - 1];
-                    // ezopen://open.ys7.com/BC7799091/1.rec
-                    // rtmp://rtmp05open.ys7.com:1935/v3/openpb/BC7799091_1_1
-                    // https://open.ys7.com/v3/openpb/llhls/BC7799091_1_1.m3u8
-                    // https://rtmp05open.ys7.com:9188/v3/openpb/BC7799091_1_1.flv
-                    // https://host:2001/live?dev=D08197169&chn=1&ss=token&stream=1
-                    if (// 私有流地址
-                    /^ezopen:\/\//.test(path) || // 标准流地址
-                    // 海外回放 https://test-ali-live.ys7.com/400e03b1738a484685f1bc2359fa141c_live/439ee62f0749a11f24595f35137b50af-BA0844510_1_1.flv?auth_key=1804485786-0-0-043eb3c148737c0f007a63e3e07243e6&begin=20250317190802&end=20250317231056&rec=local&v=1&vc=3
-                    (path.includes('/openlive/') || path.includes('/openpb/') || queryStr.includes('v=1') && (queryStr.includes('rec=local') || queryStr.includes('rec=cloud'))) && /[a-zA-Z0-9:]+_\d+_\d+/.test(lastPath) || // webtransport 取流
-                    utilsTools.isHttp(this._url) && queryStr && /dev=[a-zA-Z0-9:]+/.test(queryStr) && /chn=\d+/.test(queryStr) && /stream=\d+/.test(queryStr) && queryStr.includes('ssn=')) {
-                        return true;
-                    }
-                    return false;
-                } catch (error) {
-                    return false;
+                return this.isEzvizUrl();
+            // try {
+            //   const path = this._url.split('?')?.[0];
+            //   const queryStr = this._url.split('?')?.[1];
+            //   const lastPath = path.split('/')?.[path.split('/').length - 1];
+            //   // ezopen://open.ys7.com/BC7799091/1.rec
+            //   // rtmp://rtmp05open.ys7.com:1935/v3/openpb/BC7799091_1_1
+            //   // https://open.ys7.com/v3/openpb/llhls/BC7799091_1_1.m3u8
+            //   // https://rtmp05open.ys7.com:9188/v3/openpb/BC7799091_1_1.flv
+            //   // https://host:2001/live?dev=D08197169&chn=1&ss=token&stream=1
+            //   if (
+            //     // 私有流地址
+            //     /^ezopen:\/\//.test(path) ||
+            //     // 标准流地址
+            //     // 海外回放 https://test-ali-live.ys7.com/400e03b1738a484685f1bc2359fa141c_live/439ee62f0749a11f24595f35137b50af-BA0844510_1_1.flv?auth_key=1804485786-0-0-043eb3c148737c0f007a63e3e07243e6&begin=20250317190802&end=20250317231056&rec=local&v=1&vc=3
+            //     ((path.includes('/openlive/') || path.includes('/openpb/') || (queryStr.includes('v=1') && (queryStr.includes('rec=local') || queryStr.includes('rec=cloud')))) && /[a-zA-Z0-9:]+_\d+_\d+/.test(lastPath)) ||
+            //     // webtransport 取流
+            //     (isHttp(this._url) && queryStr && /dev=[a-zA-Z0-9:]+/.test(queryStr) && /chn=\d+/.test(queryStr) && /stream=\d+/.test(queryStr) && queryStr.includes('ssn='))
+            //   ) {
+            //     return true;
+            //   }
+            //   return false;
+            // } catch (error) {
+            //   return false;
+            // }
+            }
+        },
+        {
+            key: "deviceCapacity",
+            get: /**
+   * 设备能力集，字段见 {@link EzvizDeviceCapacity}；未查询到能力集时为空对象，按「不支持」处理， 需要
+   * @since 3.2.0
+   */ function get() {
+                var _this_services, _this, _this_services1;
+                return ((_this = ((_this_services1 = this.services) == null ? void 0 : _this_services1.deviceCapacity) || {}) == null ? void 0 : _this[(_this_services = this.services) == null ? void 0 : _this_services.getKeyName]) || {};
+            }
+        },
+        {
+            key: "deviceInfo",
+            get: /**
+   * 设备信息
+   * @since 3.2.0
+   */ function get() {
+                var _this_services, _this, _this_services1;
+                return ((_this = ((_this_services1 = this.services) == null ? void 0 : _this_services1.deviceInfo) || {}) == null ? void 0 : _this[(_this_services = this.services) == null ? void 0 : _this_services.getKeyName]) || {};
+            }
+        },
+        {
+            key: "videoLevelList",
+            get: /**
+   * 设备支持的清晰度列表, 如果外部传入默认使用传入的值， 不支持动态设置清晰度列表
+   * @since 3.2.0
+   */ function get() {
+                var _this_options_definitionOptions, _this_options_videoLevelList, _this_services, _this, _this_services1;
+                if (((_this_options_definitionOptions = this.options.definitionOptions) == null ? void 0 : _this_options_definitionOptions.list.length) > 0 || ((_this_options_videoLevelList = this.options.videoLevelList) == null ? void 0 : _this_options_videoLevelList.length) > 0) {
+                    var _this_options_definitionOptions1;
+                    return ((_this_options_definitionOptions1 = this.options.definitionOptions) == null ? void 0 : _this_options_definitionOptions1.list) || this.options.videoLevelList;
                 }
+                return ((_this = ((_this_services1 = this.services) == null ? void 0 : _this_services1.videoLevelList) || {}) == null ? void 0 : _this[(_this_services = this.services) == null ? void 0 : _this_services.getKeyName]) || [];
+            }
+        },
+        {
+            key: "support3DZoom",
+            get: /** 支持3D定位功能 （仅直播支持判断）@since 3.2.0 */ function get() {
+                var _this_deviceCapacity;
+                return ((_this_deviceCapacity = this.deviceCapacity) == null ? void 0 : _this_deviceCapacity.support_3d_position) === '1' && utilsTools.isEzvizLiveUrl(this.url);
+            }
+        },
+        {
+            key: "use3DZoom",
+            get: /**
+   * 是否开启3D定位功能 （仅直播支持判断）
+   * @since 3.2.0
+   */ function get() {
+                return this.support3DZoom && this.options.use3DZoom;
+            }
+        },
+        {
+            key: "spaceId",
+            get: // ------------------------------------------------------------------------------------------
+            /**
+   * 萤石云存储空间 id（云录制回放与云抓拍共用）
+   *
+   * 优先级：`setSpaceId()` 设置的值 > 播放地址中的 spaceId（ezopen 初始化时写入 options） > 初始化参数 `spaceId`
+   * @since 3.2.0
+   */ function get() {
+                return this.options.spaceId;
             }
         }
     ]);
@@ -12503,7 +18171,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.1.9-beta.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.1';
 
 exports.CONTROL_INIT_EVENTS = CONTROL_INIT_EVENTS;
 exports.Control = Control;

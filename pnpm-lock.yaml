@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@ezuikit/control-broadcast':
+        specifier: 1.0.0-beta.5
+        version: 1.0.0-beta.5
       '@ezuikit/control-date-picker':
         specifier: 2.1.2-beta.1
         version: 2.1.2-beta.1
@@ -33,11 +36,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       '@ezuikit/utils-tools':
-        specifier: ^2.0.9
-        version: 2.0.9
-      '@juggle/resize-observer':
-        specifier: ^3.4.0
-        version: 3.4.0
+        specifier: ^2.0.11
+        version: 2.0.11
       '@skax/delegate':
         specifier: 4.0.2
         version: 4.0.2
@@ -56,8 +56,20 @@ importers:
 
 packages:
 
+  '@ezuikit/control-broadcast@1.0.0-beta.5':
+    resolution: {integrity: sha512-EcwCjHPXHOVQaovJ4x3gNpPIOBXoQ3V6D9A0oAS2TVmAhd2dVFxabcwNfbu0SReka6f21pUreLaxQmSSK8cNqQ==}
+
+  '@ezuikit/control-core@0.0.1-beta.2':
+    resolution: {integrity: sha512-6TlZJj6KuVmGR7s6dnty2E1ozskwTqMHlBebOY5MzQUmXaBrhoPvWsqZ3vzxbGf33LOIs2ij9bDR3dZZimLkLQ==}
+
   '@ezuikit/control-date-picker@2.1.2-beta.1':
     resolution: {integrity: sha512-IGbJ0J+SifQSOMdCjnTQMJZWlD+qEqQHgWYtCWUtGP82q6pOwMGbSBE6PU1OneU7mjy9PyuvUE8Y17ylof5cFg==}
+
+  '@ezuikit/control-drawer@0.0.3':
+    resolution: {integrity: sha512-8LyqqEkoVXOCwD6kNGDS8u5h4KMGRzmR+L75+NqMZpt71RwCKW4bgzdCoGhmkDQ85ub6Kh7TaVIOZMEgiGpXCQ==}
+
+  '@ezuikit/control-message@0.0.2':
+    resolution: {integrity: sha512-flBD10WN3sT3X/RZIfOapx3O+pKvuqEZame0gFWJNERPW3DFrQI6r0LNnLCsG91FOghBRQGMe378Uhsjb+VYHg==}
 
   '@ezuikit/control-modal@0.0.2':
     resolution: {integrity: sha512-Etd2RA/iKtkhsAIXtt/sifVPsIY9Xqhe0M9LGgC0s5/DApH4/GtetZQMkCwBgk8K3nLssN0dtzObRuUaxv9+Jw==}
@@ -86,11 +98,8 @@ packages:
   '@ezuikit/utils-logger@2.1.0':
     resolution: {integrity: sha512-Kj/vTddGWhRhOApo/QmesxqEPxkSwhwakQGZx3b3xLI8Dou2NMg8iNA+9aXU4jT5uT13TmdCn0oMC8Kbq6BMGQ==}
 
-  '@ezuikit/utils-tools@2.0.9':
-    resolution: {integrity: sha512-GokUQiYNHG8cJkqU4OAJD2Dm3pXiFHvlYTYm+aw3HMTAdeERSpAgGQuWX6PHhy9GaaOiZunC5c1oRfQPnZfyfQ==}
-
-  '@juggle/resize-observer@3.4.0':
-    resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
+  '@ezuikit/utils-tools@2.0.11':
+    resolution: {integrity: sha512-yG3wPfVJw9iEkWArwIXbhJc0OP/lH9z5BM+fmEms+RdLS8KDR5NVnKR2mdsVDuMkPC9ycWe1XmYBTSbgeGJDRA==}
 
   '@skax/delegate@4.0.2':
     resolution: {integrity: sha512-8imP+fGESjlbU4mFhZMEuR3/qmYVtqQjXXzZ/C/imbzKqyaMWYpEDqQXNf6yGHzWHUJhZwn5AWNm645U1GjQsQ==}
@@ -114,13 +123,29 @@ packages:
 
 snapshots:
 
+  '@ezuikit/control-broadcast@1.0.0-beta.5':
+    dependencies:
+      '@ezuikit/control-core': 0.0.1-beta.2
+      '@ezuikit/control-drawer': 0.0.3
+      '@ezuikit/control-message': 0.0.2
+
+  '@ezuikit/control-core@0.0.1-beta.2':
+    dependencies:
+      '@ezuikit/utils-i18n': 2.0.1
+      '@ezuikit/utils-logger': 2.1.0
+      deepmerge: 4.3.1
+
   '@ezuikit/control-date-picker@2.1.2-beta.1':
     dependencies:
       '@ezuikit/utils-i18n': 2.0.1
-      '@ezuikit/utils-tools': 2.0.9
+      '@ezuikit/utils-tools': 2.0.11
       '@skax/delegate': 4.0.2
       '@skax/picker': 1.1.8
       deepmerge: 4.3.1
+
+  '@ezuikit/control-drawer@0.0.3': {}
+
+  '@ezuikit/control-message@0.0.2': {}
 
   '@ezuikit/control-modal@0.0.2':
     dependencies:
@@ -138,7 +163,7 @@ snapshots:
       '@ezuikit/control-modal': 0.0.2
       '@ezuikit/control-virtual-scroll': 0.0.2
       '@ezuikit/utils-i18n': 2.0.1
-      '@ezuikit/utils-tools': 2.0.9
+      '@ezuikit/utils-tools': 2.0.11
       deepmerge: 4.3.1
 
   '@ezuikit/control-segment-progress@0.0.1': {}
@@ -146,7 +171,7 @@ snapshots:
   '@ezuikit/control-time-line@2.1.0':
     dependencies:
       '@ezuikit/utils-i18n': 2.0.1
-      '@ezuikit/utils-tools': 2.0.9
+      '@ezuikit/utils-tools': 2.0.11
       '@skax/delegate': 4.0.2
       '@skax/drag-scroll': 1.1.2
       '@skax/picker': 1.1.8
@@ -165,9 +190,7 @@ snapshots:
 
   '@ezuikit/utils-logger@2.1.0': {}
 
-  '@ezuikit/utils-tools@2.0.9': {}
-
-  '@juggle/resize-observer@3.4.0': {}
+  '@ezuikit/utils-tools@2.0.11': {}
 
   '@skax/delegate@4.0.2': {}
 

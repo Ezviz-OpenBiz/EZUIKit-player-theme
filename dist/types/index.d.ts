@@ -18,7 +18,7 @@ declare const THEME_SCALE_MODE_TYPE: {
     /** 视频画面做等比缩放后,完全填充canvas区域,画面不被拉伸,没有黑边,但画面显示不全 */
     readonly fullAuto: 2;
 };
-declare const THEME_PROPS: readonly ["width", "height", "playing", "volume", "muted", "loading", "recType", "isCurrentFullscreen", "orientationAngle", "zooming", "zoom", "recording", "recordList", "speed", "urlInfo", "videoLevelList", "videoLevel", "recMonth", "url", "playbackRange"];
+declare const THEME_PROPS: readonly ["width", "height", "playing", "volume", "muted", "loading", "playType", "isCurrentFullscreen", "orientationAngle", "zooming", "zoom", "recording", "recordList", "speed", "supportLocalRecordStreamType", "urlInfo", "videoLevelList", "videoLevel", "recMonth", "url", "playbackRange"];
 /**
  * 全部播放类型：直播 + 三种回放
  *
@@ -78,6 +78,8 @@ declare const CONTROL_INIT_EVENTS: {
     readonly recControlInit: "Control.recControlInit";
     /** 倍速控件初始化完成 */
     readonly speedControlInit: "Control.speedControlInit";
+    /** 码流切换控件初始化完成 */
+    readonly streamTypeControlInit: "Control.streamTypeControlInit";
     /** 日历控件初始化完成 */
     readonly dateControlInit: "Control.dateControlInit";
     /** 时间选择控件初始化完成 */
@@ -148,10 +150,19 @@ declare const EVENTS: {
     readonly changeTheme: "changeTheme";
     /** 回放类型切换 */
     readonly recTypeChange: "recTypeChange";
+    /** 播放类型切换（live / rec / cloudRec / cloudRecord），回调参数 type 为切换后的播放类型 */
+    readonly playTypeChange: "playTypeChange";
     /** 切换清晰度 */
     readonly definitionChange: "definitionChange";
     /** 播放速度切换 */
     readonly speedChange: "speedChange";
+    /** 码流切换（1: 主码流, 2: 子码流） */
+    readonly streamTypeChange: "streamTypeChange";
+    /**
+     * 设备（本地回放）支持主子码流切换，收到后才展示码流切换控件（默认不展示）。
+     * 载荷可选：省略或 true 表示支持，false 表示不支持（重新隐藏）
+     */
+    readonly supportLocalRecordStreamType: "supportLocalRecordStreamType";
     /** 控件开始录制 */
     readonly recordingChange: "recordingChange";
     /** 对讲状态变化 */
@@ -159,7 +170,7 @@ declare const EVENTS: {
     /** 麦克风音量变化 */
     readonly talkVolumeChange: "talkVolumeChange";
     /** 语音广播状态变化 */
-    readonly broadcastChange: "broadcastChange";
+    readonly broadcastPanelChange: "broadcastPanelChange";
     /** AI对话框状态变化 */
     readonly aichatChange: "aichatChange";
     /** 直播模式切换 */
@@ -230,6 +241,12 @@ declare const EVENTS: {
         readonly speedPanelOpenChange: "Control.speedPanelOpenChange";
         /** 播放速度控件销毁 */
         readonly speedDestroy: "Control.speedDestroy";
+        /** 码流切换 (streamTypeIn: 1 主码流, 2 子码流, item) */
+        readonly streamTypeChange: "Control.streamTypeChange";
+        /** 码流面板 显示隐藏变换 */
+        readonly streamTypePanelOpenChange: "Control.streamTypePanelOpenChange";
+        /** 码流切换控件销毁 */
+        readonly streamTypeDestroy: "Control.streamTypeDestroy";
         /** 云台面板 显示隐藏变换 */
         readonly ptzPanelOpenChange: "Control.ptzPanelOpenChange";
         /** 云台速度切换 */
@@ -247,9 +264,21 @@ declare const EVENTS: {
         /** 对讲控件销毁 */
         readonly talkDestroy: "Control.talkDestroy";
         /** 语音广播状态变化 */
-        readonly broadcastChange: "Control.broadcastChange";
+        readonly broadcastPanelChange: "Control.broadcastPanelChange";
         /** 语音广播控件销毁 */
         readonly broadcastDestroy: "Control.broadcastDestroy";
+        /** 语音广播面板语音列表加载完成，参数为语音列表 `VoiceItem[]` */
+        readonly broadcastVoiceListChange: "Control.broadcastVoiceListChange";
+        /** 语音广播面板内置接口调用完成，参数 `{ api, success, code, msg, data }` */
+        readonly broadcastApiResult: "Control.broadcastApiResult";
+        /** 语音广播面板录到有效语音，参数 `{ voiceFile, deviceSerial, channelNo }`，紧挨着在下发之前派发 */
+        readonly broadcastVoiceRecorded: "Control.broadcastVoiceRecorded";
+        /** 语音广播面板开始录音 */
+        readonly broadcastRecordStart: "Control.broadcastRecordStart";
+        /** 语音广播面板停止录音并得到有效录音（随后请求下发）；关闭面板取消录音时不派发 */
+        readonly broadcastRecordStop: "Control.broadcastRecordStop";
+        /** 语音广播面板录音完成（正常停止，或达到最长时长自动停止），参数为 WAV 录音 `Blob` */
+        readonly broadcastRecordComplete: "Control.broadcastRecordComplete";
         /** AI对话框状态变化 */
         readonly aichatChange: "Control.aichatChange";
         /** AI对话框控件销毁 */
@@ -361,6 +390,8 @@ declare const EVENTS: {
         readonly recControlInit: "Control.recControlInit";
         /** 倍速控件初始化完成 */
         readonly speedControlInit: "Control.speedControlInit";
+        /** 码流切换控件初始化完成 */
+        readonly streamTypeControlInit: "Control.streamTypeControlInit";
         /** 日历控件初始化完成 */
         readonly dateControlInit: "Control.dateControlInit";
         /** 时间选择控件初始化完成 */
@@ -384,6 +415,34 @@ declare const EVENTS: {
         readonly recFooterDestroy: "Theme.recFooterDestroy";
     };
     readonly message: "message";
+    readonly http: {
+        readonly getDeviceCapacity: "getDeviceCapacity";
+        readonly getDeviceInfo: "getDeviceInfo";
+        readonly getDeviceSupportQuality: "getDeviceSupportQuality";
+        readonly getEzopenUrl: "getEzopenUrl";
+        readonly queryVoiceList: "queryVoiceList";
+        readonly sendVoiceOnce: "sendVoiceOnce";
+        readonly sendVoice: "sendVoice";
+        readonly postDevicePtzMirror: "postDevicePtzMirror";
+        readonly getRecordMonth: "getRecordMonth";
+        readonly getAppKey: "getAppKey";
+        readonly getDeviceList: "getDeviceList";
+        readonly setVideoLevel: "setVideoLevel";
+        readonly getCloudInfo: "getCloudInfo";
+        readonly getCloudUploadUrl: "getCloudUploadUrl";
+        readonly getStreamAddressList: "getStreamAddressList";
+        readonly getCloudRecordTimes: "getCloudRecordTimes";
+        readonly getCloudTimes: "getCloudTimes";
+        readonly getLocalRecTimes: "getLocalRecTimes";
+        readonly getAlarmList: "getAlarmList";
+        readonly captureSave: "captureSave";
+        readonly createCaptureTask: "createCaptureTask";
+        readonly getSpaceList: "getSpaceList";
+        readonly getAddress: "getAddress";
+        readonly getCDNLiveAddress: "getCDNLiveAddress";
+        readonly getCDNRecordAddress: "getCDNRecordAddress";
+        readonly getStreamInterruptInfo: "getStreamInterruptInfo";
+    };
 };
 
 /**
@@ -424,6 +483,8 @@ type ControlType =
  | 'globalFullscreen'
 /** 倍速 */
  | 'speed'
+/** 码流切换（主码流 / 子码流，本地回放） */
+ | 'streamType'
 /** 日期选择 */
  | 'date'
 /** 时间选择 */
@@ -1148,7 +1209,7 @@ interface RecOptions extends Omit<ControlOptions, 'tagName'> {
     /** 回放类型切换时的回调 */
     onChange?: (type: ThemeRecType) => void;
     /** 默认回放类型， 默认 'rec' */
-    recType?: ThemeRecType;
+    playType?: ThemeRecType;
 }
 /**
  * 回放类型切换（本地回放(sdk 卡)， 云存储回放， 云录制回放）控件
@@ -1226,6 +1287,15 @@ interface SpeedOptions extends SelectOptions {
 }
 
 /**
+ * 码流类型：1 主码流，2 子码流（仅支持这两种）
+ */
+type StreamTypeIn = 1 | 2;
+type StreamTypeOptions = Omit<SelectOptions, 'list' | 'fieldNames' | 'value'> & {
+    /** 初始码流，默认取播放地址里的 streamTypeIn，都没有时为 1（主码流） */
+    value?: StreamTypeIn;
+};
+
+/**
  * 对讲控件配置项
  */
 interface TalkOptions extends Omit<ControlOptions, 'tagName'> {
@@ -1271,6 +1341,875 @@ declare class Pause extends Control {
      */
     destroy(): void;
     protected _onControlClick(e: Event): void;
+}
+
+interface EzopenToken {
+    deviceToken?: {
+        video?: string;
+        global?: string;
+    };
+    streamToken?: {
+        live?: string;
+        rec?: string;
+        talk?: string;
+    };
+    httpToken?: {
+        url?: string;
+    };
+}
+interface ServicesOptions {
+    sdkType: string;
+    baseURL?: string;
+    accessToken: string;
+    token?: EzopenToken;
+    ezopenParams?: Record<string, any>;
+    /** 播放地址 */
+    url?: string;
+    wsParams?: Record<string, any>;
+    /**
+     * 时区偏移（小时），中国以外的地区设备才需要；播放地址里带 `timeZone` 参数时以地址为准。
+     * 回放片段查询（`getLocalRecTimes` / `getCloudTimes`）按它把返回的片段时间换算回本地时间
+     * @since 3.2.0
+     */
+    timeZone?: number;
+    videoLevelList?: EzvizVideoLevel[];
+    clientType?: string;
+}
+/**
+ * 视频清晰度能力项
+ * @deprecated
+ * 对应 `EzvizDeviceCapacity.video_quality_capacity` 数组中的一项，各字段均为字符串。
+ */
+interface IVideoQualityCapacity {
+    /** 码流类型 */
+    streamType?: string;
+    /** 清晰度等级 */
+    videoLevel?: string;
+    /** 分辨率枚举 */
+    resolution?: string;
+    /** 视频码率枚举 */
+    videoBitRate?: string;
+    /** 最大码率 */
+    maxBitRate?: string;
+}
+/**
+ * 设备能力集
+ *
+ * 来自设备能力查询接口（https://open.ys7.com/help/678）返回的 `data`，字段名是设备侧的原始命名
+ * （含下划线、大小写混用，个别字段名含 `.`），不做转换。
+ *
+ * @remarks
+ * - 绝大多数字段是字符串形式的开关：`"1"` 支持，`"0"` 不支持；字段缺失按不支持处理。
+ *   取值多于 0 / 1 的字段（如 `support_talk`、`support_wifi`）在注释里列出了各取值含义。
+ * - 标注「文档未收录」的字段出现在设备实际返回里，但开放平台文档没有列出，含义由字段名推断，仅供参考。
+ */
+interface EzvizDeviceCapacity {
+    /** 是否支持云台上下转动 0-不支持, 1-支持 */
+    ptz_top_bottom?: string;
+    /** 是否支持云台左右转动 0-不支持, 1-支持 */
+    ptz_left_right?: string;
+    /** 是否支持云台 45 度方向转动 0-不支持, 1-支持 */
+    ptz_45?: string;
+    /** 是否支持云台缩放控制 0-不支持, 1-支持 */
+    ptz_zoom?: string;
+    /** 是否支持云台预置点 0-不支持, 1-支持 */
+    ptz_preset?: string;
+    /** 是否支持普通巡航 0-不支持, 1-支持 */
+    ptz_common_cruise?: string;
+    /** 是否支持花样巡航 0-不支持, 1-支持 */
+    ptz_figure_cruise?: string;
+    /** 是否支持中心镜像 0-不支持, 1-支持 */
+    ptz_center_mirror?: string;
+    /** 是否支持左右镜像 0-不支持, 1-支持 */
+    ptz_left_right_mirror?: string;
+    /** 是否支持上下镜像 0-不支持, 1-支持 */
+    ptz_top_bottom_mirror?: string;
+    /** 是否支持关闭镜头 0-不支持, 1-支持 */
+    ptz_close_scene?: string;
+    /** 是否支持焦距模式 0-不支持, 1-支持 */
+    ptz_focus?: string;
+    /** 云台控制方式 0-支持直连+转发云台控制, 1-支持直连云台控制, 2-支持转发云台控制 */
+    support_ptz_model?: string;
+    /** 是否支持云台自动复位 0-不支持, 1-支持 */
+    support_ptz_auto_reset?: string;
+    /**
+     * 是否支持全景云台功能 0-不支持, 1-支持（C6B 等云台摄像机支持）
+     *
+     * 如果存在 {@link EzvizDeviceCapacity.support_fullscreen_ptz_12}，优先参考它。
+     */
+    support_fullscreen_ptz?: string;
+    /** 是否支持全景云台功能 0-不支持, 1-支持（C6B 等云台摄像机支持，12 张全景云台图片） */
+    support_fullscreen_ptz_12?: string;
+    /** 是否支持水平全景 0-不支持, 1-支持 */
+    support_horizontal_panoramic?: string;
+    /** 是否支持垂直全景（与 `support_horizontal_panoramic` 对应）0-不支持, 1-支持 */
+    support_vertical_panoramic?: string;
+    /** 是否支持预置点告警联动 0-不支持, 1-支持（C6B 等云台摄像机支持） */
+    support_preset_alarm?: string;
+    /** 是否支持智能跟踪 0-不支持, 1-支持（C6B 等云台摄像机支持） */
+    support_intelligent_track?: string;
+    /** 是否支持一键聚焦 0-不支持, 1-支持（F1、F2 等变焦摄像机支持） */
+    support_key_focus?: string;
+    /** 支持云台（总开关），`"1"` 支持（文档未收录） */
+    support_ptz?: string;
+    /** 通道数量（注意是 number，其余字段多为 string）（文档未收录） */
+    support_channel_number?: number;
+    /** 通道类型 1-数字通道, 2-模拟通道 */
+    support_chan_type?: string;
+    /** 是否支持通道名称配置到设备（IPC / NVR）0-不支持, 1-支持 */
+    support_modify_chan_name?: string;
+    /** 是否支持修改设备加密密码 0-不支持, 1-支持 */
+    support_modify_pwd?: string;
+    /** 是否支持设备升级 0-不支持, 1-支持 */
+    support_upgrade?: string;
+    /** 是否支持用户解绑设备 0-不支持, 1-支持 reset 键解绑, 2-支持界面点击确定按钮解绑 */
+    support_unbind?: string;
+    /** 是否支持时区配置 0-不支持, 1-支持 */
+    support_timezone?: string;
+    /** 支持的语言类型，逗号分隔，如 `"ENGLISH,SIMPCN"` */
+    support_language?: string;
+    /**
+     * 是否支持设备设置功能 0-不支持, 1-支持
+     *
+     * 设备设置页新增「更多配置」，该项按设备能力集实现，进入 H5 网页展现。
+     */
+    support_more?: string;
+    /** 是否支持睡眠功能 0-不支持, 1-支持 */
+    support_sleep?: string;
+    /** 设备重启时间，单位秒，默认 120 */
+    support_restart_time?: string | number;
+    /** 是否支持通过 UserID 关联设备 0-不支持, 1-支持 */
+    support_userId?: string;
+    /** 是否支持关联设备 0-无关联设备, 1-关联监控点或 N1, 2-关联探测器或 A1, 3-关联监控点探测器或 R1, 4-关联多通道设备 */
+    support_related_device?: string;
+    /** NVR / R1 是否支持关联 IPC 存储 0-不支持, 1-支持 */
+    support_related_storage?: string;
+    /** 是否支持设备自动上下线 0-不支持, 1-支持 */
+    support_auto_offline?: string;
+    /** 是否支持设备下线通知 0-不支持, 1-支持 */
+    support_device_offline_notify?: string;
+    /** 是否支持通道下线通知，支持后通道下线会触发 videoloss 告警 0-不支持, 1-支持 */
+    support_channel_offline_notify?: string;
+    /** X3 或 N1 可以关联的通道数 */
+    replay_chan_nums?: string | number;
+    /** 是否支持设备跨公网配置的能力级 0-不支持, 1-支持 */
+    support_sdk_transport?: string;
+    /** 是否支持多画面播放 0-不支持, 1-支持（客户端使用，与设备无关） */
+    support_multi_screen?: string;
+    /** 是否支持蓝牙 0-不支持, 1-支持 */
+    support_bluetooth?: string;
+    /** 是否支持畸形矫正 0-不支持, 1-支持 */
+    support_rectify_image?: string;
+    /** 是否支持显微镜功能 0-不支持, 1-支持 */
+    support_microscope?: string;
+    /** 是否支持鱼眼模式 0-不支持, 1-支持 */
+    support_fisheye_mode?: string;
+    /** 是否支持客流统计 0-不支持, 1-支持 */
+    support_flow_statistics?: string;
+    /** 是否支持儿歌播放功能 0-不支持, 1-支持 */
+    support_music?: string;
+    /** 是否支持语音识别 0-不支持, 1-支持 */
+    support_speech_recognition?: string;
+    /** 是否支持语音闹钟功能 0-不支持, 1-支持 */
+    support_voice_alarmclock?: string;
+    /** 是否支持微信互联 0-不支持, 1-支持 */
+    support_weixin?: string;
+    /** 是否支持声源定位 0-不支持, 1-支持（`ssl` 即 sound source localization，不是 SSL 证书） */
+    support_ssl?: string;
+    /** 是否支持留言 0-不支持, 1-支持 */
+    support_message?: string;
+    /** 是否支持留言封面 0-不支持, 1-支持 */
+    support_message_cover?: string;
+    /** 是否支持设备灯光，`"1"` 支持（文档未收录） */
+    support_device_light?: string;
+    /** 支持检查设备激活状态，`"1"` 支持（文档未收录） */
+    support_check_activestatus?: string;
+    /** 支持远程日志上传，`"1"` 支持（文档未收录） */
+    support_remoteLogUpload?: string;
+    /** 支持 HiDDNS 配置，`"1"` 支持（文档未收录） */
+    support_hiddns_config?: string;
+    /** 支持带宽检测，`"1"` 支持（文档未收录） */
+    support_bwcheck?: string;
+    /** 支持 DSTP 协议，`"1"` 支持（文档未收录） */
+    support_DSTP?: string;
+    /** 支持 GL，`"1"` 支持，具体含义由设备侧定义（文档未收录） */
+    support_GL?: string;
+    /** 是否支持 WI-FI 0-不支持, 1-支持 netsdk 配置 WI-FI, 2-支持带 userId 的新 WI-FI 配置方式, 3-支持一键配置 WI-FI */
+    support_wifi?: string;
+    /** 是否支持 WiFi userId */
+    support_wifi_userId?: string;
+    /** 是否支持智能 WiFi 配网 */
+    support_smart_wifi?: string;
+    /** 是否支持 2.4G 无线频段 0-不支持, 1-支持 */
+    'support_wifi_2.4G'?: string;
+    /** 是否支持 5G 无线频段 0-不支持, 1-支持 */
+    support_wifi_5G?: string;
+    /**
+     * 是否支持营销 WiFi，只有 `support_wifi_2.4G` 为 `"1"` 时才生效
+     *
+     * 0-不支持, 1-支持但不能设置营销页（X1）, 2-支持且可以设置营销页
+     */
+    support_wifi_portal?: string;
+    /** 是否支持添加设备配置 WiFi 使用 0-不支持, 1-smartconfig+声波失败后支持 AP 配网, 2-设备默认 AP 配网 */
+    support_ap_mode?: string;
+    /** 是否支持声波配置（高频版本）0-不支持, 1-支持 */
+    support_new_sound_wave?: string;
+    /** 是否支持 P2P 模式：默认 0 表示老的 P2P 协议，1 表示该版本支持新的 P2P 协议 */
+    support_p2p_mode?: string;
+    /** 是否支持 NAT 组合为 3-4 的 NAT 穿透（P2PV2.1）0-不支持, 1-支持 */
+    support_nat_pass?: string;
+    /** 是否支持视频图像加密 0-不支持, 1-支持 */
+    support_encrypt?: string;
+    /** 是否支持设备远程授权获取密码 0-不支持, 1-支持 */
+    support_remote_auth_randcode?: string;
+    /** 是否支持走代理时自动加密「没有开启视频加密」的流 0-不支持, 1-支持 */
+    support_noencript_via_antproxy?: string;
+    /** 是否支持反向直连功能 0-不支持, 1-支持 */
+    support_reverse_direct?: string;
+    /** 是否支持查询当前预览、回放链接信息 0-不支持, 1-支持 */
+    support_query_play_connections?: string;
+    /** 预览取流格式传输类型 0-tcp, 1-udp，默认 0 */
+    support_transfertype?: string;
+    /** 是否支持自适应码流 0-不支持, 1-支持 */
+    support_auto_adjust?: string;
+    /** 是否支持自定义码率 0-不支持, 1-支持 */
+    support_customize_rate?: string;
+    /** 是否支持高清码率限制 0-不支持码率限制, 1-支持高清码率限制 */
+    support_rate_limit?: string;
+    /** 支持快速取流，`"1"` 支持（文档未收录） */
+    support_quick_get_streaming?: string;
+    /**
+     * 全链路加密能力集（数组）
+     * @since 9.0.14
+     *
+     * 元素含义：
+     *   0 = 不支持（一票否决：含 0 视作全部不支持）
+     *   1 = 预览全链路加密
+     *   2 = 回放全链路加密
+     *   3 = 对讲全链路加密
+     *   4 = 套包预览  5 = 套包回放  6 = 套包对讲  7 = UDP 预览
+     *
+     * 服务端实测返回形态：**逗号分隔字符串**（open.ys7.com 生产验证）
+     *   "1"     → 支持预览
+     *   "1,2"   → 支持预览 + 回放
+     *   "0"     → 明确不支持
+     *   缺失    → 视作不支持（多数存量设备）
+     *
+     * 判定统一走 ecdhHelper.isEcdhSupported（内部按 [,，] 切分归一）
+     */
+    support_ecdh_v2?: string;
+    /** 该设备型号是否支持云存储 0-不支持, 1-支持 */
+    support_cloud?: string;
+    /**
+     * 该设备版本是否支持云存储 0-不支持, 1-支持，需要和 `support_cloud` 组合使用：
+     *
+     * - `support_cloud = 1` 且 `support_cloud_version = 1`：支持云存储
+     * - `support_cloud = 1` 且 `support_cloud_version = 0`：该型号支持云存储，但当前固件版本不支持
+     * - `support_cloud = 0`：该型号不支持云存储
+     */
+    support_cloud_version?: string;
+    /** 是否支持连续云存储 0-不支持, 1-支持（与 `support_cloud` 完全无关） */
+    support_continuous_cloud?: string;
+    /** 是否支持存储格式化 0-不支持, 1-支持 */
+    support_disk?: string;
+    /** 是否支持全天录像配置开关 0-不支持, 1-支持 */
+    support_fullday_record?: string;
+    /** 是否支持调节回放播放速度功能 0-不支持, 1-支持（仅 IPC 支持） */
+    support_replay_speed?: string;
+    /** 是否支持手机拍照上传到云存储 0-不支持, 1-支持 */
+    support_upload_cloud_file?: string;
+    /** 支持回放时拖动定位（seek），`"1"` 支持（文档未收录） */
+    support_seek_playback?: string;
+    /** 支持 seek v2 版本，`"1"` 支持（文档未收录） */
+    support_seek_v2?: string;
+    /** 支持录像检索过滤，值为支持的过滤类型列表，逗号分隔，如 `"1,2"`（文档未收录） */
+    support_record_search_filter?: string;
+    /**
+     * 支持本地录像按码流类型（主 / 子码流）回放，`"1"` 支持（文档未收录）
+     *
+     * 看起来对应主题的 `supportLocalRecordStreamType`，为 `"1"` 时本地回放才会展示码流切换控件，需确认。
+     */
+    support_record_stream_type?: string;
+    /** 支持回放下载，`"1"` 支持（文档未收录） */
+    support_replay_download?: string;
+    /** 支持检索本地录像延迟，`"1"` 支持（文档未收录） */
+    support_search_local_record_delay?: string;
+    /** 支持停止录像（录像视频），`"1"` 支持（文档未收录） */
+    support_stoprecord_video?: string;
+    /** 是否支持封面抓图 0-不支持, 1-支持 */
+    support_capture?: string;
+    /** 是否支持对讲 0-不支持, 1-全双工, 3-半双工 */
+    support_talk?: string;
+    /** 对讲使用的麦克风 0-采用上面的麦克风, 1-对讲采用下面的麦克风 */
+    support_talk_type?: string;
+    /** 是否支持新对讲服务 0-不支持, 1-支持 */
+    support_new_talk?: string;
+    /** 视频播放比例，`"16-9"` 表示 16:9 分辨率，默认 `"16-9"` */
+    support_resolution?: string;
+    /** 视频清晰度能力列表 */
+    video_quality_capacity?: IVideoQualityCapacity[];
+    /** 是否支持声音开关设置 0-不支持, 1-支持 */
+    support_audio_onoff?: string;
+    /** 是否支持音量调节 0-不支持, 1-支持 */
+    support_volumn_set?: string;
+    /** 是否支持麦克风音量调节 0-不支持, 1-支持 */
+    support_mcvolumn_set?: string;
+    /** 是否支持红外开关 0-不支持, 1-支持 */
+    support_close_infrared_light?: string;
+    /** 支持系统音量开关设置，`"1"` 支持（文档未收录） */
+    support_sysvolsw_set?: string;
+    /** 支持宽动态图像，`"1"` 支持（文档未收录） */
+    support_wide_dynamic_image?: string;
+    /** 支持智能夜视，值为支持的模式 / 档位，如 `"4"`，`"0"` 不支持（文档未收录） */
+    support_smart_night_vision?: string;
+    /** 是否支持布撤防、活动检测开关 */
+    support_defence?: string;
+    /** 是否支持布撤防计划 0-不支持, 1-支持, 2-支持新的设备计划协议 */
+    support_defenceplan?: string;
+    /** 是否支持通道布撤防 0-不支持, 1-支持 */
+    support_chan_defence?: string;
+    /**
+     * 防护模式 0-无防护模式（可能有活动检测，根据 `support_defence` 判断）, 1-只有防护模式,
+     * 2-有防护模式（可能有活动检测，根据 `support_defence` 判断）
+     *
+     * 举例：A1 为 `support_protection_mode=1`、`support_defence=1`；普通 IPC 为 0 / 1；C1S 为 2 / 1。
+     */
+    support_protection_mode?: string;
+    /** 是否支持定时切换安全功能模式 0-不支持, 1-支持 */
+    support_safe_mode_plan?: string;
+    /** 是否支持隐私保护 0-不支持, 1-支持 */
+    support_privacy?: string;
+    /** 是否支持告警声音配置 0-不支持, 1-支持 */
+    support_alarm_voice?: string;
+    /** 是否支持自定义语音 0-不支持, 1-支持（语音闹钟、告警声音使用） */
+    support_custom_voice?: string;
+    /** 是否支持主动防御功能 0-不支持, 1-主动防御按钮, 2-主动防御按钮+灯光提醒开关 */
+    support_active_defense?: string;
+    /** 是否支持安防灯 0-不支持, 1-支持 */
+    support_alarm_light?: string;
+    /** 是否支持安防灯 0-不支持, 1-支持（文档说明与 `support_alarm_light` 完全相同，疑为笔误，含义待确认） */
+    support_alarm_area?: string;
+    /** 是否支持温湿度告警 0-不支持, 1-支持（F2、C1S 等带温湿度传感器的摄像机支持） */
+    support_temperature_alarm?: string;
+    /** A1 是否支持远程消警（静音）功能 0-不支持, 1-支持 */
+    support_remote_quiet?: string;
+    /** 是否支持移动侦测灵敏度调节 0-不支持, 1-支持（文档只写了 0 / 1 / 2） */
+    support_sensibility_adjust?: string;
+    /** 是否支持移动侦测区域绘制 0-不支持, 1-支持 */
+    support_motion_detect_area?: string;
+    /** 是否支持人形过滤能力 0-不支持, 1-支持（C5SI 型号，设备通过智能芯片硬件来支持） */
+    support_human_filter?: string;
+    /** 是否支持人形检测能力 0-不支持, 1-支持（设备 + 平台服务开通，设备更新软件版本后可支持） */
+    support_human_service?: string;
+    /** 是否支持红外检测能力 0-不支持, 1-支持（猫眼） */
+    support_pir_detect?: string;
+    /** 是否支持人脸检测能力 0-不支持, 1-支持（猫眼） */
+    support_face_detect?: string;
+    /** 是否支持 PIR（红外）区域设置 0-不支持, 1-支持 */
+    support_pir_setting?: string;
+    /** 自定义语音的最大条数（文档未收录） */
+    support_custom_voice_max?: string;
+    /** 支持免打扰通道模式，`"1"` 支持（文档未收录） */
+    support_distrub_channel_mode?: string;
+    /** 是否支持 app 远程添加删除外设（探测器）0-不支持, 1-支持 */
+    support_add_del_detector?: string;
+    /** 是否支持修改外设（探测器）名称 0-不支持, 1-支持 */
+    support_modify_detectorname?: string;
+    /**
+     * A1 设备是否支持单独布撤防
+     *
+     * 字段不存在表示不支持；存在时各外设用逗号隔开，按下面的探测器顺序排列，每个值是 32 位数值，
+     * 按位标识该探测器在每种模式下是否可以设置使能：bit0 外出模式、bit1 睡眠模式、bit2 在家模式，
+     * 可以设置则对应位置 1。例如 `"0,0,7,7,7,0,7,0,0,0"`。
+     *
+     * 探测器顺序：烟感、紧急按钮、门磁、红外、幕帘、紧急按钮、单体门磁、警号、燃气探测器、水患探测器。
+     */
+    support_modify_detectorguard?: string;
+    /** 是否支持 IPC 与 A1 联动关系设置 0-不支持, 1-支持 */
+    support_ipc_link?: string;
+    /** 是否支持关联探测器 0-不支持, 1-支持 */
+    support_associate_detector?: string;
+    /** 是否支持 W2D 关联摄像机功能 0-不支持, 1-支持 */
+    support_relation_camera?: string;
+    /** NVR 是否支持白名单成员管理 0-不支持, 1-支持 */
+    support_nvr_whitelist?: string;
+    /** 是否支持开锁 0-不支持, 1-支持 */
+    support_unlock?: string;
+    /** 是否支持修改门锁用户备注名称 0-不支持, 1-支持 */
+    support_modify_username?: string;
+    /** 是否支持门铃呼叫能力 0-不支持, 1-支持（猫眼） */
+    support_doorbell_talk?: string;
+    /** 是否支持门铃声音 0-不支持, 1-支持 */
+    support_doorbell_sound?: string;
+    /** 是否支持门铃扩展 0-不支持, 1-支持 */
+    support_chime?: string;
+    /** 是否支持 `support_video_mode` 0-不支持, 1-支持（文档未给出具体含义） */
+    support_video_mode?: string;
+    /** 是否支持电量管理 0-不支持, 1-支持 */
+    support_battery_manage?: string;
+    /** 电池数量（文档未收录） */
+    support_battery_number?: string;
+    /** 支持设置页面智能应用 0-不支持, 1-固定 c6 设备跳转, 2-动态智能应用 */
+    support_smart_app?: string;
+    /** 其余设备侧新增的能力字段，原样透传 */
+    [key: string]: string | number | IVideoQualityCapacity[] | undefined;
+}
+/**
+ * 设备信息 POST /api/lapp/device/info
+ * @see https://open.ys7.com/help/672
+ *
+ * 查询失败时为 `{}`，所以字段全部可选
+ */
+interface EzvizDeviceInfo {
+    /** 设备序列号 */
+    deviceSerial?: string;
+    /** 设备名称 */
+    deviceName?: string;
+    /** 设备上报名称 */
+    localName?: string;
+    /** 设备型号，如 CS-C2S-21WPFR-WX */
+    model?: string;
+    /** 在线状态：0-不在线，1-在线 */
+    status?: number;
+    /** 布撤防状态：具有防护能力的设备 0-睡眠 8-在家 16-外出；普通 IPC 0-撤防 1-布防 */
+    defence?: number;
+    /** 是否加密：0-不加密，1-加密 */
+    isEncrypt?: number;
+    /** 告警声音模式：0-短叫，1-长叫，2-静音 */
+    alarmSoundMode?: number;
+    /** 设备下线是否通知：0-不通知 1-通知 */
+    offlineNotify?: number;
+    /** 设备大类 */
+    category?: string;
+    /** 设备二级类目 */
+    parentCategory?: string;
+    /** 修改时间 */
+    updateTime?: number;
+    /** 网络类型，如有线连接 wire */
+    netType?: string;
+    /** 信号强度（%） */
+    signal?: string;
+    /** 设备风险安全等级：0-安全，大于 0 有风险，风险越高值越大 */
+    riskLevel?: number;
+    /** 设备 IP 地址 */
+    netAddress?: string;
+    [key: string]: string | number | undefined;
+}
+/**
+ * 开放平台 lapp 接口通用返回结构（`code` 为 `'200'` 时成功）
+ */
+interface EzvizApiResponse<T = any> {
+    /** 返回码，`'200'` 为成功 */
+    code?: string | number;
+    /** 返回信息 */
+    msg?: string;
+    /** 返回数据 */
+    data?: T;
+    /** 分页信息（分页接口才有） */
+    page?: EzvizPage;
+    [key: string]: any;
+}
+/**
+ * service 接口通用返回结构（`meta.code` 为 200 时成功）
+ */
+interface EzvizMetaResponse<T = any> {
+    meta?: {
+        /** 返回码，200 为成功 */
+        code?: number | string;
+        /** 返回信息 */
+        message?: string;
+        moreInfo?: any;
+    };
+    /** 返回数据 */
+    data?: T;
+    [key: string]: any;
+}
+/** 分页信息 */
+interface EzvizPage {
+    /** 总数 */
+    total: number;
+    /** 当前页（从 0 开始） */
+    page: number;
+    /** 分页大小 */
+    size: number;
+}
+/**
+ * 通道信息（获取指定设备的通道信息接口返回项）
+ * @see https://open.ys7.com/help/1478
+ */
+interface EzvizCameraInfo {
+    /** 设备序列号 */
+    deviceSerial: string;
+    /** 关联的 IPC 序列号 */
+    ipcSerial?: string;
+    /** 通道号 */
+    channelNo: number;
+    /** 设备名称 */
+    deviceName?: string;
+    /** 通道名称 */
+    channelName?: string;
+    /** 在线状态：0-不在线，1-在线（-1 设备未上报） */
+    status?: number;
+    /** 是否分享：0-未分享，1-分享所有者，2-分享接受者 */
+    isShared?: string;
+    /** 图片地址（大图），若在萤石客户端设置封面则返回封面图片，未设置则返回默认图片 */
+    picUrl?: string;
+    /** 是否加密：0-不加密，1-加密 */
+    isEncrypt?: number;
+    /** 视频质量：0-流畅，1-均衡，2-高清，3-超清 */
+    videoLevel?: number;
+    /** 当前通道是否关联 IPC：true-是，false-否 */
+    relatedIpc?: boolean;
+    /** 是否显示：0-隐藏，1-显示 */
+    isAdd?: number;
+    [key: string]: any;
+}
+/**
+ * 设备云存储信息（查询设备云存储信息接口 `data` 的第一项）
+ * @see https://open.ys7.com/help/1404
+ *
+ * 查询失败或没有开通时为 `{}`，所以字段全部可选
+ */
+interface EzvizCloudInfo {
+    /** 设备序列号 */
+    deviceSerial?: string;
+    /** 通道号 */
+    channelNo?: number;
+    /** 云存储套餐总天数 */
+    totalDays?: number;
+    /** 云存储状态：-2-设备不支持，-1-未开通云存储，0-未激活，1-激活，2-过期 */
+    status?: number;
+    /** 云存储套餐有效天数 */
+    validDays?: number;
+    /** 云存储服务开始时间（毫秒时间戳） */
+    startTime?: number;
+    /** 云存储服务到期时间（毫秒时间戳） */
+    expireTime?: number;
+    /** 云存储服务类型 */
+    serviceType?: number;
+    [key: string]: any;
+}
+/**
+ * 语音文件（查询默认语音列表接口返回项）
+ * @see https://open.ys7.com/help/1247
+ */
+interface EzvizVoiceItem {
+    /** 语音名称 */
+    voiceName: string;
+    /** 下载地址，有效期 1 天 */
+    fileUrl: string;
+    /** 时长，单位秒 */
+    duration: number;
+    [key: string]: any;
+}
+/**
+ * 告警消息（按设备获取告警消息列表接口返回项）
+ * @see https://open.ys7.com/help/987
+ */
+interface EzvizAlarmItem {
+    /** 告警消息 ID */
+    alarmId: string;
+    /** 告警源名称 */
+    alarmName?: string;
+    /** 告警类型 */
+    alarmType?: number;
+    /** 告警时间（毫秒时间戳） */
+    alarmTime?: number;
+    /** 通道号 */
+    channelNo?: number;
+    /** 告警图片是否加密：0-不加密，1-加密 */
+    isEncrypt?: number;
+    /** 是否已读：0-未读，1-已读 */
+    isChecked?: number;
+    /** 存储类型：0-无存储，1-萤石，2-百度，4-云存储；多种组合时值相加 */
+    recState?: number;
+    /** 预录时间，单位秒 */
+    preTime?: number;
+    /** 延迟录像时间，单位秒 */
+    delayTime?: number;
+    /** 设备序列号 */
+    deviceSerial?: string;
+    /** 告警图片地址 */
+    alarmPicUrl?: string;
+    /** 关联的告警消息 */
+    relationAlarms?: any[];
+    /** 拨打电话类型 */
+    customerType?: string;
+    /** 拨打电话信息 */
+    customerInfo?: string;
+    [key: string]: any;
+}
+/** 列表 + 分页（语音列表、告警消息列表等，services 已从接口返回体中提取） */
+interface EzvizPageList<T> {
+    /** 列表数据，接口失败时为 `[]` */
+    data: T[];
+    /** 分页信息 */
+    page: EzvizPage;
+}
+/**
+ * 即时云抓拍返回数据
+ * @see https://open.ys7.com/help/5235
+ */
+interface EzvizCaptureSaveData {
+    /** 抓拍图片下载地址 */
+    picUrl: string;
+    /** 文件节点 id */
+    fileNodeId?: string;
+}
+/**
+ * 创建抓图任务返回数据
+ * @see https://open.ys7.com/help/1390
+ */
+interface EzvizCaptureTaskData {
+    /** 抓图任务 id */
+    taskId: string;
+}
+/**
+ * 存储空间信息（空间列表查询接口返回项）
+ * @see https://open.ys7.com/help/5230
+ */
+interface EzvizSpaceInfo {
+    /** 空间 id(即创建抓拍任务/即时抓拍所需的存储空间 id) */
+    spaceId: number;
+    /** 空间名称 */
+    spaceName: string;
+    /** 空间业务类型:vod-云点播,record-云录制2.0,cloudCapture-云抓拍,capture-设备抓图 */
+    bizType?: string;
+    /** 空间业务类型描述 */
+    bizTypeDesc?: string;
+    /** 过期天数,-1 表示永久 */
+    expireDays?: number;
+    /** 存储类型 1-标准存储 */
+    storageType?: number;
+    /** 是否为默认空间 0-否 1-是 */
+    defaultSpace?: number;
+    /** 创建时间 */
+    createTime?: string;
+    /** 更新时间 */
+    updateTime?: string;
+    [key: string]: any;
+}
+/**
+ * 存储空间列表查询返回数据
+ * @see https://open.ys7.com/help/5230
+ */
+interface EzvizSpaceListData {
+    /** 空间列表 */
+    result: EzvizSpaceInfo[];
+    /** 当前页最后一条记录的空间 id,用于翻页 */
+    lastId?: number;
+    /** 当前分页大小 */
+    pageSize?: number;
+    /** 是否有下一页 */
+    hasNext?: boolean;
+}
+/** appKey 查询返回数据 */
+interface EzvizAppKeyData {
+    /** 用于上报的 appKey */
+    appKey: string;
+    [key: string]: any;
+}
+interface EzvizVideoLevel {
+    name: string;
+    level: number | 'auto';
+    streamTypeIn: 1 | 2;
+    type?: string;
+}
+/**
+ * 云录制录像信息查询参数 GET /api/service/cloudrecord/video/info/list
+ * @see https://open.ys7.com/help/2043
+ */
+interface EzvizFetchCloudRecordRecParams {
+    /** 访问令牌 */
+    accessToken: string;
+    /** 设备序列号 */
+    deviceSerial: string;
+    /** 通道号 */
+    localIndex: number | string;
+    /** 开始时间，格式 `YYYY-MM-DD HH:mm:ss`，不允许跨天， 内部会自动转化为 startTime */
+    begin: string;
+    /** 结束时间，格式 `YYYY-MM-DD HH:mm:ss`，不允许跨天， 内部会自动转化为 endTime */
+    end: string;
+    /** 云录制空间 ID，不传默认查询主空间 */
+    spaceId?: number | string;
+    [key: string]: any;
+}
+/**
+ * 根据时间获取存储文件信息参数 POST /api/lapp/video/by/time（form-data）
+ * @see https://open.ys7.com/help/1422
+ */
+interface EzvizFetchCloudRecParams {
+    /** 访问令牌 */
+    accessToken: string;
+    /** 设备序列号 */
+    deviceSerial: string;
+    /** 通道号 */
+    channelNo: number | string;
+    /** 回放源，0-系统自动选择，1-云存储，2-本地录像，默认 0 */
+    recType?: 0 | 1 | 2 | '0' | '1' | '2';
+    /** 开始时间（毫秒时间戳）, 内部会自动转化为 startTime */
+    begin: number | string;
+    /** 结束时间（毫秒时间戳），内部会自动转化为 endTime */
+    end: number | string;
+    /** 接口版本，传 `2.0` 支持分页：返回 `{ files, isAll, nextFileTime }`，`isAll` 为 false 时以 `nextFileTime` 作为下一页的 `startTime` 继续查询；海外接口直接返回数组，不分页 */
+    version?: string;
+    [key: string]: any;
+}
+/**
+ * 设备本地录像统一查询参数 GET /api/v3/device/local/video/unify/query
+ * @see https://open.ys7.com/help/3922
+ */
+interface EzvizFetchLocalRecParams {
+    /** 访问令牌 */
+    accessToken: string;
+    /** 设备序列号 */
+    deviceSerial: string;
+    /** 通道号，默认 1 */
+    localIndex?: number | string;
+    /** 开始时间（秒级时间戳），开始结束时间需在同一天, 内部会自动转化为 startTime */
+    begin: number;
+    /** 结束时间（秒级时间戳）, 内部会自动转化为 endTime */
+    end: number;
+    /** 每页个数，默认 200，最大 200；`hasMore` 为 true 时以 `nextFileTime` 作为下一页的 `startTime` 继续查询 */
+    pageSize?: number;
+    /** 主子码流， 仅本地回放支持 @since 3.2.0 */
+    streamType?: 1 | 2;
+    [key: string]: any;
+}
+/**
+ * 获取播放地址参数 POST /api/lapp/v2/live/address/get（form-data）
+ * @see https://open.ys7.com/help/1414
+ *
+ * 所有参数均可选，不传时默认取自当前播放地址 / 播放器配置
+ */
+interface EzvizFetchAddressParams {
+    /** 访问令牌，默认取播放器配置的 accessToken */
+    accessToken?: string;
+    /** 设备序列号，默认取当前播放地址 */
+    deviceSerial?: string;
+    /** 通道号，默认取当前播放地址，缺省为 1 */
+    channelNo?: number | string;
+    /** 地址类型：1-预览，2-本地录像回放，3-云存储录像回放；默认按当前播放地址判断（回放地址未标注 rec 时按本地录像） */
+    type?: 1 | 2 | 3 | '1' | '2' | '3';
+    /** 流播放协议：1-ezopen，2-hls，3-rtmp，4-flv，5-ll-hls，默认 5 */
+    protocol?: 1 | 2 | 3 | 4 | 5 | '1' | '2' | '3' | '4' | '5';
+    /** 设备视频加密密码，默认取当前播放地址的 code */
+    code?: string;
+    /** 过期时长（秒），默认按当前播放地址的 expire 计算剩余时长 */
+    expireTime?: number;
+    /** 视频清晰度：1-高清（主码流），2-流畅（子码流） */
+    quality?: 1 | 2 | '1' | '2';
+    /** 回放开始时间，支持时间字符串和时间戳，默认取当前播放地址的 begin，内部会自动转化为 startTime（yyyy-MM-dd HH:mm:ss） */
+    begin?: string | number;
+    /** 回放结束时间，支持时间字符串和时间戳，默认取当前播放地址的 end，内部会自动转化为 stopTime（yyyy-MM-dd HH:mm:ss）；云存储开始结束时间必须在同一天 */
+    end?: string | number;
+    /** 是否支持 H265：1-支持，0-不支持，默认 1；传空串 `''` 表示不传该参数（由服务端按默认处理） */
+    supportH265?: 0 | 1 | '0' | '1' | '';
+    /** 回放倍速，默认取当前播放地址的 playbackSpeed；传空串 `''` 表示不传该参数 */
+    playbackSpeed?: number | string;
+    /** 是否静音：0-非静音，1-静音，默认取当前播放地址的 mute；传空串 `''` 表示不传该参数 */
+    mute?: 0 | 1 | '0' | '1' | '';
+    /** 国标设备通道编号 */
+    gbchannel?: string;
+    [key: string]: any;
+}
+/**
+ * 获取播放地址接口返回
+ * @see https://open.ys7.com/help/1414
+ */
+type EzvizFetchAddressResult = EzvizApiResponse<EzvizFetchAddressData>;
+/**
+ * 获取播放地址接口返回数据
+ * @see https://open.ys7.com/help/1414
+ */
+interface EzvizFetchAddressData {
+    /** 播放地址 ID */
+    id?: string;
+    /** 播放地址 */
+    url: string;
+    /** 地址过期时间 */
+    expireTime: string;
+}
+/**
+ * 获取 CDN 加速直播地址的参数
+ * @since 3.2.0
+ */
+interface EzvizFetchCDNAddressParams {
+    /** CDN 应用名（开放平台 CDN 加速配置的 appName），必填 */
+    appName: string;
+    /** 视频清晰度：1-高清（主码流，默认），2-流畅（子码流） */
+    quality?: 1 | 2 | '1' | '2';
+    /** 流名称，同一设备通道每次取流应不同；默认随机生成 32 位十六进制串 */
+    streamName?: string;
+}
+/**
+ * 获取 CDN 加速回放地址的参数
+ * @since 3.2.0
+ */
+interface EzvizFetchCDNRecordAddressParams extends EzvizFetchCDNAddressParams {
+    /** 录像类型：1-本地录像回放（默认），2-云存储录像回放 */
+    type?: 1 | 2 | '1' | '2';
+    /** 录制片段开始时间，支持时间字符串和时间戳，开始时间和结束时间跨度最多 7 天 */
+    begin: string | number;
+    /** 录制片段结束时间，支持时间字符串和时间戳；不能小于等于当前时间，必须在 30 天内 */
+    end: string | number;
+}
+/**
+ * CDN 加速地址接口返回数据
+ * @since 3.2.0
+ */
+interface EzvizCDNAddressData {
+    /** CDN 播放地址 */
+    cdnUrl?: string;
+    [key: string]: any;
+}
+/**
+ * 直播间断流信息（仅萤石直播间地址，接口返回最新一次的中断原因，可能滞后）
+ * @since 3.2.0
+ */
+interface EzvizStreamInterruptInfo {
+    /** 中断错误码，可直接作为多语言 key 取文案 */
+    intrCode?: string | number;
+    [key: string]: any;
+}
+/**
+ * 回放片段
+ */
+interface EzvizFetchRecItem {
+    /** 片段开始时间 单位秒 */
+    startTime: number;
+    /** 片段结束时间 单位秒 */
+    endTime: number;
+    /** 存储版本，1-单文件，2-连续存储，仅在下载非云空间录像时填写 云端支持 */
+    iStorageVersion?: number;
+    /** 7 是云录制 云端支持 */
+    busType?: number;
+    /** 下载地址 云端支持 */
+    downloadPath?: string;
+    [key: string]: any;
+}
+/**
+ * 取流机房地址（主机房 + 备用机房）
+ */
+interface EzopenBackupAddress {
+    domain: string;
+    port: number;
+    /** 过期时间（毫秒时间戳），过期后重新以接口结果为准 */
+    expire?: number;
+}
+/**
+ * 备用地址接口原始返回；海外返回的域名字段为 addr，国内为 domain
+ */
+interface StreamAddressBackup {
+    domain?: string;
+    addr?: string;
+    port: number;
+    backups?: Array<Omit<StreamAddressBackup, 'backups'>>;
+}
+interface IQueryVoiceParams {
+    voiceName?: string;
+    pageStart?: number;
+    pageSize?: number;
 }
 
 /**
@@ -1483,6 +2422,420 @@ interface InteractiveHFResult {
     hide: IMouseFunc;
 }
 
+declare class Services {
+    deviceCapacity: Record<string, EzvizDeviceCapacity>;
+    deviceInfo: Record<string, EzvizDeviceInfo>;
+    videoLevelList: Record<string, EzvizVideoLevel[]>;
+    /** 取流机房地址（主机房在第一个），按设备通道缓存 */
+    streamAddressList: Record<string, EzopenBackupAddress[]>;
+    private _options;
+    private _controllers;
+    /** 在途的模板请求，新请求发起前中止上一个 */
+    private _templateAbortController;
+    private _url;
+    private get url();
+    private set url(value);
+    get urlInfo(): Partial<_ezuikit_utils_tools.EzopenURL>;
+    /**
+     * @param {ServicesOptions} options
+     */
+    constructor(options: ServicesOptions);
+    /**
+     * @param {ServicesOptions} options 配置
+     */
+    updateOptions(options: Partial<ServicesOptions>): void;
+    /**
+     * @description fetch请求
+     * @param {string} url  请求地址
+     * @param {RequestInit} options  请求参数
+     * @private
+     */
+    _fetch(url: string, options?: RequestInit): Promise<Response>;
+    /**
+     * @description get请求
+     * @param {string} url 请求地址
+     */
+    get(url: string, options?: {}): Promise<Response>;
+    /**
+     * @description post请求
+     * @param {string} url 请求地址
+     */
+    post(url: string, options?: {}): Promise<Response>;
+    /**
+     * @description pust请求
+     * @param {string} url 请求地址
+     */
+    put(url: string, options?: {}): Promise<Response>;
+    /**
+     * @description delete请求
+     * @param {string} url 请求地址
+     */
+    delete(url: string, options?: {}): Promise<Response>;
+    /**
+     * 获取开放平台轻应用模板数据
+     * @param id 开放平台轻应用模板id （https://open.ys7.com/console/ezuikit/template.html）
+     * @returns
+     */
+    getThemeDataByTemplate(id: string): Promise<IThemeData>;
+    /**
+     * @description 获取设备能力集 https://open.ys7.com/help/678
+     * @returns {Promise<EzvizDeviceCapacity>}
+     *
+     * 9.0.14 (OPOOL-11457): 在飞 Promise 去重
+     *   - 同一时刻多个 caller (getEzopenUrl 前置 await + _deviceSerialChangeServices) 复用同一次 HTTP
+     *   - 请求结束（无论成功失败）后清空缓存，允许后续新一轮调用重新发起
+     *   - 成功后自动把结果回填到 this._options.deviceCapacity，供 ECDH 判定复用
+     */
+    getDeviceCapacity(): Promise<EzvizDeviceCapacity>;
+    /** 在飞的能力集请求，key 同 {@link getKeyName} */
+    private readonly _capacityPromises;
+    private _fetchDeviceCapacity;
+    /**
+     * @description 获取设备信息 https://open.ys7.com/help/672
+     */
+    getDeviceInfo(): Promise<EzvizDeviceInfo>;
+    /**
+     * @description 获取设备清晰度列表接口
+     * @returns {Promise<Array<EzvizVideoLevel>>}
+     */
+    getDeviceSupportQuality(): Promise<EzvizVideoLevel[]>;
+    /**
+     * @description 镜像翻转 https://open.ys7.com/help/681
+     * @param {number} command 镜像方向：0-上下, 1-左右, 2-中心 , 和设备报备的能力集有关，即使设备支持，但是没有报备也一样不支持
+     * @returns 不等待接口结果，始终 resolve undefined
+     */
+    postDevicePtzMirror(command: 0 | 1 | 2): Promise<void>;
+    /**
+     * 按月查询录像日历 （本地存储、云存储和云录制）
+     * - 本地存储 / 云存储 https://open.ys7.com/help/4329
+     * - 云录制 https://open.ys7.com/help/2042
+     * @param recType 录像类型 -1 云录制 1-云存储，2-本地录像，3-关联录像
+     * @param month 查询的月份，时间格式为：yyyy-MM
+     * @param spaceId 云录制空间的 spaceId， 仅云录制需要
+     * @returns 有录像的日期列表，如 `["2025-08-14", "2025-08-16"]`（云录制为接口原始 data）；失败时为 `[]`
+     */
+    getRecordMonth(recType: -1 | 1 | 2 | 3, month: string, spaceId?: string | number): Promise<string[]>;
+    /**
+     * 按月查询录像日历(本地存储和云存储)
+     *
+     * 录像日历查询 {@link https://open.ys7.com/help/4329}
+     * @param recType 回放源，0-云存储和本地录像，1-云存储，2-本地录像，3-关联录像
+     * @param queryMonth 查询的月份，时间格式为：yyyy-MM
+     * @returns
+     */
+    private _getSdkCloudMonth;
+    /**
+     * 按月查询云录制日历查询接口 https://open.ys7.com/help/2042
+     * @param spaceId 空间id,不填默认查询主空间下录像日历
+     * @param month 查询的月份，时间格式为：yyyyMM / yyyy-MM / yyyy-MM
+     * @returns
+     */
+    private _getCloudRecordMonth;
+    /**
+     * 获取appkey 用来上报
+     * @returns 接口原始返回 `{ meta, data: { appKey } }`；请求失败时为空串
+     */
+    getAppKey(): Promise<EzvizMetaResponse<EzvizAppKeyData> | ''>;
+    /**
+     * @description 获取指定设备的通道信息 https://open.ys7.com/help/1478
+     * @returns 通道列表；失败时为 `[]`
+     */
+    getDeviceList(): Promise<EzvizCameraInfo[]>;
+    /**
+     * @description 设置设备视频质量（清晰度）接口 https://open.ys7.com/help/2286
+     * @param {string | number} videoLevel 设备视频清晰度等级 0-流畅 1-均衡 2-高清 3-超清 4-极清 5-3K 6-4K
+     * @param {string=} clientLid 直播取流会话标识（无缝切换用，9.0.22 OPOOL-12269）。
+     *   传入时服务端据此定位当前推流通道，在同一条流上完成切档（不断流）；
+     *   不传则走旧逻辑（仅下发切档指令到设备），保持对老版本服务端与回放场景的兼容。
+     * @param {number | string=} prevVideoLevel 切换前清晰度，用于计算 adaptive 方向（升/降/保持）
+     * @returns 接口原始返回；videoLevel 小于 0 时不发请求，返回 `{}`
+     */
+    setVideoLevel(videoLevel: number | string, clientLid?: string, prevVideoLevel?: number | string): Promise<EzvizMetaResponse & EzvizApiResponse>;
+    /**
+     * 查询设备云存储信息 https://open.ys7.com/help/1404
+     * @returns 当前通道的云存储信息（接口 data 的第一项）；接口失败或无数据时为 `{}`
+     */
+    getCloudInfo(): Promise<EzvizCloudInfo>;
+    /**
+     * @description 获取云录制截图上传地址
+     * @param fileName 截图文件名
+     * @returns 接口原始返回 `{ meta, data }`
+     */
+    getCloudUploadUrl(fileName: string): Promise<EzvizMetaResponse>;
+    /**
+     * @description 获取服务备用地址接口
+     *
+     * 机房地址按设备通道缓存在 {@link streamAddressList}，12 小时过期；
+     * 接口返回的机房集合与缓存不一致、或缓存已过期时，以接口结果为准。
+     *
+     * @returns `[地址个数, 接口原始 data, 归一化后的地址列表（主机房在第一个）]`；
+     *   接口非 200 时**不给第三位**，调用方保持已有列表不动，避免一次接口抖动把备用地址清空
+     */
+    getStreamAddressList(): Promise<[number, Partial<StreamAddressBackup>, EzopenBackupAddress[]?]>;
+    /**
+     * @description 获取播放地址接口（私有协议 ezopen 换 wss 取流地址）
+     * @returns {string | Object} wss 取流地址；接口返回错误码时原样返回接口结果，请求失败返回空串
+     * FIXME: 服务端接口有问题  预览 和 本地回放、 云存储 、云录制 同等条件下返回不一样， 海外和国内也是
+     */
+    getEzopenUrl(url?: string): Promise<string | EzvizApiResponse>;
+    /**
+     * @description 获取云录制片段接口 (云录制返回的时间不需要转时区) https://open.ys7.com/help/2043
+     * @param {EzvizFetchCloudRecordRecParams} body 开始时间和结束时间 支持 时间字符串和时间戳 和 存储空间ID
+     * ezopen://open.ys7.com/BC7799091/1.cloud.rec?begin=20250401000000&busType=7&spaceId=21536
+     * @returns {Promise<EzvizFetchRecItem[]>}
+     */
+    getCloudRecordTimes(body: EzvizFetchCloudRecordRecParams): Promise<EzvizFetchRecItem[]>;
+    /**
+     * @description 获取云存储片段接口 (已处理时区问题) https://open.ys7.com/help/1422
+     * ezopen://open.ys7.com/BD3664803/1.cloud.rec?begin=20250430050000
+     * @param {EzvizFetchCloudRecParams} body 开始时间和结束时间 支持 时间字符串和时间戳
+     * @returns {Promise<EzvizFetchRecItem[]>} (已处理时区问题)
+     */
+    getCloudTimes(body: EzvizFetchCloudRecParams): Promise<EzvizFetchRecItem[]>;
+    /**
+     * @description 获取查询设备本地录像 (开始结束时间必须在同一天, 有时区问题) https://open.ys7.com/help/3922
+     * @param {EzvizFetchLocalRecParams | EzvizFetchCloudRecParams} params 开始时间和结束时间 支持 时间字符串和时间戳
+     * @returns {EzvizFetchRecItem[]} (已处理时区问题)
+     */
+    getLocalRecTimes(params: EzvizFetchLocalRecParams | EzvizFetchCloudRecParams): Promise<EzvizFetchRecItem[]>;
+    /**
+     * @description 查询默认语音列表
+     * @link https://open.ys7.com/help/1247
+     * @param {Object} params 查询参数
+     * @param {string} params.voiceName 模糊匹配语音名称（可选）
+     * @param {number} params.pageStart 分页起始页，从0开始（可选）
+     * @param {number} params.pageSize 分页大小，默认为10，最大为50（可选）
+     * @returns `{ data, page }`；非 base 版本或接口失败时为空列表
+     */
+    queryVoiceList(params?: IQueryVoiceParams): Promise<EzvizPageList<EzvizVoiceItem>>;
+    /**
+     * @description 临时语音下发（一次性自定义语音下发到设备，不保存到语音列表）
+     * @link https://open.ys7.com/help/1252
+     * @param {File | Blob} voiceFile 语音文件，支持wav、mp3、aac格式，最大20M，最长60s
+     * @param {number} channelNo 通道号，默认取播放地址里的通道号（可选）
+     * @returns 接口原始返回 `{ code, msg }`；非 base 版本为 `{}`，请求失败为 `{ code: '500', msg, error }`
+     * @description 需要设备支持能力集 support_talk=1或3
+     */
+    sendVoiceOnce(voiceFile: File | Blob, channelNo?: number): Promise<EzvizApiResponse>;
+    /**
+     * @description 语音文件下发（指定设备播放已上传的语音文件）
+     * @link https://open.ys7.com/help/1253
+     * @param {string} fileUrl 下载音频文件的url（从查询接口返回的url）
+     * @param {number} channelNo 通道号，默认取播放地址里的通道号（可选）
+     * @returns 接口原始返回 `{ code, msg }`；非 base 版本为 `{}`，请求失败为 `{ code: '500', msg, error }`
+     * @description 需要设备支持能力集 support_talk=1或3
+     */
+    sendVoice(fileUrl: string, channelNo?: number): Promise<EzvizApiResponse>;
+    /**
+     * @description 按设备获取告警消息列表 https://open.ys7.com/help/987
+     * @param params.startTime 告警查询开始时间（毫秒时间戳），默认今日0点
+     * @param params.endTime 告警查询结束时间（毫秒时间戳），默认当前时间
+     * @param params.pageStart 分页起始页，从0开始
+     * @param params.pageSize 分页大小，默认20，最大50
+     * @param params.status 告警状态：2-所有，1-已读，0-未读，默认2
+     * @param params.alarmType 告警类型，默认-1（全部）
+     * @returns `{ data, page }`；非 base 版本为空列表；接口非 200 时 reject 接口原始结果
+     */
+    getAlarmList(params?: {
+        startTime?: number;
+        endTime?: number;
+        pageStart?: number;
+        pageSize?: number;
+        status?: number;
+        alarmType?: number;
+    }): Promise<EzvizPageList<EzvizAlarmItem>>;
+    /**
+     * @description 即时云抓拍(设备抓拍图片,支持生命周期) https://open.ys7.com/help/5235
+     * 接口依据:《云抓拍接口.md》 POST /api/service/open/capture/device/capture (form)
+     * @param params.resultSpaceId 抓图业务存储空间 id(由空间列表查询接口获取,必填)
+     * @param params.quality 视频清晰度:0-流畅,1-高清(720P),2-FCIF,3-1080P,4-400w(可选)
+     * @param params.channelNo 通道号,默认取播放地址里的通道号
+     * @returns 接口原始返回 `{ meta, data: { picUrl, fileNodeId } }`
+     */
+    captureSave(params: {
+        resultSpaceId: number | string;
+        quality?: number | string;
+        channelNo?: number | string;
+    }): Promise<EzvizMetaResponse<EzvizCaptureSaveData>>;
+    /**
+     * @description 创建抓图任务(批量/定时抓拍计划),返回 taskId https://open.ys7.com/help/1390
+     * 接口依据:《创建云抓拍计划接口.md》 POST /api/service/cloudrecord/pic/capture/task
+     * header:accessToken/deviceSerial/localIndex;body:application/x-www-form-urlencoded
+     * @param params.resultSpaceId 云抓拍业务空间 id(由空间列表查询接口获取,必填)
+     * @param params.captureType 抓图模式:1 按时间点 / 2 按时间间隔(必填)
+     * @param params.captureInterval 时间间隔(秒),captureType=2 必填
+     * @param params.timingPoints 时间点列表 yyyyMMddHHmmss,英文逗号分隔,captureType=1 必填
+     * @param params.startTime 开始时间 yyyyMMddHHmmss,captureType=2 必填
+     * @param params.endTime 结束时间 yyyyMMddHHmmss,captureType=2 必填
+     * @param params.frameSwitch 抽帧补偿开关,默认 false
+     * @param params.filePrefix 文件 id 前缀
+     * @param params.validateCode 视频解密密钥(加密设备必填)
+     * @returns 接口原始返回 `{ meta, data: { taskId } }`
+     */
+    createCaptureTask(params: {
+        resultSpaceId: number | string;
+        captureType: 1 | 2;
+        captureInterval?: number;
+        timingPoints?: string;
+        startTime?: string;
+        endTime?: string;
+        frameSwitch?: boolean;
+        filePrefix?: string;
+        validateCode?: string;
+    }): Promise<EzvizMetaResponse<EzvizCaptureTaskData>>;
+    /**
+     * @description 查询存储空间列表(默认查询云抓拍 cloudCapture 空间),用于获取 resultSpaceId https://open.ys7.com/help/5230
+     * 接口依据:《查询空间列表.md》 GET /api/service/open/storage/engine/space/listById
+     * header:accessToken;query:startTime/endTime(必填,30天内)/lastSpaceId/pageSize/bizTypeList
+     * @param params.startTime 查询开始时间 yyyy-MM-dd HH:mm:ss,默认近 30 天
+     * @param params.endTime 查询结束时间 yyyy-MM-dd HH:mm:ss,默认当前时间
+     * @param params.lastSpaceId 上一页最后空间 id,用于翻页
+     * @param params.pageSize 分页大小,默认 10,范围 1-50
+     * @param params.bizTypeList 存储空间类型,默认 cloudCapture
+     * @returns 接口原始返回 `{ meta, data: { result, lastId, pageSize, hasNext } }`
+     */
+    getSpaceList(params?: {
+        startTime?: string;
+        endTime?: string;
+        lastSpaceId?: number | string;
+        pageSize?: number;
+        bizTypeList?: string;
+    }): Promise<EzvizMetaResponse<EzvizSpaceListData>>;
+    /**
+     * 获取播放地址 https://open.ys7.com/help/1414
+     * @remarks
+     * 所有参数均可选，不传时默认取自当前播放地址 / 播放器配置，默认生成标准流 LL-HLS（protocol=5）地址
+     *
+     * @warning 每次生成的地址实效不做变更，即第一次传入的地址是时效是多久， 新生成的地址也是一样的时效（不过是从当前时间开始计算）
+     *
+     * @param params 请求参数，见 {@link EzvizFetchAddressParams}
+     * @returns 接口原始返回 `{ code, msg, data: { id, url, expireTime } }`；响应体解析失败时返回 undefined
+     * @throws 请求失败（非 2xx）时抛错
+     * @example
+     * ```typescript
+     * const res = await services.getAddress({ begin: '20260804000000', end: '20260804235959', playbackSpeed: 2 });
+     * ```
+     */
+    getAddress(params?: EzvizFetchAddressParams): Promise<EzvizFetchAddressResult | undefined>;
+    /**
+     * 获取 CDN 加速直播地址（地址有效期为当天 00:00:00 - 23:59:59）
+     * @param params 请求参数，见 {@link EzvizFetchCDNAddressParams}
+     * @returns 接口原始返回 `{ meta, data: { cdnUrl } }`
+     * @since 3.2.0
+     */
+    getCDNLiveAddress(params: EzvizFetchCDNAddressParams): Promise<EzvizMetaResponse<EzvizCDNAddressData>>;
+    /**
+     * 获取 CDN 加速回放地址（地址有效期为当天 00:00:00 - 23:59:59）
+     * @param params 请求参数，见 {@link EzvizFetchCDNRecordAddressParams}
+     * @returns 接口原始返回 `{ meta, data: { cdnUrl } }`
+     * @since 3.2.0
+     */
+    getCDNRecordAddress(params: EzvizFetchCDNRecordAddressParams): Promise<EzvizMetaResponse<EzvizCDNAddressData>>;
+    /**
+     * 查询直播间断流信息（仅萤石直播间地址，地址里的 `sid` 即直播间流 ID）
+     * @param streamId 直播间流 ID
+     * @returns 接口原始返回 `{ meta, data: { intrCode } }`，`intrCode` 可作为多语言 key 取中断原因文案
+     * @since 3.2.0
+     */
+    getStreamInterruptInfo(streamId: string): Promise<EzvizMetaResponse<EzvizStreamInterruptInfo>>;
+    /** CDN 加速地址的公共请求：有效期固定为当天，播放协议固定为 2 */
+    private _getCDNAddress;
+    /** 时区偏移（小时），优先读取播放地址的 timeZone 参数，其次是配置项 timeZone；中国以外的地区设备才有 */
+    private get timeZone();
+    /** 时间字符串 / 时间戳 转秒级时间戳 */
+    private _toSeconds;
+    /** 把首尾片段裁剪到查询区间内（片段会跨天） */
+    private _clampTimes;
+    /**
+     * 按时间查询录像片段（/api/lapp/video/by/time），自动翻页，已处理时区
+     * @param recType 1-云存储，2-本地录像
+     */
+    private _getVideoByTime;
+    get getKeyName(): string;
+    abortAll(): void;
+    destroy(): void;
+}
+
+/**
+ * 业务事件来源：`'http'` 接口请求成功、`'httpError'` 接口请求失败、`'api'` 对外 api 调用、
+ * `'stream'` / `'streamError'` 取流、`'message'` 提示消息
+ */
+type BuilderEventType = 'http' | 'httpError' | 'api' | 'stream' | 'streamError' | 'message';
+
+/**
+ * 云抓拍相关 API 编排（迁移自 ezuikit-js `ezopen/api/_cloudCapture.ts`，原 @since 9.0.9）
+ *
+ * - 即时云抓拍:POST /api/service/open/capture/device/capture(服务端字段 resultSpaceId)
+ * - 创建抓拍计划:POST /api/service/cloudrecord/pic/capture/task(服务端字段 resultSpaceId)
+ * - 空间列表查询:GET /api/service/open/storage/engine/space/listById
+ *
+ * 对外统一以 `spaceId` 表达"萤石云存储空间 id"概念,与云录制的 `spaceId` 共用同一个实例字段
+ * （`theme.spaceId`，即 `options.spaceId`）；到 services 层时再映射成服务端协议字段 resultSpaceId。
+ *
+ * 接口请求走 `theme.xxxService()`：请求结果统一派发 `EVENTS.http.*` 事件，请求异常时返回 undefined（不抛错）。
+ *
+ * @since 3.2.0
+ */
+
+/** 统一返回结构 */
+interface CloudCaptureResult<T = any> {
+    /** 0 成功;非 0 失败(透传服务端 meta.code 或 -1) */
+    code: number;
+    /** 成功数据 */
+    data?: T;
+    /** 错误信息 */
+    msg?: string;
+}
+/** 即时云抓拍入参 */
+interface CaptureCameraOptions {
+    /** 抓图存储空间 id(由空间列表查询接口获取);不传则取实例 spaceId(调用 > 实例) */
+    spaceId?: number | string;
+    /** 视频清晰度:0-流畅,1-高清(720P),2-FCIF,3-1080P,4-400w；不传则取初始化参数 quality */
+    quality?: number | string;
+    /** 通道号,默认取实例通道号 */
+    channelNo?: number | string;
+}
+/** 即时云抓拍返回数据 */
+type CaptureCameraData = EzvizCaptureSaveData;
+/** 创建抓拍计划任务入参 */
+interface CreateCaptureTaskOptions {
+    /** 云抓拍业务空间 id;不传则取实例 spaceId(调用 > 实例) */
+    spaceId?: number | string;
+    /** 抓图模式:1 按时间点 / 2 按时间间隔 */
+    captureType: 1 | 2;
+    /** 时间点列表 yyyyMMddHHmmss,英文逗号分隔,captureType=1 必填 */
+    timingPoints?: string;
+    /** 时间间隔(秒),captureType=2 必填 */
+    captureInterval?: number;
+    /** 开始时间 yyyyMMddHHmmss,captureType=2 必填 */
+    startTime?: string;
+    /** 结束时间 yyyyMMddHHmmss,captureType=2 必填 */
+    endTime?: string;
+    /** 抽帧补偿开关,默认 false */
+    frameSwitch?: boolean;
+    /** 文件 id 前缀 */
+    filePrefix?: string;
+    /** 视频解密密钥(加密设备必填) */
+    validateCode?: string;
+}
+/** 空间信息(空间列表查询接口返回项) */
+type SpaceInfo = EzvizSpaceInfo;
+/** 空间列表查询入参 */
+interface GetSpaceListOptions {
+    /** 查询开始时间 yyyy-MM-dd HH:mm:ss,基于 createTime 筛选;不传默认近 30 天 */
+    startTime?: string;
+    /** 查询结束时间 yyyy-MM-dd HH:mm:ss,与开始时间需在 30 天内;不传默认当前时间 */
+    endTime?: string;
+    /** 上一页最后空间 id,用于翻页 */
+    lastSpaceId?: number | string;
+    /** 分页大小,默认 10,范围 1-50 */
+    pageSize?: number;
+    /** 存储空间类型,默认查询云抓拍 cloudCapture。可选:vod/record/cloudCapture/capture */
+    bizTypeList?: string;
+}
+/** 空间列表查询返回数据 */
+type SpaceListData = EzvizSpaceListData;
+
 /**
  * 播放器主题
  * @class Theme
@@ -1547,12 +2900,15 @@ declare class Theme extends EventEmitter {
         readonly audioCodecUnsupported: "audioCodecUnsupported";
         readonly changeTheme: "changeTheme";
         readonly recTypeChange: "recTypeChange";
+        readonly playTypeChange: "playTypeChange"; /** 正在兜底的原始 scope，非 null 表示处于兜底取值中（用于避免 customizeMissing 无限递归） */
         readonly definitionChange: "definitionChange";
         readonly speedChange: "speedChange";
-        readonly recordingChange: "recordingChange"; /** 自定清晰度 @private */
-        readonly talkingChange: "talkingChange"; /** 清晰度列表 */
-        readonly talkVolumeChange: "talkVolumeChange"; /** 回放片段列表 */
-        readonly broadcastChange: "broadcastChange";
+        readonly streamTypeChange: "streamTypeChange";
+        readonly supportLocalRecordStreamType: "supportLocalRecordStreamType";
+        readonly recordingChange: "recordingChange";
+        readonly talkingChange: "talkingChange";
+        readonly talkVolumeChange: "talkVolumeChange";
+        readonly broadcastPanelChange: "broadcastPanelChange";
         readonly aichatChange: "aichatChange";
         readonly liveChange: "liveChange";
         readonly recDropdownChange: "recDropdownChange";
@@ -1560,6 +2916,9 @@ declare class Theme extends EventEmitter {
         readonly alarmMessageChange: "alarmMessageChange";
         readonly setLoggerOptions: "setLoggerOptions";
         readonly records: "records";
+        /**
+         * 录像回放的月份列表 @private
+         */
         readonly ptzSpeedChange: "ptzSpeedChange";
         readonly setVideoLevelList: "setVideoLevelList";
         readonly currentVideoLevel: "currentVideoLevel";
@@ -1569,11 +2928,7 @@ declare class Theme extends EventEmitter {
         readonly playbackEnd: "playbackEnd";
         readonly control: {
             readonly play: "Control.play";
-            readonly playDestroy: "Control.playDestroy"; /**
-             * 模板请求（getDetail）的中止控制器。
-             * 重新渲染或销毁时中止在途请求，避免请求返回后在已销毁/已切换的 theme 上继续操作。
-             * @private
-             */
+            readonly playDestroy: "Control.playDestroy";
             readonly capturePicture: "Control.capturePicture";
             readonly capturePictureResult: "Control.capturePictureResult";
             readonly capturePictureDestroy: "Control.capturePictureDestroy";
@@ -1595,6 +2950,9 @@ declare class Theme extends EventEmitter {
             readonly speedChange: "Control.speedChange";
             readonly speedPanelOpenChange: "Control.speedPanelOpenChange";
             readonly speedDestroy: "Control.speedDestroy";
+            readonly streamTypeChange: "Control.streamTypeChange";
+            readonly streamTypePanelOpenChange: "Control.streamTypePanelOpenChange";
+            readonly streamTypeDestroy: "Control.streamTypeDestroy";
             readonly ptzPanelOpenChange: "Control.ptzPanelOpenChange";
             readonly ptzSpeedChange: "Control.ptzSpeedChange";
             readonly ptzError: "Control.ptzError";
@@ -1604,8 +2962,14 @@ declare class Theme extends EventEmitter {
             readonly talkingChange: "Control.talkingChange";
             readonly talkError: "Control.talkError";
             readonly talkDestroy: "Control.talkDestroy";
-            readonly broadcastChange: "Control.broadcastChange";
+            readonly broadcastPanelChange: "Control.broadcastPanelChange";
             readonly broadcastDestroy: "Control.broadcastDestroy";
+            readonly broadcastVoiceListChange: "Control.broadcastVoiceListChange";
+            readonly broadcastApiResult: "Control.broadcastApiResult";
+            readonly broadcastVoiceRecorded: "Control.broadcastVoiceRecorded";
+            readonly broadcastRecordStart: "Control.broadcastRecordStart";
+            readonly broadcastRecordStop: "Control.broadcastRecordStop";
+            readonly broadcastRecordComplete: "Control.broadcastRecordComplete";
             readonly aichatChange: "Control.aichatChange";
             readonly aichatDestroy: "Control.aichatDestroy";
             readonly liveChange: "Control.liveChange";
@@ -1625,6 +2989,9 @@ declare class Theme extends EventEmitter {
             readonly datePanelOpenChange: "Control.datePanelOpenChange";
             readonly dateChange: "Control.dateChange";
             readonly dateMonthChange: "Control.dateMonthChange";
+            /**
+             * url 信息 播放地址信息
+             */
             readonly datePanelMonthChange: "Control.datePanelMonthChange";
             readonly datePanelYearChange: "Control.datePanelYearChange";
             readonly dateDestroy: "Control.dateDestroy";
@@ -1658,15 +3025,21 @@ declare class Theme extends EventEmitter {
             readonly alarmMessageControlInit: "Control.alarmMessageControlInit";
             readonly zoomControlInit: "Control.zoomControlInit";
             readonly definitionControlInit: "Control.definitionControlInit";
-            readonly fullscreenControlInit: "Control.fullscreenControlInit"; /** 多语言对象 https://www.npmjs.com/package/@ezuikit/utils-i18n  @since 0.0.1 */
+            readonly fullscreenControlInit: "Control.fullscreenControlInit";
             readonly globalFullscreenControlInit: "Control.globalFullscreenControlInit";
             readonly recControlInit: "Control.recControlInit";
             readonly speedControlInit: "Control.speedControlInit";
+            readonly streamTypeControlInit: "Control.streamTypeControlInit";
             readonly dateControlInit: "Control.dateControlInit";
             readonly timeControlInit: "Control.timeControlInit";
             readonly timeLineControlInit: "Control.timeLineControlInit";
             readonly segmentProgressControlInit: "Control.segmentProgressControlInit";
-        };
+        }; /**
+         * 容器的宽(单位 px)
+         * ```ts
+         * theme.width // number
+         * ```
+         */
         readonly theme: {
             readonly beforeDestroy: "Theme.beforeDestroy";
             readonly destroyed: "Theme.destroyed";
@@ -1674,6 +3047,34 @@ declare class Theme extends EventEmitter {
             readonly recFooterDestroy: "Theme.recFooterDestroy";
         };
         readonly message: "message";
+        readonly http: {
+            readonly getDeviceCapacity: "getDeviceCapacity";
+            readonly getDeviceInfo: "getDeviceInfo";
+            readonly getDeviceSupportQuality: "getDeviceSupportQuality";
+            readonly getEzopenUrl: "getEzopenUrl";
+            readonly queryVoiceList: "queryVoiceList";
+            readonly sendVoiceOnce: "sendVoiceOnce";
+            readonly sendVoice: "sendVoice";
+            readonly postDevicePtzMirror: "postDevicePtzMirror";
+            readonly getRecordMonth: "getRecordMonth";
+            readonly getAppKey: "getAppKey";
+            readonly getDeviceList: "getDeviceList";
+            readonly setVideoLevel: "setVideoLevel";
+            readonly getCloudInfo: "getCloudInfo";
+            readonly getCloudUploadUrl: "getCloudUploadUrl";
+            readonly getStreamAddressList: "getStreamAddressList";
+            readonly getCloudRecordTimes: "getCloudRecordTimes";
+            readonly getCloudTimes: "getCloudTimes";
+            readonly getLocalRecTimes: "getLocalRecTimes";
+            readonly getAlarmList: "getAlarmList";
+            readonly captureSave: "captureSave";
+            readonly createCaptureTask: "createCaptureTask";
+            readonly getSpaceList: "getSpaceList";
+            readonly getAddress: "getAddress";
+            readonly getCDNLiveAddress: "getCDNLiveAddress";
+            readonly getCDNRecordAddress: "getCDNRecordAddress";
+            readonly getStreamInterruptInfo: "getStreamInterruptInfo";
+        };
     };
     /** 语言包 @since 0.0.1 */
     static LOCALES: {
@@ -1835,7 +3236,7 @@ declare class Theme extends EventEmitter {
             SEEK_CANNOT_CROSS_DAYS: string;
             SEEK_TIMEFORMAT_ERROR: string;
             PAUSE: string;
-            PAUSE_FAILED: string; /** 多语言对象 https://www.npmjs.com/package/@ezuikit/utils-i18n  @since 0.0.1 */
+            PAUSE_FAILED: string;
             RESUME: string;
             RESUME_FAILED: string;
             CALL_END: string;
@@ -1847,7 +3248,6 @@ declare class Theme extends EventEmitter {
             PLEASE_INPUT_RIGHT_VIDEO_LEVEL: string;
             VIDEO_LEVEL_NOT_SUPPORT: string;
             VIDEO_LEVEL_AUTO: string;
-            /** 暂停控件 @since 0.0.1 @private */
             VIDEO_LEVEL_FLUENT: string;
             VIDEO_LEVEL_STANDARD: string;
             VIDEO_LEVEL_HEIGH: string;
@@ -1855,10 +3255,6 @@ declare class Theme extends EventEmitter {
             VIDEO_LEVEL_EXTREME: string;
             VIDEO_LEVEL_3K: string;
             VIDEO_LEVEL_4k: string;
-            /**
-             * @since 0.0.1
-             * @private
-             */
             RESET_THEME: string;
             BTN_PLAY: string;
             BTN_PAUSE: string;
@@ -1884,6 +3280,9 @@ declare class Theme extends EventEmitter {
             BTN_EXIR_FULLSCREEN: string;
             BTN_HD: string;
             BTN_SPEED: string;
+            BTN_STREAM_TYPE: string;
+            STREAM_TYPE_MAIN: string;
+            STREAM_TYPE_SUB: string; /** 主题挂载节点 */
             BTN_CLOUDREC: string;
             BTN_CLOUDRECORD: string;
             BTN_REC: string;
@@ -1896,12 +3295,12 @@ declare class Theme extends EventEmitter {
             CAPTURE_FAILED: string;
             START_RECORD_SUCCESS: string;
             START_RECORD_FAILED: string;
-            STOP_RECORD_SUCCESS: string;
+            STOP_RECORD_SUCCESS: string; /** 内容控件 @since 0.0.1 */
             STOP_RECORD_FAILED: string;
-            RECORD_TIPS: string;
+            RECORD_TIPS: string; /** 加载控件 @since 0.0.1  @private */
             RECORDS: string;
             OPEN_SOUND: string;
-            CLOSE_SOUND: string;
+            CLOSE_SOUND: string; /** 暂停控件 @since 0.0.1 @private */
             SOUND_OPENED: string;
             ZOOM: string;
             START_ZOOM: string;
@@ -1929,12 +3328,60 @@ declare class Theme extends EventEmitter {
             WEB_FULLSCREEN: string;
             WEB_FULLSCREEN_EXIT: string;
             DESTROY: string;
-            /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */
-            GET_CAPACITY: string;
+            GET_CAPACITY_SUCCESS: string;
+            GET_CAPACITY_FAILED: string;
+            GET_DEVICE_INFO_SUCCESS: string;
+            GET_DEVICE_INFO_FAILED: string;
+            GET_DEVICE_SUPPORT_QUALITY_SUCCESS: string;
+            GET_DEVICE_SUPPORT_QUALITY_FAILED: string;
+            GET_EZOPEN_URL_SUCCESS: string;
+            GET_EZOPEN_URL_FAILED: string;
+            QUERY_VOICE_LIST_SUCCESS: string;
+            QUERY_VOICE_LIST_FAILED: string;
+            SEND_VOICE_SUCCESS: string;
+            SEND_VOICE_FAILED: string;
+            PTZ_MIRROR_SUCCESS: string;
+            PTZ_MIRROR_FAILED: string;
+            GET_RECORD_MONTH_SUCCESS: string;
+            GET_RECORD_MONTH_FAILED: string;
+            GET_APP_KEY_SUCCESS: string;
+            GET_APP_KEY_FAILED: string;
+            GET_DEVICE_LIST_SUCCESS: string;
+            GET_DEVICE_LIST_FAILED: string;
+            SET_VIDEO_LEVEL_SUCCESS: string;
+            SET_VIDEO_LEVEL_FAILED: string;
+            GET_CLOUD_INFO_SUCCESS: string;
+            GET_CLOUD_INFO_FAILED: string;
+            GET_CLOUD_UPLOAD_URL_SUCCESS: string;
+            GET_CLOUD_UPLOAD_URL_FAILED: string;
+            GET_STREAM_ADDRESS_LIST_SUCCESS: string;
+            GET_STREAM_ADDRESS_LIST_FAILED: string;
+            GET_REC_TIMES_SUCCESS: string;
+            GET_REC_TIMES_FAILED: string;
+            GET_ALARM_LIST_SUCCESS: string;
+            GET_ALARM_LIST_FAILED: string;
+            CAPTURE_SAVE_SUCCESS: string;
+            CAPTURE_SAVE_FAILED: string;
+            CREATE_CAPTURE_TASK_SUCCESS: string; /**
+             * 是否支持主子码流切换（本地回放），默认 false。
+             * 由 SDK 层通过 `EVENTS.supportLocalRecordStreamType` 事件设置；为 true 且当前是本地回放时才展示码流切换控件。
+             */
+            CREATE_CAPTURE_TASK_FAILED: string;
+            GET_SPACE_LIST_SUCCESS: string;
+            GET_SPACE_LIST_FAILED: string;
+            GET_ADDRESS_SUCCESS: string;
+            GET_ADDRESS_FAILED: string;
+            GET_CDN_ADDRESS_SUCCESS: string;
+            GET_CDN_ADDRESS_FAILED: string;
+            GET_STREAM_INTERRUPT_INFO_SUCCESS: string;
+            GET_STREAM_INTERRUPT_INFO_FAILED: string;
             GET_PTZ_STATUS: string;
             GET_PTZ_STATUS_FAILED: string;
             MOBILE_HIDE_PTZ: string;
             OPTION_PTZ_FAILED: string;
+            /**
+             * 录像回放的月份列表 @private
+             */
             MOBILE_PTZ_TIPS: string;
             PTZ_FAST: string;
             PTZ_MID: string;
@@ -1954,9 +3401,6 @@ declare class Theme extends EventEmitter {
             SET_FEC_PARAMS: string;
             GET_FEC_PARAMS: string;
             SET_FEC_PARAMS_FAILED: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
             GET_FEC_PARAMS_FAILED: string;
             GET_FEC_PARAMS_SUPPORT_VERSION: string;
             SET_WATERMARK: string;
@@ -1966,6 +3410,14 @@ declare class Theme extends EventEmitter {
             close: string;
             BTN_REC_LIST_TITLE: string;
             UNKOWN_ISSUE: string;
+            391004: string;
+            SEEK_NOT_SUPPORT: string;
+            VIDEO_LEVEL_SATNDARD: string;
+            VIDEO_LEVEL_SPUER: string;
+            BTN_SOUND: string;
+            BTN_EXPEND: string;
+            BTN_WEBEXPEND: string;
+            SOUND_DISABLED_WHEN_TALKING: string;
         };
         en: {
             391001: string;
@@ -2039,6 +3491,7 @@ declare class Theme extends EventEmitter {
             396109: string;
             396110: string;
             396501: string;
+            /** 所有控件列表, 所有控件名称规则（`${iconId}Control`）， 如音量控件 this.controls["volumeControl"]  @since 0.0.1 */
             396502: string;
             396503: string;
             396504: string;
@@ -2052,28 +3505,24 @@ declare class Theme extends EventEmitter {
             396513: string;
             396514: string;
             396515: string;
-            396516: string;
+            396516: string; /**  @since 0.0.1 @private */
             396517: string;
-            396518: string; /** 清晰度列表 */
-            396519: string; /**
-             * 播放区间（片段分享），null 表示不约束。
-             * 由 SDK 层在初始化时通过 props 下发，主题层据此决定日历/回放类型按钮
-             * 是否渲染、片段进度条是否渲染。区间没有运行时变更入口。
-             */
+            396518: string;
+            396519: string;
             396520: string;
             396700: string;
-            396701: string;
+            396701: string; /** 容器的宽 */
             397001: string;
             397002: string;
             397003: string;
             397004: string;
-            397005: string;
+            397005: string; /** 静音 */
             397006: string;
             397007: string;
             399000: string;
             399001: string;
             399002: string;
-            399016: string;
+            399016: string; /** 自定清晰度 @private */
             399048: string;
             399049: string;
             399030: string;
@@ -2090,7 +3539,11 @@ declare class Theme extends EventEmitter {
             3860000: string;
             3860001: string;
             3860002: string;
-            3860003: string;
+            3860003: string; /**
+             * 模板请求（getDetail）的中止控制器。
+             * 重新渲染或销毁时中止在途请求，避免请求返回后在已销毁/已切换的 theme 上继续操作。
+             * @private
+             */
             3860004: string;
             3860005: string;
             3860006: string;
@@ -2175,14 +3628,10 @@ declare class Theme extends EventEmitter {
             BTN_WEBEXPEND: string;
             BTN_HD: string;
             BTN_SPEED: string;
+            BTN_STREAM_TYPE: string;
+            STREAM_TYPE_MAIN: string;
+            STREAM_TYPE_SUB: string;
             BTN_CLOUDREC: string;
-            /**
-             * 视频信息
-             * @version 3.1.2
-             * ```ts
-             * theme.videoInfo // ThemeVideoInfo
-             * ```
-             */
             BTN_CLOUDRECORD: string;
             BTN_REC: string;
             BTN_CALENDAR: string;
@@ -2196,12 +3645,7 @@ declare class Theme extends EventEmitter {
             START_RECORD_FAILED: string;
             STOP_RECORD_SUCCESS: string;
             STOP_RECORD_FAILED: string;
-            RECORD_TIPS: string; /**
-             * 当前播放状态
-             * ```ts
-             * theme.playing // boolean
-             * ```
-             */
+            RECORD_TIPS: string;
             RECORDS: string;
             OPEN_SOUND: string;
             CLOSE_SOUND: string;
@@ -2232,11 +3676,61 @@ declare class Theme extends EventEmitter {
             WEB_FULLSCREEN: string;
             WEB_FULLSCREEN_EXIT: string;
             DESTROY: string;
-            GET_CAPACITY: string;
+            GET_CAPACITY_SUCCESS: string;
+            GET_CAPACITY_FAILED: string;
+            GET_DEVICE_INFO_SUCCESS: string;
+            GET_DEVICE_INFO_FAILED: string;
+            GET_DEVICE_SUPPORT_QUALITY_SUCCESS: string;
+            GET_DEVICE_SUPPORT_QUALITY_FAILED: string;
+            GET_EZOPEN_URL_SUCCESS: string;
+            GET_EZOPEN_URL_FAILED: string;
+            QUERY_VOICE_LIST_SUCCESS: string;
+            QUERY_VOICE_LIST_FAILED: string;
+            SEND_VOICE_SUCCESS: string;
+            SEND_VOICE_FAILED: string;
+            PTZ_MIRROR_SUCCESS: string;
+            PTZ_MIRROR_FAILED: string;
+            GET_RECORD_MONTH_SUCCESS: string;
+            GET_RECORD_MONTH_FAILED: string;
+            GET_APP_KEY_SUCCESS: string;
+            GET_APP_KEY_FAILED: string;
+            GET_DEVICE_LIST_SUCCESS: string;
+            GET_DEVICE_LIST_FAILED: string;
+            SET_VIDEO_LEVEL_SUCCESS: string;
+            SET_VIDEO_LEVEL_FAILED: string;
+            GET_CLOUD_INFO_SUCCESS: string;
+            GET_CLOUD_INFO_FAILED: string;
+            GET_CLOUD_UPLOAD_URL_SUCCESS: string;
+            GET_CLOUD_UPLOAD_URL_FAILED: string;
+            GET_STREAM_ADDRESS_LIST_SUCCESS: string;
+            GET_STREAM_ADDRESS_LIST_FAILED: string;
+            GET_REC_TIMES_SUCCESS: string;
+            GET_REC_TIMES_FAILED: string;
+            GET_ALARM_LIST_SUCCESS: string;
+            GET_ALARM_LIST_FAILED: string;
+            CAPTURE_SAVE_SUCCESS: string;
+            CAPTURE_SAVE_FAILED: string;
+            CREATE_CAPTURE_TASK_SUCCESS: string;
+            CREATE_CAPTURE_TASK_FAILED: string;
+            GET_SPACE_LIST_SUCCESS: string;
+            GET_SPACE_LIST_FAILED: string;
+            GET_ADDRESS_SUCCESS: string;
+            GET_ADDRESS_FAILED: string;
+            GET_CDN_ADDRESS_SUCCESS: string;
+            GET_CDN_ADDRESS_FAILED: string;
+            GET_STREAM_INTERRUPT_INFO_SUCCESS: string;
+            GET_STREAM_INTERRUPT_INFO_FAILED: string;
             GET_PTZ_STATUS: string;
             GET_PTZ_STATUS_FAILED: string;
             MOBILE_HIDE_PTZ: string;
             OPTION_PTZ_FAILED: string;
+            /**
+             * 音量值
+             * ```ts
+             * // 事件监听
+             * theme.on(Theme.EVENTS.volumechange, (volume: number, muted: boolean) => {})
+             * ```
+             */
             MOBILE_PTZ_TIPS: string;
             PTZ_FAST: string;
             PTZ_MID: string;
@@ -2248,10 +3742,7 @@ declare class Theme extends EventEmitter {
             NOT_SUPPORT_FOCUS: string;
             MIRROR: string;
             MIRROR_TYPE_ERROR: string;
-            CHANGE_FEC_TYPE: string; /**
-             * 静音
-             *
-             */
+            CHANGE_FEC_TYPE: string;
             DEVICE_NOT_SUPPORT: string;
             TYPE_NOT_SUPPORT: string;
             FEC_SUPPORT_VERSION: string;
@@ -2268,6 +3759,12 @@ declare class Theme extends EventEmitter {
             close: string;
             BTN_REC_LIST_TITLE: string;
             UNKOWN_ISSUE: string;
+            391004: string;
+            SEEK_NOT_SUPPORT: string;
+            VIDEO_LEVEL_SATNDARD: string;
+            VIDEO_LEVEL_SPUER: string;
+            BTN_SOUND: string;
+            SOUND_DISABLED_WHEN_TALKING: string;
         };
     };
     /** 版本号 @since 0.0.1 */
@@ -2297,13 +3794,6 @@ declare class Theme extends EventEmitter {
      * @private
      */
     _seekDate: Date | null;
-    /**
-     * @type { "rec" | "cloudRec" | "cloudRecord" } recType 回放类型
-     * ```ts
-     * theme.recType // 回放类型
-     * ```
-     */
-    recType: string;
     /**
      * 更多控件（header more）
      * @since 0.0.1
@@ -2369,8 +3859,11 @@ declare class Theme extends EventEmitter {
     _speed: number;
     /** 自定清晰度 @private */
     _videoLevelAuto: boolean;
-    /** 清晰度列表 */
-    videoLevelList: DefinitionItem[];
+    /**
+     * 是否支持主子码流切换（本地回放），默认 false。
+     * 由 SDK 层通过 `EVENTS.supportLocalRecordStreamType` 事件设置；为 true 且当前是本地回放时才展示码流切换控件。
+     */
+    supportLocalRecordStreamType: boolean;
     /** 回放片段列表 */
     recordList: TimeLineTimeSection[];
     /**
@@ -2406,6 +3899,7 @@ declare class Theme extends EventEmitter {
     destroyed: boolean;
     scaleMode: ThemeOptions['scaleMode'];
     _videoInfo: ThemeVideoInfo;
+    services: Services | null;
     constructor(options: ThemeOptions);
     get url(): string;
     set url(url: string);
@@ -2413,6 +3907,10 @@ declare class Theme extends EventEmitter {
      * url 信息 播放地址信息
      */
     get urlInfo(): Partial<_ezuikit_utils_tools.EzopenURL>;
+    /**
+     * 主子码流 1 | 2
+     */
+    get currentStreamTypeIn(): number | undefined;
     /**
      * 当前播放类型，由播放地址解析得出
      *
@@ -2429,6 +3927,14 @@ declare class Theme extends EventEmitter {
      * ```
      */
     get playType(): ThemePlayType | '';
+    /** 萤石直播 */
+    get isEzvizLive(): boolean;
+    /** 萤石本地存储 */
+    get isLocalRec(): boolean;
+    /** 萤石云存储 */
+    get isCloudRec(): boolean;
+    /** 萤石云录制 */
+    get isCloudRecord(): boolean;
     /**
      * 容器的宽(单位 px)
      * ```ts
@@ -2760,6 +4266,57 @@ declare class Theme extends EventEmitter {
      * ```
      */
     destroy(): void;
+    /**
+     * 判断是否为萤石播放地址（直播或回放，私有流 `ezopen://` 与标准流 flv / hls 都算）
+     *
+     * 只校验 `?` 之前的部分，查询参数不参与判断。判定规则见 `@ezuikit/utils-tools` 的 `isEzvizUrl`。
+     *
+     * 注意：`options.isEzviz` 为 `true`（默认值）时直接返回 `true`，不再看地址；
+     * 需要按地址判定时请显式传 `isEzviz: false`。
+     *
+     * @param url - 待判断的地址，省略时使用当前播放地址 `theme.url`
+     * @returns 是萤石播放地址返回 `true`，否则返回 `false`
+     * @sine 3.2.0
+     * @example
+     * ```ts
+     * theme.isEzvizUrl(); // 判断当前 theme.url
+     * theme.isEzvizUrl('ezopen://open.ys7.com/BW3143164/1.hd.live'); // true
+     * theme.isEzvizUrl('https://example.com/a.flv'); // false
+     * ```
+     */
+    isEzvizUrl(url?: string): boolean;
+    /**
+     * 判断是否为萤石直播（预览）地址，包括私有流与标准流
+     *
+     * - `ezopen://` 地址：路径以 `.live` 结尾
+     * - `http(s)://` 地址：路径包含 `/openlive/`
+     *
+     * @param url - 待判断的地址，省略时使用当前播放地址 `theme.url`
+     * @returns 是萤石直播地址返回 `true`，否则返回 `false`
+     * @sine 3.2.0
+     * @example
+     * ```ts
+     * theme.isEzvizLiveUrl('ezopen://open.ys7.com/BW3143164/1.hd.live'); // true
+     * theme.isEzvizLiveUrl('ezopen://open.ys7.com/BW3143164/1.rec'); // false
+     * ```
+     */
+    isEzvizLiveUrl(url?: string): boolean;
+    /**
+     * 判断是否为萤石回放地址，包括私有流与标准流
+     *
+     * - `ezopen://` 地址：路径以 `.rec` 结尾（如 `1.rec`、`1.cloud.rec`、`1.hd.local.rec`）
+     * - `http(s)://` 地址：路径包含 `/openpb/`
+     *
+     * @param url - 待判断的地址，省略时使用当前播放地址 `theme.url`
+     * @returns 是萤石回放地址返回 `true`，否则返回 `false`
+     * @sine 3.2.0
+     * @example
+     * ```ts
+     * theme.isEzvizPlaybackUrl('ezopen://open.ys7.com/BW3143164/1.cloud.rec'); // true
+     * theme.isEzvizPlaybackUrl('ezopen://open.ys7.com/BW3143164/1.hd.live'); // false
+     * ```
+     */
+    isEzvizPlaybackUrl(url?: string): boolean;
     /** 初始化配置项 */
     private _initOptions;
     /**
@@ -2801,21 +4358,11 @@ declare class Theme extends EventEmitter {
      */
     private _removeEventListener;
     /**
-     * 设置清晰度列表（临时方案，后期会有改动）
-     */
-    protected _setVideoLevelList(list: DefinitionItem[]): void;
-    /**
      * 禁用按钮
      * @private
      */
     _disabled(disabled?: boolean): void;
     private _onDblClickFullscreen;
-    /**
-     * 获取录像类型， 仅 ezopen 支持
-     * @param url 录像 url
-     * @returns {"rec" | "cloudRecord" | "cloudRec" | ""} 录像类型， rec: 录像， cloudRec: 云录像， cloudRecord: 云录制
-     */
-    protected _getRecType(url: string): "" | "rec" | "cloudRec" | "cloudRecord";
     private resetControl;
     /**
      * 窗口全屏后旋转 90度判断， 然后设置控件已经旋转 90度， 为了解决控件交互问题
@@ -2827,9 +4374,315 @@ declare class Theme extends EventEmitter {
     get isEzopen(): boolean;
     /**
      * 判断播放地址是萤石的播放地址
-     * @since 3.1.2
+     * @since 3.2.0
      */
     get isEzviz(): boolean;
+    /**
+     * 设备能力集，字段见 {@link EzvizDeviceCapacity}；未查询到能力集时为空对象，按「不支持」处理， 需要
+     * @since 3.2.0
+     */
+    get deviceCapacity(): EzvizDeviceCapacity;
+    /**
+     * 设备信息
+     * @since 3.2.0
+     */
+    get deviceInfo(): EzvizDeviceCapacity;
+    /**
+     * 设备支持的清晰度列表, 如果外部传入默认使用传入的值， 不支持动态设置清晰度列表
+     * @since 3.2.0
+     */
+    get videoLevelList(): EzvizVideoLevel[];
+    /** 支持3D定位功能 （仅直播支持判断）@since 3.2.0 */
+    get support3DZoom(): boolean;
+    /**
+     * 是否开启3D定位功能 （仅直播支持判断）
+     * @since 3.2.0
+     */
+    get use3DZoom(): any;
+    /**
+     * 萤石云存储空间 id（云录制回放与云抓拍共用）
+     *
+     * 优先级：`setSpaceId()` 设置的值 > 播放地址中的 spaceId（ezopen 初始化时写入 options） > 初始化参数 `spaceId`
+     * @since 3.2.0
+     */
+    get spaceId(): number | string | undefined;
+    /**
+     * 设置 / 更新存储空间 id（与云录制 spaceId 共用，支持实例化后更新）
+     * @param spaceId 存储空间 id（由 {@link getSpaceList} 获取）
+     * @since 3.2.0
+     */
+    setSpaceId(spaceId: number | string): void;
+    /**
+     * @deprecated 请使用 {@link setSpaceId}，此别名仅作兼容保留
+     * @param resultSpaceId 存储空间 id
+     */
+    setResultSpaceId(resultSpaceId: number | string): void;
+    /**
+     * 即时云抓拍（设备抓拍图片，支持生命周期）
+     * @param options 抓拍参数，`spaceId` 不传时取实例 {@link spaceId}
+     * @returns `{ code: 0, data: { picUrl, fileNodeId } }`；失败时 code 非 0（透传服务端 meta.code 或 -1），不会 reject
+     * @since 3.2.0
+     * @example
+     * ```ts
+     * await theme.captureCamera({ spaceId: 270328 }) // { code: 0, data: { picUrl, fileNodeId } }
+     * ```
+     */
+    captureCamera(options?: CaptureCameraOptions): Promise<CloudCaptureResult<CaptureCameraData>>;
+    /**
+     * 创建抓拍计划任务（批量 / 定时）
+     * @param options 抓拍计划参数，`spaceId` 不传时取实例 {@link spaceId}
+     * @returns `{ code: 0, data: { taskId } }`；失败时 code 非 0，不会 reject
+     * @since 3.2.0
+     * @example
+     * ```ts
+     * await theme.createCaptureTask({ spaceId: 270328, captureType: 1, timingPoints: '20260101120000' })
+     * ```
+     */
+    createCaptureTask(options: CreateCaptureTaskOptions): Promise<CloudCaptureResult<{
+        taskId: string;
+    }>>;
+    /**
+     * 查询存储空间列表（默认云抓拍 cloudCapture 空间），供用户选择 spaceId
+     * @param options 查询参数 `{ startTime, endTime, lastSpaceId, pageSize, bizTypeList }`
+     * @returns `{ code: 0, data: { result, lastId, pageSize, hasNext } }`；失败时 code 非 0，不会 reject
+     * @since 3.2.0
+     * @example
+     * ```ts
+     * const res = await theme.getSpaceList();
+     * // res.data.result => [{ spaceId, spaceName, bizType, ... }]
+     * ```
+     */
+    getSpaceList(options?: GetSpaceListOptions): Promise<CloudCaptureResult<SpaceListData>>;
+    /**
+     * 构造并派发统一结构的业务事件（接口请求结果、api 调用、取流等通知）
+     *
+     * 事件载荷为 `{ name, code, msg, type, ...data }`：
+     * - `name`：事件名，同时作为第一个参数传给 `emit`
+     * - `code`：结果码，`type` 以 `Error` 结尾（`'httpError'` / `'streamError'`）时为 `-1`，其余为 `0`
+     * - `msg`：当前语言下的提示文案，由 `i18nKey` 翻译得到；未传 `i18nKey` 时为空串
+     * - `type`：事件来源分类，同 `type` 参数
+     * - `data` 的字段会展开合并到载荷里（如接口结果 `data`、接口路径 `path`），同名字段会覆盖前面的 `name` / `code` / `msg` / `type`
+     *
+     * @param name 事件名，如 `EVENTS.http.getDeviceCapacity`
+     * @param type 事件来源：`'http'` 接口请求成功、`'httpError'` 接口请求失败、`'api'` 对外 api 调用、
+     *   `'stream'` 取流、`'streamError'` 取流失败、`'message'` 提示消息
+     * @param data 附加到载荷上的字段，可为空
+     * @param i18nKey 多语言 key，用于生成 `msg`
+     * @since 3.2.0
+     * @example
+     * ```ts
+     * theme.on(EVENTS.http.sendVoice, ({ code, msg, data, path }) => {
+     *   if (code === -1) console.error(msg, path, data);
+     * });
+     * ```
+     */
+    builderEvent(name: string, type: BuilderEventType, data?: object, i18nKey?: string): void;
+    /**
+     * 获取 ezopen 私有流的 wss 取流地址（含 ECDH 全链路加密判定，见 api/_services.ts `_getEzopenUrlService`）
+     * @param url ezopen 地址，默认当前播放地址
+     * @returns wss 取流地址；接口返回错误码时为接口原始结果，请求失败为空串，未初始化 services 时为 undefined
+     * @since 3.2.0
+     */
+    getEzopenUrlService(url?: string): Promise<string | EzvizApiResponse<any> | undefined>;
+    /**
+     * 获取设备能力集 https://open.ys7.com/help/678
+     * @since 3.2.0
+     */
+    getDeviceCapacityService(): Promise<EzvizDeviceCapacity | undefined>;
+    /**
+     * 获取设备信息 https://open.ys7.com/help/672
+     * @since 3.2.0
+     */
+    getDeviceInfoService(): Promise<EzvizDeviceInfo | undefined>;
+    /**
+     * 获取设备支持清晰度列表
+     * @since 3.2.0
+     */
+    getDeviceSupportQualityService(): Promise<EzvizVideoLevel[] | undefined>;
+    /**
+     * @description 查询默认语音列表 https://open.ys7.com/help/1247
+     * @param {Object} params 查询参数
+     * @param {string} params.voiceName 模糊匹配语音名称（可选）
+     * @param {number} params.pageStart 分页起始页，从0开始（可选）
+     * @param {number} params.pageSize 分页大小，默认为10，最大为50（可选）
+     * @returns {Promise<{data: Array, page: Object}>}
+     * @since v3.2.0
+     * @example
+     * player.queryVoiceList({ pageSize: 20 }).then(res => {
+     *   console.log(res.data); // 语音列表
+     *   console.log(res.page); // 分页信息
+     * });
+     */
+    queryVoiceListService(params?: IQueryVoiceParams): Promise<EzvizPageList<EzvizVoiceItem> | undefined>;
+    /**
+     * @description 临时语音下发（一次性自定义语音下发到设备，不保存到语音列表） https://open.ys7.com/help/1252
+     * @param {File | Blob} voiceFile 语音文件，支持wav、mp3、aac格式，最大20M，最长60s
+     * @param {number} channelNo 通道号，默认使用播放器配置的通道号（可选）
+     * @returns {Promise<{code: number, msg: string}>}
+     * @since 3.2.0
+     * @example
+     * player.sendVoiceOnce(audioFile).then(res => {
+     *   console.log('语音下发成功');
+     * }).catch(err => {
+     *   console.error('语音下发失败', err);
+     * });
+     */
+    sendVoiceOnceService(voiceFile: File | Blob, channelNo?: number): Promise<EzvizApiResponse<any> | undefined>;
+    /**
+     * @description 语音文件下发（指定设备播放已上传的语音文件） https://open.ys7.com/help/1253
+     * @param {string} fileUrl 下载音频文件的url（从查询接口返回的url）
+     * @param {number=} channelNo 通道号，默认使用播放器配置的通道号（可选）
+     * @returns {Promise<{code: number, msg: string}>}
+     * @since 3.2.0
+     * @example
+     * player.sendVoice(fileUrl).then(res => {
+     *   console.log('语音下发成功');
+     * }).catch(err => {
+     *   console.error('语音下发失败', err);
+     * });
+     */
+    sendVoiceService(fileUrl: string, channelNo?: number): Promise<EzvizApiResponse<any> | undefined>;
+    /**
+     * 镜像翻转（需设备报备对应能力集） https://open.ys7.com/help/681
+     * @param command 镜像方向：0-上下, 1-左右, 2-中心
+     * @since 3.2.0
+     */
+    postDevicePtzMirrorService(command: 0 | 1 | 2): Promise<void | undefined>;
+    /**
+     * 按月查询录像日历（本地存储、云存储和云录制）
+     * - 本地存储 / 云存储 https://open.ys7.com/help/4329
+     * - 云录制 https://open.ys7.com/help/2042
+     * @param recType 录像类型 -1 云录制 1-云存储，2-本地录像，3-关联录像
+     * @param month 查询的月份，格式 yyyy-MM
+     * @param spaceId 云录制空间的 spaceId，仅云录制需要
+     * @returns 有录像的日期列表，如 `["2025-08-14", "2025-08-16"]`
+     * @since 3.2.0
+     */
+    getRecordMonthService(recType: -1 | 1 | 2 | 3, month: string, spaceId?: string | number): Promise<string[] | undefined>;
+    /**
+     * 获取 appKey（用于上报）
+     * @since 3.2.0
+     */
+    getAppKeyService(): Promise<"" | EzvizMetaResponse<EzvizAppKeyData> | undefined>;
+    /**
+     * 获取设备的通道信息 https://open.ys7.com/help/1478
+     * @since 3.2.0
+     */
+    getDeviceListService(): Promise<EzvizCameraInfo[] | undefined>;
+    /**
+     * 设置设备视频质量（清晰度） https://open.ys7.com/help/2286
+     * @param videoLevel 清晰度等级 0-流畅 1-均衡 2-高清 3-超清 4-极清 5-3K 6-4K
+     * @param clientLid 直播取流会话标识（无缝切换用）
+     * @param prevVideoLevel 切换前清晰度，用于计算 adaptive 方向
+     * @since 3.2.0
+     */
+    setVideoLevelService(videoLevel: number | string, clientLid?: string, prevVideoLevel?: number | string): Promise<(EzvizMetaResponse<any> & EzvizApiResponse<any>) | undefined>;
+    /**
+     * 查询设备云存储信息 https://open.ys7.com/help/1404
+     * @since 3.2.0
+     */
+    getCloudInfoService(): Promise<EzvizCloudInfo | undefined>;
+    /**
+     * 获取云录制截图上传地址
+     * @param fileName 截图文件名
+     * @since 3.2.0
+     */
+    getCloudUploadUrlService(fileName: string): Promise<EzvizMetaResponse<any> | undefined>;
+    /**
+     * 获取取流备用地址
+     * @returns `[地址个数, 接口原始 data, 归一化后的地址列表]`
+     * @since 3.2.0
+     */
+    getStreamAddressListService(): Promise<[number, Partial<StreamAddressBackup>, (EzopenBackupAddress[] | undefined)?] | undefined>;
+    /**
+     * 获取云录制回放片段 https://open.ys7.com/help/2043
+     * @param params 查询参数
+     * @param params.begin 开始时间，格式 `YYYY-MM-DD HH:mm:ss`，不允许跨天，内部会自动转化为接口的 startTime
+     * @param params.end 结束时间，格式 `YYYY-MM-DD HH:mm:ss`，不允许跨天，内部会自动转化为接口的 endTime
+     * @param params.spaceId 云录制空间 ID
+     * @returns 回放片段列表（时间单位：秒）
+     * @since 3.2.0
+     */
+    getCloudRecordTimesService(params: EzvizFetchCloudRecordRecParams): Promise<EzvizFetchRecItem[] | undefined>;
+    /**
+     * 获取云存储回放片段 https://open.ys7.com/help/1422
+     * @param params 查询参数
+     * @param params.begin 开始时间（毫秒时间戳），内部会自动转化为接口的 startTime
+     * @param params.end 结束时间（毫秒时间戳），内部会自动转化为接口的 endTime
+     * @returns 回放片段列表（时间单位：秒，已处理时区）
+     * @since 3.2.0
+     */
+    getCloudTimesService(params: EzvizFetchCloudRecParams): Promise<EzvizFetchRecItem[] | undefined>;
+    /**
+     * 获取本地回放片段 https://open.ys7.com/help/3922
+     * @param params 查询参数；custom 版本与云存储共用 /api/lapp/video/by/time，按 {@link EzvizFetchCloudRecParams} 传参
+     * @param params.begin 开始时间（秒级时间戳），开始结束时间需在同一天，内部会自动转化为接口的 startTime
+     * @param params.end 结束时间（秒级时间戳），内部会自动转化为接口的 endTime
+     * @param params.streamType 主子码流，仅本地回放支持 （3.2.0 开始支持）
+     * @returns 回放片段列表（时间单位：秒，已处理时区）
+     * @since 3.2.0
+     */
+    getLocalRecTimesService(params: EzvizFetchLocalRecParams | EzvizFetchCloudRecParams): Promise<EzvizFetchRecItem[] | undefined>;
+    /**
+     * 按设备获取告警消息列表 https://open.ys7.com/help/987
+     * @since 3.2.0
+     */
+    getAlarmListService(params?: Parameters<Services['getAlarmList']>[0]): Promise<EzvizPageList<EzvizAlarmItem> | undefined>;
+    /**
+     * 即时云抓拍 https://open.ys7.com/help/5235
+     * @since 3.2.0
+     */
+    captureSaveService(params: Parameters<Services['captureSave']>[0]): Promise<EzvizMetaResponse<EzvizCaptureSaveData> | undefined>;
+    /**
+     * 创建抓图任务（批量 / 定时抓拍计划） https://open.ys7.com/help/1390
+     * @since 3.2.0
+     */
+    createCaptureTaskService(params: Parameters<Services['createCaptureTask']>[0]): Promise<EzvizMetaResponse<EzvizCaptureTaskData> | undefined>;
+    /**
+     * 查询存储空间列表 https://open.ys7.com/help/5230
+     * @since 3.2.0
+     */
+    getSpaceListService(params?: Parameters<Services['getSpaceList']>[0]): Promise<EzvizMetaResponse<EzvizSpaceListData> | undefined>;
+    /**
+     * 获取播放地址 https://open.ys7.com/help/1414
+     * @param params 请求参数，均可选，不传时默认取自当前播放地址 / 播放器配置
+     * @param params.begin 回放开始时间，支持时间字符串和时间戳，默认取当前播放地址的 begin，内部会自动转化为接口的 startTime
+     * @param params.end 回放结束时间，支持时间字符串和时间戳，默认取当前播放地址的 end，内部会自动转化为接口的 stopTime
+     * @param params.playbackSpeed 回放倍速，默认取当前播放地址的 playbackSpeed
+     * @param params.protocol 流播放协议：1-ezopen，2-hls，3-rtmp，4-flv，5-ll-hls，默认 5
+     * @param params.type 地址类型：1-预览，2-本地录像回放，3-云存储录像回放，默认按当前播放地址判断
+     * @param params.quality 视频清晰度：1-高清（主码流），2-流畅（子码流）
+     * @param params.expireTime 过期时长（秒），默认按当前播放地址的 expire 计算剩余时长
+     * @returns 接口原始返回 `{ code, msg, data: { id, url, expireTime } }`
+     * @since 3.2.0
+     * @example
+     * ```typescript
+     * const res = await theme.getAddressService({ begin: '20260804000000', playbackSpeed: 2 });
+     * ```
+     */
+    getAddressService(params?: EzvizFetchAddressParams): Promise<EzvizFetchAddressResult | undefined>;
+    /**
+     * 获取 CDN 加速直播地址（有效期为当天 00:00:00 - 23:59:59）
+     * @param params 请求参数，`appName` 必填，见 {@link EzvizFetchCDNAddressParams}
+     * @returns 接口原始返回 `{ meta, data: { cdnUrl } }`
+     * @since 3.2.0
+     */
+    getCDNLiveAddressService(params: EzvizFetchCDNAddressParams): Promise<EzvizMetaResponse<EzvizCDNAddressData> | undefined>;
+    /**
+     * 获取 CDN 加速回放地址（有效期为当天 00:00:00 - 23:59:59）
+     * @param params 请求参数，`appName` / `begin` / `end` 必填，见 {@link EzvizFetchCDNRecordAddressParams}
+     * @returns 接口原始返回 `{ meta, data: { cdnUrl } }`
+     * @since 3.2.0
+     */
+    getCDNRecordAddressService(params: EzvizFetchCDNRecordAddressParams): Promise<EzvizMetaResponse<EzvizCDNAddressData> | undefined>;
+    /**
+     * 查询直播间断流信息（仅萤石直播间地址）
+     * @param streamId 直播间流 ID，即播放地址里的 `sid`
+     * @returns 接口原始返回 `{ meta, data: { intrCode } }`
+     * @since 3.2.0
+     */
+    getStreamInterruptInfoService(streamId: string): Promise<EzvizMetaResponse<EzvizStreamInterruptInfo> | undefined>;
+    protected _updateServicesOptions(options: Partial<ServicesOptions>): void;
 }
 
 /**
@@ -2870,7 +4723,7 @@ interface TimePickerControlOptions extends Omit<ControlOptions, 'tagName'>, Part
  */
 interface RecDropdownOptions extends Omit<ControlOptions, 'tagName'> {
     /** 当前回放类型 */
-    recType?: ThemeRecType;
+    playType?: ThemeRecType;
     /** 回放支持类型(['rec', 'cloudRec', 'cloudRecord']) @since 3.1.8 */
     list?: ThemeRecType[];
     /**
@@ -2975,6 +4828,8 @@ interface ThemeOptions {
      * `rec` / `cloudRec` / `cloudRecord` 可按回放类型单独配置，优先级高于 `list`。
      */
     speedOptions?: OmitControlOptions<SpeedOptions> | null;
+    /** 码流切换控件（主码流 / 子码流）配置， 设置 null 不渲染控件 */
+    streamTypeOptions?: OmitControlOptions<StreamTypeOptions> | null;
     /** 对讲控件配置， 设置 null 不渲染控件 @since 0.0.1 */
     talkOptions?: OmitControlOptions<TalkOptions> | null;
     /** 缩放控件配置， 设置 null 不渲染控件 @since 0.0.1 */
@@ -3018,6 +4873,11 @@ interface ThemeOptions {
     isEzviz?: boolean;
     /** 基线 和 定制 */
     sdkType: 'base' | 'custom';
+    /**
+     * 设备时区偏移（小时），中国以外的地区设备才需要。
+     * ezopen 回放地址会自动追加为 `timeZone` 参数；播放地址里没有该参数时（如 flv / hls 标准流），回放片段查询按此配置换算
+     */
+    timeZone?: number;
     [kye: string]: any;
 }
 interface ThemeVideoInfo {
@@ -3421,10 +5281,16 @@ interface ThemeEventMap extends ControlInitEventMap {
     changeTheme: (themeData: IThemeData | null) => void;
     /** 回放类型切换 */
     recTypeChange: (type: string) => void;
+    /** 播放类型切换，type 为切换后的播放类型：'live' | 'rec' | 'cloudRec' | 'cloudRecord' */
+    playTypeChange: (type: string) => void;
     /** 切换清晰度 */
     definitionChange: (definition: number, item?: DefinitionItem) => void;
     /** 播放速度切换 */
     speedChange: (speed: number, item?: unknown) => void;
+    /** 码流切换（1: 主码流, 2: 子码流） */
+    streamTypeChange: (streamTypeIn: 1 | 2) => void;
+    /** 支持主子码流切换：收到后才展示码流切换控件；省略载荷或 true 表示支持，false 表示不支持 */
+    supportLocalRecordStreamType: (support?: boolean, streamTypeIn?: 1 | 2) => void;
     /** 录制状态变化 */
     recordingChange: (recording: boolean) => void;
     /** 对讲状态变化 */
@@ -3432,7 +5298,7 @@ interface ThemeEventMap extends ControlInitEventMap {
     /** 麦克风音量变化（高频） */
     talkVolumeChange: (value: number) => void;
     /** 语音广播状态变化 */
-    broadcastChange: (active: boolean) => void;
+    broadcastPanelChange: (active: boolean) => void;
     /** AI 对话框状态变化 */
     aichatChange: (active: boolean) => void;
     /** 直播模式切换 */
@@ -3509,8 +5375,28 @@ interface ThemeEventMap extends ControlInitEventMap {
     'Control.talkingChange': (talking: boolean) => void;
     'Control.talkError': (info: unknown) => void;
     'Control.talkDestroy': () => void;
-    'Control.broadcastChange': (active: boolean) => void;
+    'Control.broadcastPanelChange': (active: boolean) => void;
     'Control.broadcastDestroy': () => void;
+    'Control.broadcastVoiceListChange': (voiceList: Array<{
+        voiceName: string;
+        fileUrl: string;
+        duration: number;
+    }>) => void;
+    'Control.broadcastApiResult': (result: {
+        api: 'queryVoiceList' | 'sendVoice' | 'sendVoiceOnce';
+        success: boolean;
+        code: string;
+        msg: string;
+        data?: unknown;
+    }) => void;
+    'Control.broadcastVoiceRecorded': (data: {
+        voiceFile: Blob;
+        deviceSerial: string;
+        channelNo?: string | number;
+    }) => void;
+    'Control.broadcastRecordStart': () => void;
+    'Control.broadcastRecordStop': () => void;
+    'Control.broadcastRecordComplete': (voiceFile: Blob) => void;
     'Control.aichatChange': (active: boolean) => void;
     'Control.aichatDestroy': () => void;
     'Control.liveChange': () => void;
@@ -3531,6 +5417,9 @@ interface ThemeEventMap extends ControlInitEventMap {
     'Control.speedChange': (speed: number, item?: unknown) => void;
     'Control.speedPanelOpenChange': (open: boolean, speed: number, item?: unknown) => void;
     'Control.speedDestroy': () => void;
+    'Control.streamTypeChange': (streamTypeIn: 1 | 2, item?: unknown) => void;
+    'Control.streamTypePanelOpenChange': (open: boolean, streamTypeIn: 1 | 2, item?: unknown) => void;
+    'Control.streamTypeDestroy': () => void;
     'Control.zoomChange': (zoom: number) => void;
     'Control.zoomPanelOpenChange': (open: boolean) => void;
     'Control.zoomDestroy': () => void;
@@ -3567,4 +5456,4 @@ type ThemeEventHandler<K extends ThemeEventName> = K extends keyof ThemeEventMap
 type ThemeEventArgs<K extends ThemeEventName> = K extends keyof ThemeEventMap ? Parameters<ThemeEventMap[K]> : unknown[];
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
-export type { AudioInfo, CleanUpResizeObserver, CleanUpScreenOrientationFun, ControlEventName, ControlInitEventMap, ControlItem, ControlOptions, FooterOptions, FullscreenChangeInfo, FullscreenOptions, HeaderOptions, IThemeData, IThemeDataItem, LoadingOptions, MessageOptions, OrientationAngle, PlayOptions, PosterOptions, PtzErrorInfo, RecOptions, ResizeInfo, ScreenOrientation, ThemeEventArgs, ThemeEventHandler, ThemeEventMap, ThemeEventName, ThemeLifecycleEventName, ThemeOptions, ThemeOuterEventName, VideoInfo, VolumeOptions };
+export type { AudioInfo, CaptureCameraData, CaptureCameraOptions, CleanUpResizeObserver, CleanUpScreenOrientationFun, CloudCaptureResult, ControlEventName, ControlInitEventMap, ControlItem, ControlOptions, CreateCaptureTaskOptions, FooterOptions, FullscreenChangeInfo, FullscreenOptions, GetSpaceListOptions, HeaderOptions, IThemeData, IThemeDataItem, LoadingOptions, MessageOptions, OrientationAngle, PlayOptions, PosterOptions, PtzErrorInfo, RecOptions, ResizeInfo, ScreenOrientation, SpaceInfo, SpaceListData, ThemeEventArgs, ThemeEventHandler, ThemeEventMap, ThemeEventName, ThemeLifecycleEventName, ThemeOptions, ThemeOuterEventName, VideoInfo, VolumeOptions };

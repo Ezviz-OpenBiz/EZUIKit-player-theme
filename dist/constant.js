@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.1.9-beta.1
-* Copyright (c) 2026-11-06 19:43:39 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.1
+* Copyright (c) 2026-11-17 18:55:15 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 function _extends() {
@@ -17,6 +17,31 @@ function _extends() {
  * 播放器的类名前缀
  */ var PREFIX_CLASS = 'ezplayer';
 /** */ var DATE_PICKER_ICON_WIDTH = 36;
+/**
+ * streamTypeIn: 1 | 2  //  1-主码流，2-子码流
+ * 能力集没有报备的都默认使用主码流，防止没有子码流
+ */ var VIDEO_LEVEL = [
+    {
+        videoLevel: 1,
+        streamTypeIn: 2,
+        type: 'compatible'
+    },
+    {
+        videoLevel: 2,
+        streamTypeIn: 1,
+        type: 'compatible'
+    }
+];
+/** 清晰度 */ var VIDEO_LEVEL_NAME = {
+    auto: 'VIDEO_LEVEL_AUTO',
+    0: 'VIDEO_LEVEL_FLUENT',
+    1: 'VIDEO_LEVEL_STANDARD',
+    2: 'VIDEO_LEVEL_HEIGH',
+    3: 'VIDEO_LEVEL_SUPER',
+    4: 'VIDEO_LEVEL_EXTREME',
+    5: 'VIDEO_LEVEL_3K',
+    6: 'VIDEO_LEVEL_4k'
+};
 /** 填充模式 */ var THEME_SCALE_MODE_TYPE = {
     /** 画面完全填充canvas区域,画面会被拉伸 */ full: 0,
     /** 画面做等比缩放后,高或宽对齐canvas区域,画面不被拉伸,但有黑边 */ auto: 1,
@@ -31,7 +56,7 @@ var THEME_PROPS = [
     'volume',
     'muted',
     'loading',
-    'recType',
+    'playType',
     'isCurrentFullscreen',
     'orientationAngle',
     'zooming',
@@ -39,6 +64,9 @@ var THEME_PROPS = [
     'recording',
     'recordList',
     'speed',
+    // 是否支持主子码流切换（本地回放），默认 false；SDK 层通过 supportLocalRecordStreamType 事件下发。
+    // 走 props 而不是只靠事件：事件可能早于控件渲染，props 能保证后渲染的控件拿到最新状态
+    'supportLocalRecordStreamType',
     'urlInfo',
     'videoLevelList',
     'videoLevel',
@@ -91,6 +119,7 @@ var THEME_PROPS = [
     'talk',
     'definition',
     'speed',
+    'streamType',
     'fullscreen',
     'globalFullscreen'
 ];
@@ -103,6 +132,7 @@ var THEME_PROPS = [
     'record',
     'talk',
     'definition',
+    'streamType',
     'speed',
     'globalFullscreen'
 ];
@@ -166,6 +196,7 @@ var THEME_PROPS = [
     /** 全局全屏控件初始化完成 */ globalFullscreenControlInit: 'Control.globalFullscreenControlInit',
     /** 回放类型控件初始化完成 */ recControlInit: 'Control.recControlInit',
     /** 倍速控件初始化完成 */ speedControlInit: 'Control.speedControlInit',
+    /** 码流切换控件初始化完成 */ streamTypeControlInit: 'Control.streamTypeControlInit',
     /** 日历控件初始化完成 */ dateControlInit: 'Control.dateControlInit',
     /** 时间选择控件初始化完成 */ timeControlInit: 'Control.timeControlInit',
     /** 时间轴控件初始化完成 */ timeLineControlInit: 'Control.timeLineControlInit',
@@ -215,12 +246,18 @@ var EVENTS = {
     /** 音频编码不支持 （暂时仅支持标准流 flv） */ audioCodecUnsupported: 'audioCodecUnsupported',
     /** 切换主题 themeDate 变化时 */ changeTheme: 'changeTheme',
     /** 回放类型切换 */ recTypeChange: 'recTypeChange',
+    /** 播放类型切换（live / rec / cloudRec / cloudRecord），回调参数 type 为切换后的播放类型 */ playTypeChange: 'playTypeChange',
     /** 切换清晰度 */ definitionChange: 'definitionChange',
     /** 播放速度切换 */ speedChange: 'speedChange',
+    /** 码流切换（1: 主码流, 2: 子码流） */ streamTypeChange: 'streamTypeChange',
+    /**
+   * 设备（本地回放）支持主子码流切换，收到后才展示码流切换控件（默认不展示）。
+   * 载荷可选：省略或 true 表示支持，false 表示不支持（重新隐藏）
+   */ supportLocalRecordStreamType: 'supportLocalRecordStreamType',
     /** 控件开始录制 */ recordingChange: 'recordingChange',
     /** 对讲状态变化 */ talkingChange: 'talkingChange',
     /** 麦克风音量变化 */ talkVolumeChange: 'talkVolumeChange',
-    /** 语音广播状态变化 */ broadcastChange: 'broadcastChange',
+    /** 语音广播状态变化 */ broadcastPanelChange: 'broadcastPanelChange',
     /** AI对话框状态变化 */ aichatChange: 'aichatChange',
     /** 直播模式切换 */ liveChange: 'liveChange',
     /** 回放下拉选择变化 */ recDropdownChange: 'recDropdownChange',
@@ -261,6 +298,9 @@ var EVENTS = {
         /** 播放速度切换 */ speedChange: 'Control.speedChange',
         /** 播放速度面板 显示隐藏变换 */ speedPanelOpenChange: 'Control.speedPanelOpenChange',
         /** 播放速度控件销毁 */ speedDestroy: 'Control.speedDestroy',
+        /** 码流切换 (streamTypeIn: 1 主码流, 2 子码流, item) */ streamTypeChange: 'Control.streamTypeChange',
+        /** 码流面板 显示隐藏变换 */ streamTypePanelOpenChange: 'Control.streamTypePanelOpenChange',
+        /** 码流切换控件销毁 */ streamTypeDestroy: 'Control.streamTypeDestroy',
         /** 云台面板 显示隐藏变换 */ ptzPanelOpenChange: 'Control.ptzPanelOpenChange',
         /** 云台速度切换 */ ptzSpeedChange: 'Control.ptzSpeedChange',
         ptzError: 'Control.ptzError',
@@ -270,8 +310,14 @@ var EVENTS = {
         /** 开始对讲 */ talkingChange: 'Control.talkingChange',
         /** 对讲错误, 一般是麦克风权限被拒绝 */ talkError: 'Control.talkError',
         /** 对讲控件销毁 */ talkDestroy: 'Control.talkDestroy',
-        /** 语音广播状态变化 */ broadcastChange: 'Control.broadcastChange',
+        /** 语音广播状态变化 */ broadcastPanelChange: 'Control.broadcastPanelChange',
         /** 语音广播控件销毁 */ broadcastDestroy: 'Control.broadcastDestroy',
+        /** 语音广播面板语音列表加载完成，参数为语音列表 `VoiceItem[]` */ broadcastVoiceListChange: 'Control.broadcastVoiceListChange',
+        /** 语音广播面板内置接口调用完成，参数 `{ api, success, code, msg, data }` */ broadcastApiResult: 'Control.broadcastApiResult',
+        /** 语音广播面板录到有效语音，参数 `{ voiceFile, deviceSerial, channelNo }`，紧挨着在下发之前派发 */ broadcastVoiceRecorded: 'Control.broadcastVoiceRecorded',
+        /** 语音广播面板开始录音 */ broadcastRecordStart: 'Control.broadcastRecordStart',
+        /** 语音广播面板停止录音并得到有效录音（随后请求下发）；关闭面板取消录音时不派发 */ broadcastRecordStop: 'Control.broadcastRecordStop',
+        /** 语音广播面板录音完成（正常停止，或达到最长时长自动停止），参数为 WAV 录音 `Blob` */ broadcastRecordComplete: 'Control.broadcastRecordComplete',
         /** AI对话框状态变化 */ aichatChange: 'Control.aichatChange',
         /** AI对话框控件销毁 */ aichatDestroy: 'Control.aichatDestroy',
         /** 直播按钮点击 */ liveChange: 'Control.liveChange',
@@ -318,7 +364,35 @@ var EVENTS = {
         /** 移动端扩展销毁 */ mobileExtendDestroy: 'Theme.mobileExtendDestroy',
         /** 回放页底部销毁 */ recFooterDestroy: 'Theme.recFooterDestroy'
     },
-    message: 'message'
+    message: 'message',
+    http: {
+        getDeviceCapacity: 'getDeviceCapacity',
+        getDeviceInfo: 'getDeviceInfo',
+        getDeviceSupportQuality: 'getDeviceSupportQuality',
+        getEzopenUrl: 'getEzopenUrl',
+        queryVoiceList: 'queryVoiceList',
+        sendVoiceOnce: 'sendVoiceOnce',
+        sendVoice: 'sendVoice',
+        postDevicePtzMirror: 'postDevicePtzMirror',
+        getRecordMonth: 'getRecordMonth',
+        getAppKey: 'getAppKey',
+        getDeviceList: 'getDeviceList',
+        setVideoLevel: 'setVideoLevel',
+        getCloudInfo: 'getCloudInfo',
+        getCloudUploadUrl: 'getCloudUploadUrl',
+        getStreamAddressList: 'getStreamAddressList',
+        getCloudRecordTimes: 'getCloudRecordTimes',
+        getCloudTimes: 'getCloudTimes',
+        getLocalRecTimes: 'getLocalRecTimes',
+        getAlarmList: 'getAlarmList',
+        captureSave: 'captureSave',
+        createCaptureTask: 'createCaptureTask',
+        getSpaceList: 'getSpaceList',
+        getAddress: 'getAddress',
+        getCDNLiveAddress: 'getCDNLiveAddress',
+        getCDNRecordAddress: 'getCDNRecordAddress',
+        getStreamInterruptInfo: 'getStreamInterruptInfo'
+    }
 };
 
-export { CLEAR_TIMER_HEADER_FOOTER_ANIMATION, CONTROL_INIT_EVENTS, DATE_PICKER_ICON_WIDTH, DEVICE_INFO_GROUP, EVENTS, FOOTER_MORE_GROUP, MOBILE_EXTENDS, PAUSE_DISABLED_BTN, PLAY_TYPES, PREFIX_CLASS, REC_BOTTOM_GROUP, REC_GROUP, THEME_PROPS, THEME_SCALE_MODE_TYPE };
+export { CLEAR_TIMER_HEADER_FOOTER_ANIMATION, CONTROL_INIT_EVENTS, DATE_PICKER_ICON_WIDTH, DEVICE_INFO_GROUP, EVENTS, FOOTER_MORE_GROUP, MOBILE_EXTENDS, PAUSE_DISABLED_BTN, PLAY_TYPES, PREFIX_CLASS, REC_BOTTOM_GROUP, REC_GROUP, THEME_PROPS, THEME_SCALE_MODE_TYPE, VIDEO_LEVEL, VIDEO_LEVEL_NAME };
