@@ -1,6 +1,6 @@
 /*
 * @ezuikit/player-theme v3.2.0-beta.1
-* Copyright (c) 2026-11-17 18:55:15 Ezviz-OpenBiz
+* Copyright (c) 2026-11-18 10:44:36 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -3025,7 +3025,7 @@ var zh = {
     GET_SPEED: '获取当前播放速率',
     MAX_SPEED_LIMIT: '播放速度最大为4倍速度',
     MIN_SPEED_LIMIT: '播放速度最小为0.5倍速度',
-    SPEED_SWITCH_ERRROR: '切换播放速度失败',
+    SPEED_SWITCH_ERROR: '切换播放速度失败',
     SPEED_SWITCH_NOT_SUPPORT: '切换倍速（{{rate}}）不支持',
     SEEK_CANNOT_CROSS_DAYS: 'seek时间不能跨日期',
     SEEK_TIMEFORMAT_ERROR: 'seek时间格式错误',
@@ -3412,7 +3412,7 @@ var en = {
     GET_SPEED: 'Get the current playback rate',
     MAX_SPEED_LIMIT: 'The maximum playback speed is 4 times the speed',
     MIN_SPEED_LIMIT: 'The minimum playback speed is 0.5 times the speed',
-    SPEED_SWITCH_ERRROR: 'Failed to switch playback speed',
+    SPEED_SWITCH_ERROR: 'Failed to switch playback speed',
     SPEED_SWITCH_NOT_SUPPORT: 'Switching speed({{rate}}) is not supported',
     SEEK_CANNOT_CROSS_DAYS: 'The seek time cannot cross dates',
     SEEK_TIMEFORMAT_ERROR: 'The seek time format is wrong',
@@ -3626,6 +3626,10 @@ var en = {
                 iconId: 'zoom',
                 part: 'left'
             },
+            // {
+            //   iconId: 'definition',
+            //   part: 'right',
+            // },
             {
                 iconId: 'fullscreen',
                 part: 'right'
@@ -6238,7 +6242,7 @@ var Services = /*#__PURE__*/ function() {
                                             ]);
                                             return [
                                                 4,
-                                                this.get(API.getLocalRecTimes + "?startTime=" + query.startTime + "&endTime=" + query.endTime + "&pageSize=" + (query.pageSize || 200), {
+                                                this.get(API.getLocalRecTimes + "?startTime=" + query.startTime + "&endTime=" + query.endTime + "&pageSize=" + (query.pageSize || 200) + "&streamType=" + (query.streamType || 1), {
                                                     headers: {
                                                         accessToken: this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video),
                                                         deviceSerial: this.urlInfo.deviceSerial
@@ -7392,10 +7396,13 @@ var Services = /*#__PURE__*/ function() {
     theme.on(EVENTS.setVideoLevelList, function(list) {
         var _theme_controls_definitionControl_emit, _theme_controls_definitionControl, _theme_controls;
         (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_definitionControl = _theme_controls.definitionControl) == null ? void 0 : (_theme_controls_definitionControl_emit = _theme_controls_definitionControl.emit) == null ? void 0 : _theme_controls_definitionControl_emit.call(_theme_controls_definitionControl, EVENTS.setVideoLevelList, list || []);
+        // 外部重置清晰度
+        if (theme.services) theme.services.videoLevelList[theme.services.getKeyName] = list;
     });
     theme.on(EVENTS.currentVideoLevel, function(item, level) {
         var _theme_controls_definitionControl_emit, _theme_controls_definitionControl, _theme_controls;
         (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_definitionControl = _theme_controls.definitionControl) == null ? void 0 : (_theme_controls_definitionControl_emit = _theme_controls_definitionControl.emit) == null ? void 0 : _theme_controls_definitionControl_emit.call(_theme_controls_definitionControl, EVENTS.currentVideoLevel, item, level);
+        theme._currentVideoLevel = item;
     });
     // =======================================================
     // 放大
@@ -7429,7 +7436,6 @@ var Services = /*#__PURE__*/ function() {
     // 默认不支持（不展示）；收到事件才展示。先记在 theme 上，控件晚于事件渲染时也能从 props 拿到
     theme.on(EVENTS.supportLocalRecordStreamType, function(support, streamTypeIn) {
         var _theme_controls_streamTypeControl_setSupported, _theme_controls_streamTypeControl, _theme_controls;
-        theme.supportLocalRecordStreamType = support !== false;
         (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_streamTypeControl = _theme_controls.streamTypeControl) == null ? void 0 : (_theme_controls_streamTypeControl_setSupported = _theme_controls_streamTypeControl.setSupported) == null ? void 0 : _theme_controls_streamTypeControl_setSupported.call(_theme_controls_streamTypeControl, theme.supportLocalRecordStreamType, streamTypeIn);
     });
     // =======================================================
@@ -14067,7 +14073,7 @@ function _type_of(obj) {
  * @since 3.2.0
  */ function _getDeviceCapacityService(theme) {
     return _async_to_generator$2(function() {
-        var res;
+        var _theme_deviceCapacity, res;
         return _ts_generator$2(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -14099,6 +14105,8 @@ function _type_of(obj) {
                     })) {
                         theme.emit(EVENTS.setVideoLevelList, theme.videoLevelList);
                     }
+                    // 设备能力集变化后同步本地回放码流切换的支持性（theme.deviceCapacity 可能为空）
+                    theme.emit(EVENTS.supportLocalRecordStreamType, ((_theme_deviceCapacity = theme.deviceCapacity) == null ? void 0 : _theme_deviceCapacity.support_record_stream_type) === '1', theme.currentStreamTypeIn);
                     return [
                         2,
                         res
@@ -15780,9 +15788,8 @@ var THEME_DEFAULT_OPTIONS = {
    * 移动端扩展容器, 扩展的控件渲染在指定容器以外， 仅只用端适用， 为了可以放置大的控件和方便开发接入
    * @private
    */ _this._mobileExtend = null, /**  @since 0.0.1 @private */ _this._interactiveResult = null, /**  @since 0.0.1 @private */ _this._themeData = null, _this._fullscreen = null, _this.zoomUtil = null, /** 清除屏幕旋转 */ _this._cleanupOrientation = null, /**  resizeObserver 监听销毁 */ _this._cleanUpResizeObserver = null, /** 容器的宽 */ _this._width = 0, /** 容器的高 */ _this._height = 0, /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */ _this._isCurrentFullscreen = false, /** 屏幕旋转角度 0 ｜ 90 ｜ 180 ｜ 270 */ _this._orientationAngle = 0, _this._url = '', /** 是否播放中 @private */ _this._playing = false, /** @private 加载中 */ _this._loading = false, /** 音量 */ _this._volume = 0, /** 静音 */ _this._muted = false, /** 正在兜底的原始 scope，非 null 表示处于兜底取值中（用于避免 customizeMissing 无限递归） */ _this._missingScope = null, /** 电子放大倍数 @private */ _this._zoom = 1, /** 放大中  true: 可缩放状态，false: 禁止缩放状态(不能缩放) @private */ _this._zooming = false, /** 录制中 @private */ _this._recording = false, /** 对讲中 @private */ _this._talking = false, /** 倍速 @private */ _this._speed = 1, /** 自定清晰度 @private */ _this._videoLevelAuto = false, /**
-   * 是否支持主子码流切换（本地回放），默认 false。
-   * 由 SDK 层通过 `EVENTS.supportLocalRecordStreamType` 事件设置；为 true 且当前是本地回放时才展示码流切换控件。
-   */ _this.supportLocalRecordStreamType = false, /** 回放片段列表 */ _this.recordList = [], /**
+   * 当前清晰度
+   */ _this._currentVideoLevel = null, /** 回放片段列表 */ _this.recordList = [], /**
    * 播放区间（片段分享），null 表示不约束。
    * 由 SDK 层在初始化时通过 props 下发，主题层据此决定日历/回放类型按钮
    * 是否渲染、片段进度条是否渲染。区间没有运行时变更入口。
@@ -18005,6 +18012,14 @@ var THEME_DEFAULT_OPTIONS = {
             }
         },
         {
+            key: "currentVideoLevel",
+            get: /**
+   * 当前清晰度
+   */ function get() {
+                return this._currentVideoLevel;
+            }
+        },
+        {
             key: "isCurrentFullscreen",
             get: /**
    * 当前容器的全屏状态  true: 全屏， false: 非全屏 ， 如果想获取当前浏览器是否全屏，请使用 document.fullscreenElement 判断
@@ -18108,6 +18123,16 @@ var THEME_DEFAULT_OPTIONS = {
    */ function get() {
                 var _this_services, _this, _this_services1;
                 return ((_this = ((_this_services1 = this.services) == null ? void 0 : _this_services1.deviceCapacity) || {}) == null ? void 0 : _this[(_this_services = this.services) == null ? void 0 : _this_services.getKeyName]) || {};
+            }
+        },
+        {
+            key: "supportLocalRecordStreamType",
+            get: /**
+   * 是否支持主子码流切换（本地回放），默认 false。
+   * 由 SDK 层通过 `EVENTS.supportLocalRecordStreamType` 事件设置；为 true 且当前是本地回放时才展示码流切换控件。
+   */ function get() {
+                var _this_deviceCapacity;
+                return ((_this_deviceCapacity = this.deviceCapacity) == null ? void 0 : _this_deviceCapacity.support_record_stream_type) === '1';
             }
         },
         {

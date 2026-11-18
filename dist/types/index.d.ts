@@ -2014,6 +2014,8 @@ interface EzvizVideoLevel {
     level: number | 'auto';
     streamTypeIn: 1 | 2;
     type?: string;
+    /** 标准流可以扩展 url 等数据 */
+    [key: string]: any;
 }
 /**
  * 云录制录像信息查询参数 GET /api/service/cloudrecord/video/info/list
@@ -2916,9 +2918,6 @@ declare class Theme extends EventEmitter {
         readonly alarmMessageChange: "alarmMessageChange";
         readonly setLoggerOptions: "setLoggerOptions";
         readonly records: "records";
-        /**
-         * 录像回放的月份列表 @private
-         */
         readonly ptzSpeedChange: "ptzSpeedChange";
         readonly setVideoLevelList: "setVideoLevelList";
         readonly currentVideoLevel: "currentVideoLevel";
@@ -2989,9 +2988,6 @@ declare class Theme extends EventEmitter {
             readonly datePanelOpenChange: "Control.datePanelOpenChange";
             readonly dateChange: "Control.dateChange";
             readonly dateMonthChange: "Control.dateMonthChange";
-            /**
-             * url 信息 播放地址信息
-             */
             readonly datePanelMonthChange: "Control.datePanelMonthChange";
             readonly datePanelYearChange: "Control.datePanelYearChange";
             readonly dateDestroy: "Control.dateDestroy";
@@ -3003,7 +2999,7 @@ declare class Theme extends EventEmitter {
             readonly unsupportedPlayType: "Control.unsupportedPlayType";
             readonly beforeMountControls: "Control.beforeMountControls";
             readonly mountedControls: "Control.mountedControls";
-            readonly beforeUnmountControls: "Control.beforeUnmountControls";
+            readonly beforeUnmountControls: "Control.beforeUnmountControls"; /** 萤石直播 */
             readonly unmountedControls: "Control.unmountedControls";
             readonly posterDestroy: "Control.posterDestroy";
             readonly loadingDestroy: "Control.loadingDestroy";
@@ -3034,12 +3030,7 @@ declare class Theme extends EventEmitter {
             readonly timeControlInit: "Control.timeControlInit";
             readonly timeLineControlInit: "Control.timeLineControlInit";
             readonly segmentProgressControlInit: "Control.segmentProgressControlInit";
-        }; /**
-         * 容器的宽(单位 px)
-         * ```ts
-         * theme.width // number
-         * ```
-         */
+        };
         readonly theme: {
             readonly beforeDestroy: "Theme.beforeDestroy";
             readonly destroyed: "Theme.destroyed";
@@ -3231,7 +3222,7 @@ declare class Theme extends EventEmitter {
             GET_SPEED: string;
             MAX_SPEED_LIMIT: string;
             MIN_SPEED_LIMIT: string;
-            SPEED_SWITCH_ERRROR: string;
+            SPEED_SWITCH_ERROR: string;
             SPEED_SWITCH_NOT_SUPPORT: string;
             SEEK_CANNOT_CROSS_DAYS: string;
             SEEK_TIMEFORMAT_ERROR: string;
@@ -3277,9 +3268,10 @@ declare class Theme extends EventEmitter {
             BTN_GLOBAL_FULLSCREEN: string;
             BTN_EXIT_GLOBAL_FULLSCREEN: string;
             BTN_FULLSCREEN: string;
+            /** 版本号 @since 0.0.1 */
             BTN_EXIR_FULLSCREEN: string;
             BTN_HD: string;
-            BTN_SPEED: string;
+            BTN_SPEED: string; /** 播放器配置项 */
             BTN_STREAM_TYPE: string;
             STREAM_TYPE_MAIN: string;
             STREAM_TYPE_SUB: string; /** 主题挂载节点 */
@@ -3300,7 +3292,7 @@ declare class Theme extends EventEmitter {
             RECORD_TIPS: string; /** 加载控件 @since 0.0.1  @private */
             RECORDS: string;
             OPEN_SOUND: string;
-            CLOSE_SOUND: string; /** 暂停控件 @since 0.0.1 @private */
+            CLOSE_SOUND: string;
             SOUND_OPENED: string;
             ZOOM: string;
             START_ZOOM: string;
@@ -3341,6 +3333,7 @@ declare class Theme extends EventEmitter {
             SEND_VOICE_SUCCESS: string;
             SEND_VOICE_FAILED: string;
             PTZ_MIRROR_SUCCESS: string;
+            /** 容器的宽 */
             PTZ_MIRROR_FAILED: string;
             GET_RECORD_MONTH_SUCCESS: string;
             GET_RECORD_MONTH_FAILED: string;
@@ -3363,8 +3356,7 @@ declare class Theme extends EventEmitter {
             CAPTURE_SAVE_SUCCESS: string;
             CAPTURE_SAVE_FAILED: string;
             CREATE_CAPTURE_TASK_SUCCESS: string; /**
-             * 是否支持主子码流切换（本地回放），默认 false。
-             * 由 SDK 层通过 `EVENTS.supportLocalRecordStreamType` 事件设置；为 true 且当前是本地回放时才展示码流切换控件。
+             * 当前清晰度
              */
             CREATE_CAPTURE_TASK_FAILED: string;
             GET_SPACE_LIST_SUCCESS: string;
@@ -3376,12 +3368,12 @@ declare class Theme extends EventEmitter {
             GET_STREAM_INTERRUPT_INFO_SUCCESS: string;
             GET_STREAM_INTERRUPT_INFO_FAILED: string;
             GET_PTZ_STATUS: string;
-            GET_PTZ_STATUS_FAILED: string;
-            MOBILE_HIDE_PTZ: string;
-            OPTION_PTZ_FAILED: string;
             /**
              * 录像回放的月份列表 @private
              */
+            GET_PTZ_STATUS_FAILED: string;
+            MOBILE_HIDE_PTZ: string;
+            OPTION_PTZ_FAILED: string;
             MOBILE_PTZ_TIPS: string;
             PTZ_FAST: string;
             PTZ_MID: string;
@@ -3393,7 +3385,11 @@ declare class Theme extends EventEmitter {
             NOT_SUPPORT_FOCUS: string;
             MIRROR: string;
             MIRROR_TYPE_ERROR: string;
-            CHANGE_FEC_TYPE: string;
+            CHANGE_FEC_TYPE: string; /**
+             * 首帧同步 Live/RecDropdown 激活态的监听器引用。
+             * 每次 `_renderTheme` 重新绑定前需先移除旧引用，避免 changeTheme 累积监听。
+             * @private
+             */
             DEVICE_NOT_SUPPORT: string;
             TYPE_NOT_SUPPORT: string;
             FEC_SUPPORT_VERSION: string;
@@ -3532,6 +3528,9 @@ declare class Theme extends EventEmitter {
             3820002: string;
             3820006: string;
             3820007: string;
+            /**
+             * 录像回放的月份列表 @private
+             */
             3820008: string;
             3820014: string;
             3820032: string;
@@ -3539,11 +3538,7 @@ declare class Theme extends EventEmitter {
             3860000: string;
             3860001: string;
             3860002: string;
-            3860003: string; /**
-             * 模板请求（getDetail）的中止控制器。
-             * 重新渲染或销毁时中止在途请求，避免请求返回后在已销毁/已切换的 theme 上继续操作。
-             * @private
-             */
+            3860003: string;
             3860004: string;
             3860005: string;
             3860006: string;
@@ -3577,7 +3572,7 @@ declare class Theme extends EventEmitter {
             GET_SPEED: string;
             MAX_SPEED_LIMIT: string;
             MIN_SPEED_LIMIT: string;
-            SPEED_SWITCH_ERRROR: string;
+            SPEED_SWITCH_ERROR: string;
             SPEED_SWITCH_NOT_SUPPORT: string;
             SEEK_CANNOT_CROSS_DAYS: string;
             SEEK_TIMEFORMAT_ERROR: string;
@@ -3693,7 +3688,12 @@ declare class Theme extends EventEmitter {
             GET_RECORD_MONTH_SUCCESS: string;
             GET_RECORD_MONTH_FAILED: string;
             GET_APP_KEY_SUCCESS: string;
-            GET_APP_KEY_FAILED: string;
+            GET_APP_KEY_FAILED: string; /**
+             * 当前播放状态
+             * ```ts
+             * theme.playing // boolean
+             * ```
+             */
             GET_DEVICE_LIST_SUCCESS: string;
             GET_DEVICE_LIST_FAILED: string;
             SET_VIDEO_LEVEL_SUCCESS: string;
@@ -3713,7 +3713,12 @@ declare class Theme extends EventEmitter {
             CREATE_CAPTURE_TASK_SUCCESS: string;
             CREATE_CAPTURE_TASK_FAILED: string;
             GET_SPACE_LIST_SUCCESS: string;
-            GET_SPACE_LIST_FAILED: string;
+            GET_SPACE_LIST_FAILED: string; /**
+             * 加载中
+             * ```ts
+             * theme.loading // boolean
+             * ```
+             */
             GET_ADDRESS_SUCCESS: string;
             GET_ADDRESS_FAILED: string;
             GET_CDN_ADDRESS_SUCCESS: string;
@@ -3722,15 +3727,11 @@ declare class Theme extends EventEmitter {
             GET_STREAM_INTERRUPT_INFO_FAILED: string;
             GET_PTZ_STATUS: string;
             GET_PTZ_STATUS_FAILED: string;
-            MOBILE_HIDE_PTZ: string;
-            OPTION_PTZ_FAILED: string;
             /**
              * 音量值
-             * ```ts
-             * // 事件监听
-             * theme.on(Theme.EVENTS.volumechange, (volume: number, muted: boolean) => {})
-             * ```
              */
+            MOBILE_HIDE_PTZ: string;
+            OPTION_PTZ_FAILED: string;
             MOBILE_PTZ_TIPS: string;
             PTZ_FAST: string;
             PTZ_MID: string;
@@ -3860,10 +3861,9 @@ declare class Theme extends EventEmitter {
     /** 自定清晰度 @private */
     _videoLevelAuto: boolean;
     /**
-     * 是否支持主子码流切换（本地回放），默认 false。
-     * 由 SDK 层通过 `EVENTS.supportLocalRecordStreamType` 事件设置；为 true 且当前是本地回放时才展示码流切换控件。
+     * 当前清晰度
      */
-    supportLocalRecordStreamType: boolean;
+    _currentVideoLevel: EzvizVideoLevel | null;
     /** 回放片段列表 */
     recordList: TimeLineTimeSection[];
     /**
@@ -4095,6 +4095,10 @@ declare class Theme extends EventEmitter {
      * 清晰度自动
      */
     get videoLevelAuto(): boolean;
+    /**
+     * 当前清晰度
+     */
+    get currentVideoLevel(): EzvizVideoLevel | null;
     /**
      * 当前容器的全屏状态  true: 全屏， false: 非全屏 ， 如果想获取当前浏览器是否全屏，请使用 document.fullscreenElement 判断
      * @since 0.0.1
@@ -4382,6 +4386,11 @@ declare class Theme extends EventEmitter {
      * @since 3.2.0
      */
     get deviceCapacity(): EzvizDeviceCapacity;
+    /**
+     * 是否支持主子码流切换（本地回放），默认 false。
+     * 由 SDK 层通过 `EVENTS.supportLocalRecordStreamType` 事件设置；为 true 且当前是本地回放时才展示码流切换控件。
+     */
+    get supportLocalRecordStreamType(): boolean;
     /**
      * 设备信息
      * @since 3.2.0
