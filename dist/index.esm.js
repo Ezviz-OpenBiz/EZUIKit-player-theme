@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.2.0-beta.3
-* Copyright (c) 2026-11-18 16:40:01 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.4
+* Copyright (c) 2026-11-19 03:41:47 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -6013,7 +6013,7 @@ var Services = /*#__PURE__*/ function() {
                             this.post(API.ezopen, {
                                 body: formData,
                                 headers: {
-                                    sdkVersion: '3.2.0-beta.3'
+                                    sdkVersion: '3.2.0-beta.4'
                                 }
                             }).then(function(response) {
                                 return _async_to_generator$8(function() {
@@ -6835,7 +6835,7 @@ var Services = /*#__PURE__*/ function() {
    * ```
    */ _proto.getAddress = function getAddress() {
         return _async_to_generator$8(function(params) {
-            var _ref, _params_begin, _ref1, _params_end, _params_type, _params_expireTime, _params_mute, _ref2, _params_accessToken, _params_deviceSerial, _params_channelNo, _params_protocol, _params_code, _params_supportH265, _params_playbackSpeed, urlInfo, searchParams, begin, end, type, expireTime, mute, body, formdata, response;
+            var _ref, _params_begin, _ref1, _params_end, _params_type, _params_expireTime, _params_mute, _ref2, _params_accessToken, _params_deviceSerial, _params_channelNo, _params_protocol, _params_code, _params_quality, _params_supportH265, urlInfo, searchParams, begin, end, type, expireTime, mute, body, formdata, response;
             return _ts_generator$8(this, function(_state) {
                 switch(_state.label){
                     case 0:
@@ -6865,11 +6865,11 @@ var Services = /*#__PURE__*/ function() {
                             protocol: (_params_protocol = params.protocol) != null ? _params_protocol : 5,
                             code: (_params_code = params.code) != null ? _params_code : searchParams.code,
                             expireTime: expireTime,
-                            quality: params.quality,
+                            quality: ((_params_quality = params.quality) != null ? _params_quality : urlInfo.streamTypeIn) || '1',
                             startTime: begin ? DateTime.format(begin, 'yyyy-MM-dd HH:mm:ss') : undefined,
                             stopTime: end ? DateTime.format(end, 'yyyy-MM-dd HH:mm:ss') : undefined,
                             supportH265: (_params_supportH265 = params.supportH265) != null ? _params_supportH265 : 1,
-                            playbackSpeed: (_params_playbackSpeed = params.playbackSpeed) != null ? _params_playbackSpeed : searchParams.playbackSpeed,
+                            playbackSpeed: params.playbackSpeed === 1 ? undefined : params.playbackSpeed,
                             mute: mute,
                             gbchannel: params.gbchannel
                         };
@@ -16761,10 +16761,14 @@ var THEME_DEFAULT_OPTIONS = {
         }
     };
     /**
-   * 设置 / 更新存储空间 id（与云录制 spaceId 共用，支持实例化后更新）
+   * 设置 / 更新存储空间 id（与云录制 spaceId 共用，支持实例化后更新）会同时修改 url 上的 spaceId
    * @param spaceId 存储空间 id（由 {@link getSpaceList} 获取）
    * @since 3.2.0
    */ _proto.setSpaceId = function setSpaceId(spaceId) {
+        var _this_urlInfo_searchParams;
+        if (this.urlInfo.recType === 'cloud' && ((_this_urlInfo_searchParams = this.urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.busType) === '7') {
+            this._url = this._url.replace(/spaceId=\d+/, "spaceId=" + spaceId);
+        }
         this.options.spaceId = spaceId;
     };
     /**
@@ -18187,7 +18191,8 @@ var THEME_DEFAULT_OPTIONS = {
    * 优先级：`setSpaceId()` 设置的值 > 播放地址中的 spaceId（ezopen 初始化时写入 options） > 初始化参数 `spaceId`
    * @since 3.2.0
    */ function get() {
-                return this.options.spaceId;
+                var _this_urlInfo_searchParams, _this_urlInfo;
+                return ((_this_urlInfo = this.urlInfo) == null ? void 0 : (_this_urlInfo_searchParams = _this_urlInfo.searchParams) == null ? void 0 : _this_urlInfo_searchParams.spaceId) || this.options.spaceId;
             }
         }
     ]);
@@ -18199,6 +18204,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.3';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.4';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };

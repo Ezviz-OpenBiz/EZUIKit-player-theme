@@ -4458,7 +4458,7 @@ declare class Theme extends EventEmitter {
      */
     get spaceId(): number | string | undefined;
     /**
-     * 设置 / 更新存储空间 id（与云录制 spaceId 共用，支持实例化后更新）
+     * 设置 / 更新存储空间 id（与云录制 spaceId 共用，支持实例化后更新）会同时修改 url 上的 spaceId
      * @param spaceId 存储空间 id（由 {@link getSpaceList} 获取）
      * @since 3.2.0
      */
