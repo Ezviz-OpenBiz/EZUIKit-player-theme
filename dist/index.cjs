@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.2.0-beta.4
-* Copyright (c) 2026-11-19 03:41:47 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.5
+* Copyright (c) 2026-11-19 07:49:15 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -6015,7 +6015,7 @@ var Services = /*#__PURE__*/ function() {
                             this.post(API.ezopen, {
                                 body: formData,
                                 headers: {
-                                    sdkVersion: '3.2.0-beta.4'
+                                    sdkVersion: '3.2.0-beta.5'
                                 }
                             }).then(function(response) {
                                 return _async_to_generator$8(function() {
@@ -18206,7 +18206,7 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.4';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.5';
 
 exports.CONTROL_INIT_EVENTS = CONTROL_INIT_EVENTS;
 exports.Control = Control;
