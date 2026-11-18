@@ -3289,6 +3289,8 @@ declare class Theme extends EventEmitter {
             BTN_STREAM_TYPE: string;
             STREAM_TYPE_MAIN: string;
             STREAM_TYPE_SUB: string; /** 主题挂载节点 */
+            STREAM_SWITCH_ERROR: string;
+            STREAM_SWITCH_NOT_SUPPORT: string;
             BTN_CLOUDREC: string;
             BTN_CLOUDRECORD: string;
             BTN_REC: string;
@@ -3300,10 +3302,10 @@ declare class Theme extends EventEmitter {
             CAPTURE_SUCCESS: string;
             CAPTURE_FAILED: string;
             START_RECORD_SUCCESS: string;
-            START_RECORD_FAILED: string;
-            STOP_RECORD_SUCCESS: string; /** 内容控件 @since 0.0.1 */
-            STOP_RECORD_FAILED: string;
-            RECORD_TIPS: string; /** 加载控件 @since 0.0.1  @private */
+            START_RECORD_FAILED: string; /** 加载控件 @since 0.0.1  @private */
+            STOP_RECORD_SUCCESS: string;
+            STOP_RECORD_FAILED: string; /** 暂停控件 @since 0.0.1 @private */
+            RECORD_TIPS: string;
             RECORDS: string;
             OPEN_SOUND: string;
             CLOSE_SOUND: string;
@@ -3324,7 +3326,7 @@ declare class Theme extends EventEmitter {
             START_3D_ZOOM: string;
             CLOSE_3D_ZOOM: string;
             DEVICE_NOT_SUPPORT_3D_ZOOM: string;
-            '3D_ZOOM_ACTIVED': string;
+            '3D_ZOOM_ACTIVED': string; /** 回放底部时间轴 @since 0.0.1 @private */
             '3D_ZOOM_NOT_ACTIVED': string;
             '3D_ZOOM_CLOSED': string;
             CHANGE_ZOOM_TYPE: string;
@@ -3347,12 +3349,13 @@ declare class Theme extends EventEmitter {
             SEND_VOICE_SUCCESS: string;
             SEND_VOICE_FAILED: string;
             PTZ_MIRROR_SUCCESS: string;
-            /** 容器的宽 */
+            /** 当前容器的全屏状态  true: 全屏， false: 非全屏 */
             PTZ_MIRROR_FAILED: string;
             GET_RECORD_MONTH_SUCCESS: string;
             GET_RECORD_MONTH_FAILED: string;
             GET_APP_KEY_SUCCESS: string;
             GET_APP_KEY_FAILED: string;
+            /** 是否播放中 @private */
             GET_DEVICE_LIST_SUCCESS: string;
             GET_DEVICE_LIST_FAILED: string;
             SET_VIDEO_LEVEL_SUCCESS: string;
@@ -3369,9 +3372,7 @@ declare class Theme extends EventEmitter {
             GET_ALARM_LIST_FAILED: string;
             CAPTURE_SAVE_SUCCESS: string;
             CAPTURE_SAVE_FAILED: string;
-            CREATE_CAPTURE_TASK_SUCCESS: string; /**
-             * 当前清晰度
-             */
+            CREATE_CAPTURE_TASK_SUCCESS: string;
             CREATE_CAPTURE_TASK_FAILED: string;
             GET_SPACE_LIST_SUCCESS: string;
             GET_SPACE_LIST_FAILED: string;
@@ -3380,6 +3381,9 @@ declare class Theme extends EventEmitter {
             GET_CDN_ADDRESS_SUCCESS: string;
             GET_CDN_ADDRESS_FAILED: string;
             GET_STREAM_INTERRUPT_INFO_SUCCESS: string;
+            /**
+             * 录像回放的月份列表 @private
+             */
             GET_STREAM_INTERRUPT_INFO_FAILED: string;
             GET_PTZ_STATUS: string;
             GET_PTZ_STATUS_FAILED: string;
@@ -3388,22 +3392,18 @@ declare class Theme extends EventEmitter {
             MOBILE_PTZ_TIPS: string;
             PTZ_FAST: string;
             PTZ_MID: string;
-            PTZ_SLOW: string;
-            PTZ_SPEED: string;
             /**
              * 录像回放的月份列表 @private
              */
+            PTZ_SLOW: string;
+            PTZ_SPEED: string;
             DEVICE_ZOOM: string;
             DEVICE_FOCUS: string;
             NOT_SUPPORT_DEVICE_ZOOM: string;
             NOT_SUPPORT_FOCUS: string;
             MIRROR: string;
             MIRROR_TYPE_ERROR: string;
-            CHANGE_FEC_TYPE: string; /**
-             * 首帧同步 Live/RecDropdown 激活态的监听器引用。
-             * 每次 `_renderTheme` 重新绑定前需先移除旧引用，避免 changeTheme 累积监听。
-             * @private
-             */
+            CHANGE_FEC_TYPE: string;
             DEVICE_NOT_SUPPORT: string;
             TYPE_NOT_SUPPORT: string;
             FEC_SUPPORT_VERSION: string;
@@ -3640,6 +3640,8 @@ declare class Theme extends EventEmitter {
             BTN_STREAM_TYPE: string;
             STREAM_TYPE_MAIN: string;
             STREAM_TYPE_SUB: string;
+            STREAM_SWITCH_ERROR: string;
+            STREAM_SWITCH_NOT_SUPPORT: string;
             BTN_CLOUDREC: string;
             BTN_CLOUDRECORD: string;
             BTN_REC: string;
@@ -3683,7 +3685,6 @@ declare class Theme extends EventEmitter {
             FULLSCREEN_EXIT: string;
             GET_WEB_FULLSCREEN_STATUS: string;
             WEB_FULLSCREEN: string;
-            /** 萤石本地存储 */
             WEB_FULLSCREEN_EXIT: string;
             DESTROY: string;
             GET_CAPACITY_SUCCESS: string;
@@ -3695,20 +3696,27 @@ declare class Theme extends EventEmitter {
             GET_EZOPEN_URL_SUCCESS: string;
             GET_EZOPEN_URL_FAILED: string;
             QUERY_VOICE_LIST_SUCCESS: string;
+            /**
+             * 视频分辨率 宽
+             *
+             * @version 3.1.2
+             *
+             * ```ts
+             * theme.videoWidth // number
+             * ```
+             */
             QUERY_VOICE_LIST_FAILED: string;
             SEND_VOICE_SUCCESS: string;
             SEND_VOICE_FAILED: string;
-            PTZ_MIRROR_SUCCESS: string;
+            PTZ_MIRROR_SUCCESS: string; /**
+             * 视频分辨率 高
+             * @version 3.1.2
+             */
             PTZ_MIRROR_FAILED: string;
             GET_RECORD_MONTH_SUCCESS: string;
             GET_RECORD_MONTH_FAILED: string;
             GET_APP_KEY_SUCCESS: string;
-            GET_APP_KEY_FAILED: string; /**
-             * 当前播放状态
-             * ```ts
-             * theme.playing // boolean
-             * ```
-             */
+            GET_APP_KEY_FAILED: string;
             GET_DEVICE_LIST_SUCCESS: string;
             GET_DEVICE_LIST_FAILED: string;
             SET_VIDEO_LEVEL_SUCCESS: string;
@@ -3728,12 +3736,7 @@ declare class Theme extends EventEmitter {
             CREATE_CAPTURE_TASK_SUCCESS: string;
             CREATE_CAPTURE_TASK_FAILED: string;
             GET_SPACE_LIST_SUCCESS: string;
-            GET_SPACE_LIST_FAILED: string; /**
-             * 加载中
-             * ```ts
-             * theme.loading // boolean
-             * ```
-             */
+            GET_SPACE_LIST_FAILED: string;
             GET_ADDRESS_SUCCESS: string;
             GET_ADDRESS_FAILED: string;
             GET_CDN_ADDRESS_SUCCESS: string;
@@ -3742,9 +3745,6 @@ declare class Theme extends EventEmitter {
             GET_STREAM_INTERRUPT_INFO_FAILED: string;
             GET_PTZ_STATUS: string;
             GET_PTZ_STATUS_FAILED: string;
-            /**
-             * 音量值
-             */
             MOBILE_HIDE_PTZ: string;
             OPTION_PTZ_FAILED: string;
             MOBILE_PTZ_TIPS: string;
@@ -3758,6 +3758,14 @@ declare class Theme extends EventEmitter {
             NOT_SUPPORT_FOCUS: string;
             MIRROR: string;
             MIRROR_TYPE_ERROR: string;
+            /**
+             * 静音
+             * @example
+             * ```ts
+             * // 事件监听
+             * theme.on(Theme.EVENTS.volumechange, (volume: number, muted: boolean) => {})
+             * ```
+             */
             CHANGE_FEC_TYPE: string;
             DEVICE_NOT_SUPPORT: string;
             TYPE_NOT_SUPPORT: string;
@@ -3776,11 +3784,30 @@ declare class Theme extends EventEmitter {
             BTN_REC_LIST_TITLE: string;
             UNKOWN_ISSUE: string;
             391004: string;
+            /**
+             * 电子放大倍数， 仅 ezopen 支持
+             * @since 0.0.1
+             * @example
+             * ```ts
+             * theme.zoom // 放大倍数
+             * // 事件监听
+             * theme.on(Theme.EVENTS.zoom, (zoom: number) => {})
+             * ```
+             */
             SEEK_NOT_SUPPORT: string;
             VIDEO_LEVEL_SATNDARD: string;
             VIDEO_LEVEL_SPUER: string;
             BTN_SOUND: string;
-            SOUND_DISABLED_WHEN_TALKING: string;
+            SOUND_DISABLED_WHEN_TALKING: string; /**
+             * 电子放大倍数，最多保留一位小数 (需要 zooming = true 才能进行缩放)
+             * @example
+             * ```ts
+             * theme.zoom = 2 // 放大倍数
+             * theme.zoom = 2.5 // 放大倍数
+             * // 事件监听
+             * theme.on(Theme.EVENTS.zoomChange, (zoom: number) => {})
+             * ```
+             */
         };
     };
     /** 版本号 @since 0.0.1 */

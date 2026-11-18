@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.2.0-beta.2
-* Copyright (c) 2026-11-18 10:52:41 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.3
+* Copyright (c) 2026-11-18 16:40:01 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -3075,6 +3075,8 @@ var zh = {
     BTN_STREAM_TYPE: '码流切换',
     STREAM_TYPE_MAIN: '主码流',
     STREAM_TYPE_SUB: '子码流',
+    STREAM_SWITCH_ERROR: '切换码流失败',
+    STREAM_SWITCH_NOT_SUPPORT: '切换码流（{{streamType}}）不支持',
     BTN_CLOUDREC: '云存储回放',
     BTN_CLOUDRECORD: '云录制',
     BTN_REC: '本地存储',
@@ -3464,6 +3466,8 @@ var en = {
     BTN_STREAM_TYPE: 'Stream type',
     STREAM_TYPE_MAIN: 'Main stream',
     STREAM_TYPE_SUB: 'Sub-stream',
+    STREAM_SWITCH_ERROR: 'Failed to switch stream type',
+    STREAM_SWITCH_NOT_SUPPORT: 'Switching stream type ({{streamType}}) is not supported',
     BTN_CLOUDREC: 'Cloud storage playback',
     BTN_CLOUDRECORD: 'Cloud recording',
     BTN_REC: 'Local storage',
@@ -6009,7 +6013,7 @@ var Services = /*#__PURE__*/ function() {
                             this.post(API.ezopen, {
                                 body: formData,
                                 headers: {
-                                    sdkVersion: '3.2.0-beta.2'
+                                    sdkVersion: '3.2.0-beta.3'
                                 }
                             }).then(function(response) {
                                 return _async_to_generator$8(function() {
@@ -18195,6 +18199,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.2';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.3';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
