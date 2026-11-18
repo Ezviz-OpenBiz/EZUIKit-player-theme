@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.2.0-beta.1
-* Copyright (c) 2026-11-18 10:44:36 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.2
+* Copyright (c) 2026-11-18 10:46:42 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -6009,7 +6009,7 @@ var Services = /*#__PURE__*/ function() {
                             this.post(API.ezopen, {
                                 body: formData,
                                 headers: {
-                                    sdkVersion: '3.2.0-beta.1'
+                                    sdkVersion: '3.2.0-beta.2'
                                 }
                             }).then(function(response) {
                                 return _async_to_generator$8(function() {
@@ -7431,10 +7431,11 @@ var Services = /*#__PURE__*/ function() {
         var _theme_controls_streamTypeControl_emit, _theme_controls_streamTypeControl, _theme_controls;
         (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_streamTypeControl = _theme_controls.streamTypeControl) == null ? void 0 : (_theme_controls_streamTypeControl_emit = _theme_controls_streamTypeControl.emit) == null ? void 0 : _theme_controls_streamTypeControl_emit.call(_theme_controls_streamTypeControl, EVENTS.streamTypeChange, streamTypeIn);
     });
-    // 默认不支持（不展示）；收到事件才展示。先记在 theme 上，控件晚于事件渲染时也能从 props 拿到
+    // 默认不支持（不展示）；收到事件才展示。
+    // 事件带了 support 载荷时以载荷为准（能力集可能还没查回来），省略载荷时按能力集判定
     theme.on(EVENTS.supportLocalRecordStreamType, function(support, streamTypeIn) {
         var _theme_controls_streamTypeControl_setSupported, _theme_controls_streamTypeControl, _theme_controls;
-        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_streamTypeControl = _theme_controls.streamTypeControl) == null ? void 0 : (_theme_controls_streamTypeControl_setSupported = _theme_controls_streamTypeControl.setSupported) == null ? void 0 : _theme_controls_streamTypeControl_setSupported.call(_theme_controls_streamTypeControl, theme.supportLocalRecordStreamType, streamTypeIn);
+        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_streamTypeControl = _theme_controls.streamTypeControl) == null ? void 0 : (_theme_controls_streamTypeControl_setSupported = _theme_controls_streamTypeControl.setSupported) == null ? void 0 : _theme_controls_streamTypeControl_setSupported.call(_theme_controls_streamTypeControl, support != null ? support : theme.supportLocalRecordStreamType, streamTypeIn);
     });
     // =======================================================
     // 回放片段
@@ -18194,6 +18195,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.1';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.2';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
