@@ -2989,7 +2989,21 @@ declare class Theme extends EventEmitter {
             readonly dateChange: "Control.dateChange";
             readonly dateMonthChange: "Control.dateMonthChange";
             readonly datePanelMonthChange: "Control.datePanelMonthChange";
-            readonly datePanelYearChange: "Control.datePanelYearChange";
+            readonly datePanelYearChange: "Control.datePanelYearChange"; /**
+             * 当前播放类型，由播放地址解析得出
+             *
+             * 取值 `'live' | 'rec' | 'cloudRec' | 'cloudRecord'`，无法判定时为空字符串 `''`。
+             *
+             * 与 {@link recType} 的关系：`recType` 只覆盖三种回放，直播时为空串；
+             * 本 getter 把直播也纳入同一个枚举，作为「当前播放类型」的统一出口。
+             *
+             * @remarks 空串表示无法从地址判定（如 rtmp、webrtc、地址未设置）。
+             * 此时控件支持性校验会整体跳过，避免对判不出类型的地址误报。
+             * @since 3.1.7
+             * ```ts
+             * theme.playType // 'cloudRec'
+             * ```
+             */
             readonly dateDestroy: "Control.dateDestroy";
             readonly timePanelOpenChange: "Control.timePanelOpenChange";
             readonly timeChange: "Control.timeChange";
@@ -3368,9 +3382,6 @@ declare class Theme extends EventEmitter {
             GET_STREAM_INTERRUPT_INFO_SUCCESS: string;
             GET_STREAM_INTERRUPT_INFO_FAILED: string;
             GET_PTZ_STATUS: string;
-            /**
-             * 录像回放的月份列表 @private
-             */
             GET_PTZ_STATUS_FAILED: string;
             MOBILE_HIDE_PTZ: string;
             OPTION_PTZ_FAILED: string;
@@ -3379,6 +3390,9 @@ declare class Theme extends EventEmitter {
             PTZ_MID: string;
             PTZ_SLOW: string;
             PTZ_SPEED: string;
+            /**
+             * 录像回放的月份列表 @private
+             */
             DEVICE_ZOOM: string;
             DEVICE_FOCUS: string;
             NOT_SUPPORT_DEVICE_ZOOM: string;
@@ -3669,6 +3683,7 @@ declare class Theme extends EventEmitter {
             FULLSCREEN_EXIT: string;
             GET_WEB_FULLSCREEN_STATUS: string;
             WEB_FULLSCREEN: string;
+            /** 萤石本地存储 */
             WEB_FULLSCREEN_EXIT: string;
             DESTROY: string;
             GET_CAPACITY_SUCCESS: string;

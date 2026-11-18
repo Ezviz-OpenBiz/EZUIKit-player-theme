@@ -1,6 +1,6 @@
 /*
 * @ezuikit/player-theme v3.2.0-beta.2
-* Copyright (c) 2026-11-18 10:46:42 Ezviz-OpenBiz
+* Copyright (c) 2026-11-18 10:52:41 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 'use strict';
@@ -7433,11 +7433,11 @@ var Services = /*#__PURE__*/ function() {
         var _theme_controls_streamTypeControl_emit, _theme_controls_streamTypeControl, _theme_controls;
         (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_streamTypeControl = _theme_controls.streamTypeControl) == null ? void 0 : (_theme_controls_streamTypeControl_emit = _theme_controls_streamTypeControl.emit) == null ? void 0 : _theme_controls_streamTypeControl_emit.call(_theme_controls_streamTypeControl, EVENTS.streamTypeChange, streamTypeIn);
     });
-    // 默认不支持（不展示）；收到事件才展示。
-    // 事件带了 support 载荷时以载荷为准（能力集可能还没查回来），省略载荷时按能力集判定
+    // 默认不支持（不展示）；收到事件才展示。事件是内核下发的权威结果，省略载荷视为支持；
+    // 控件渲染时拿不到事件的情况由 props.supportLocalRecordStreamType（theme getter 按能力集派生）兜底
     theme.on(EVENTS.supportLocalRecordStreamType, function(support, streamTypeIn) {
         var _theme_controls_streamTypeControl_setSupported, _theme_controls_streamTypeControl, _theme_controls;
-        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_streamTypeControl = _theme_controls.streamTypeControl) == null ? void 0 : (_theme_controls_streamTypeControl_setSupported = _theme_controls_streamTypeControl.setSupported) == null ? void 0 : _theme_controls_streamTypeControl_setSupported.call(_theme_controls_streamTypeControl, support != null ? support : theme.supportLocalRecordStreamType, streamTypeIn);
+        (_theme_controls = theme.controls) == null ? void 0 : (_theme_controls_streamTypeControl = _theme_controls.streamTypeControl) == null ? void 0 : (_theme_controls_streamTypeControl_setSupported = _theme_controls_streamTypeControl.setSupported) == null ? void 0 : _theme_controls_streamTypeControl_setSupported.call(_theme_controls_streamTypeControl, support !== false, streamTypeIn);
     });
     // =======================================================
     // 回放片段
