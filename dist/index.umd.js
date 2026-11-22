@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.2.0-beta.5
-* Copyright (c) 2026-11-19 07:49:15 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.6
+* Copyright (c) 2026-11-22 23:52:28 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -7501,7 +7501,7 @@
 	                            this.post(API.ezopen, {
 	                                body: formData,
 	                                headers: {
-	                                    sdkVersion: '3.2.0-beta.5'
+	                                    sdkVersion: '3.2.0-beta.6'
 	                                }
 	                            }).then(function(response) {
 	                                return _async_to_generator$b(function() {
@@ -12559,9 +12559,9 @@
 	        }
 	        var valueKey = (_ref = (_this__options_fieldNames = _this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.value) != null ? _ref : 'value';
 	        _this._picker = new Picker(_this.$container, {
-	            // 由于某些原因， 移动端强制渲染在 body 上
+	            // 由于IOS中样式问题（如 overflow: hidden; 或 aspect-ratio: 16 / 9; 等 ）等原因， 移动端强制渲染在 body 上
 	            getPopupContainer: function getPopupContainer() {
-	                return Utils.isMobile ? options.rootContainer : _this.$container;
+	                return Utils.isMobile ? document.body || options.rootContainer : _this.$container;
 	            },
 	            trigger: Utils.isMobile ? 'click' : 'hover',
 	            isMobile: Utils.isMobile,
@@ -20232,7 +20232,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.5';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.6';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
