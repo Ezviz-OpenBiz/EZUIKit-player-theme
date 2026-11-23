@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.2.0-beta.7
-* Copyright (c) 2026-11-23 14:12:20 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.8
+* Copyright (c) 2026-11-23 17:20:55 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -6013,7 +6013,7 @@ var Services = /*#__PURE__*/ function() {
                             this.post(API.ezopen, {
                                 body: formData,
                                 headers: {
-                                    sdkVersion: '3.2.0-beta.7'
+                                    sdkVersion: '3.2.0-beta.8'
                                 }
                             }).then(function(response) {
                                 return _async_to_generator$8(function() {
@@ -6229,11 +6229,21 @@ var Services = /*#__PURE__*/ function() {
                         endTime = this._toSeconds(params.end);
                         getLocalVideoUnifyQueryHttp = function getLocalVideoUnifyQueryHttp1(query) {
                             return _async_to_generator$8(function() {
-                                var list, _this__options_token_deviceToken, _this__options_token, _data_meta, _data_data_records, _data_data, _data_data1, data, _data_data2, _;
+                                var _this_deviceCapacity_this_getKeyName, list, path, _this__options_token_deviceToken, _this__options_token, _data_meta, _data_data_records, _data_data, _data_data1, data, _data_data2, _;
                                 return _ts_generator$8(this, function(_state) {
                                     switch(_state.label){
                                         case 0:
                                             list = [];
+                                            path = API.getLocalRecTimes + "?startTime=" + query.startTime + "&endTime=" + query.endTime + "&pageSize=" + (query.pageSize || 200);
+                                            if (((_this_deviceCapacity_this_getKeyName = this.deviceCapacity[this.getKeyName]) == null ? void 0 : _this_deviceCapacity_this_getKeyName.support_record_stream_type) + '' === '1' && params.streamType) {
+                                                path = path + "&streamType=" + (query.streamType || 1);
+                                            }
+                                            [
+                                                "recordType",
+                                                "isQueryByNvr"
+                                            ].forEach(function(key) {
+                                                if (!(params[key] === undefined || params[key] === null)) path = path + "&" + key + "=" + params[key];
+                                            });
                                             _state.label = 1;
                                         case 1:
                                             _state.trys.push([
@@ -6244,7 +6254,7 @@ var Services = /*#__PURE__*/ function() {
                                             ]);
                                             return [
                                                 4,
-                                                this.get(API.getLocalRecTimes + "?startTime=" + query.startTime + "&endTime=" + query.endTime + "&pageSize=" + (query.pageSize || 200) + "&streamType=" + (query.streamType || 1), {
+                                                this.get(path, {
                                                     headers: {
                                                         accessToken: this._options.accessToken || ((_this__options_token = this._options.token) == null ? void 0 : (_this__options_token_deviceToken = _this__options_token.deviceToken) == null ? void 0 : _this__options_token_deviceToken.video),
                                                         deviceSerial: this.urlInfo.deviceSerial
@@ -6315,10 +6325,10 @@ var Services = /*#__PURE__*/ function() {
                         };
                         return [
                             4,
-                            getLocalVideoUnifyQueryHttp({
+                            getLocalVideoUnifyQueryHttp(_extends$t({}, params, {
                                 startTime: startTime,
                                 endTime: endTime
-                            })
+                            }))
                         ];
                     case 3:
                         list = _state.sent() || [];
@@ -14085,7 +14095,7 @@ function _type_of(obj) {
  * @since 3.2.0
  */ function _getDeviceCapacityService(theme) {
     return _async_to_generator$2(function() {
-        var _theme_deviceCapacity, res;
+        var res;
         return _ts_generator$2(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -14118,7 +14128,7 @@ function _type_of(obj) {
                         theme.emit(EVENTS.setVideoLevelList, theme.videoLevelList);
                     }
                     // 设备能力集变化后同步本地回放码流切换的支持性（theme.deviceCapacity 可能为空）
-                    theme.emit(EVENTS.supportLocalRecordStreamType, ((_theme_deviceCapacity = theme.deviceCapacity) == null ? void 0 : _theme_deviceCapacity.support_record_stream_type) === '1', theme.currentStreamTypeIn);
+                    theme.emit(EVENTS.supportLocalRecordStreamType, theme.supportLocalRecordStreamType, theme.currentStreamTypeIn);
                     return [
                         2,
                         res
@@ -18148,7 +18158,7 @@ var THEME_DEFAULT_OPTIONS = {
    * 由 SDK 层通过 `EVENTS.supportLocalRecordStreamType` 事件设置；为 true 且当前是本地回放时才展示码流切换控件。
    */ function get() {
                 var _this_deviceCapacity;
-                return ((_this_deviceCapacity = this.deviceCapacity) == null ? void 0 : _this_deviceCapacity.support_record_stream_type) === '1';
+                return ((_this_deviceCapacity = this.deviceCapacity) == null ? void 0 : _this_deviceCapacity.support_record_stream_type) + '' === '1';
             }
         },
         {
@@ -18213,6 +18223,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.7';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.8';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
