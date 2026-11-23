@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.2.0-beta.6
-* Copyright (c) 2026-11-22 23:52:28 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.7
+* Copyright (c) 2026-11-23 14:12:20 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -6013,7 +6013,7 @@ var Services = /*#__PURE__*/ function() {
                             this.post(API.ezopen, {
                                 body: formData,
                                 headers: {
-                                    sdkVersion: '3.2.0-beta.6'
+                                    sdkVersion: '3.2.0-beta.7'
                                 }
                             }).then(function(response) {
                                 return _async_to_generator$8(function() {
@@ -11008,9 +11008,18 @@ var SELECT_DEFAULT_OPTIONS = {
         }
         var valueKey = (_ref = (_this__options_fieldNames = _this._options.fieldNames) == null ? void 0 : _this__options_fieldNames.value) != null ? _ref : 'value';
         _this._picker = new Picker(_this.$container, {
-            // 由于IOS中样式问题（如 overflow: hidden; 或 aspect-ratio: 16 / 9; 等 ）等原因， 移动端强制渲染在 body 上
             getPopupContainer: function getPopupContainer() {
-                return Utils.isMobile ? document.body || options.rootContainer : _this.$container;
+                if (Utils.isMobile) {
+                    // FIXME: 由于IOS中样式问题（如 overflow: hidden; 或 aspect-ratio: 16 / 9; 等 ）等原因，移动端强制渲染在 body 上
+                    // 移动端 旋转全屏挂载 在 rootContainer
+                    if (options.rootContainer.classList.contains("" + PREFIX_CLASS + "-fullscreen")) {
+                        return options.rootContainer;
+                    }
+                    // 移动端竖屏挂载在 body 上
+                    // return  document.body || options.rootContainer
+                    return options.rootContainer;
+                }
+                return _this.$container;
             },
             trigger: Utils.isMobile ? 'click' : 'hover',
             isMobile: Utils.isMobile,
@@ -18204,6 +18213,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.6';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.7';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };
