@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.2.0-beta.8
-* Copyright (c) 2026-11-23 17:20:55 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.9
+* Copyright (c) 2026-11-23 22:14:12 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 import EventEmitter from 'eventemitter3';
@@ -6013,7 +6013,7 @@ var Services = /*#__PURE__*/ function() {
                             this.post(API.ezopen, {
                                 body: formData,
                                 headers: {
-                                    sdkVersion: '3.2.0-beta.8'
+                                    sdkVersion: '3.2.0-beta.9'
                                 }
                             }).then(function(response) {
                                 return _async_to_generator$8(function() {
@@ -6239,8 +6239,8 @@ var Services = /*#__PURE__*/ function() {
                                                 path = path + "&streamType=" + (query.streamType || 1);
                                             }
                                             [
-                                                "recordType",
-                                                "isQueryByNvr"
+                                                'recordType',
+                                                'isQueryByNvr'
                                             ].forEach(function(key) {
                                                 if (!(params[key] === undefined || params[key] === null)) path = path + "&" + key + "=" + params[key];
                                             });
@@ -11128,12 +11128,12 @@ var SELECT_DEFAULT_OPTIONS = {
                 if (!target.classList.contains("" + PREFIX_CLASS + "-disabled")) {
                     var value = target.getAttribute('data-value');
                     if (_this.value !== value) {
+                        _this._picker.open = false;
                         _this.value = value;
                         var item = _this.list.find(function(item) {
                             return item[valueKey] + '' === _this.value;
                         });
                         _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, _this.value, item);
-                        _this._picker.open = false;
                     }
                 }
             });
@@ -18223,6 +18223,6 @@ var THEME_DEFAULT_OPTIONS = {
     zh: zh,
     en: en
 };
-/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.8';
+/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.9';
 
 export { CONTROL_INIT_EVENTS, Control, EVENTS, Fullscreen, Loading, Message, Play, Poster, Rec, Theme, Utils, Volume };

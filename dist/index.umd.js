@@ -1,6 +1,6 @@
 /*
-* @ezuikit/player-theme v3.2.0-beta.8
-* Copyright (c) 2026-11-23 17:20:55 Ezviz-OpenBiz
+* @ezuikit/player-theme v3.2.0-beta.9
+* Copyright (c) 2026-11-23 22:14:12 Ezviz-OpenBiz
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -7501,7 +7501,7 @@
 	                            this.post(API.ezopen, {
 	                                body: formData,
 	                                headers: {
-	                                    sdkVersion: '3.2.0-beta.8'
+	                                    sdkVersion: '3.2.0-beta.9'
 	                                }
 	                            }).then(function(response) {
 	                                return _async_to_generator$b(function() {
@@ -7727,8 +7727,8 @@
 	                                                path = path + "&streamType=" + (query.streamType || 1);
 	                                            }
 	                                            [
-	                                                "recordType",
-	                                                "isQueryByNvr"
+	                                                'recordType',
+	                                                'isQueryByNvr'
 	                                            ].forEach(function(key) {
 	                                                if (!(params[key] === undefined || params[key] === null)) path = path + "&" + key + "=" + params[key];
 	                                            });
@@ -12679,12 +12679,12 @@
 	                if (!target.classList.contains("" + PREFIX_CLASS$1 + "-disabled")) {
 	                    var value = target.getAttribute('data-value');
 	                    if (_this.value !== value) {
+	                        _this._picker.open = false;
 	                        _this.value = value;
 	                        var item = _this.list.find(function(item) {
 	                            return item[valueKey] + '' === _this.value;
 	                        });
 	                        _this._options.onChange == null ? void 0 : _this._options.onChange.call(_this._options, _this.value, item);
-	                        _this._picker.open = false;
 	                    }
 	                }
 	            });
@@ -20251,7 +20251,7 @@
 	    zh: zh,
 	    en: en
 	};
-	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.8';
+	/** 版本号 @since 0.0.1 */ Theme.THEME_VERSION = '3.2.0-beta.9';
 
 	// 不要动这里的代码， 这个出口是为了编译成 umd 规范的文件
 
